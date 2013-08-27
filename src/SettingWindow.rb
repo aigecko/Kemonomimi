@@ -1,0 +1,179 @@
+#coding: utf-8
+class SettingWindow < SelectWindow
+  def initialize
+    win_w,win_h=400,300
+    win_x=(Game.Width-win_w)/2
+    win_y=(Game.Height-win_h)/2
+    super(win_x,win_y,win_w,win_h)
+    
+    @alone=true
+    
+    title_initialize('變更遊戲設定')
+    comment_initialize(:save,:change)
+    word_initialize
+    pic_initialize
+    
+  end
+  def word_initialize
+    @table=[]
+    Conf.each_key{|key| @table<<key}
+    
+    @name={
+      'FULL_SCREEN'=>'全螢幕-  ：',
+      'SDL_VIDEO_CENTERED'=>'視窗置中-：',
+      'FONT_TYPE'=>'字體檔名-：',
+      'MUSIC'=>'音樂開啟 ：',
+      'SOUND'=>'音效開啟 ：'
+    }
+    
+    @value=Hash.new('')
+    Conf.each{|key,val|
+      @value[key]=val.to_s
+    }
+    
+    @extra_comment="有-號之選項須重新啟動遊戲才會變更"
+    
+    @font_demo_str='字體範例DEMO'
+  end
+  def pic_initialize
+    @back=Input.load_title
+    @name_pic=select_pic_initialize(@name)
+    @value_pic=select_pic_initialize(@value)
+    
+    w_long=0
+    @name_pic.each_value{|pic|
+      pic[0].w>w_long and w_long=pic[0].w
+    }
+    @value_draw_x=@win_x+@border*2+w_long
+    @value_draw_y=@win_y+@border+@title_pic.h
+        
+    @extra_comment_pic=Font.render_solid(@extra_comment,@comment_size,*Color[:comment])
+    
+    @ex_cmt_draw_x=@cmt_draw_x-2
+    @ex_cmt_draw_y=@cmt_draw_y-@extra_comment_pic.h-@border/2
+    
+    @font_demo_pic=Font.render_solid(@font_demo_str,@font_size,*Color[:font_demo])
+  end
+  def font_select_initialize
+    @fonts=[]
+    Dir.foreach('./rc/font'){|name|
+      if name=~/ttf/
+        @fonts<<name.split(/\.ttf/)[0]
+      end
+    }
+    
+    current_font_select=Conf['FONT_TYPE']
+    @font_select=@fonts.find_index(current_font_select)
+  end
+  def interact
+    Event.each{|event|
+      case event
+      when Event::KeyDown
+        case event.sym
+        when Key::UP
+          @select=(@select==0) ? @table.size-1: @select-1
+          @need2draw_word=true
+        when Key::DOWN
+          @select=(@select==@table.size-1) ? 0: @select+1
+          @need2draw_word=true
+        when *Key::BACK
+          select_back
+        when *Key::CHECK
+          select_check
+        end
+      when Event::MouseButtonDown
+        case event.button
+        when SDL::Mouse::BUTTON_LEFT
+          result=check_select_index
+          result and select_check
+        when SDL::Mouse::BUTTON_RIGHT
+          select_back
+        end
+      when Event::MouseMotion
+        check_select_index
+        @need2draw_word=true
+      when Event::Quit
+        Game.quit
+      end
+    }
+  end
+  def select_check
+    key=@table[@select]
+    if key=='FONT_TYPE'
+      font_change
+    else
+      other_change
+    end
+    refresh_pic
+    @need2draw_word=true
+  end
+  def select_back
+    close
+    Conf.save
+    Game.set_window(:MenuWindow,:open)
+  end
+  def check_select_index
+    result=super(@name_pic,@table)
+    value_pic_start
+    result||=super(@value_pic,@table)
+    value_pic_end
+    return result
+  end
+  def value_pic_start
+    @select_draw_x,@value_draw_x=@value_draw_x,@select_draw_x
+  end
+  def value_pic_end
+    @select_draw_x,@value_draw_x=@value_draw_x,@select_draw_x
+  end
+  def font_change
+    font_select_initialize
+    @font_select=(@font_select==@fonts.size-1)? 0 : @font_select+1
+    Conf['FONT_TYPE']=@fonts[@font_select]
+    Font.demo_init(@font_size)
+    @font_demo_pic=Font.demo_render(@font_demo_str,*Color[:font_demo])
+  end
+  def other_change
+    if Conf[@table[@select]]
+      Conf[@table[@select]]=false
+    else        
+      Conf[@table[@select]]=true
+    end
+  end
+  def refresh_pic
+    key=@table[@select]
+    @value[key]=Conf[@table[@select]]
+    
+    str=@value[key].to_s
+    @value_pic[key]=[
+      Font.render_solid(str,@font_size,*Color[:normal_select]),
+      Font.render_solid(str,@font_size,*Color[:focused_select])]
+      
+  end
+  def open
+    super
+    @need2draw_back=true
+    @need2draw_word=true
+  end
+  def draw
+    if @need2draw_back
+      @back.draw(0,0)
+      @need2draw_back=false
+    end
+    if @need2draw_word
+      super
+      draw_title
+      draw_select(@name_pic,@table)
+      value_pic_start
+      draw_select(@value_pic,@table)
+      value_pic_end
+      @extra_comment_pic.draw(@ex_cmt_draw_x,@ex_cmt_draw_y)
+    
+      if @table[@select]=='FONT_TYPE'
+        @font_demo_pic.draw(@win_x+@border*2,@ex_cmt_draw_y-@font_demo_pic.h-@border)
+      end
+      
+      draw_comment
+      @need2draw_word=false
+    end
+  end
+end
