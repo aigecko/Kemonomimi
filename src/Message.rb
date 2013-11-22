@@ -51,22 +51,13 @@ class Message
     message=@@table[function]
     WIN32API.ShowMessage(message[0],message[1],message[2],message[3])
   end
-  def self.show_format(format,title,type,binding,*args)
-    script=""
-    args.each{|arg|
-      if arg.respond_to? :id2name
-        script<<arg.to_s
-      else
-        script<<arg.split(/[;\n]/)[0]
-      end
-      script<<','
-    }
-    script.chop!
-    eval "WIN32API.ShowMessage('#{format}'%[#{script}],'#{title}', :OK,:#{type})",binding
+  def self.show_format(format,title,type)
+    WIN32API.ShowMessage(format, title, :OK, type)
   end
   def self.show_backtrace(e)
     p e
     e.backtrace.each{|line|
+      print "\t"
       puts line
     }
   end

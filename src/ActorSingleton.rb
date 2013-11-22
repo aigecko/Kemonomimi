@@ -43,7 +43,8 @@ class Actor
       ratk:'遠攻',
       
       block:'格檔',dodge:'閃避',
-      wlkspd:'跑速',jump:'跳躍',
+      wlkspd:'跑速',atkspd:'攻速',
+      jump:'跳躍',
       extra:'剩餘點數'
     }#}
     

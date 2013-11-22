@@ -5,7 +5,7 @@ std_lib.each{|lib|
   require "#{lib}"
 }
 my_lib=%w(Color Screen Config win32api Message
-          Font Input Extension skill Mouse)
+          Font Input Extension Skill Mouse)
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
@@ -82,11 +82,11 @@ class Game
   end
   def self.load_lib
     t=Thread.new{
-      text=Font.render_solid('Loading',40,*Color[:loading_font])
-      dot=Font.render_solid('.',40,*Color[:loading_font])
+      text=Font.render_solid('Loading',30,*Color[:loading_font])
+      dot=Font.render_solid('.',30,*Color[:loading_font])
       num=0
       loop{
-        Screen.fill_rect(0,0,640,480,0)
+        Screen.fill_rect(0,0,@Width,@Height,0)
         text.draw(230,240)
         num=(num<3) ? num+1 : 0
         for i in 0..num
@@ -104,7 +104,9 @@ class Game
     
     library_list=%w(Database Item Equipment Consumable
                     Event Key Actor Player Enemy Friend
-                    Statement ColorString Shape Bullet)
+                    Statement ColorString ParaString
+                    Shape Bullet
+                    Attack FixAttack Effect)
     library_list.each{|lib|
       require_relative "src/#{lib}"
     }
@@ -156,7 +158,7 @@ class Game
     $buffer.clear
   end
   def self.draw_back
-    Screen.fill_rect(0,0,640,480,0)
+    Screen.fill_rect(0,0,@Width,@Height,0)
   end
   public
   def self.set_window(name,state)

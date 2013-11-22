@@ -90,7 +90,7 @@ class ItemWindow < DragWindow
 	     y.between?(@title_back_y,@title_back_y+@title_h)
 		return true
       elsif x.between?(@x+1,@x+135)&&
-            y.between?(@y+1,@y+270)&&
+            y.between?(@y+1,@y+@h-1)&&
             @boxes&&@select
         box_x=(x-@x-1)/27
         box_y=(y-@y-1)/27
@@ -114,9 +114,13 @@ class ItemWindow < DragWindow
 	    return false
 	  end
 	end
+    def convert_position
+      @click_box and
+      @click_box[0]+@click_box[1]*5
+    end
     def wear_equip
       if @click_box
-        Game.player.wear_equip(@click_box[0]+@click_box[1]*5)
+        Game.player.wear_equip(*convert_position)
         @click_box=nil
       end
     end
@@ -139,7 +143,7 @@ class ItemWindow < DragWindow
       }
     end
     def draw_page      
-      @click_box and 
+      @click_box and
       Screen.fill_rect(@x+@click_box[0]*27+1,@y+@click_box[1]*27+1,26,26,Color[:click_box_back])
       @boxes and
       @boxes.each_with_index{|equip,n|
@@ -147,6 +151,8 @@ class ItemWindow < DragWindow
         row=n/5
         equip.draw(@x+col*27+2,@y+row*27+2)
       }
+      @click_box and
+      @boxes[*convert_position].draw_detail(@x+27+@click_box[0]*27+1,@y+@click_box[1]*27+1)
     end
   end
   def initialize

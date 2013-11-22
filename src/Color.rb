@@ -62,7 +62,18 @@ class Color
       equip_rect_back:[240,240,255],
       equip_name_font:[32,32,94],
       equip_attrib_sym_font:[21,120,230],
-      equip_attrib_val_font:[89,43,213]
+      equip_attrib_val_font:[89,43,213],
+      
+      attack_phy:[255,0,0],
+      attack_mag:[128,0,255],
+      attack_umag:[128,0,128],
+      attack_acid:[255,255,255],
+      
+      vamp_attack:[20,232,9],
+      vamp_skill:[0,220,0],
+      
+      statement_back:[0,217,255],
+      statement_border:[47,57,128]
     }
   end
   def self.[](sym)

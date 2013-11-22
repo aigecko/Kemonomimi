@@ -8,7 +8,7 @@ class Database
   @Skill=Input.load_skill
   #@@consum=Input.load_consum
   #@buffer=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
-  def self.get_growth(key)
+  def self.get_class(key)
     @Class[key]
   end
   def self.get_base(key)
@@ -51,7 +51,10 @@ class Database
       pic=pic.reverse
       
       @Actor_pic_cache[name][:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
-    rescue =>e
+    rescue NoMethodError,ArgumentError=>e
+      Message.show_backtrace(e)
+      exit
+    rescue SDL::Error=>e
       Message.show_backtrace(e)
       Message.show(:actor_pic_format_wrong)
       Message.show(:please_check_files)

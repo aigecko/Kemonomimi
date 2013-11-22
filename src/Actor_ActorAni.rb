@@ -10,6 +10,9 @@ class Actor
  	  @idx=0
       @face=:right
 	end
+    def side
+      @face
+    end
     def rotate(side)
       @face=side
     end
@@ -19,10 +22,23 @@ class Actor
 	def h
 	  return @pic[@idx][@face].h
 	end
+    def under_cursor?(offset_x)
+      draw_x,draw_y,* =Mouse.state
+      x=draw_x-@draw_x+offset_x
+      y=draw_y-@draw_y
+      pic=@pic[@idx][@face]
+      if x.between?(0,pic.w)&&
+         y.between?(0,pic.h)&&
+         pic[x,y]!=pic.colorkey
+        return true
+      else
+        return false
+      end
+    end
     def draw(pos,dst)
-      draw_x=pos.x-@pic[@idx][@face].w/2
-      draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
-      @pic[@idx][@face].draw(draw_x,draw_y,dst)
+      @draw_x=pos.x-@pic[@idx][@face].w/2
+      @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1      
+      @pic[@idx][@face].draw(@draw_x,@draw_y,dst)
 	end
     def draw_hpbar(pos,percent,dst)
       bar_w=40

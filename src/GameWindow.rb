@@ -76,12 +76,22 @@ class GameWindow < BaseWindow
           #dbg
           @player.add_state(@player,name:'祝福',sym: :recover,
                             icon:'./rc/icon/food/2011-12-23_2-003.gif',
-                            attrib:{def:1000,healhp:10},
-                            last:5000)#}
+                            attrib:{def:1000,agi:1000,healsp:10,atkspd:200},#}
+                            last:4999)#}
+        when Key::D
+          #dbg
+          @player.lose_hp(10)
 	    when Key::A
 		  #dbg
 		  convert_position or next
 		  @player.cast(:arrow,nil,*convert_position)
+        when Key::Q
+          #dbg
+          convert_position or next
+          @player.cast(:fire_circle,nil,*convert_position)
+        when Key::W
+          convert_position or next
+          @player.cast(:magic_immunity,nil,*convert_position)
         when Key::F1
           switch_window(:StatusWindow)
         when Key::F2
@@ -104,7 +114,7 @@ class GameWindow < BaseWindow
           case @windows[window].detect_click_window(event)
           when :drag
 		    case event.button
-			when SDL::Mouse::BUTTON_LEFT
+			when Mouse::BUTTON_LEFT
               set_first_window(window)
               close_contral
 			  break
@@ -112,7 +122,7 @@ class GameWindow < BaseWindow
 			window_click=true
           when :click
 			case event.button
-			when SDL::Mouse::BUTTON_LEFT
+			when Mouse::BUTTON_LEFT
               set_first_window(window)
 			  break
 			end
@@ -121,10 +131,8 @@ class GameWindow < BaseWindow
         }
 		window_click or
 		case event.button
-	    when SDL::Mouse::BUTTON_RIGHT
-          if convert_position
-		    @player.set_move_dst(*convert_position)
-          end
+	    when Mouse::BUTTON_RIGHT
+          get_attack_target
 		end
       when Event::Quit
         Game.quit
@@ -142,6 +150,18 @@ class GameWindow < BaseWindow
   end
   def get_player
     return @player
+  end
+  def get_attack_target
+    if convert_position
+      target=@map.find_under_cursor_enemy(@offset_x)
+      if target        
+        @player.set_target(target)
+        @player.chase_target        
+      else
+        @player.set_move_dst(*convert_position)
+        @player.set_target(nil)
+      end
+    end
   end
   def open
     super
@@ -171,6 +191,9 @@ class GameWindow < BaseWindow
     when :right
       @offset_x=@map.w-Game.Width
     end
+  end
+  def render_offset
+    return [@offset_x,0]
   end
   def switch_window(name)
     if @windows[name].close?
@@ -206,6 +229,14 @@ class GameWindow < BaseWindow
 	  add_actor_buffer(bullet)
 	}
   end
+  def draw_circle
+    #dbg
+    @map.render_friend_circle.sort_by{|circle|
+      -circle.position.z
+    }.each{|circle|
+      circle.draw(@surface)
+    }
+  end
   def draw_actor    
     @actor_buffer=@actor_buffer.sort_by{|actor| -actor.position.z}
     @actor_buffer.each{|actor| actor.draw(@surface)}
@@ -215,7 +246,10 @@ class GameWindow < BaseWindow
     @surface.fill_rect(@offset_x,0,Game.Width,230,Color[:clear])
     @surface.fill_rect(@offset_x,@map_up_margin,Game.Width,50,Color[:clear])
     @map.draw(@surface)
+    draw_circle
     draw_actor
+    Attack.draw(@surface)
+    Effect.draw(@surface)
     Surface.blit(@surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
                  Screen.render,0,0)
     draw_sub_window

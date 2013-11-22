@@ -4,7 +4,7 @@ class Font
   def self.init
     @font=Hash.new
     @cache=Hash.new
-	[12,15,20,40].each{|size|
+	[12,15,20,30].each{|size|
       @font[size]=Input.load_font(Conf['FONT_TYPE'],size)
       @cache[size]=Hash.new()
 	}
@@ -23,6 +23,12 @@ class Font
     @font[index]
   end  
   def self.render_solid(text,size,r,g,b)
+    unless @font[size]
+      p text
+      Message.show_format("字體大小#{size}不存在","錯誤",:ASTERISK)
+      return
+    end
+  
     color=(r<<20)+(g<<10)+b
     
     @cache[size]||=Hash.new
@@ -35,9 +41,9 @@ class Font
 
     
   end
-  def self.draw_solid(text,size,x,y,r,g,b)
+  def self.draw_solid(text,size,x,y,r,g,b,dst=Screen.render)
     pic=self.render_solid(text,size,r,g,b)
-    pic.draw(x,y)
+    pic.draw(x,y,dst)
     return pic.w,pic.h
   end
 end

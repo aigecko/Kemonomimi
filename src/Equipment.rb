@@ -27,8 +27,8 @@ class Equipment < Item
 	@comment=ColorString.new(comment,@font_size,Color[:equip_comment_font],7)
 	@attrib=Attrib.new(part,attrib)
 	@attrib_str={}
-    @attrib.each{|sym,val|     
-      @attrib_str[sym]="+%d"%val
+    @attrib.each{|sym,val|
+      @attrib_str[sym]=(val.integer? ? "+%d"%val : "+%d%%"%(val*100))
     }
     
     @rect_w=85
@@ -52,7 +52,7 @@ class Equipment < Item
       Font.draw_solid(@@Attrib_table[sym],@font_size,x,str_y,*Color[:equip_attrib_sym_font])
       Font.draw_solid(@attrib_str[sym],@font_size,
                       x+@@Attrib_table[sym].size*@font_size,
-                      str_y,*Color[:equip_attrib_val_font])      
+                      str_y,*Color[:equip_attrib_val_font])
       str_y+=@font_size
     }
     str_y+=2

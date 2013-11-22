@@ -1,12 +1,32 @@
 #coding: utf-8
 class SDL::Surface  
+  def save_cmp(filename)    
+    Zlib::GzipWriter.open(filename){|file|
+      file.print (
+        Marshal.dump([self.pixels,self.w,self.h,
+                      self.bpp,self.pitch,
+                      self.format.Rmask,
+                      self.format.Gmask,
+                      self.format.Bmask,
+                      self.format.Amask]))
+    }
+  end
+  def self.load_cmp(filename)
+    Zlib::GzipReader.open(filename){|file|
+      data=file.read
+      ary=Marshal.load(data)
+      return SDL::Surface.new_from(*ary)
+    }
+  end
   def reverse
-    str=pixels
-    wpixel=w*3
-    for i in 0...h
-      str[i*wpixel,wpixel]=str[i*wpixel,wpixel].reverse
-    end
-    pic=SDL::Surface.new_from(str,w,h,24,pitch,format.Bmask,format.Gmask,format.Rmask,format.Amask)
+    #str=pixels
+    #wpixel=w*3
+    
+    ##for i in 0...h
+    ##  str[i*wpixel,wpixel]=str[i*wpixel,wpixel].reverse
+    #end
+    #pic=SDL::Surface.new_from(str,w,h,24,pitch,format.Bmask,format.Gmask,format.Rmask,format.Amask)
+    pic=transform_surface(get_pixel(0,0),0,-1,1,SDL::TRANSFORM_SAFE)
 	return pic
   end
   def draw(dst_x,dst_y,dst=Screen.render)
@@ -27,6 +47,12 @@ class Surface < SDL::Surface
   end
   def set_color_key(color)
     super(SDL::SRCCOLORKEY|SDL::RLEACCEL,color)
+  end
+  def self.load_with_colorkey(path)
+    pic=Surface.load(path)
+    pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
+    pic.display_format_alpha
+    return pic
   end
   def self.flag
     SDL::SWSURFACE
@@ -54,7 +80,13 @@ module Math
   end
   module_function :sin, :cos, :cosine,:sine  
 end
-
+class Numeric  
+  def confine(min,max)
+    self<min and return min
+    self>max and return max
+    return self
+  end
+end
 class Fixnum
   def to_sec
     self*1000

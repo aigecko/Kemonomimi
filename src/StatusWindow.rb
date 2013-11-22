@@ -76,7 +76,10 @@ class StatusWindow < DragWindow
     def update
 	  attrib=Game.player.attrib
       unless @click_plus
-        if @value!=attrib[@name] 
+        if @value!=attrib[@name]
+        
+      
+          #p "#{@value}:#{attrib[@name]}\n"
           @value=attrib[@name]
           @val_pic=Font.render_solid(@val.call,@font_size,*Color[:attrib_font])
         end
@@ -84,7 +87,6 @@ class StatusWindow < DragWindow
         if @value!=attrib[@name]+@plus_val
           @value=attrib[@name]+@plus_val
           @val_pic=Font.render_solid(@val.call,@font_size,*Color[:attrib_plus])
-          @name==:agi and p 'update'
         end
       end
     end
@@ -211,7 +213,7 @@ class StatusWindow
     @coord[:dodge]=[@win_x+@border+75,@win_y+185]
     
     @coord[:wlkspd]=[@win_x+@border,@win_y+215]
-    @coord[:jump]=[@win_x+@border,@win_y+235]
+    @coord[:atkspd]=[@win_x+@border,@win_y+235]
     
     @coord[:extra]=[@win_x+@border+70,@win_y+215]
 	
@@ -228,7 +230,7 @@ class StatusWindow
 	}
 	
 	
-    [:atk,:def,:matk,:mdef,:ratk,:wlkspd,:jump].each{|sym|
+    [:atk,:def,:matk,:mdef,:ratk,:wlkspd,:atkspd].each{|sym|
       @bars<<Bar.new(sym,*@coord[sym],:short)
     }
     [:block,:dodge].each{|sym|

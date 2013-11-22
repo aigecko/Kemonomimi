@@ -5,7 +5,7 @@ require_relative 'output'
 $race=Hash.new
 $attrib=[:str,:con,:int,:wis,:agi,:wlkspd,:jump]
 #[種類]=[]
-$race[:catear]= [20,20,15,15,30,215,100]
+$race[:catear]= [20,20,15,15,30,200,100]
 $race[:foxear]= [15,15,30,25,15,200,100]
 $race[:wolfear]=[25,20,15,15,25,200,100]
 $race[:dogear]= [15,25,20,20,20,205,100]

@@ -1,3 +1,4 @@
+#coding: utf-8
 class Map
   class Chipset
     @@chipsets=Input.load_chipset_pic
@@ -31,6 +32,9 @@ class Map
     @friend_bullet=[]
 	@enemy_bullet=[]
 	
+    @friend_circle=[]
+    @enemy_circle=[]
+    
 	@@current_map=self
   end
   def which_side(player_x)
@@ -42,39 +46,102 @@ class Map
       return :mid
     end
   end
-  def render_friend
-    return @friend
+  def find_under_cursor_enemy(offset_x)
+    under_cursor=@enemy.select{|enemy|
+      enemy.under_cursor?(offset_x)
+    }
+    result=under_cursor.min_by{|enemy| enemy.position.z}
+    return result
+  end
+  def render_friend(ally=:friend)
+    if ally==:enemy
+      return @enemy
+    else
+      return @friend
+    end
   end  
-  def render_enemy
-    return @enemy
+  def render_enemy(ally=:friend)
+    if ally==:enemy
+      return @friend
+    else
+      return @enemy
+    end
   end
-  def render_friend_bullet
-    return @friend_bullet
+  def render_friend_circle(ally=:friend)
+    if ally==:enemy
+      return @enemy_circle
+    else
+      return @friend_circle
+    end
   end
-  def render_enemy_bullet
-    return @enemy_bullet
+  def render_friend_bullet(ally=:friend)
+    if ally==:enemy
+      return @enemy_circle
+    else
+      return @friend_bullet
+    end
   end
-  def add_friend_bullet(bullet)
-    @friend_bullet<<bullet
+  def render_enemy_bullet(ally=:friend)
+    if ally==:enemy
+      return @friend_bullet
+    else    
+      return @enemy_bullet
+    end
   end
-  def add_enemy_bullet(bullet)
-    @enemy_bullet<<bullet
+  def add_friend_circle(ally,circle)
+    if ally==:enemy
+      @enemy_circle<<circle
+    else
+      @friend_circle<<circle
+    end
+  end
+  def add_friend_bullet(ally,bullet)
+    if ally==:enemy
+      @enemy_bullet<<bullet
+    else
+      @friend_bullet<<bullet
+    end
+  end
+  def add_enemy_bullet(ally,bullet)
+    if ally==:enemy
+      @friend_bullet<<bullet
+    else
+      @enemy_bullet<<bullet
+    end
   end
   def update
-    @enemy.each{|actor|
+    @enemy.reject!{|actor|
       @friend_bullet.reject!{|bullet|	  
-	    Shape.collision?(actor,bullet)
+	    Shape.collision?(actor,bullet)&&
+        bullet.affect(actor)||
+        !bullet.position.x.between?(0,@w)
 	  }
+      actor.died?
 	}
+    @enemy.reject!{|actor|
+      @friend_circle.reject!{|circle|
+        Shape.collision?(actor,circle)&&
+        circle.affect(actor)||
+        !circle.position.x.between?(0,@w)
+      }
+      actor.died?
+    }
+    @friend_bullet.reject!{|bullet| bullet.live_frame?}
+    @friend_circle.reject!{|circle| circle.live_frame?}
     update_actor
     update_bullet
   end
   def update_actor
-    rand(1000)>950 and 
-    @enemy<<Enemy.new("slime","fighter",
-                       [rand(1000),0,rand(400)],
-                       {},
-                       'mon_001r')
+    if rand(1000)>990
+      enemy=Enemy.new("slime","fighter",
+                         [200,0,200],
+                         {exp:600,agi:1000,str:1000},
+                         "mon_004r")
+      #enemy.add_state(@player,name:'魔法免疫',sym: :magic_immunity,
+      #                 icon:'./rc/icon/icon/tklre04/skill_053.png',
+      #                 attrib:{},last: nil)
+      @enemy<<enemy
+    end
     @friend.each{|friend|
       friend.update
     }    
@@ -105,7 +172,16 @@ class Map
     
     Surface.blit(@map_pic,x,0,Game.Width,@h/2,dst,x,y)
   end
-  def self.current_map
-    @@current_map
+  meta=class<<Map
+    def method_missing(method,*arg)
+      Map.respond_to?(method) and return
+      eval %Q{
+        class ::Map
+          def Map.#{method}(*arg)
+            @@current_map.#{method}(*arg)
+          end
+        end}        
+      Map.send(method,*arg)
+    end
   end
 end

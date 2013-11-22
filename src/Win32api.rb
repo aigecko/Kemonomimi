@@ -10,7 +10,7 @@ class WIN32API
 	@mb[:OK]=0
     @mb[:OK_CANCEL]=1
     @mb[:ABORT_RETRY_IGNORE]=2
-    @mb[:ES_NO_CANCEL]=3
+    @mb[:YES_NO_CANCEL]=3
     @mb[:YES_NO]=4
     @mb[:RETRY_CANCEL]=5
 	
