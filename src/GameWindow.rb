@@ -76,7 +76,8 @@ class GameWindow < BaseWindow
           #dbg
           @player.add_state(@player,name:'祝福',sym: :recover,
                             icon:'./rc/icon/food/2011-12-23_2-003.gif',
-                            attrib:{def:1000,agi:1000,healsp:10,atkspd:200},#}
+                            attrib:{def:1000,agi:1000,healhp:10,atkspd:200},#}
+                            multi: true,
                             last:4999)#}
         when Key::D
           #dbg
@@ -84,7 +85,7 @@ class GameWindow < BaseWindow
 	    when Key::A
 		  #dbg
 		  convert_position or next
-		  @player.cast(:arrow,nil,*convert_position)
+		  @player.cast(:arrow,nil,*convert_position,true)
         when Key::Q
           #dbg
           convert_position or next

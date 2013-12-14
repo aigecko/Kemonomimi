@@ -23,9 +23,9 @@ class Actor
     
 	@attrib=Attrib.new(attrib,@race,@class)
 	
-	@animation=ActorAni.new(pics)
+	@animation=ActorAni.new(pics,(@ally==:player)? :player : :actor)
 	
-	@state=State.new
+	@state=State.new(self)
 	@equip=Equip.new
 	@equip_list=Array.new
 	@item_list=Array.new
@@ -71,8 +71,8 @@ class Actor
     race_initialize
     class_initialize
 	skill_initialize
-    @var=Hash.new(0)
     
+    @var=Hash.new(0)
   end
   def race_initialize
     case @race
@@ -165,6 +165,12 @@ class Actor
       icon:'./rc/icon/skill/2011-12-23_3-072.gif',
       base: :fire_circle,consum: 1,level: 1,table:[0,[50,0]],
       comment:'焚燒周圍的敵人 造成傷害')
+    @class==:fighter and
+    add_skill(:break_armor,
+      name:'破防',type: :append,
+      icon:'./rc/icon/skill/2011-12-23_3-125.gif',
+      base: :break_armor,table:[0,-100],
+      comment:'破防')
     @class==:cleric and
     add_skill(:enegy_arrow,
       name:'碎石杖擊',type: :switch_append,
@@ -316,7 +322,7 @@ class Actor
     @state.include?(name)
   end
   def add_state(caster,info)
-    @state.add(self,Statement.new(caster,info))
+    @state.add(Statement.new(caster,info))
     #@attrib.gain_state_attrib(state.attrib)
   end
   def has_skill?(name)
@@ -391,12 +397,16 @@ class Actor
     SDL.get_ticks>end_time or return false
     @attrib[:sp]>=consum ? true : false
   end
-  def cast(name,target,x,y,z)
+  def cast(name,target,x,y,z,atkspd_affect=false)
     unless @skill[name]
       Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
       return
     end
-    @skill[name].cast(self,target,x,y,z)
+    if atkspd_affect
+      @skill[name].cast_attack(self,target,@attrib[:atkspd])
+    else      
+      @skill[name].cast(self,target,x,y,z)
+    end
   end
   def gain_attrib(attrib)
     @attrib.gain_base_attrib(attrib)
@@ -417,5 +427,6 @@ class Actor
   end
   def draw(dst)
 	@animation.draw(@position,dst)
+    draw_hpbar(dst)
   end
 end

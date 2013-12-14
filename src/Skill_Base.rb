@@ -27,21 +27,22 @@ class Skill
         attack=info[:args][0]+info[:caster].attrib[:ratk]
 	    Map.add_friend_bullet(
           info[:caster].ally,
-     	  Bullet.new(Attack.new(info[:caster],
-                                type: :phy,
-                                cast_type: :attack,
-                                attack: attack,
-                                append: [:fire_arrow,:enegy_arrow]),
-		             (pic=Surface.load_with_colorkey('./rc/pic/battle/arrow.png')),
-					 :box,
-                     caster: info[:caster],
-					 x: info[:caster].position.x,
-					 y: info[:caster].position.y+info[:caster].pic_h/4,
-					 z: info[:caster].position.z,
-					 w: pic.w,
-					 h: pic.w/4,
-					 t: pic.h,
-					 vx: info[:caster].face_side==:right ? 20 : -20)
+     	  Bullet.new(
+            Attack.new(info[:caster],
+              type: :phy,
+              cast_type: :attack,
+              attack: attack,
+              append: [:fire_arrow,:enegy_arrow]),
+            (pic=Surface.load_with_colorkey('./rc/pic/battle/arrow.png')),
+            :box,
+            caster: info[:caster],
+            x: info[:caster].position.x,
+            y: info[:caster].position.y+info[:caster].pic_h/4,
+            z: info[:caster].position.z,
+            w: pic.w,
+            h: pic.w/4,
+            t: pic.h,
+            vx: info[:caster].face_side==:right ? 2 : -2)
 	    )
 	  }
       @proc[:fire_arrow]=->(info){
@@ -58,10 +59,17 @@ class Skill
         attrib=info[:args][0]
         last=info[:args][1]
         caster.add_state(caster,
-                         name:'魔法免疫',sym: :magic_immunity,
-                         icon:'./rc/icon/icon/tklre04/skill_053.png',
-                         attrib: attrib,
-                         last: last)
+          name:'魔法免疫',sym: :magic_immunity,
+          icon:'./rc/icon/icon/tklre04/skill_053.png',
+          attrib: attrib,
+          last: last)
+      }
+      @proc[:break_armor]=->(info){
+        info[:target].add_state(info[:caster],
+          name:'破防',sym: :break_armor,
+          icon: './rc/icon/skill/2011-12-23_3-146.gif',
+          attrib: {def: info[:args]},#}
+          last: 2.to_sec)
       }
       @proc[:smash_wave]=->(info){
         caster=info[:caster]
@@ -72,26 +80,70 @@ class Skill
         rand(100)<probability and
         Map.add_friend_bullet(
           caster.ally,
-          Bullet.new(Attack.new(caster,type: :mag,cast_type: :skill,attack: attack),
-                     nil,
-                     :col,
-                     caster: info[:caster],
-                     x: caster.position.x,
-                     y: caster.position.y,
-                     z: caster.position.z,
-                     r: 75,h: 50,
-                     live_cycle: :frame)
+          Bullet.new(
+            Attack.new(
+              caster,type: :mag,cast_type: :skill,attack: attack),
+              nil,
+              :col,
+              caster: info[:caster],
+              x: caster.position.x,
+              y: caster.position.y,
+              z: caster.position.z,
+              r: 75,h: 50,
+              live_cycle: :frame)
+        )
+      }
+      #BUG!!
+      #假如沒有delay或是print會錯誤
+      @proc[:dst_dec_dmg]=->(info){
+        caster=info[:caster]
+        target=info[:target]
+        distance=Math.distance(caster.position.x,caster.position.z,
+                               target.position.x,target.position.z)
+                               #SDL.delay(2)
+        rad=info[:args]
+        if distance>=rad
+          return true
+        else
+        #dbg
+          #attack=caster.attrib[:atk]*(rad-distance)/rad
+          attack=10*(rad-distance)/rad
+          attack==0 and attack=1
+          Attack.new(caster,type: :mag,attack: attack).affect(target)
+        end
+      }
+      #BUG!!
+      @proc[:shatter]=->(info){
+        caster=info[:caster]
+        shatter=Skill.new(
+          name:'噴濺',tpye: :append,
+          icon: './rc/icon/skill/2011-12-23_3-045.gif',
+          base: :dst_dec_dmg,consum: 0,level: 1,table:[0,info[:args]],
+          commit:'技能用')
         
+        Map.add_friend_bullet(
+          caster.ally,
+          Bullet.new(
+            Attack.new(caster,type: :phy,cast_type: :skill,attack: 0,append: shatter),
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 100,h: 50,
+            live_cycle: :frame,
+            exclude: info[:target])
         )
       }
       @proc[:normal_attack]=->(info){
         caster=info[:caster]
         attack=caster.attrib[:atk]
         Attack.new(caster,
-                   type: :phy,
-                   cast_type: :attack,
-                   attack: attack,
-                   append: [:smash_wave,:enegy_arrow]).affect(info[:target])
+          type: :phy,
+          cast_type: :attack,
+          attack: attack,
+          append: [:smash_wave,:enegy_arrow,:shatter,:break_armor]).affect(info[:target])
       }      
       @proc[:fire_circle]=->(info){        
         const=info[:args][0]
@@ -104,21 +156,22 @@ class Skill
         
         Map.add_friend_circle(
           info[:caster].ally,
-          Bullet.new([Attack.new(info[:caster],type: :mag,dmg_type: :const_cur,attack: [const,percent]),
-                      Effect.new(info[:caster],
-                                name:'燃燒',sym: :burn,effect_type: :slow,
-                                icon:'./rc/icon/skill/2011-12-23_3-049.gif',
-                                attrib:{wlkspd: -0.8},
-                                last: 5.to_sec)],
-                     (pic=Surface.load_with_colorkey('./rc/pic/battle/fire_circle.png')),
-                     :col,
-                     caster: info[:caster],
-                     x: info[:caster].position.x,
-                     y: 0,
-                     z: info[:caster].position.z,
-                     r: 60,
-                     h: 50,
-                     live_cycle: :frame)
+          Bullet.new(
+            [Attack.new(info[:caster],type: :mag,dmg_type: :const_cur,attack: [const,percent]),
+             Effect.new(info[:caster],
+               name:'燃燒',sym: :burn,effect_type: :slow,
+               icon:'./rc/icon/skill/2011-12-23_3-049.gif',
+               attrib:{wlkspd: -0.8},
+               last: 5.to_sec)],
+            (pic=Surface.load_with_colorkey('./rc/pic/battle/fire_circle.png')),
+            :col,
+            caster: info[:caster],
+            x: info[:caster].position.x,
+            y: 0,
+            z: info[:caster].position.z,
+            r: 60,
+            h: 50,
+            live_cycle: :frame)
         )
       }
       @proc[:wolfear]=->(info){
@@ -159,15 +212,17 @@ class Skill
         attack=info[:caster].attrib[:int]*4/5
         Map.add_friend_bullet(
           caster.ally,
-          Bullet.new(Attack.new(caster,type: :acid,attack: attack),
-                     nil,
-                     :col,
-                     caster: caster,
-                     x: caster.position.x,
-                     y: caster.position.y,
-                     z: caster.position.z,
-                     r: 70,h: 50,
-                     live_cycle: :frame)
+          Bullet.new(
+            Attack.new(caster,type: :acid,attack: attack),
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 70,h: 50,
+            live_cycle: :frame
+          )
         )
         
       }

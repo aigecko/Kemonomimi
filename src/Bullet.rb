@@ -36,7 +36,7 @@ class Bullet
     @live_cycle=info[:live_cycle]
     @live_count=info[:live_count]
     
-    @hit_target=[]
+    @hit_target=[info[:exclude]]
   end
   def live_frame?
     if @live_cycle==:frame
@@ -57,8 +57,9 @@ class Bullet
   end
   def affect(target)
     @effect or return true
-    @hit_target.include?(target) and return false
     @trigger and return true
+    
+    @hit_target.include?(target) and return false
     
     if @effect.respond_to?(:each)
       @effect.each{|effect| effect.affect(target)}

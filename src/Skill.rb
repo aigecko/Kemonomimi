@@ -5,6 +5,11 @@ class Skill
   attr_reader :switch
   def initialize(info)
     @name=info[:name]
+    unless @name
+      Message.show_format('技能名稱設定錯誤','錯誤',:ERROR)
+      exit
+    end    
+    
     begin
       if info[:icon]
         @icon=SDL::Surface.load(info[:icon])
@@ -18,10 +23,10 @@ class Skill
     end
     @common_cd=info[:common_cd]
     
-    @proc=Base[info[:base]]  
+    @proc=Base[info[:base]]
     @type=info[:type]
     
-    @consum=info[:consum]
+    @consum=info[:consum]||0
 	
     if @@SwitchTypeList.include?(@type)      
       @switch=false
@@ -32,10 +37,10 @@ class Skill
     @org_cd=@cd=info[:cd]||0    
     @end_time=0
     
-    @level=info[:level]
+    @level=info[:level]||1
     @table=info[:table]
     
-    @comment=info[:comment]
+    @comment=info[:comment]||:nil.to_s
   end
   def toggle(x,y,z)
     if @@SwitchTypeList.include?(@type)&&x&&y&&z      
@@ -62,7 +67,6 @@ class Skill
     else
       caster.skill[@common_cd] and caster.skill[@common_cd].cd_start
     end
-    
     @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level])
   end
   def cast_attack(caster,target,atkspd)    

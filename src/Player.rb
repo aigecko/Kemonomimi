@@ -1,6 +1,5 @@
 #coding: utf-8
 class Player < Actor
-  #dbg
   attr_accessor :var
   def initialize
     #@player=Player.new('friend catear crossbowman',[125,125,125],

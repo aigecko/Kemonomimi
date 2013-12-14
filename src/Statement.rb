@@ -1,6 +1,6 @@
 #coding: utf-8
 class Statement
-  attr_reader :attrib,:sym,:delta_hp
+  attr_reader :attrib,:sym,:delta_hp,:multi
   def initialize(caster,info)
     @caster=caster
     
@@ -9,8 +9,12 @@ class Statement
     
 	info[:icon] and
     @icon=SDL::Surface.load(info[:icon])
+    
     @attrib=info[:attrib]
     @delta_hp=info[:delta_hp]||0
+    @interval=info[:interval]
+    
+    @multi=info[:multi]
     
     @start_time=SDL.get_ticks
     @last_time=info[:last]
@@ -18,6 +22,7 @@ class Statement
     @last_time and @end_time=@start_time+@last_time     
   end
   def update
+    
   end
   def end?
     @last_time and

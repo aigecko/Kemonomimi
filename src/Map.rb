@@ -132,10 +132,10 @@ class Map
     update_bullet
   end
   def update_actor
-    if rand(1000)>990
+    if rand(1000)>980
       enemy=Enemy.new("slime","fighter",
-                         [200,0,200],
-                         {exp:600,agi:1000,str:1000},
+                         [rand(200),0,rand(200)],
+                         {exp:600},
                          "mon_004r")
       #enemy.add_state(@player,name:'魔法免疫',sym: :magic_immunity,
       #                 icon:'./rc/icon/icon/tklre04/skill_053.png',

@@ -1,7 +1,7 @@
 #coding: utf-8
 class Actor  
   class ActorAni
-    def initialize(pics)
+    def initialize(pics,actor)
       @pic=[]
 	  pics.to_sym and pics=[pics]
 	  pics.each{|name|
@@ -9,6 +9,9 @@ class Actor
 	  }
  	  @idx=0
       @face=:right
+      
+      @hpbar_color_back=Color[:"actor_hpbar_back"]
+      @hpbar_color=Color[:"#{actor}_hpbar"]
 	end
     def side
       @face
@@ -42,11 +45,11 @@ class Actor
 	end
     def draw_hpbar(pos,percent,dst)
       bar_w=40
-      bar_h=6
+      bar_h=4
       draw_x=pos.x-bar_w/2
       draw_y=@@map_h-pos.y-pos.z/2+30+1
-      dst.fill_rect(draw_x-1,draw_y,bar_w+1,bar_h+1,[0,0,0])
-      dst.fill_rect(draw_x,draw_y+1,bar_w*percent,bar_h-1,[255,0,0])
+      dst.fill_rect(draw_x-1,draw_y,bar_w+2,bar_h+2,@hpbar_color_back)
+      dst.fill_rect(draw_x,draw_y+1,bar_w*percent,bar_h,@hpbar_color)
     end
     
     def self.set_map_size(w,h)

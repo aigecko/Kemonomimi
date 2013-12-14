@@ -16,11 +16,12 @@ class Attack
 	  @@buffer<<ParaString.new("MISS",target,0,color,@@FontSize)
 	  return true
 	end
-    target.lose_hp(damage)
-    vamp(damage)
+    if damage!=0
+      target.lose_hp(damage)
+      vamp(damage)
 	
-    show_damage(damage,target)
-    
+      show_damage(damage,target)
+    end
     append(target)
     
     return true
@@ -29,6 +30,7 @@ class Attack
     if @caster.has_skill?(:dogear)
 	  @caster.skill[:dogear].cast(@caster,target,nil,nil,nil)
 	end
+    
     before=@info[:before]
 	before and
 	if before.respond_to? :each
@@ -57,24 +59,32 @@ class Attack
     @@buffer<<ParaString.new(damage,target,direct,color,@@FontSize)
   end
   def attack(target)
+    @info[:attack]==0 and return 0
     attack=@info[:attack]
 	attack+=attack*@caster.attrib[:attack_amp]/100
     case @info[:type]
     when :phy
-	  dodge=target.attrib[:dodge]*100
-	  if rand(10000)<dodge
-	    return :miss
-	  end	   
-      damage=Attack.formula(attack,target.attrib[:def])
+      case @info[:cast_type]
+      when :attack
+	    dodge=target.attrib[:dodge]*100
+	    if rand(10000)<dodge
+    	    return :miss
+	    end
+        damage=Attack.formula(attack,target.attrib[:def])
 	  
-	  block=target.attrib[:block]*100	
-	  if rand(10000)<dodge
-	    if @caster.skill[:catear]
-		  damage=damage*40/100
-		else
-	      damage=1
-		end
-	  end
+	    block=target.attrib[:block]*100	
+	    if rand(10000)<dodge
+	      if @caster.skill[:catear]
+		    damage=damage*40/100
+		  else
+	        damage=1
+		  end
+	    end
+      when :skill        
+        damage=Attack.formula(attack,target.attrib[:def])
+      else        
+        damage=Attack.formula(attack,target.attrib[:def])
+      end
     when :mag
       if target.has_state?(:magic_immunity)
         return :miss
@@ -111,10 +121,16 @@ class Attack
     append=@info[:append]
     append and
     if append.respond_to? :each
-      append.each{|name|
-        skill=@caster.skill[name] and
-        skill.cast(@caster,target,nil,nil,nil)
+      append.each{|skill|
+        if skill.respond_to? :cast
+          skill.cast(@caster,target,nil,nil,nil)
+        else
+          skill=@caster.skill[skill] and
+          skill.cast(@caster,target,nil,nil,nil)
+        end
       }
+    elsif append.respond_to? :cast
+      append.cast(@caster,target,nil,nil,nil)
     else
       skill=@caster.skill[append] and
       skill.cast(@caster,target,nil,nil,nil)
@@ -127,6 +143,7 @@ class Attack
       }
     end
     def formula(attack,defense)
+      defense=defense.confine(0,defense)
       return (attack**2/(attack+defense)).to_i
     end
     alias create new

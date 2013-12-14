@@ -37,6 +37,7 @@ class Actor
           actor.set_move_dst(dst_x,nil,dst_z)
         end
       }
+      @proc[:none]=->(actor){}
     end
     def self.render(type)
       unless @proc[type]
