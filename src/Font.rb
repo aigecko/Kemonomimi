@@ -11,7 +11,6 @@ class Font
   end
   def self.release
     @cache=Hash.new
-    p @cache
   end
   def self.demo_init(size)
     @demo=Input.load_font(Conf['FONT_TYPE'],size)
@@ -26,6 +25,7 @@ class Font
     unless @font[size]
       p text
       Message.show_format("字體大小#{size}不存在","錯誤",:ASTERISK)
+      exit
       return
     end
   

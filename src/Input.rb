@@ -163,8 +163,6 @@ class Input
 	}
 	return pics
   end
-  def self.load_skill
-  end
   def self.load_chipset_pic
     path='./rc/pic/chipset/chipset.bmp'
     base=Input.load_pic(path)

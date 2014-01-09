@@ -45,7 +45,13 @@ class Actor
       block:'格檔',dodge:'閃避',
       wlkspd:'跑速',atkspd:'攻速',
       jump:'跳躍',
-      extra:'剩餘點數'
+      extra:'剩餘點數',
+      
+      atk_vamp:'普攻吸血',
+      skl_vamp:'技能吸血',
+      
+      magic_amp:'魔法輸出強化',
+      attack_amp:'輸出強化'
     }#}
     
     @part_table={

@@ -47,7 +47,8 @@ class Actor
 	  @base=Hash.new(0)
       [:str,:con,:int,:wis,:agi,
        :maxhp,:maxsp,
-       :wlkspd,:jump,:atkspd,:level].each{|sym|
+       :wlkspd,:jump,:atkspd,
+       :level,:money].each{|sym|
 		@base[sym]=base[sym]+attrib[sym]
 	  }
       
@@ -79,10 +80,7 @@ class Actor
     def #{act}_#{name}_attrib(attrib)
       attrib.each{|sym,value|
         if value.integer?||
-           sym==:dodge||
-           sym==:block||
-           sym==:healhp||
-           sym==:healsp
+           [:dodge,:block,:healhp,:healsp,:atk_vamp,:skl_vamp].include?(sym)
           @#{name}[sym]#{act==:gain ? '+':'-'}=value
         else
           @amped[sym]#{act==:gain ? '+':'-'}=(value*100).to_i
@@ -127,12 +125,12 @@ class Actor
       }
     end
     def compute_state_equip
-      @total[:wlkspd]=@base[:wlkspd]
-      @total[:atkspd]=@base[:atkspd]
-      @total[:jump]=@base[:jump]
-      @total[:level]=@base[:level]
+      [:wlkspd,:atkspd,:jump,:level].each{|sym|
+        @total[sym]=@base[sym]
+      }      
 	  
-	  [:magic_amp,:consum_amp].each{|sym|
+	  [:magic_amp,:consum_amp,
+       :atk_vamp,:skl_vamp].each{|sym|
 	    @total[sym]=0
 	  }
       #dbg
@@ -142,12 +140,14 @@ class Actor
       [:atk,:def,:matk,:mdef,:ratk,
        :wlkspd,:atkspd,
        :maxhp,:maxsp,:healhp,:healsp,
-	   :magic_amp,:consum_amp].each{|sym|
+	   :magic_amp,:consum_amp,
+       :atk_vamp,:skl_vamp].each{|sym|
         @total[sym]+=@state[sym]
         @total[sym]+=@equip[sym]
       }
-	  
       @total[:wlkstep]=@total[:wlkspd]/@@Coef[:step].to_f
+      @total[:hlhpstep]=@total[:healhp]/25.to_f
+      @total[:hlspstep]=@total[:healsp]/25.to_f
     end
     def compute_block_dodge    
       agi=@total[:agi]

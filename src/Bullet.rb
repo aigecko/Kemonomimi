@@ -38,6 +38,9 @@ class Bullet
     
     @hit_target=[info[:exclude]]
   end
+  def mark_live_frame
+    @trigger=true
+  end
   def live_frame?
     if @live_cycle==:frame
       if @trigger
@@ -57,7 +60,6 @@ class Bullet
   end
   def affect(target)
     @effect or return true
-    @trigger and return true
     
     @hit_target.include?(target) and return false
     
@@ -74,6 +76,9 @@ class Bullet
       @hit_target<<target
       @live_count-=1
       return @live_count<0 ? true : false 
+    when :time
+      @live_count-=1
+      return @live_count<0 ? true : false
     when :frame
       return false    
     else

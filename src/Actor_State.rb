@@ -21,6 +21,9 @@ class Actor
     def include?(name)
       return @state[name] ? true : false
     end
+    def keep_if
+      @state.keep_if{|sym,state| yield state}
+    end
     def update
       @state.reject!{|_,state|
         if state.respond_to? :each
@@ -42,6 +45,7 @@ class Actor
           end
         end
       }
+      @state.each{|_,state| state.update(@actor)}
     end
     def draw(x,y)
       n=0

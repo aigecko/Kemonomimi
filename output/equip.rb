@@ -17,7 +17,20 @@ $equip[:body][0]=['測試用盔甲','test/body.png',{str:5,con:5,def:15,mdef:15}
 $equip[:back][0]=['測試用披風','test/back.png',{def:2,jump:5},600,'能跳比較高']
 
 $equip[:hand][0]=['測試用短劍','test/sword.png',{atk:15,maxhp:10},1000,'可以造成一些傷害']
-
+$equip[:hand][1]=['勝利寶劍','icon/mat_tkl002/we_sword018d.png',
+  {str:10,con:10,wlkspd:100,atkspd:200,atk_vamp: 0.2,
+   skill:{sym: :burn,name:'燒毀',type: :append,table:[0,0],
+     icon: './rc/icon/icon/mat_tkl002/we_sword018d.png',
+     base: :burn,comment:'就是點燃啦= ='}},
+  65535,"MJ勝利寶劍\n附帶#ff0000|燒毀#00327d|技能"]
+$equip[:hand][2]=['蜻蛉切‧銘槍','icon/mat_tkl002/we_spear006.png',
+  {str:25,con:25,wlkspd: 0.25,
+   skill:{
+     sym: :smash_wave,name:'蜻切',type: :append,level:1,table:[0,[300,20]],
+     icon:'./rc/icon/icon/mat_tkl002/we_spear006.png:[0,5]',
+     base: :smash_wave,comment:'普通攻擊20%機率產生300魔法傷害'}},
+  8450,'攻擊附帶粉碎波']
+$equip[:hand][3]=['妖刀‧村正','icon/mat_tkl002/we_sword021.png',{atk_vamp: 0.52,atk:150},9850,'妖刀村正~~很猛~~']
 
 $equip[:range][0]=['測試用弩弓','test/crsbow.png',{ratk:10,agi:5},1000,'輕型遠距離武器']
 

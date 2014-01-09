@@ -2,24 +2,31 @@
 class Attack
   @@FontSize=30
   @@buffer=[]
+  attr_accessor :attrib
   def initialize(caster,info)  
     @info=info
     @caster=caster
+    
+    @attrib=info[:attrib]||Hash.new(0)
   end
-  def affect(target)
+  def affect(target,scale=1)
     before(target) 
    
     damage=attack(target)
 	
     color=Color[:"attack_#{@info[:type]}"]
 	if damage==:miss
+      @info[:visible]!=false and
 	  @@buffer<<ParaString.new("MISS",target,0,color,@@FontSize)
 	  return true
 	end
+    
+    damage=(damage*scale).to_i
     if damage!=0
       target.lose_hp(damage)
       vamp(damage)
 	
+      @info[:visible]!=false and
       show_damage(damage,target)
     end
     append(target)
@@ -55,13 +62,19 @@ class Attack
 	when :acid	  
 	  direct=2
 	end
+    direct=rand(5)-2
 	color=Color[:"attack_#{@info[:type]}"]
     @@buffer<<ParaString.new(damage,target,direct,color,@@FontSize)
   end
   def attack(target)
-    @info[:attack]==0 and return 0
+    @info[:attack]==0 and return 0    
+    
     attack=@info[:attack]
+    
+    attack+=attack*@attrib[:attack_adj]
+    attack+=attack*@attrib[:attack_amp]/100
 	attack+=attack*@caster.attrib[:attack_amp]/100
+    
     case @info[:type]
     when :phy
       case @info[:cast_type]
@@ -105,14 +118,14 @@ class Attack
       
       case @info[:cast_type]
       when :attack
-        vamp_hp=damage*@caster.attrib[:atk_vamp]/100
+        vamp_hp=(damage*@caster.attrib[:atk_vamp]).to_i
       when :skill
-        vamp_hp=damage*@caster.attrib[:skl_vamp]/100
-      end      
+        vamp_hp=(damage*@caster.attrib[:skl_vamp]).to_i
+      end
       if vamp_hp>0
-        @caster.gain_hp(vamp_hp)      
+        @caster.gain_hp(vamp_hp)
         vamp_hp="%+d"%vamp_hp
-        color=Color[:"vamp_#{@info[cast_type]}"]
+        color=Color[:"vamp_#{@info[:cast_type]}"]
         @@buffer<<ParaString.new(vamp_hp,@caster,color,@@FontSize)
       end
     end 

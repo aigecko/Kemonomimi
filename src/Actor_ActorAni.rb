@@ -47,7 +47,7 @@ class Actor
       bar_w=40
       bar_h=4
       draw_x=pos.x-bar_w/2
-      draw_y=@@map_h-pos.y-pos.z/2+30+1
+      draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+15
       dst.fill_rect(draw_x-1,draw_y,bar_w+2,bar_h+2,@hpbar_color_back)
       dst.fill_rect(draw_x,draw_y+1,bar_w*percent,bar_h,@hpbar_color)
     end

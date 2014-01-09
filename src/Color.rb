@@ -47,6 +47,7 @@ class Color
       item_tag_normal:[182,204,244],
       item_page:[200,200,255],
       item_box:[0,159,236],
+      item_money_font:[0,128,41],
       
       equip_pic_back:[153,206,238],
       equip_str_back:[128,194,234],
@@ -58,9 +59,10 @@ class Color
       item_drag_bar_back:[20,20,255],
       item_drag_bar:[186,205,242],
       
-      equip_comment_font:[34,65,102],
-      equip_rect_back:[240,240,255],
-      equip_name_font:[32,32,94],
+      item_comment_font:[34,65,102],
+      item_rect_back:[240,240,255],
+      item_name_font:[32,32,94],
+      item_count_font:[210,249,255],
       equip_attrib_sym_font:[21,120,230],
       equip_attrib_val_font:[89,43,213],
       
@@ -77,7 +79,9 @@ class Color
       
       actor_hpbar_back:[0,0,0],
       actor_hpbar:[255,0,0],
-      player_hpbar:[255,128,0]
+      player_hpbar:[255,128,0],
+      
+      shadow:[0,0,0]
     }
   end
   def self.[](sym)

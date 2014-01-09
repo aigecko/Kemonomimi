@@ -43,11 +43,9 @@ class GameWindow < BaseWindow
   end
   def close_contral
     Game.window(:ButtonWindow).enable=false
-    #@contral=false
   end
   def open_contral
     Game.window(:ButtonWindow).enable=true
-    #@@contral=true
   end
   def sub_window_interact
     @drag_list.each{|name| 
@@ -81,7 +79,13 @@ class GameWindow < BaseWindow
                             last:4999)#}
         when Key::D
           #dbg
-          @player.lose_hp(10)
+          @player.add_state(@player,
+          name:'燒毀',sym: :burn,
+          icon:'./rc/icon/icon/tklre03/skill_041.png',
+          attrib: {},
+          effect: Attack.new(@player,type: :acid,attack: 25,visible: false),
+          effect_amp: 0.04,
+          last: 2000)
 	    when Key::A
 		  #dbg
 		  convert_position or next
@@ -111,29 +115,36 @@ class GameWindow < BaseWindow
           Game.quit
         end
       when Event::MouseButtonDown
+        window=false
 	    @drag_list.each_with_index{|window,i|
           case @windows[window].detect_click_window(event)
           when :drag
 		    case event.button
 			when Mouse::BUTTON_LEFT
               set_first_window(window)
+			  window_click=true
               close_contral
 			  break
+            when Mouse::BUTTON_RIGHT
+			  window_click=true
 			end
-			window_click=true
           when :click
 			case event.button
 			when Mouse::BUTTON_LEFT
               set_first_window(window)
+			  window_click=true
 			  break
+            when Mouse::BUTTON_RIGHT
+			  window_click=true
 			end
-			window_click=true
           end
         }
 		window_click or
 		case event.button
 	    when Mouse::BUTTON_RIGHT
           get_attack_target
+        when Mouse::BUTTON_LEFT
+          get_item_onground
 		end
       when Event::Quit
         Game.quit
@@ -156,8 +167,20 @@ class GameWindow < BaseWindow
     if convert_position
       target=@map.find_under_cursor_enemy(@offset_x)
       if target        
-        @player.set_target(target)
+        @player.set_target(target,:attack)
         @player.chase_target        
+      else
+        @player.set_move_dst(*convert_position)
+        @player.set_target(nil)
+      end
+    end
+  end
+  def get_item_onground
+    if convert_position
+      item=@map.find_under_cursor_item(@offset_x)
+      if item
+        @player.set_target(item,:pickup)
+        @player.chase_target
       else
         @player.set_move_dst(*convert_position)
         @player.set_target(nil)
@@ -229,6 +252,10 @@ class GameWindow < BaseWindow
 	@map.render_enemy_bullet.each{|bullet|
 	  add_actor_buffer(bullet)
 	}
+    
+    @map.render_onground_item.each{|item|
+      add_actor_buffer(item)
+    }
   end
   def draw_circle
     #dbg

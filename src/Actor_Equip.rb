@@ -4,21 +4,25 @@ class Actor
     @@Part=[:head,:neck,:body,:back,:right,:left,
 	         :range,:finger,:feet,:deco]
     def initialize(list={})      
-	  @wear=Hash.new(nil)
-	  @@Part.each{|part|
-	    @wear[part]=list[part]
-	  }
-	end
-	def []=(part,equip)
+      @wear=Hash.new(nil)
+      @@Part.each{|part|
+        @wear[part]=list[part]
+      }
+    end
+    def []=(part,equip)
       if part==:hand
         @wear[:right]=equip
       else
-	    @wear[part]=equip
+        @wear[part]=equip
       end
-	end
-	def [](part)
-	  @wear[part]
-	end
+    end
+    def [](part)
+      if part==:hand
+        @wear[:right]
+      else
+        @wear[part]
+      end
+    end
     def parts
       @@Part
     end

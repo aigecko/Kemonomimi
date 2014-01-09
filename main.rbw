@@ -4,8 +4,8 @@ std_lib=%w(sdl yaml singleton win32api pathname)
 std_lib.each{|lib|
   require "#{lib}"
 }
-my_lib=%w(Color Screen Config win32api Message
-          Font Input Extension Skill Mouse)
+my_lib=%w(Color Screen Config win32api Message Icon
+          Font Input Extension Skill Mouse FixedArray)
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
@@ -31,7 +31,7 @@ class Game
     Event.init
     Screen.flip
     self.win_initialize
-	puts "start #{Time.now-$t}"
+    puts "start #{Time.now-$t}"
   end
   private
   def self.sdl_putenv
@@ -102,11 +102,12 @@ class Game
     require 'zlib'
     require 'stringio'
     
-    library_list=%w(Database Item Equipment Consumable
-                    Event Key Actor Player Enemy Friend
+    library_list=%w(Database Position Item Equipment Consumable
+                    Event Key
+                    Actor Player Enemy Friend
                     Statement ColorString ParaString
                     Shape Bullet
-                    Attack FixAttack Effect)
+                    Attack FixAttack Effect Heal)
     library_list.each{|lib|
       require_relative "src/#{lib}"
     }
@@ -130,32 +131,21 @@ class Game
 
   def self.update
     Event.poll
-	@window.each_value{|window|
+    @window.each_value{|window|
       if window.enable
 	    window.interact
         if window.alone
           break
         end
       end
-	}
+    }
     if Event[:Quit]
-	  Game.quit
+      Game.quit
     end
   end
   def self.draw
-	@window.each_value{|window| window.visible and window.draw}
+    @window.each_value{|window| window.visible and window.draw}
     Screen.flip
-  end
-  def self.draw_buffer
-
-    $buffer.sort_by!{|src| src[3]}
-	$buffer.reverse!
-    $buffer.each{|src|
-	  #src[0]=src [1]=draw_x [2]=draw_y [3]=y for compare
-	  src[0].draw(src[1],src[2],src[4])
-    }
-
-    $buffer.clear
   end
   def self.draw_back
     Screen.fill_rect(0,0,@Width,@Height,0)
@@ -185,14 +175,14 @@ class Game
   end
   def self.quit
     Screen.destroy
-	SDL.quit
+    SDL.quit
     exit
   end
   def self.show
     loop{
       time=SDL.get_ticks
 
-	  update
+      update
       draw
 
       delta_time=SDL.get_ticks-time

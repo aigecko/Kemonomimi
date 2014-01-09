@@ -25,12 +25,16 @@ class Map
         Chipset[@chips[column][row]].draw(row*@chip_w,column*@chip_h,@map_pic)
       end
     end
+    #dbg
+    @items=[]#Array.new(1000){
+      # Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(1000),z:rand(400)})
+    # }
     
     @friend=[]
     @enemy=[]
     
     @friend_bullet=[]
-	@enemy_bullet=[]
+	  @enemy_bullet=[]
 	
     @friend_circle=[]
     @enemy_circle=[]
@@ -51,6 +55,13 @@ class Map
       enemy.under_cursor?(offset_x)
     }
     result=under_cursor.min_by{|enemy| enemy.position.z}
+    return result
+  end
+  def find_under_cursor_item(offset_x)
+    under_cursor=@items.select{|item|
+      item.under_cursor?(offset_x)
+    }
+    result=under_cursor.min_by{|item| item.position.z}
     return result
   end
   def render_friend(ally=:friend)
@@ -88,6 +99,9 @@ class Map
       return @enemy_bullet
     end
   end
+  def render_onground_item
+    return @items
+  end
   def add_friend_circle(ally,circle)
     if ally==:enemy
       @enemy_circle<<circle
@@ -109,7 +123,9 @@ class Map
       @enemy_bullet<<bullet
     end
   end
-  def update
+  def update    
+    @friend_bullet.each{|bullet| bullet.mark_live_frame}
+    @friend_circle.each{|circle| circle.mark_live_frame}
     @enemy.reject!{|actor|
       @friend_bullet.reject!{|bullet|	  
 	    Shape.collision?(actor,bullet)&&
@@ -137,9 +153,6 @@ class Map
                          [rand(200),0,rand(200)],
                          {exp:600},
                          "mon_004r")
-      #enemy.add_state(@player,name:'魔法免疫',sym: :magic_immunity,
-      #                 icon:'./rc/icon/icon/tklre04/skill_053.png',
-      #                 attrib:{},last: nil)
       @enemy<<enemy
     end
     @friend.each{|friend|

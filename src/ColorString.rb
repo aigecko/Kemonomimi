@@ -1,74 +1,90 @@
 class ColorString
-  @@regexp=/(#.{6,6}\|)/
+  @@regexp=/#(..)(..)(..)\|/
+  attr_reader :h
   def initialize(str,size,default_color,limit_len=0)
     @size=size
+    @default_color=default_color
+    @limit_len=limit_len
     @ary=[]
-    
-    r=default_color[0]
-    g=default_color[1]
-    b=default_color[2]
-    @default_color="#%02x%02x%02x|"%[r,g,b]
-    
-    if limit_len>0&&
-       str.size>limit_len      
-      endl=str.size/7
-      if str.size%7==0
-        endl-=1
-      end
-      endl.times{|n|
-        n+=1
-        str.insert(7*n+n-1,"\n")
-      }
-    end
-    
-    sentences=str.split(/\n/)    
-    sentences.each{|s| @ary<<s.split(@@regexp)}
-    
-    unless @ary[0][0].match(@@regexp)
-      @ary[0].unshift(@default_color)
-    end
-    
-    sentences.size>0 and
-    for line in 1...sentences.size
-      forward_line=line-1
-      while(forward_line>=0)
-        @ary[forward_line].reverse.each do |word|
-          if word.match(@@regexp)
-  	        @ary[line].unshift($~.to_s)
-		    forward_line=-1
-		    break
-	      end
-	    end
-	  forward_line-=1
+    ary=[]
+    sentence=str.split(/(\n)/)
+    sentence.each{|str|
+      ary+=str.split(/(#.{6,6}\|)/)
+    }    
+    for i in 0...ary.size
+      if (m=ary[i].match(@@regexp))
+        ary[i]=m[1..3].collect{|n| n.to_i(16)}
       end
     end
-    
-    @ary.each do |pack| 
-      (pack.size/2).times do |i|
-        color=pack[i*2]
-        r=color[1..2].to_i(16)
-        g=color[3..4].to_i(16)
-        b=color[5..6].to_i(16)
-        pack[i*2]=[r,g,b]
-      end
+    unless ary.first.respond_to? :take
+      ary.unshift(@default_color)
     end
-  end
-  def h
-    @ary.size*@size
+    #p ary
+    if limit_len==0
+      @ary=ary
+      @ary.reject!{|str| str=="\n"}
+    else
+      accum=0
+      str=''
+      for i in 0...ary.size
+        if ary[i].respond_to?(:take)          
+          @ary<<str
+          @ary<<ary[i]          
+          str=''
+          next
+        end
+        ary[i].empty? and next
+        ary[i].each_char{|char|
+          if char=="\n"      
+            @ary<<str
+            @ary<<:endl
+            str=''
+          else
+            str<<char
+            if str.size>=7
+              @ary<<str
+              str=''
+            end
+          end
+        }
+      end
+      @ary<<str
+    end
+    
+    @h=0
+    @ary.each{|pack|
+      pack.respond_to? :take and next
+      pack.empty? and next
+      @h+=@size
+    }
   end
   def draw(start_x,start_y)
     x=start_x
     y=start_y
-    @ary.each do |pack| 
-      (pack.size/2).times do |i|
-        color=pack[i*2]
-        str=pack[i*2+1]
-        if str.size>0
-          x+=Font.draw_solid(str,@size,x,y,*color)[0]
+    color=@default_color
+    accum=0
+    @ary.each{|pack|
+      if pack.respond_to? :take
+        color=pack
+      elsif pack==:endl
+        y+=@size
+        x=start_x
+        accum=0
+      else
+        pack.empty? or     
+        x+=Font.draw_solid(pack,@size,x,y,*color)[0]
+        accum+=pack.size
+        if @limit_len>0
+          if accum>=@limit_len
+            accum=0
+            x=start_x            
+            y+=@size
+          end
+        else
+          x=start_x
+          y+=@size
         end
       end
-      x=start_x
-      y+=@size
-    end
+    }
   end
 end

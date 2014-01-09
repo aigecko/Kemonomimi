@@ -8,16 +8,17 @@ class Skill
     unless @name
       Message.show_format('技能名稱設定錯誤','錯誤',:ERROR)
       exit
-    end    
+    end
     
     begin
       if info[:icon]
-        @icon=SDL::Surface.load(info[:icon])
-		@icon.set_color_key(SDL::SRCCOLORKEY,@icon[0,0])
+        @icon=Icon.load(info[:icon])
+        #@icon.set_color_key(SDL::SRCCOLORKEY,@icon[0,0])
       else
         @icon=SDL::Surface.new(Screen.flag,24,24,Screen.format)
       end
     rescue
+      p info[:icon]
       Message.show(:skill_pic_load_failure)
       exit
     end
@@ -39,6 +40,7 @@ class Skill
     
     @level=info[:level]||1
     @table=info[:table]
+    @data=info[:data]
     
     @comment=info[:comment]||:nil.to_s
   end
@@ -67,7 +69,7 @@ class Skill
     else
       caster.skill[@common_cd] and caster.skill[@common_cd].cd_start
     end
-    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level])
+    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@sdata)
   end
   def cast_attack(caster,target,atkspd)    
 	consum=@consum*(100+caster.attrib[:consum_amp])/100
