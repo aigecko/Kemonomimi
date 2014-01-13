@@ -1,7 +1,7 @@
 #coding: utf-8
 class EquipWindow < DragWindow
   def initialize
-    win_w,win_h=150,310
+    win_w,win_h=156,310
     win_x=377
     win_y=50
     super(win_x,win_y,win_w,win_h)
@@ -61,7 +61,7 @@ class EquipWindow < DragWindow
     draw_title(dst)
     (0...@Parts.size).each{|n|
        dst.fill_rect(@win_x+10,@win_y+22+n*27,26,26,Color[:equip_pic_back])    
-       dst.fill_rect(@win_x+36,@win_y+22+n*27,105,26,Color[:equip_str_back])
+       dst.fill_rect(@win_x+36,@win_y+22+n*27,110,26,Color[:equip_str_back])
     }
     def draw
       @skeleton.draw(@win_x,@win_y)
@@ -69,20 +69,32 @@ class EquipWindow < DragWindow
       @click_equip_y and
       Screen.fill_rect(@win_x+10,@win_y+22+@click_equip_y*27,26,26,Color[:click_box_back])
       
-      x,y=@border+1,23
+      draw_x,draw_y=@win_x+39,@win_y+27
+      icon_x=@win_x+11
       @equip.each{|part,equip|
         if equip
-          equip.draw(@win_x+x,@win_y+y)
-          equip.draw_name(@win_x+x+28,@win_y+y+4)
+          equip.draw_name(draw_x,draw_y)
+          equip.draw(icon_x,draw_y-4)
         else
-          Font.draw_solid(@part_table[part],15,@win_x+x+28,@win_y+y+4,*Color[:part_str_font])
+          Font.draw_solid(@part_table[part],15,draw_x,draw_y,*Color[:part_str_font])
         end
-        y+=27
+        draw_y+=27
       }
       
-      @click_equip_y and
-      @show_equip_detail and 
-      @equip[@Parts[@click_equip_y]].draw_detail(@win_x+37,@win_y+22+@click_equip_y*27)
+      if @click_equip_y&&@show_equip_detail
+        unless @equip[@Parts[@click_equip_y]]
+          @show_equip_detail=@click_equip_y=nil
+          return
+        end
+        equip=@equip[@Parts[@click_equip_y]]
+        draw_x,draw_y=@win_x+10,@win_y+22+@click_equip_y*27
+        if @click_equip_y>5
+          draw_y=equip.draw_detail(draw_x,draw_y,:above)
+        else
+          draw_y=equip.draw_detail(draw_x,draw_y,:below)
+        end
+        equip.draw_comment(draw_x,draw_y)
+      end
     end
   end
 end

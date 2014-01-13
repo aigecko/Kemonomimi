@@ -77,6 +77,7 @@ class GameWindow < BaseWindow
                             attrib:{def:1000,agi:1000,healhp:10,atkspd:200},#}
                             multi: true,
                             last:4999)#}
+                         #照秒回 lag會有BUG
         when Key::D
           #dbg
           @player.add_state(@player,
@@ -86,12 +87,10 @@ class GameWindow < BaseWindow
           effect: Attack.new(@player,type: :acid,attack: 25,visible: false),
           effect_amp: 0.04,
           last: 2000)
-	    when Key::A
-		  #dbg
-		  convert_position or next
-		  @player.cast(:arrow,nil,*convert_position,true)
+        when Key::A
+          convert_position or next
+          @player.cast(:arrow,nil,*convert_position,true)
         when Key::Q
-          #dbg
           convert_position or next
           @player.cast(:fire_circle,nil,*convert_position)
         when Key::W
@@ -258,7 +257,6 @@ class GameWindow < BaseWindow
     }
   end
   def draw_circle
-    #dbg
     @map.render_friend_circle.sort_by{|circle|
       -circle.position.z
     }.each{|circle|
@@ -277,11 +275,11 @@ class GameWindow < BaseWindow
     draw_circle
     draw_actor
     Attack.draw(@surface)
+    Heal.draw(@surface)
     Effect.draw(@surface)
     Surface.blit(@surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
                  Screen.render,0,0)
     draw_sub_window
-    #dbg
     @player.draw_state(200,400)
   end
 end

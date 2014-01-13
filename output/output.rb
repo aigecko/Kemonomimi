@@ -5,7 +5,7 @@ require 'zlib'
 require 'pp'
 
 #加密設定
-$Encrypt=false
+$Encrypt=true
 
 def Output(name)
   #輸出設定

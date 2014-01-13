@@ -8,10 +8,10 @@ class ParaString
       @draw_x=target.position.x-(@string.size*@font_size>>2)
       @draw_y=430-target.position.y-target.position.z/2-target.pic_h
       @direct=rand(5)-2
-	when 5	  
-	  @string,target,@direct,@color,@font_size= *ary
-	  
-	  @draw_x=target.position.x-(@string.size*@font_size>>2)
+    when 5	  
+      @string,target,@direct,@color,@font_size= *ary
+      
+      @draw_x=target.position.x-(@string.size*@font_size>>2)
       @draw_y=430-target.position.y-target.position.z/2-target.pic_h
     when 6
       @string,@draw_x,@draw_y,@direct,@color,@font_size= *ary
@@ -27,8 +27,8 @@ class ParaString
     elsif @count<15
       @draw_y-=2
     elsif @count<20
-	  @draw_y-=1
-	elsif @count<25
+      @draw_y-=1
+    elsif @count<25
       return true
     end
     Font.draw_solid(@string,@font_size,
@@ -36,8 +36,5 @@ class ParaString
                     *@color,dst)
     @count+=1
     return false
-  end
-  def self.create_arg(str,target)
-    
   end
 end

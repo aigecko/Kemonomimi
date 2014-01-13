@@ -45,7 +45,13 @@ class Actor
           end
         end
       }
-      @state.each{|_,state| state.update(@actor)}
+      @state.each{|_,state|
+        if state.respond_to? :each
+          state.each{|st| st.update(@actor)}
+        else
+          state.update(@actor)
+        end
+      }
     end
     def draw(x,y)
       n=0

@@ -3,8 +3,12 @@ class Item
   attr_reader :position,:superposed,:name    
   @@rect_alpha=220    
   @@low_bound=350
+  @@font_size=12
+  @@rect_w=135
   def initialize(name,pic,price,comment,args={})
     @name=name
+    @name_pic=Font.render_solid(@name,@@font_size,*Color[:item_name_font])
+    
     @price=price
     begin
       @pic=Icon.load("./rc/icon/#{pic}")
@@ -16,14 +20,9 @@ class Item
     @onground=args[:onground]
     @position=Position.new(args[:x]||0,0,args[:z]||0)
     
-    @superposed=true
-        
-    @font_size=12
-    @name_size=15
+    @superposed=true 
+    @comment=ColorString.new(comment,@@font_size,Color[:item_comment_font],11)
     
-    @comment=ColorString.new(comment,@font_size,Color[:item_comment_font],7)
-    
-    @rect_w=85
     @rect_h=28+@comment.h
   end
   def pickup
@@ -51,10 +50,16 @@ class Item
       @pic.draw(*args)
     end
   end
-  def draw_detail(x,y)
+  def draw_detail(x,y,direct)
     y>@@low_bound and y=@@low_bound
-    Screen.draw_rect(x,y,@rect_w,@rect_h,Color[:item_rect_back],true,@@rect_alpha)
-    Font.draw_solid(@name,@font_size,x,y,*Color[:item_name_font])
+    case direct
+    when :above
+      y-=@rect_h+1
+    when :below
+      y+=27
+    end
+    Screen.draw_rect(x,y,@@rect_w,@rect_h,Color[:item_rect_back],true,@@rect_alpha)
+    @name_pic.draw(x,y)
     return y+14
   end
   def draw_comment(x,y)

@@ -10,21 +10,19 @@ class Attack
     @attrib=info[:attrib]||Hash.new(0)
   end
   def affect(target,scale=1)
-    before(target) 
-   
-    damage=attack(target)
-	
-    color=Color[:"attack_#{@info[:type]}"]
-	if damage==:miss
+    before(target)
+    
+    damage=attack(target)	
+    if damage==:miss
       @info[:visible]!=false and
-	  @@buffer<<ParaString.new("MISS",target,0,color,@@FontSize)
-	  return true
-	end
+      show_damage("MISS",target)
+      return true
+    end
     
     damage=(damage*scale).to_i
     if damage!=0
-      target.lose_hp(damage)
-      vamp(damage)
+      vamp_damage=target.lose_hp(damage)
+      vamp(vamp_damage)
 	
       @info[:visible]!=false and
       show_damage(damage,target)
@@ -35,35 +33,25 @@ class Attack
   end
   def before(target)
     if @caster.has_skill?(:dogear)
-	  @caster.skill[:dogear].cast(@caster,target,nil,nil,nil)
-	end
+      @caster.skill[:dogear].cast(@caster,target,nil,nil,nil)
+    end
     
     before=@info[:before]
-	before and
-	if before.respond_to? :each
-	  before.each{|name|
-	    skill=@caster.skill[name] and
-		skill.cast(@caster,target,nil,nil,nil)
-	  }
-	else
-	  skill=@caster.skill[before] and
-	  skill.cast(@caster,target,nil,nil,nil)
-	end
+    before and
+    if before.respond_to? :each
+      before.each{|name|
+        skill=@caster.skill[name] and
+      skill.cast(@caster,target,nil,nil,nil)
+      }
+    else
+      skill=@caster.skill[before] and
+      skill.cast(@caster,target,nil,nil,nil)
+    end
   end
   def show_damage(damage,target)
     damage=damage.to_s
-	case @info[:type]
-	when :phy
-	  direct=-2
-	when :mag	  
-	  direct=-1
-	when :umag	
-	  direct=1  
-	when :acid	  
-	  direct=2
-	end
     direct=rand(5)-2
-	color=Color[:"attack_#{@info[:type]}"]
+    color=Color[:"attack_#{@info[:type]}"]
     @@buffer<<ParaString.new(damage,target,direct,color,@@FontSize)
   end
   def attack(target)
@@ -73,26 +61,24 @@ class Attack
     
     attack+=attack*@attrib[:attack_adj]
     attack+=attack*@attrib[:attack_amp]/100
-	attack+=attack*@caster.attrib[:attack_amp]/100
+    attack+=attack*@caster.attrib[:attack_amp]/100
     
     case @info[:type]
     when :phy
       case @info[:cast_type]
       when :attack
-	    dodge=target.attrib[:dodge]*100
-	    if rand(10000)<dodge
-    	    return :miss
-	    end
+        dodge=target.attrib[:dodge]*100
+        if rand(10000)<dodge
+          return :miss
+        end
         damage=Attack.formula(attack,target.attrib[:def])
-	  
-	    block=target.attrib[:block]*100	
-	    if rand(10000)<dodge
-	      if @caster.skill[:catear]
-		    damage=damage*40/100
-		  else
-	        damage=1
-		  end
-	    end
+      
+        block=target.attrib[:block]*100	
+        if rand(10000)<block
+          damage=(@caster.skill[:catear])? damage*40/100 : 1
+        end
+        damage=critical(damage)
+        damage=bash(target,damage)
       when :skill        
         damage=Attack.formula(attack,target.attrib[:def])
       else        
@@ -110,7 +96,33 @@ class Attack
     when :acid
       damage=attack
     end	
-	return damage.confine(1,damage)
+    return damage.confine(1,damage)
+  end
+  def critical(damage)
+    if !@caster.attrib[:critical].empty?
+      @caster.attrib[:critical].each{|data|
+        possibility,amped=data
+        rand(100)<possibility or next
+        damage+=(damage*(amped-1)).to_i
+      }
+    end
+    return damage
+  end
+  def bash(target,damage)    
+    if !@caster.attrib[:bash].empty?
+      @caster.attrib[:bash].each{|data|
+        possibility,time,add_damage=data
+        rand(100)<possibility or next
+        damage+=add_damage
+        Effect.new(@caster,
+          name:'暈眩',sym: :stun,effect_type: :stun,
+          icon:'./rc/icon/icon/tklre04/skill_064.png',
+          attrib:{},
+          last: time.to_sec).affect(target)
+        break
+      }
+    end
+    return damage
   end
   def vamp(damage)
     if @info[:cast_type]
@@ -123,10 +135,7 @@ class Attack
         vamp_hp=(damage*@caster.attrib[:skl_vamp]).to_i
       end
       if vamp_hp>0
-        @caster.gain_hp(vamp_hp)
-        vamp_hp="%+d"%vamp_hp
-        color=Color[:"vamp_#{@info[:cast_type]}"]
-        @@buffer<<ParaString.new(vamp_hp,@caster,color,@@FontSize)
+        Heal.new(@caster,hp: vamp_hp).affect(@caster)
       end
     end 
   end

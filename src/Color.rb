@@ -71,8 +71,8 @@ class Color
       attack_umag:[128,0,128],
       attack_acid:[255,255,255],
       
-      vamp_attack:[20,232,9],
-      vamp_skill:[0,220,0],
+      heal_hp_font:[20,232,9],
+      heal_sp_font:[0,220,0],
       
       statement_back:[0,217,255],
       statement_border:[47,57,128],

@@ -31,7 +31,7 @@ class ClassWindow < SelectWindow
 單次攻擊輸出非常高
 不過攻擊速度並不快
 具有雷電的屬性
-弓箭射擊可以造成擴散效果
+弓箭射擊可以造成範圍傷害
 攻擊高且攻擊範圍也很遠
     EOF
     @detail[:archer]=<<-EOF
@@ -59,7 +59,7 @@ class ClassWindow < SelectWindow
 甚至強度可以超越坦克的水準
     EOF
     @detail[:fighter]=<<-EOF
-將劍和盾搭配使用的職業
+可以單手武器與盾搭配或二刀流
 輸出以普通攻擊為主
 血量很高可以承受大量傷害
 具有火的屬性

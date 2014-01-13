@@ -4,10 +4,10 @@ class Font
   def self.init
     @font=Hash.new
     @cache=Hash.new
-	[12,15,20,30].each{|size|
+	  [12,15,20,30].each{|size|
       @font[size]=Input.load_font(Conf['FONT_TYPE'],size)
       @cache[size]=Hash.new()
-	}
+	  }
   end
   def self.release
     @cache=Hash.new
@@ -23,10 +23,15 @@ class Font
   end  
   def self.render_solid(text,size,r,g,b)
     unless @font[size]
-      p text
-      Message.show_format("字體大小#{size}不存在","錯誤",:ASTERISK)
+      print text      
+      
+      begin
+        raise "FontNotExisted"
+      rescue => e
+        Message.show_format("字體大小#{size}不存在","錯誤",:ASTERISK)
+        Message.show_backtrace(e)
+      end
       exit
-      return
     end
   
     color=(r<<20)+(g<<10)+b

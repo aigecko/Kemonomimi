@@ -14,6 +14,7 @@ class Actor
           actor.set_move_dst(dst_x,nil,dst_z)                           
         }
         @proc[:sidemove]=->(actor){
+          actor.target and return
           actor.var[:w]=400
           actor.var[:h]=50
           unless actor.moving?
@@ -45,7 +46,15 @@ class Actor
     end
     class Action
       def self.init
-        @prc=Hash.new
+        @proc=Hash.new
+        @proc[:agreesive]=->(actor){
+          actor.set_target(Game.player,:attack)
+        }
+        @proc[:peaceful]=->(actor){
+          if actor.attrib[:maxhp]>actor.attrib[:hp]
+            actor.set_target(Game.player,:attack)
+          end
+        }
       end
       def self.[](type)
         return @proc[type]
@@ -64,8 +73,8 @@ class Actor::AI
     exit
   end
   def initialize(info)
-    @move=Move[info[:move]] or  self.fail_message(info[:move])
-    @action=->(actor){}
+    @move=Move[info[:move]] or  Actor::AI.fail_message(info[:move])
+    @action=Action[info[:action]]||->(info){}
   end
   def call(actor)
     @move.call(actor)

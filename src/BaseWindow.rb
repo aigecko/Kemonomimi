@@ -27,15 +27,15 @@ private
     @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
     @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
     @@colorkey=@@skeleton[:loca7][0,0]
-	@@skeleton.each_value{|ske|
+	  @@skeleton.each_value{|ske|
 	  ske.set_color_key(SDL::SRCCOLORKEY,@@colorkey)
 	  ske.display_format_alpha
 	}
   end
   self.init
   def stat_init
-	@enable=false
-	@visible=false
+    @enable=false
+    @visible=false
     
     @alone=false
      
@@ -89,12 +89,12 @@ public
     dst.fill_rect(@win_x+@ske_w,@win_y+@ske_h,
                   @row_draw_times<<@ske_mv,
                   @column_draw_times<<@ske_mv,
-                  [70,163,255])
+                  @@skeleton[:loca5][0,0])
     @@skeleton[:loca8].draw(@right_margin-@ske_w,@win_y,dst)
     @@skeleton[:loca2].draw(@right_margin-@ske_w,@down_margin,dst)
     if @win_y<@down_margin-@ske_h
-    @@skeleton[:loca4].draw(@win_x,@down_margin-@ske_h,dst)
-    @@skeleton[:loca6].draw(@right_margin,@down_margin-@ske_h,dst)
+      @@skeleton[:loca4].draw(@win_x,@down_margin-@ske_h,dst)
+      @@skeleton[:loca6].draw(@right_margin,@down_margin-@ske_h,dst)
     end
     @@skeleton[:loca7].draw(@win_x,@win_y,dst)
     @@skeleton[:loca1].draw(@win_x,@down_margin,dst)

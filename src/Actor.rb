@@ -6,7 +6,7 @@
 }
 class Actor
   attr_reader :position,:attrib,:ally,:race,:class
-  attr_reader :equip_list,:item_list,:equip,:skill
+  attr_reader :equip_list,:item_list,:equip,:skill,:target
   #dbg
   attr_accessor :shape  
   attr_accessor :var
@@ -28,21 +28,23 @@ class Actor
     @equip=Equip.new
     @equip_list=FixedArray.new(100)
     @item_list=FixedArray.new(100){[nil,0]}
-    #dbg
-    gain_consum(10)
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
-    #dbg
+
     @skill={}
-    #dbg
+
     @skill_list={}
     Skill.all_type_list.each{|type|
       @skill_list[type]=[]
     }
-    gain_equip([:hand,3])
-    #gain_equip([:hand,1])
-    gain_equip([:hand,2])
+    
+    #dbg
+    gain_equip ([[:head,1],[:head,10],[:head,20],
+      [:left,1],[:dual,1],[:dual,1],[:right,1],[:single,1],
+      [:body,1],[:body,10],[:body,20],[:range,1],[:range,10],
+      [:finger,1],[:finger,2],[:feet,1],[:feet,10],[:deco,5]])
+    
     @shape=Shape.new(:col,					 
       r: @animation.w/2,
       h: @animation.h)
@@ -89,23 +91,9 @@ class Actor
     end
   end
   def class_initialize
-    attack_cd=arrow_cd=0
-    case @class
-    when :fighter
-      attack_cd=1.6
-    when :paladin,:darkknight
-      attack_cd=1.64
-    when :mage
-      attack_cd=1.8
-    when :cleric
-      attack_cd=1.76
-    when :archer
-      attack_cd=1.68
-      arrow_cd=1.6
-    when :crossbowman
-      attack_cd=1.72
-      arrow_cd=1.68
-    end
+    class_data=Database.get_class(@class)
+    attack_cd=class_data[:attack_cd]
+    arrow_cd=class_data[:arrow_cd]
 	
     add_skill(:normal_attack,
       name:'普通攻擊',type: :active,cd: attack_cd,
@@ -114,25 +102,15 @@ class Actor
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
 	  
-    (@class==:archer||@class==:crossbowman)and
+    #(@class==:archer||@class==:crossbowman)and
     add_skill(:arrow,
       name:'弓箭射擊',type: :active,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
-      base: :arrow,consum: 1,level: 1,table:[0,[0,:ratk,1]],
+      base: :arrow,level: 1,table:[0,[0,:ratk,1]],
       common_cd: :normal_attack,
       comment:'快速射出一隻箭 威力和ratk成正相關')
   end  
   def skill_initialize
-    #add_skill(:flash,
-    #  name:'閃現',type: :active,cd: 20,
-    #  icon:'./rc/icon/skill/2011-12-23_3-033.gif',
-    #  base: :flash,consum:10,level:1,table:[0,100],
-    #  comment:'瞬間移動到指定地點')
-    #add_skill(:fire_arrow,
-    #  name:'火焰箭',type: :append,
-    #  icon:'./rc/icon/skill/2011-12-23_3-047.gif',
-    #  base: :fire_arrow,consum:2,level:1,table:[0,20],
-    #  comment:'金川大胖火焰箭 威力和matk成正相關')
 	(@class==:paladin||@class==:darkknight)and
     add_skill(:smash_wave,
       name:'粉碎波',type: :append,
@@ -145,17 +123,11 @@ class Actor
       icon:'./rc/icon/skill/2011-12-23_3-072.gif',
       base: :fire_circle,consum: 1,level: 1,table:[0,[50,0]],
       comment:'焚燒周圍的敵人 造成傷害')
-    @class==:fighter and
-    add_skill(:break_armor,
-      name:'破防',type: :append,
-      icon:'./rc/icon/skill/2011-12-23_3-125.gif',
-      base: :break_armor,table:[0,-100],
-      comment:'破防')
     @class==:cleric and
     add_skill(:enegy_arrow,
       name:'碎石杖擊',type: :switch_append,
       icon:'./rc/icon/skill/2011-12-23_3-125.gif',
-      base: :enegy_arrow,consum: 0,level: 1,table:[0,[40,0]],
+      base: :enegy_arrow,consum: 0,level: 1,table:[0,[40,10]],
       comment:'普攻附加無視魔免魔法傷害')
     (@class==:fighter||@class==:paladin||@class==:darkknight) and
     add_skill(:magic_immunity,
@@ -163,12 +135,6 @@ class Actor
       icon:'./rc/icon/icon/tklre04/skill_053.png',
       base: :magic_immunity,consum: 30,level: 1,table:[0,[{atk: 20,con: 10},3.to_sec]],
       comment:'數秒內不受大部分魔法及狀態影響')
-    #dbg
-    #add_skill(:burn,
-    #  name:'燒毀',type: :append,
-    #  icon:'./rc/icon/icon/tklre04/skill_058.png',
-    #  base: :burn,table:[],
-    #  comment:'敵人每秒受到50絕對傷害 燒毀~~')
   end
   def rotate(side)
     @animation.rotate(side)
@@ -297,35 +263,40 @@ class Actor
   def update
     @state.update
     recover
-    #dbg
-    if @ally==:player
-      target=x=y=z=nil
-      @skill_list[:auto].each{|skill|
-        skill.cast(self,target,x,y,z)
-      }
-      @skill_list[:switch_auto].each{|skill|
-        skill.switch and skill.cast(self,target,x,y,z)
-      }
+    
+    @skill_list[:auto].each{|skill|
+      skill.cast_auto(self)
+    }
+    @skill_list[:switch_auto].each{|skill|
+      skill.switch and skill.cast_auto(self)
+    }
+    
+    unless has_state?(:stun)
+      chase_target
+      move2dst
+      interact_target
     end
-    chase_target  
-    move2dst 
-    interact_target 
   end
   def wear_equip(index)
     part=@equip_list[index].part
     equip=@equip_list[index]
     @equip_list.delete_at(index)
-    unless @equip[part]
-      @equip[part]=equip
-    else
-      old_equip=@equip[part]
-      if old_equip.skill
-        del_skill(old_equip.sym,old_equip.skill)
-      end
-      @equip[part]=equip
-      @equip_list<<old_equip	
-      @attrib.lose_equip_attrib(old_equip.attrib)
-    end
+        
+    #unless @equip[part]
+    #  @equip.wear(self,part,equip)
+    #else
+    takeon_equip(part,equip)
+  end
+  def takeon_equip(part,equip)
+    #old_equip=@equip[part]      
+    
+    #if old_equip
+    #  if old_equip.skill
+    #    del_skill(old_equip.sym,old_equip.skill)
+    #  end
+    #  @attrib.lose_equip_attrib(old_equip.attrib)
+    #end
+    @equip.wear(self,part,equip)
 	  @attrib.gain_equip_attrib(equip.attrib)
     if equip.skill
       add_skill(equip.sym,equip.skill)
@@ -352,19 +323,32 @@ class Actor
     @skill[name]
   end
   def add_skill(skill,info)
-    @skill[skill]=Skill.new(info)
-    @skill_list[info[:type]]<<@skill[skill]
+    if skill.respond_to? :zip
+      skill.zip(info){|skl,inf|
+        @skill[skl]=Skill.new(inf)
+        @skill_list[inf[:type]]<<@skill[skl]
+      }
+    else
+      @skill[skill]=Skill.new(info)
+      @skill_list[info[:type]]<<@skill[skill]
+    end
   end
   def del_skill(skill,info)
-    @skill_list[info[:type]].delete(@skill[skill])
-    @skill.delete(skill)
+    if skill.respond_to? :zip
+      skill.zip(info){|skl,inf|
+        @skill_list[inf[:type]].delete(@skill[skl])
+        @skill.delete(skl)
+      }
+    else
+      @skill_list[info[:type]].delete(@skill[skill])
+      @skill.delete(skill)
+    end
   end
-  def gain_equip(*equips)
+  def gain_equip(equips)
     equips.each{|equip|
-	  part=equip[0]
-	  index=equip[1]
-    @equip_list<<Database.get_equip(part,index)
-	}
+	    part,index=equip
+      @equip_list<<Database.get_equip(part,index)
+	  }
   end
   def gain_consum(index)
     @item_list<<Database.get_consum(index)
@@ -404,9 +388,11 @@ class Actor
     if @attrib[:hp]-hp>0
       @attrib[:hp]-=hp
     else
+      hp=@attrib[:hp]
       @attrib[:hp]=0
-      die      
-    end
+      die
+    end    
+    return hp
   end
   def die
     @die=true
@@ -419,7 +405,12 @@ class Actor
       @attrib[:sp]=0
     end
   end
-  def can_cast?(end_time,consum)    
+  def can_cast?(end_time,consum)
+    has_state?(:stun) and return false
+    SDL.get_ticks>end_time or return false
+    @attrib[:sp]>=consum ? true : false
+  end
+  def can_cast_auto?(end_time,consum)
     SDL.get_ticks>end_time or return false
     @attrib[:sp]>=consum ? true : false
   end
@@ -439,10 +430,6 @@ class Actor
   end
   def lose_attrib(attrib)
     @attrib.lose_base_attrib(attrib)
-  end
-  def update_attrib
-    @attrib.compute_base
-    @attrib.compute_total
   end
   def draw_hpbar(dst)
     percent=@attrib[:hp]/@attrib[:maxhp].to_f

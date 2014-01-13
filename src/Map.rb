@@ -124,8 +124,8 @@ class Map
     end
   end
   def update    
-    @friend_bullet.each{|bullet| bullet.mark_live_frame}
-    @friend_circle.each{|circle| circle.mark_live_frame}
+    @friend_bullet.reject!{|bullet| bullet.to_delete?}
+    @friend_circle.reject!{|circle| circle.to_delete?}    
     @enemy.reject!{|actor|
       @friend_bullet.reject!{|bullet|	  
 	    Shape.collision?(actor,bullet)&&
@@ -142,16 +142,16 @@ class Map
       }
       actor.died?
     }
-    @friend_bullet.reject!{|bullet| bullet.live_frame?}
-    @friend_circle.reject!{|circle| circle.live_frame?}
+    @friend_bullet.each{|bullet| bullet.mark_live_frame}
+    @friend_circle.each{|circle| circle.mark_live_frame}
     update_actor
     update_bullet
   end
   def update_actor
-    if rand(1000)>980
-      enemy=Enemy.new("slime","fighter",
-                         [rand(200),0,rand(200)],
-                         {exp:600},
+    if rand(1000)>997
+      enemy=Enemy.new("slime","none",
+                         [rand(1000),0,rand(400)],
+                         {exp:100},
                          "mon_004r")
       @enemy<<enemy
     end
@@ -164,11 +164,11 @@ class Map
   end
   def update_bullet
     @friend_bullet.each{|bullet|
-	  bullet.update
-	}
-	@enemy_bullet.each{|bullet|
-	  bullet.update
-	}
+      bullet.update
+    }
+    @enemy_bullet.each{|bullet|
+      bullet.update
+    }
   end
   def draw(dst)
     player_x=Game.player.position.x

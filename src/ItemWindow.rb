@@ -25,15 +25,15 @@ class ItemWindow < DragWindow
     def initialize(x,y)
       update_coord(x,y)
       @w=11
-      @h=266
+      @h=268
       @rect_w=9
-      @rect_h=132#266 #or 132
+      @rect_h=133
         
       @offset_y=0
       @last_y=0      
     end
     def offset
-      @offset_y/13*5 #13= 132/10
+      @offset_y/13*5 #13= 133/10
     end
     def reinit
       @offset_y=0
@@ -61,8 +61,7 @@ class ItemWindow < DragWindow
       @offset_y+=offset
       @last_y=y
       @offset_y<0 and @offset_y=0
-      @rect_h==132 and @offset_y>@rect_h and @offset_y=@rect_h
-      @rect_h==266 and @offset_y=0
+      @offset_y>@rect_h and @offset_y=@rect_h
       return offset!=0
     end
     def update_coord(x,y)
@@ -215,9 +214,13 @@ class ItemWindow < DragWindow
         item.first or return
         item=item.first
       end
-      draw_x=box_draw_x+27
+      draw_x=@x
       draw_y=box_draw_y
-      draw_y=item.draw_detail(draw_x,draw_y)
+      if @click_box.y>=5        
+        draw_y=item.draw_detail(draw_x,draw_y,:above)
+      else
+        draw_y=item.draw_detail(draw_x,draw_y,:below)
+      end
       item.draw_comment(draw_x,draw_y)
     end
   end
@@ -245,7 +248,7 @@ end
     @pages[@current].tag
     
     @dragbar_init_x=->{@win_x+146}
-    @dragbar_init_y=->{@win_y+39}
+    @dragbar_init_y=->{@win_y+37}
     @drag_bar=DragBar.new(@dragbar_init_x.call,@dragbar_init_y.call)
     
     @moneybar_init_x=->{@win_x+@border}

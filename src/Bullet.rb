@@ -27,7 +27,7 @@ class Bullet
     @position=Position.new(info[:x],info[:y],info[:z])
     
     @ani=ani
-	@vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]	    
+	  @vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]	    
     if @vector[0]<0
       @ani=@ani.reverse
       @ani.set_color_key(SDL::SRCCOLORKEY,@ani[0,0])
@@ -41,22 +41,23 @@ class Bullet
   def mark_live_frame
     @trigger=true
   end
-  def live_frame?
-    if @live_cycle==:frame
-      if @trigger
-        return true
-      else
-        @trigger=true
-        return false
-      end
+  def to_delete?
+    case @live_cycle
+    when :frame
+      @trigger and return true
+      @trigger=true
+      return false
+    when :time    
+      @live_count-=1
+      return @live_count<0
     else
       return false
     end 
   end  
   def update
     @position.x+=@vector[0]
-	@position.y+=@vector[1]
-	@position.z+=@vector[2]
+    @position.y+=@vector[1]
+    @position.z+=@vector[2]
   end
   def affect(target)
     @effect or return true
@@ -70,15 +71,12 @@ class Bullet
     end
 	
     case @live_cycle
-    when :once
+    when :once,:time
       return true
     when :count
       @hit_target<<target
       @live_count-=1
       return @live_count<0 ? true : false 
-    when :time
-      @live_count-=1
-      return @live_count<0 ? true : false
     when :frame
       return false    
     else

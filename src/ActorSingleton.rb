@@ -13,7 +13,8 @@ class Actor
       cleric: "牧師",
       fighter: "戰士",
       paladin: "聖騎士",
-      darkknight: "暗騎士"
+      darkknight: "暗騎士",
+      none: "初心者"
     }
     
     @race_table={
@@ -34,9 +35,9 @@ class Actor
       int:'智力',wis:'智慧',
       agi:'敏捷',
 	  
-	  hp:'生命',sp:'法力',
-	  maxhp:'最大生命',maxsp:'最大法力',
-	  healhp:'生命回復',healsp:'法力回復',
+      hp:'生命',sp:'法力',
+      maxhp:'最大生命',maxsp:'最大法力',
+      healhp:'生命回復',healsp:'法力回復',
     
       atk:'近攻',def:'物防',
       matk:'魔攻',mdef:'魔防',
@@ -51,7 +52,10 @@ class Actor
       skl_vamp:'技能吸血',
       
       magic_amp:'魔法輸出強化',
-      attack_amp:'輸出強化'
+      attack_amp:'輸出強化',
+      
+      critical:'爆擊',
+      bash:'暈眩'
     }#}
     
     @part_table={

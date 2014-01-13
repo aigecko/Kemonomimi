@@ -2,7 +2,7 @@
 require_relative 'Skill_Base'
 class Skill
   @@SwitchTypeList=[:switch,:switch_auto,:switch_append]
-  attr_reader :switch
+  attr_reader :switch,:invisible
   def initialize(info)
     @name=info[:name]
     unless @name
@@ -13,9 +13,8 @@ class Skill
     begin
       if info[:icon]
         @icon=Icon.load(info[:icon])
-        #@icon.set_color_key(SDL::SRCCOLORKEY,@icon[0,0])
       else
-        @icon=SDL::Surface.new(Screen.flag,24,24,Screen.format)
+        @invisible=true
       end
     rescue
       p info[:icon]
@@ -55,12 +54,26 @@ class Skill
     if toggle(x,y,z)
       return
     end
-	consum=@consum*(100+caster.attrib[:consum_amp])/100
-    caster.can_cast?(@end_time,consum) or return
-    
+    consum=@consum*(100+caster.attrib[:consum_amp])/100
+    caster.can_cast?(@end_time,consum) or return    
     caster.lose_sp(consum)
     
     cd_start
+    common_cd(caster)
+    
+    call_skill_base(caster,target,x,y,z)
+  end
+  def cast_auto(caster)
+    consum=@consum*(100+caster.attrib[:consum_amp])/100
+    caster.can_cast_auto?(@end_time,consum) or return    
+    caster.lose_sp(consum)
+    
+    cd_start
+    common_cd(caster)
+    
+    call_skill_base(caster,nil,nil,nil,nil)
+  end
+  def common_cd(caster)
     @common_cd and
     if @common_cd.respond_to? :each
       @common_cd.each{|name|
@@ -69,10 +82,12 @@ class Skill
     else
       caster.skill[@common_cd] and caster.skill[@common_cd].cd_start
     end
-    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@sdata)
+  end
+  def call_skill_base(caster,target,x,y,z)
+    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@data)
   end
   def cast_attack(caster,target,atkspd)    
-	consum=@consum*(100+caster.attrib[:consum_amp])/100
+    consum=@consum*(100+caster.attrib[:consum_amp])/100
     caster.can_cast?(@end_time,@consum) or return
     
     reset_cd

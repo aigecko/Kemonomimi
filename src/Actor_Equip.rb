@@ -10,11 +10,7 @@ class Actor
       }
     end
     def []=(part,equip)
-      if part==:hand
-        @wear[:right]=equip
-      else
-        @wear[part]=equip
-      end
+      @wear[part]=equip
     end
     def [](part)
       if part==:hand
@@ -22,6 +18,43 @@ class Actor
       else
         @wear[part]
       end
+    end
+    def wear(actor,part,equip)
+      case part
+      when :single
+        @wear[:right] and actor.takeoff_equip(:right)
+        @wear[:left] and actor.takeoff_equip(:left)
+        
+        @wear[:right]=equip
+        return
+      when :dual
+        if @wear[:right]
+          if @wear[:right].part==:single            
+            actor.takeoff_equip(:right)            
+            @wear[:left]=equip
+          elsif @wear[:left]
+            actor.takeoff_equip(:right)
+            @wear[:right]=equip
+          else
+            @wear[:left]=equip
+          end
+        else
+          @wear[:right]=equip
+        end
+        return
+      when :left
+        if @wear[:right]&&@wear[:right].part==:single
+          actor.takeoff_equip(:right)
+        end
+      when :right
+        if @wear[:left]&&@wear[:left].part==:dual
+          actor.takeoff_equip(:left)
+        end
+      end
+      if @wear[part]
+        actor.takeoff_equip(part)
+      end
+      @wear[part]=equip
     end
     def parts
       @@Part

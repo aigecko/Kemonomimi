@@ -8,14 +8,14 @@ class Actor
 	  wis:{mdef: 1,maxsp: 10},
 	  agi:{ratk: 1}
 	}#}
-	@@Max={
+    @@Max={
       level: 200,
-	  str: 1024,
-	  con: 1024,
-	  int: 1024,
-	  wis: 1024,
-	  agi: 1024
-	}
+      str: 1024,
+      con: 1024,
+      int: 1024,
+      wis: 1024,
+      agi: 1024
+    }
     @@Base=[:str,:con,:int,:wis,:agi]
     @@Coef={
       extra: 7,      
@@ -34,31 +34,34 @@ class Actor
       dtob: 0.8,
       atkspd_max: 400
     }
-    #attr_reader :base
     attr_accessor :equip
     attr_reader :total
     def initialize(attrib,race,klass)
       base=Database.get_base(race)
-	  growth_base=Database.get_class(klass)
-	  base.default=0
-	  attrib.default=0
-      
-     
-	  @base=Hash.new(0)
+      growth_base=Database.get_class(klass)
+      base.default=0
+      attrib.default=0
+        
+       
+      @base=Hash.new(0)
       [:str,:con,:int,:wis,:agi,
+       :atk,:def,:matk,:mdef,:ratk,
        :maxhp,:maxsp,
        :wlkspd,:jump,:atkspd,
        :level,:money].each{|sym|
-		@base[sym]=base[sym]+attrib[sym]
-	  }
+        @base[sym]=base[sym]+attrib[sym]
+      }
       
-      @base_attack=Hash.new(0)
-      [:atk,:matk,:ratk].each{|sym| @base_attack[sym]=growth_base[sym]}
+      [:atk,:matk,:ratk].each{|sym| @base[sym]+=growth_base[sym]}
       
       @state=Hash.new(0)
-      @equip=Hash.new(0)
+      @equip=Hash.new(0)      
+      @state[:critical]=[]
+      @equip[:critical]=[]
+      @equip[:bash]=[]
+      @state[:bash]=[]
       @amped=Hash.new(0)      
-	  @total=Hash.new(0)
+      @total=Hash.new(0)
       
       @growth=growth_base 
       
@@ -72,15 +75,16 @@ class Actor
       @total[:exp]=attrib[:exp]
       @total[:maxexp]=Actor.get_need_exp(@base[:level])
       @total[:extra]=@@Coef[:extra]
-      
     end
     [:base,:equip,:state].each{|name|
     [:gain,:lose].each{|act|
     eval %Q{
     def #{act}_#{name}_attrib(attrib)
       attrib.each{|sym,value|
-        if value.integer?||
-           [:dodge,:block,:healhp,:healsp,:atk_vamp,:skl_vamp].include?(sym)
+        if [:dodge,:block,
+            :healhp,:healsp,
+            :atk_vamp,:skl_vamp,
+            :critical,:bash].include?(sym)||value.integer?
           @#{name}[sym]#{act==:gain ? '+':'-'}=value
         else
           @amped[sym]#{act==:gain ? '+':'-'}=(value*100).to_i
@@ -115,12 +119,9 @@ class Actor
       @@Base.each{|base|
         @total[base]=@base[base]+@equip[base]+@state[base]+
                      @growth[base]*@base[:level]/@@Coef[:growth]
-        #@total[base]+=@amped[base]*@total[base]/@@Coef[:amped]
              
         @@Conv[base].each{|key,val|
-          @base[key]=@base[base]*val
-          @total[key]=@total[base]*val+@base_attack[key]
-          #@total[key]+=@amped[key]*@total[key]/@@Coef[:amped]
+          @total[key]=@base[key]+@total[base]*val
         }
       }
     end
@@ -129,19 +130,22 @@ class Actor
         @total[sym]=@base[sym]
       }      
 	  
-	  [:magic_amp,:consum_amp,
-       :atk_vamp,:skl_vamp].each{|sym|
-	    @total[sym]=0
-	  }
-      #dbg
+      [:magic_amp,:consum_amp,
+         :atk_vamp,:skl_vamp].each{|sym|
+        @total[sym]=0
+      }
+      
+      @total[:critical]=[]
+      @total[:bash]=[]
       @total[:healhp]=@total[:str]*@@Coef[:healhp]
-	  @total[:healsp]=@total[:int]*@@Coef[:healsp]
+	    @total[:healsp]=@total[:int]*@@Coef[:healsp]
 	  
       [:atk,:def,:matk,:mdef,:ratk,
        :wlkspd,:atkspd,
        :maxhp,:maxsp,:healhp,:healsp,
-	   :magic_amp,:consum_amp,
-       :atk_vamp,:skl_vamp].each{|sym|
+       :magic_amp,:consum_amp,
+       :atk_vamp,:skl_vamp,
+       :critical,:bash].each{|sym|
         @total[sym]+=@state[sym]
         @total[sym]+=@equip[sym]
       }
@@ -174,13 +178,13 @@ class Actor
         @total[base]+=@amped[base]*@total[base]/@@Coef[:amped]
         delta_base=@total[base]-delta_base
         @@Conv[base].each{|key,val|
-          @total[key]+=delta_base*val+@base_attack[key]          
+          @total[key]+=delta_base*val
           @total[key]+=@amped[key]*@total[key]/@@Coef[:amped]
         }
       }      
       
       @total[:hp]>@total[:maxhp] and @total[:hp]=@total[:maxhp]
-	  @total[:sp]>@total[:maxsp] and @total[:sp]=@total[:maxsp]
+      @total[:sp]>@total[:maxsp] and @total[:sp]=@total[:maxsp]
             
       @total[:wlkspd]+=@total[:wlkspd]*@amped[:wlkspd]/@@Coef[:amped]
       @total[:wlkstep]=@total[:wlkspd].confine(0,@total[:wlkspd])
@@ -189,16 +193,16 @@ class Actor
       @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
     end
     def compute_total
-	  maxhp=@total[:maxhp]
-	  maxsp=@total[:maxsp]
+      maxhp=@total[:maxhp]
+      maxsp=@total[:maxsp]
 	  
       compute_base_attrib
       compute_state_equip
       compute_block_dodge
       compute_amp_attrib
 	  
-	  maxhp>0 and @total[:maxhp]>maxhp and @total[:hp]=@total[:hp]*@total[:maxhp]/maxhp
-	  maxsp>0 and @total[:maxsp]>maxsp and @total[:sp]=@total[:sp]*@total[:maxsp]/maxsp
+      maxhp>0 and @total[:maxhp]>maxhp and @total[:hp]=@total[:hp]*@total[:maxhp]/maxhp
+      maxsp>0 and @total[:maxsp]>maxsp and @total[:sp]=@total[:sp]*@total[:maxsp]/maxsp
     end
   end
 end

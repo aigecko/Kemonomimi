@@ -68,26 +68,26 @@ class Input
     name=type.to_s
     unless FileTest.exist?("./rc/data/#{name}.data")
       load_failure_message(type)
-	  exit
+      exit
     end
-	decrypt_data=''
-	Zlib::GzipReader.open("./rc/data/#{name}.data",){|file|
+    decrypt_data=''
+    Zlib::GzipReader.open("./rc/data/#{name}.data",){|file|
       encrypt_data=file.read
-	  encrypt_data.chomp!
-	  if encrypt
-	    cipher=OpenSSL::Cipher::Cipher.new('bf-cbc')
-		cipher.decrypt
-		cipher.key=Digest::SHA1.hexdigest('')
-		decrypt_data=cipher.update(encrypt_data)<<cipher.final
-	  else
-	    decrypt_data=encrypt_data
-	  end	  
-	}
+      encrypt_data.chomp!
+      if encrypt
+        cipher=OpenSSL::Cipher::Cipher.new('bf-cbc')
+        cipher.decrypt
+        cipher.key=Digest::SHA1.hexdigest('')
+        decrypt_data=cipher.update(encrypt_data)<<cipher.final
+      else
+        decrypt_data=encrypt_data
+      end	  
+    }
     begin
-	  data=Marshal.load(decrypt_data)
+      data=Marshal.load(decrypt_data)
     rescue
       load_failure_message(type)
-	  exit
+      exit
     end
 	return data
   end
@@ -95,12 +95,12 @@ class Input
     case type
     when :class
       Message.show(:class_load_failure)
-	when :race
-	  Message.show(:race_load_failure)
+    when :race
+      Message.show(:race_load_failure)
     when :equip
       Message.show(:equip_load_failure)
-	when :consum
-	  Message.show(:consum_load_failure)
+    when :consum
+      Message.show(:consum_load_failure)
     end
     Message.show(:please_check_files)
   end

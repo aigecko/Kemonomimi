@@ -1,7 +1,7 @@
 #coding: utf-8
 class Database
   @Class=Input.load_database(:class,true)
-  @Equip=Input.load_database(:equip,false)
+  @Equip=Input.load_database(:equip,true)
   @Actor_pic=Input.load_actor_pic  
   @Actor_pic_cache={}
   @Race= Input.load_database(:race,true)
@@ -17,6 +17,7 @@ class Database
     begin
       data=@Equip[part][index]      
     rescue NoMethodError
+      print "part: #{part} index: #{index}"
       Message.show(:unvalid_equip)
       return nil
     else
