@@ -2,7 +2,7 @@
 require_relative 'Skill_Base'
 class Skill
   @@SwitchTypeList=[:switch,:switch_auto,:switch_append]
-  attr_reader :switch,:invisible
+  attr_reader :switch,:invisible,:type
   def initialize(info)
     @name=info[:name]
     unless @name
@@ -54,6 +54,7 @@ class Skill
     if toggle(x,y,z)
       return
     end
+    @switch or return
     consum=@consum*(100+caster.attrib[:consum_amp])/100
     caster.can_cast?(@end_time,consum) or return    
     caster.lose_sp(consum)
@@ -118,6 +119,7 @@ class Skill
   end
   def self.all_type_list
     [:none,:auto,:switch,:active,:append,:before,
+     :attack,:shoot,
      :switch_auto,:switch_append]
   end
 end

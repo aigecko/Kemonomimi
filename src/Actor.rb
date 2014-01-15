@@ -96,7 +96,7 @@ class Actor
     arrow_cd=class_data[:arrow_cd]
 	
     add_skill(:normal_attack,
-      name:'普通攻擊',type: :active,cd: attack_cd,
+      name:'普通攻擊',type: :attack,cd: attack_cd,
       icon:'./rc/icon/skill/2011-12-23_3-034.gif',
       base: :normal_attack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
@@ -104,7 +104,7 @@ class Actor
 	  
     #(@class==:archer||@class==:crossbowman)and
     add_skill(:arrow,
-      name:'弓箭射擊',type: :active,cd: arrow_cd,
+      name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
       base: :arrow,level: 1,table:[0,[0,:ratk,1]],
       common_cd: :normal_attack,
@@ -414,15 +414,16 @@ class Actor
     SDL.get_ticks>end_time or return false
     @attrib[:sp]>=consum ? true : false
   end
-  def cast(name,target,x,y,z,atkspd_affect=false)
+  def cast(name,target,x,y,z)
     unless @skill[name]
-      Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
+      #Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
       return
     end
-    if atkspd_affect
-      @skill[name].cast_attack(self,target,@attrib[:atkspd])
+    if (skill=@skill[name]).type==:attack||
+       skill.type==:shoot
+      skill.cast_attack(self,target,@attrib[:atkspd])
     else      
-      @skill[name].cast(self,target,x,y,z)
+      skill.cast(self,target,x,y,z)
     end
   end
   def gain_attrib(attrib)

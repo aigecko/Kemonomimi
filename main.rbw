@@ -103,7 +103,7 @@ class Game
     require 'stringio'
     
     library_list=%w(Database Position Item Equipment Consumable
-                    Event Key
+                    Event Key HotKey
                     Actor Player Enemy Friend
                     Statement ColorString ParaString
                     Shape Bullet
@@ -113,6 +113,7 @@ class Game
     }
     Actor.init
     Equipment.init
+    HotKey.init
     window_list=%w(BaseWindow SelectWindow DragWindow
                    MenuWindow 
                    RaceWindow ClassWindow LoadWindow GameWindow

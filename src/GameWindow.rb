@@ -20,6 +20,13 @@ class GameWindow < BaseWindow
     @contral=true
     
     @actor_buffer=[]
+    #dbg
+    HotKey.bind(Key::F1,:proc,:once,->{switch_window(:StatusWindow)})
+    HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
+    HotKey.bind(Key::F3,:proc,:once,->{switch_window(:SkillWindow)})
+    HotKey.bind(Key::F4,:proc,:once,->{switch_window(:EquipWindow)})
+    HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
+    
   end
   def start_init
     player_init
@@ -64,20 +71,16 @@ class GameWindow < BaseWindow
         case event.sym
         when Key::RSHIFT,Key::LSHIFT
           close
+          HotKey.all_off
           friend_window_close
           Game.set_window(:ClassWindow,:open)
-        when Key::F
-          #dbg
-          convert_position or next
-          @player.cast(:flash,nil,*convert_position)
         when Key::S
           #dbg
           @player.add_state(@player,name:'祝福',sym: :recover,
                             icon:'./rc/icon/food/2011-12-23_2-003.gif',
                             attrib:{def:1000,agi:1000,healhp:10,atkspd:200},#}
                             multi: true,
-                            last:4999)#}
-                         #照秒回 lag會有BUG
+                            last:4999)
         when Key::D
           #dbg
           @player.add_state(@player,
@@ -87,73 +90,59 @@ class GameWindow < BaseWindow
           effect: Attack.new(@player,type: :acid,attack: 25,visible: false),
           effect_amp: 0.04,
           last: 2000)
-        when Key::A
-          convert_position or next
-          @player.cast(:arrow,nil,*convert_position,true)
-        when Key::Q
-          convert_position or next
-          @player.cast(:fire_circle,nil,*convert_position)
-        when Key::W
-          convert_position or next
-          @player.cast(:magic_immunity,nil,*convert_position)
-        when Key::F1
-          switch_window(:StatusWindow)
-        when Key::F2
-          switch_window(:ItemWindow)
-        when Key::F3
-          switch_window(:SkillWindow)
-        when Key::F4
-          switch_window(:EquipWindow)
-        when Key::F5
-          #svae
-        when Key::F6
-          #tool
-        when Key::F12
-          Game.release        
-        when Key::ESCAPE
-          Game.quit
+        when Key::LCTRL
+          HotKey.bind_mode=true
+        else
+          HotKey.turn_on(event.sym)
+        end
+      when Event::KeyUp
+        case event.sym
+        when Key::LCTRL
+          HotKey.bind_mode=false
+        else
+          HotKey.turn_off(event.sym)
         end
       when Event::MouseButtonDown
         window=false
-	    @drag_list.each_with_index{|window,i|
+        @drag_list.each_with_index{|window,i|
           case @windows[window].detect_click_window(event)
           when :drag
-		    case event.button
-			when Mouse::BUTTON_LEFT
+            case event.button
+            when Mouse::BUTTON_LEFT
               set_first_window(window)
-			  window_click=true
+              window_click=true
               close_contral
-			  break
+              break
             when Mouse::BUTTON_RIGHT
-			  window_click=true
-			end
+              window_click=true
+            end
           when :click
-			case event.button
-			when Mouse::BUTTON_LEFT
+            case event.button
+            when Mouse::BUTTON_LEFT
               set_first_window(window)
-			  window_click=true
-			  break
+              window_click=true
+              break
             when Mouse::BUTTON_RIGHT
-			  window_click=true
-			end
+              window_click=true
+            end
           end
         }
-		window_click or
-		case event.button
-	    when Mouse::BUTTON_RIGHT
+        window_click and next
+        case event.button
+        when Mouse::BUTTON_RIGHT
           get_attack_target
         when Mouse::BUTTON_LEFT
           get_item_onground
-		end
+        end
       when Event::Quit
         Game.quit
       end
-    }
-    
+    }        
   end
   def interact
     sub_window_interact
     game_window_interact
+    HotKey.update
     @player.update
     @map.update
     offset_change
