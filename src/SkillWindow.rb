@@ -8,6 +8,9 @@ class SkillWindow < DragWindow
     title_initialize('角色技能')
     pic_initialize
     
+    @box_w=@box_h=24
+    @box_border_w=@box_border_h=26
+    
     @comment='滑鼠左鍵: 選擇技能, ctrl+按鍵:設定快捷鍵'
     @comment_pic=Font.render_solid(@comment,12,*Color[:comment])
   end
@@ -19,11 +22,12 @@ class SkillWindow < DragWindow
       case event
       when Event::KeyDown
         case key=event.sym
-        when Key::LCTRL
+        when Key::LCTRL,Key::RCTRL
           HotKey.bind_mode=true
         else
           if HotKey.bind_mode
-            @click_box and
+            @click_skill and
+            @hotkey_set and
             HotKey.can_bind?(event.sym) and
             HotKey.bind(event.sym,@skill[@click_skill].type,:repeat,@click_skill)
           end
@@ -31,9 +35,9 @@ class SkillWindow < DragWindow
       when Event::MouseButtonDown
         case event.button
         when Mouse::BUTTON_LEFT
-          if (event.x-@win_x-10)/26<@skill.size&&
-             (event.y-@win_y-24).between?(0,23)
-            @click_box=(event.x-@win_x-10)/26
+          if (event.x-@win_x-10)/@box_border_w<@skill.size&&
+             (event.y-@win_y-24).between?(0,@box_h-1)
+            @click_box=(event.x-@win_x-10)/@box_border_w
           else
             @click_box=nil
             @click_skill=nil
@@ -51,37 +55,52 @@ class SkillWindow < DragWindow
       end
     }
   end
+  def close
+    super
+    @click_box=nil
+    @click_skill=nil
+  end
   def draw(dst)   
     super(dst)
     def draw
-      @skeleton.draw(@win_x,@win_y)      
+      @skeleton.draw(@win_x,@win_y)
       @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
       i=0
+      draw_x,draw_y=@win_x+@border,@win_y+24
       @skill.each{|sym,skill|
         skill.invisible and next
-        if i==@click_box
-          case skill.type
-          when :none,:append,:before,:auto,:attack
-            Screen.fill_rect(@win_x+@border+26*i,@win_y+24,24,24,[128,128,128])
-            @click_box=nil
-            @click_skill=nil
-          else
-            Screen.fill_rect(@win_x+@border+26*i,@win_y+24,24,24,[255,0,0])
-            @click_skill=sym
-          end
+        if i==@click_box         
+          draw_x=draw_click_box(skill,draw_x,draw_y)        
+          @click_skill=sym
         else
-          case skill.type
-          when :none,:append,:before,:auto,:attack
-            Screen.fill_rect(@win_x+@border+26*i,@win_y+24,24,24,[128,128,128])
-          else
-            Screen.fill_rect(@win_x+@border+26*i,@win_y+24,24,24,[80,128,255])
-          end
+          draw_x=draw_unclick_box(skill,draw_x,draw_y)
         end
-        skill.draw_icon(@win_x+@border+26*i,@win_y+24)
-        #skill.draw_name(@win_x+40,@win_y+27+35*i)
-        #skill.draw_comment(@win_x+40,@win_y+42+35*i)
+        skill.draw_icon(@win_x+@border+@box_border_w*i,@win_y+24)
         i+=1
       }
+      if @click_skill
+        skill=@skill[@click_skill]
+        x=skill.draw_name(@win_x+@border,@win_y+85)[0]
+        skill.draw_cd(@win_x+@border+x,@win_y+85)
+        skill.draw_comment(@win_x+@border,@win_y+100)
+      end
     end
+  end
+  def draw_click_box(skill,draw_x,draw_y)
+    Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0])
+    if [:none,:append,:before,:auto,:attack,:defense,:pf_defense].include?(skill.type)
+      @hotkey_set=false
+    else
+      @hotkey_set=true
+    end  
+    return draw_x+@box_border_w
+  end
+  def draw_unclick_box(skill,draw_x,draw_y)
+    if [:none,:append,:before,:auto,:attack,:defense,:pf_defense].include?(skill.type)
+      Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[128,128,128])
+    else
+      Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[80,128,255])
+    end
+    return draw_x+@box_border_w
   end
 end

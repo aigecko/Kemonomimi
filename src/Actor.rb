@@ -26,8 +26,8 @@ class Actor
     
     @state=State.new(self)
     @equip=Equip.new
-    @equip_list=FixedArray.new(100)
-    @item_list=FixedArray.new(100){[nil,0]}
+    @equip_list=ItemArray.new(100)
+    @item_list=ItemArray.new(100,:superposed)
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
@@ -40,10 +40,12 @@ class Actor
     }
     
     #dbg
-    gain_equip ([[:head,1],[:head,10],[:head,20],
-      [:left,1],[:dual,1],[:dual,1],[:right,1],[:single,1],
-      [:body,1],[:body,10],[:body,20],[:range,1],[:range,10],
-      [:finger,1],[:finger,2],[:feet,1],[:feet,10],[:deco,5]])
+    #100.times{
+    # gain_consum(10)}
+    # gain_equip ([[:head,1],[:head,10],[:head,20],
+      # [:left,1],[:dual,1],[:dual,1],[:right,1],[:single,1],
+      # [:body,1],[:body,10],[:body,20],[:range,1],[:range,10],
+      # [:finger,1],[:finger,2],[:feet,1],[:feet,10],[:deco,5]])
     
     @shape=Shape.new(:col,					 
       r: @animation.w/2,
@@ -101,40 +103,78 @@ class Actor
       base: :normal_attack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
-	  
-    #(@class==:archer||@class==:crossbowman)and
-    add_skill(:arrow,
+	  add_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
-      base: :arrow,level: 1,table:[0,[0,:ratk,1]],
+      base: :arrow,level: 1,table:[0,[50,:ratk,1]],
+      equip_need: :range,
       common_cd: :normal_attack,
-      comment:'快速射出一隻箭 威力和ratk成正相關')
+      comment:'快速射出一隻箭造成#{@table[@level][0]}+ratk的傷害')
   end  
-  def skill_initialize
-	(@class==:paladin||@class==:darkknight)and
-    add_skill(:smash_wave,
+  def skill_initialize    
+    case @class
+    when :paladin
+      add_skill(:smash_wave,
       name:'粉碎波',type: :append,
       icon:'./rc/icon/skill/2011-12-23_3-037.gif',
       base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
-      comment:'攻擊時產生範圍魔法傷害')
-    @class==:fighter and
-    add_skill(:fire_circle,
-      name:'熾焰焚身',type: :switch_auto,cd: 1,
-      icon:'./rc/icon/skill/2011-12-23_3-072.gif',
-      base: :fire_circle,consum: 1,level: 1,table:[0,[50,0]],
-      comment:'焚燒周圍的敵人 造成傷害')
-    @class==:cleric and
-    add_skill(:enegy_arrow,
+      comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}範圍魔法傷害')
+    when :darkknight
+      add_skill(:smash_wave,
+      name:'粉碎波',type: :append,
+      icon:'./rc/icon/skill/2011-12-23_3-037.gif',
+      base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
+      comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}範圍魔法傷害')
+    when :fighter
+      add_skill(:counter_attack,
+        name:'反擊之火',type: :pf_defense,
+        icon:'./rc/icon/skill/2011-12-23_3-049.gif',
+        base: :counter_attack,table:[0,[10,0.1]],
+        comment:'受攻擊時反彈#{@table[@level][0]}+#{@table[@level][1]}def絕對傷害')
+      add_skill(:amplify_hp_block,
+        name:'堅忍不拔',type: :auto,
+        icon:'./rc/icon/skill/2011-12-23_3-186.gif',
+        base: :amplify,table:[0,{maxhp: 0.06,block: 11}],
+        data:{name:'堅忍不拔',sym: :amplify_hp_block},
+        comment:'最大生命增幅#{@table[@level][:maxhp]}% 格檔增幅#{@table[@level][:block]}%')
+      add_skill(:fire_circle,
+        name:'熾焰焚身',type: :switch_auto,cd: 1,
+        icon:'./rc/icon/skill/2011-12-23_3-072.gif',
+        base: :fire_circle,consum: 1,table:[0,[50,0]],
+        comment:'焚燒周圍的敵人造成#{@table[@level][0]}傷害')
+      add_skill(:magic_immunity,
+        name:'魔法免疫',type: :active,cd: 30,
+        icon:'./rc/icon/icon/tklre04/skill_053.png',
+        base: :magic_immunity,consum: 100,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},last: 3.to_sec}],#}
+        comment:'數秒內不受大部分魔法及狀態影響')
+      add_skill(:break_armor,
+        name:'破甲斬擊',type: :append,
+        icon:'./rc/icon/icon/tklre05/skill_074.png',
+        base: :break_armor,table:[0,-5],
+        comment:'命中目標降低#{@table[@level]}xLog(matk)的物防')
+    when :mage
+      add_skill(:ice_arrow,
+        name:'寒冰球',type: :active,
+        icon:'./rc/icon/skill/2011-12-23_3-053.gif',
+        base: :missile,consum: 0,cd: 3,level: 1,table:[0,[100]],
+        data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
+          pic:'./rc/pic/battle/ice_ball.bmp',
+          live_cycle: :time,live_count: 20,velocity: 15},
+        comment:'對指定地點發射冰塊造成#{@table[@level][0]}+#{@data[:coef][:matk]}matk魔法傷害')
+      add_skill(:ice_wave,
+        name:'寒霜結界',type: :append,
+        icon:'./rc/icon/skill/2011-12-23_3-052.gif',
+        base: :ice_wave,consum: 0,table:[0,20],
+        data:{coef:{int: 0.8}},
+        comment:'魔法命中造成#{@table[@level]}+#{@data[:coef][:int]}int範圍絕對傷害')
+    when :cleric
+      add_skill(:enegy_arrow,
       name:'碎石杖擊',type: :switch_append,
       icon:'./rc/icon/skill/2011-12-23_3-125.gif',
-      base: :enegy_arrow,consum: 0,level: 1,table:[0,[40,10]],
-      comment:'普攻附加無視魔免魔法傷害')
-    (@class==:fighter||@class==:paladin||@class==:darkknight) and
-    add_skill(:magic_immunity,
-      name:'魔法免疫',type: :active,cd: 15,
-      icon:'./rc/icon/icon/tklre04/skill_053.png',
-      base: :magic_immunity,consum: 30,level: 1,table:[0,[{atk: 20,con: 10},3.to_sec]],
-      comment:'數秒內不受大部分魔法及狀態影響')
+      base: :enegy_arrow,consum: 5,level: 1,table:[0,[40,10]],
+      comment:'開啟後普攻帶#{@table[@level][0]}+#{@table[@level][1]}%現有法力之無視魔免魔傷')
+    end
+    
   end
   def rotate(side)
     @animation.rotate(side)
@@ -213,7 +253,7 @@ class Actor
              (@position.z-@target.position.z).abs<=20
     when :pickup
       return Math.distance(@position.x,@position.z,
-                           @target.position.x,@target.position.z)<=50                           
+                           @target.position.x,@target.position.z)<=51
     end
   end
   def interact_target    
@@ -224,10 +264,11 @@ class Actor
         @position.x>@target.position.x ? rotate(:left) : rotate(:right)
         @skill[:normal_attack].cast_attack(self,@target,@attrib[:atkspd])
       end
-    when :pickup      
-      @target.pickup
-      gain_item(@target)
-      Map.render_onground_item.delete(@target)
+    when :pickup
+      if gain_item(@target)
+        @target.pickup
+        Map.render_onground_item.delete(@target)
+      end
       set_target(nil)
     end
   end
@@ -245,7 +286,7 @@ class Actor
       dst_x=dst_x.confine(0,Map.w)
       dst_z=@target.position.z
       set_move_dst(dst_x,0,dst_z)
-    when :pickup      
+    when :pickup
       item_x=@target.position.x
       item_z=@target.position.z
       dis=Math.distance(item_x,item_z,
@@ -281,21 +322,9 @@ class Actor
     part=@equip_list[index].part
     equip=@equip_list[index]
     @equip_list.delete_at(index)
-        
-    #unless @equip[part]
-    #  @equip.wear(self,part,equip)
-    #else
     takeon_equip(part,equip)
   end
   def takeon_equip(part,equip)
-    #old_equip=@equip[part]      
-    
-    #if old_equip
-    #  if old_equip.skill
-    #    del_skill(old_equip.sym,old_equip.skill)
-    #  end
-    #  @attrib.lose_equip_attrib(old_equip.attrib)
-    #end
     @equip.wear(self,part,equip)
 	  @attrib.gain_equip_attrib(equip.attrib)
     if equip.skill
@@ -344,6 +373,9 @@ class Actor
       @skill.delete(skill)
     end
   end
+  def pf_defense_skill
+    return @skill_list[:pf_defense]
+  end
   def gain_equip(equips)
     equips.each{|equip|
 	    part,index=equip
@@ -354,7 +386,7 @@ class Actor
     @item_list<<Database.get_consum(index)
   end
   def gain_item(item)
-    @item_list<<item
+    return @item_list<<item
   end
   def gain_hp(hp)
     @attrib[:hp]+=hp
@@ -406,9 +438,9 @@ class Actor
     end
   end
   def can_cast?(end_time,consum)
-    has_state?(:stun) and return false
-    SDL.get_ticks>end_time or return false
-    @attrib[:sp]>=consum ? true : false
+    (has_state?(:stun)) and return false
+    (SDL.get_ticks>end_time) or return false
+    (@attrib[:sp]>=consum) ? true : false
   end
   def can_cast_auto?(end_time,consum)
     SDL.get_ticks>end_time or return false

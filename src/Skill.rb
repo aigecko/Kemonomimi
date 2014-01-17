@@ -3,6 +3,7 @@ require_relative 'Skill_Base'
 class Skill
   @@SwitchTypeList=[:switch,:switch_auto,:switch_append]
   attr_reader :switch,:invisible,:type
+  attr_writer :cd
   def initialize(info)
     @name=info[:name]
     unless @name
@@ -25,6 +26,7 @@ class Skill
     
     @proc=Base[info[:base]]
     @type=info[:type]
+    @equip_need=info[:equip_need]
     
     @consum=info[:consum]||0
 	
@@ -34,17 +36,18 @@ class Skill
       @switch=true
     end
     
-    @org_cd=@cd=info[:cd]||0    
+    @org_cd=@cd=info[:cd]||0
     @end_time=0
     
     @level=info[:level]||1
     @table=info[:table]
     @data=info[:data]
     
-    @comment=info[:comment]||:nil.to_s
+    @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)    
+    @cd_pic=DynamicString.new('CD: #{@cd}',:skill_comment_font,binding)
   end
   def toggle(x,y,z)
-    if @@SwitchTypeList.include?(@type)&&x&&y&&z      
+    if @@SwitchTypeList.include?(@type)&&!x&&!y&&!z
       @switch=!@switch
       return true
     end
@@ -55,13 +58,12 @@ class Skill
       return
     end
     @switch or return
-    consum=@consum*(100+caster.attrib[:consum_amp])/100
-    caster.can_cast?(@end_time,consum) or return    
-    caster.lose_sp(consum)
     
+    consum=@consum*(100+caster.attrib[:consum_amp])/100
+    caster.can_cast?(@end_time,consum) or return
+    caster.lose_sp(consum)
     cd_start
     common_cd(caster)
-    
     call_skill_base(caster,target,x,y,z)
   end
   def cast_auto(caster)
@@ -87,17 +89,19 @@ class Skill
   def call_skill_base(caster,target,x,y,z)
     @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@data)
   end
-  def cast_attack(caster,target,atkspd)    
+  def cast_attack(caster,target,atkspd)
+    @equip_need and (caster.equip[@equip_need] or return)
     consum=@consum*(100+caster.attrib[:consum_amp])/100
     caster.can_cast?(@end_time,@consum) or return
+    caster.lose_sp(consum)
     
-    reset_cd
+    reset_cd    
     @cd=@cd*100/(atkspd)
     
-    cast(caster,target,nil,nil,nil)
-  end
-  def cd=(cd)
-    @cd=cd
+    cd_start
+    common_cd(caster)
+    
+    call_skill_base(caster,target,nil,nil,nil)
   end
   def reset_cd
     @cd=@org_cd
@@ -114,12 +118,15 @@ class Skill
   def draw_name(x,y)
     Font.draw_solid(@name,15,x,y,255,255,0)
   end
+  def draw_cd(x,y)
+    @cd>0 and @cd_pic.draw(x,y)
+  end
   def draw_comment(x,y)
-    Font.draw_solid(@comment,15,x,y,135,255,15)
+    @comment.draw(x,y)
   end
   def self.all_type_list
     [:none,:auto,:switch,:active,:append,:before,
-     :attack,:shoot,
+     :attack,:shoot,:defense,:pf_defense,
      :switch_auto,:switch_append]
   end
 end

@@ -1,13 +1,13 @@
 #coding: utf-8
 class Statement
-  attr_reader :attrib,:sym,:multi
+  attr_reader :attrib,:sym,:multi,:num_limit
   def initialize(caster,info)
     @caster=caster
     
     @name=info[:name]||""
     @sym=info[:sym]
     
-	info[:icon] and
+    info[:icon] and
     @icon=SDL::Surface.load(info[:icon])
     
     @attrib=info[:attrib]
@@ -16,6 +16,7 @@ class Statement
     @interval=info[:interval]
     
     @multi=info[:multi]
+    @num_limit=info[:num_limit]
     
     @start_time=SDL.get_ticks
     @last_time=info[:last]    
@@ -23,9 +24,12 @@ class Statement
     
     @magicimu_keep=info[:magicimu_keep]
   end
+  def refresh
+    @end_time=SDL.get_ticks+@last_time
+  end
   def update(actor)
     @effect or return    
-    @effect.affect(actor,@effect_amp)
+    @effect.affect(actor,actor.position,@effect_amp)
   end
   def keep_when_magicimmunity?
     @magicimu_keep

@@ -56,6 +56,11 @@ class EquipWindow < DragWindow
       end      
     }
   end
+  def close
+    super
+    @click_equip_y=nil
+    @show_equip_detail=false
+  end
   def draw(dst)
     super(dst)
     draw_title(dst)

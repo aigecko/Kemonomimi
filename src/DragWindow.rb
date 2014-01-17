@@ -56,6 +56,10 @@ class DragWindow < BaseWindow
     @drag_x=@win_x+@border
     @drag_y=@win_y
   end
+  def close
+    super
+    end_drag
+  end
   def keep_drag(x,y)
     if @drag
       window_move(x,y)

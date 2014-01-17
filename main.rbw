@@ -5,7 +5,7 @@ std_lib.each{|lib|
   require "#{lib}"
 }
 my_lib=%w(Color Screen Config win32api Message Icon
-          Font Input Extension Skill Mouse FixedArray)
+          Font Input Extension Skill Mouse)
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
@@ -102,12 +102,15 @@ class Game
     require 'zlib'
     require 'stringio'
     
-    library_list=%w(Database Position Item Equipment Consumable
-                    Event Key HotKey
-                    Actor Player Enemy Friend
-                    Statement ColorString ParaString
-                    Shape Bullet
-                    Attack FixAttack Effect Heal)
+    library_list=%w(
+      Database Position 
+      Item Equipment Consumable ItemArray
+      Event Key HotKey
+      Actor Player Enemy Friend
+      Statement 
+      ColorString ParaString DynamicString
+      Shape Bullet
+      Attack FixAttack Effect Heal)
     library_list.each{|lib|
       require_relative "src/#{lib}"
     }

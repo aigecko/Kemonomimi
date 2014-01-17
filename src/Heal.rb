@@ -7,7 +7,7 @@ class Heal
     @caster=caster
   end
   
-  str="def affect(target)\n"
+  str="def affect(target,position)\n"
   [:hp,:sp].each{|type| 
     str+=
 "  if #{type}=@info[:#{type}]    

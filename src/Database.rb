@@ -21,30 +21,13 @@ class Database
       Message.show(:unvalid_equip)
       return nil
     else
-      if data.respond_to? :part
-        return data
-      else
-        name=data[0]
-        pic=data[1]
-        attrib=data[2]
-        price=data[3]
-        comment=data[4]
-        return @Equip[part][index]=Equipment.new(name,pic,part,attrib,price,comment)
-      end
+      name,pic,attrib,price,comment=data
+      return Equipment.new(name,pic,part,attrib,price,comment)
     end
   end
-  def self.get_consum(index)    
-    data=@Consum[index]
-    if data.respond_to? :use
-      return data
-    else
-      name=data[0]
-      pic=data[1]
-      attrib=data[2]
-      price=data[3]
-      comment=data[4]
-      return @Consum[index]=Consumable.new(name,pic,attrib,price,comment)
-    end
+  def self.get_consum(index)   
+    name,pic,attrib,price,comment=@Consum[index]
+    return Consumable.new(name,pic,attrib,price,comment,{id: index})
   end
   def self.get_actor_pic(name)
     @Actor_pic_cache[name] and return @Actor_pic_cache[name]

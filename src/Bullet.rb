@@ -65,9 +65,9 @@ class Bullet
     @hit_target.include?(target) and return false
     
     if @effect.respond_to?(:each)
-      @effect.each{|effect| effect.affect(target)}
+      @effect.each{|effect| effect.affect(target,@position)}
     else
-      @effect.affect(target)    
+      @effect.affect(target,@position)    
     end
 	
     case @live_cycle

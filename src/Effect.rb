@@ -6,7 +6,7 @@ class Effect
     @info=info
     @caster=caster
   end
-  def affect(target)
+  def affect(target,position)
     #魔免 有視   結果
     # t    t   f  f
     # t    f   t  t

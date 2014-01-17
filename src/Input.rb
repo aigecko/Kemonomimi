@@ -17,8 +17,6 @@ class Input
       Message.show(:please_check_files)
       exit
     else
-      #pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-      #pic.display_format
       return pic
     end
   end

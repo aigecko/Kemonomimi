@@ -20,6 +20,7 @@ class GameWindow < BaseWindow
     @contral=true
     
     @actor_buffer=[]
+    @shadow_buffer=[]
     #dbg
     HotKey.bind(Key::F1,:proc,:once,->{switch_window(:StatusWindow)})
     HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
@@ -79,7 +80,7 @@ class GameWindow < BaseWindow
           @player.add_state(@player,name:'祝福',sym: :recover,
                             icon:'./rc/icon/food/2011-12-23_2-003.gif',
                             attrib:{def:1000,agi:1000,healhp:10,atkspd:200},#}
-                            multi: true,
+                            multi: :add,
                             last:4999)
         when Key::D
           #dbg
@@ -227,33 +228,30 @@ class GameWindow < BaseWindow
   def set_draw_actor
     add_actor_buffer(@player)
 	
-    @map.render_friend.each{|actor|
-      add_actor_buffer(actor)
-    }
-    @map.render_enemy.each{|actor|
-      add_actor_buffer(actor)
-    }
-	
-    @map.render_friend_bullet.each{|bullet|
-      add_actor_buffer(bullet)
-    }
-	@map.render_enemy_bullet.each{|bullet|
-	  add_actor_buffer(bullet)
-	}
+    @actor_buffer+=@map.render_friend
+    @actor_buffer+=@map.render_enemy
     
-    @map.render_onground_item.each{|item|
-      add_actor_buffer(item)
-    }
+    @actor_buffer+=@map.render_friend_bullet
+	  @actor_buffer+=@map.render_enemy_bullet
+    
+    @actor_buffer+=@map.render_onground_item
+    @shadow_buffer=@map.render_shadow
+    
   end
   def draw_circle
-    @map.render_friend_circle.sort_by{|circle|
+    @shadow_buffer.sort_by!{|shadow|
+      -shadow.position.z
+    }.each{|shadow|
+      shadow.draw_shadow(@surface)
+    }
+    @map.render_friend_circle.sort_by!{|circle|
       -circle.position.z
     }.each{|circle|
       circle.draw(@surface)
     }
   end
-  def draw_actor    
-    @actor_buffer=@actor_buffer.sort_by{|actor| -actor.position.z}
+  def draw_actor
+    @actor_buffer.sort_by!{|actor| -actor.position.z}
     @actor_buffer.each{|actor| actor.draw(@surface)}
     @actor_buffer.clear
   end

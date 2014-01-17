@@ -23,51 +23,123 @@ class Skill
           caster.position.z=info[:z]
         end
       }
+      
+      @proc[:counter_attack]=->(info){
+        attack=info[:args][0]+(info[:caster].attrib[:def]*info[:args][1]).to_i
+        Attack.new(info[:caster],
+          type: :acid,
+          attack: attack).affect(info[:target],info[:target].position)
+        return info[:damage]
+      }
+      
+      @proc[:amplify]=->(info){
+        caster=info[:caster]
+        attrib=info[:args]
+        caster.add_state(caster,
+          name: info[:data][:name],
+          sym: info[:data][:sym],
+          attrib: attrib,
+          last: nil
+        )
+      }
+      @proc[:boost]=->(info){
+        caster=info[:caster]
+        args=info[:args]
+        data=info[:data]
+        
+        if healhp=args[:healhp]
+          healhp+=(caster.attrib[data[:healhp_sym]]*args[:healhp_coef]||0).to_i
+          healhp*=Math.log10(caster.attrib[data[:healhp_amp]||1])
+          caster.gain_hp(healhp)
+        end
+        
+        #todo atkspd,wlkspd
+      }
+      
       @proc[:arrow]=->(info){
         caster=info[:caster]
-        caster.equip[:range] or return
         attack=info[:args][0]+caster.attrib[:ratk]
         Map.add_friend_bullet(
-            caster.ally,
-            Bullet.new(
-              Attack.new(caster,
-                type: :phy,
-                cast_type: :attack,
-                attack: attack,
-                append: [:fire_arrow,:enegy_arrow]),
-              (pic=Surface.load_with_colorkey('./rc/pic/battle/arrow.png')),
-              :box,
-              caster: caster,
-              live_cycle: :time,
-              live_count: 25,
-              x: caster.position.x,
-              y: caster.position.y+caster.pic_h/4,
-              z: caster.position.z,
-              w: pic.w,
-              h: pic.w/4,
-              t: pic.h,
-              vx: caster.face_side==:right ? 20 : -20)
+          caster.ally,
+          Bullet.new(
+            Attack.new(caster,
+              type: :phy,
+              cast_type: :attack,
+              attack: attack,
+              append: [:fire_arrow,:enegy_arrow]),
+            (pic=Surface.load_with_colorkey('./rc/pic/battle/arrow.png')),
+            :box,
+            caster: caster,
+            live_cycle: :time,
+            live_count: 25,
+            x: caster.position.x,
+            y: caster.position.y+caster.pic_h/4,
+            z: caster.position.z,
+            w: pic.w,
+            h: pic.w/4,
+            t: pic.h,
+            vx: caster.face_side==:right ? 20 : -20)
+        )
+      }
+      @proc[:missile]=->(info){
+        caster=info[:caster]
+        attack=info[:args][0]
+        info[:data][:coef].each{|sym,val|
+          attack+=(caster.attrib[sym]*val).to_i
+        }
+        
+        pic=Surface.load_with_colorkey(info[:data][:pic])
+        distance=Math.distance(info[:x],info[:z],caster.position.x,caster.position.z).to_i
+        delta_x=info[:x]-caster.position.x
+        delta_z=info[:z]-caster.position.z
+        Map.add_friend_bullet(
+          caster.ally,
+          Bullet.new(
+            Attack.new(caster,
+              type: info[:data][:type],
+              cast_type: :skill,
+              attack: attack,
+              append: info[:data][:append]),
+            pic,
+            :col,
+            caster: caster,
+            live_cycle: info[:data][:live_cycle],
+            live_count: info[:data][:live_count],
+            x: caster.position.x,
+            y: caster.position.y+caster.pic_h/2-pic.h/2,
+            z: caster.position.z,
+            r: pic.w/2,
+            h: pic.h,
+            vx: info[:data][:velocity]*delta_x/distance,
+            vz: info[:data][:velocity]*delta_z/distance
+          )
         )
       }
       @proc[:fire_arrow]=->(info){
         attack=info[:args]
-        Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target])
+        Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target],info[:target].position)
       }
       @proc[:enegy_arrow]=->(info){
         const,percent= *info[:args]
         attack=const+info[:caster].attrib[:sp]*percent/100
-        Attack.new(info[:caster],type: :umag,attack: attack).affect(info[:target])
+        Attack.new(info[:caster],type: :umag,attack: attack).affect(info[:target],info[:target].position)
       }
+      
       @proc[:magic_immunity]=->(info){
         caster=info[:caster]
-        attrib=info[:args][0]
-        last=info[:args][1]
+        attrib=info[:args][:base]
+        add=info[:args][:add]
+        attrib.each_key{|sym|
+          attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
+        }
+        last=info[:args][:last]
         caster.add_state(caster,
           name:'魔法免疫',sym: :magic_immunity,
           icon:'./rc/icon/icon/tklre04/skill_053.png',
           attrib: attrib,
           last: last)
       }
+      
       @proc[:burn]=->(info){
         info[:target].add_state(info[:caster],
           name:'燒毀',sym: :burn,
@@ -78,10 +150,12 @@ class Skill
           last: 2.to_sec)
       }
       @proc[:break_armor]=->(info){
-        info[:target].add_state(info[:caster],
+        caster=info[:caster]
+        dec_armor=(info[:args]*Math.log10(caster.attrib[:matk])).to_i
+        info[:target].add_state(caster,
           name:'破防',sym: :break_armor,
           icon: './rc/icon/skill/2011-12-23_3-146.gif',
-          attrib: {def: info[:args]},#}
+          attrib: {def: dec_armor},#}
           last: 2.to_sec)
       }
       @proc[:smash_wave]=->(info){
@@ -122,7 +196,7 @@ class Skill
           #attack=caster.attrib[:atk]*(rad-distance)/rad
           attack=10*(rad-distance)/rad
           attack==0 and attack=1
-          Attack.new(caster,type: :mag,attack: attack).affect(target)
+          Attack.new(caster,type: :mag,attack: attack).affect(target,target.position)
         end
       }
       #BUG!!
@@ -149,6 +223,7 @@ class Skill
             exclude: info[:target])
         )
       }
+      
       @proc[:normal_attack]=->(info){
         caster=info[:caster]
         attack=caster.attrib[:atk]
@@ -156,8 +231,9 @@ class Skill
           type: :phy,
           cast_type: :attack,
           attack: attack,
-          append: [:smash_wave,:enegy_arrow,:shatter,:break_armor,:burn]).affect(info[:target])
+          append: [:smash_wave,:enegy_arrow,:shatter,:break_armor,:burn]).affect(info[:target],info[:target].position)
       }
+      
       @proc[:fire_circle]=->(info){        
         const=info[:args][0]
         percent=info[:args][1]
@@ -187,6 +263,7 @@ class Skill
             live_cycle: :frame)
         )
       }
+      
       @proc[:wolfear]=->(info){
         caster=info[:caster]
         attrib=caster.attrib
@@ -221,24 +298,27 @@ class Skill
         #10%:1.6 15%:1.5 25%:1.4 40%:1.3 60%:1.15
           info[:caster].attrib[:attack_amp]=attack_amp
       }
+      
       @proc[:ice_wave]=->(info){
         caster=info[:caster]
-        attack=info[:caster].attrib[:int]*4/5
+        attack=info[:args]        
+        info[:data][:coef].each{|sym,val|        
+          attack+=(caster.attrib[sym]*val).to_i
+        }
         Map.add_friend_bullet(
           caster.ally,
           Bullet.new(
             Attack.new(caster,type: :acid,attack: attack),
-            nil,
+            Surface.load_with_colorkey('./rc/pic/battle/ice_wave.png'),
             :col,
             caster: caster,
-            x: caster.position.x,
-            y: caster.position.y,
-            z: caster.position.z,
-            r: 70,h: 50,
+            x: info[:x],y: 0,z: info[:z],
+            r: 60,h: 1000,
             live_cycle: :frame
           )
         )
       }
+      
       @proc[:heal]=->(info){
         hp,sp=info[:args][:hp],info[:args][:sp]
         target=info[:target]
@@ -253,7 +333,7 @@ class Skill
           hp&&=(hp_lost*hp).to_i
           sp&&=(sp_lost*sp).to_i
         end
-        Heal.new(info[:caster],hp: hp,sp: sp).affect(target)
+        Heal.new(info[:caster],hp: hp,sp: sp).affect(target,target.position)
       }
       @proc[:recover]=->(info){
         caster=info[:caster]

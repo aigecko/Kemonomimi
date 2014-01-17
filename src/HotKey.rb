@@ -7,6 +7,7 @@ class<<(class HotKey;self;end)
     @active={}
   end
   def bind(key,type,trigger,value)
+    @hotkey.delete(@object[value])
     @hotkey[key]=[type,trigger,value]
     @object[value]=key
   end
@@ -32,7 +33,7 @@ class<<(class HotKey;self;end)
         Game.player.cast(value,nil,*position)
       when :switch_auto,:switch_append
         position=Game.window(:GameWindow).convert_position and
-        Game.player.cast(value,nil,*position)
+        Game.player.cast(value,nil,nil,nil,nil)
         @active.delete(key)
       when :proc
         value.call

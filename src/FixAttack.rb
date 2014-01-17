@@ -7,7 +7,7 @@ class FixAttack <Attack
 end
 class ConstAttack < FixAttack;end
 class ConstMixAttack < FixAttack 
-  def affect(target)
+  def affect(target,position)
     @percent||=@info[:attack][1]
     @const||=@info[:attack][0]
     attack=@const
@@ -24,7 +24,7 @@ class ConstMixAttack < FixAttack
   end
 end
 class PercentAttack < FixAttack
-  def affect(target)    
+  def affect(target,position)    
     @percent||=@info[:attack]
     case @info[:dmg_type]
     when :max      

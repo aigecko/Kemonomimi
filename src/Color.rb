@@ -81,6 +81,8 @@ class Color
       actor_hpbar:[255,0,0],
       player_hpbar:[255,128,0],
       
+      skill_comment_font:[0,94,0],
+      
       shadow:[0,0,0]
     }
   end

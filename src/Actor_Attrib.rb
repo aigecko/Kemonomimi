@@ -101,7 +101,7 @@ class Actor
 	end
     def gain_exp(exp)
       @total[:exp]+=exp
-      if @total[:exp]>=@total[:maxexp]
+      while @total[:exp]>=@total[:maxexp]
         if @base[:level]<@@Max[:level]
           @total[:exp]-=@total[:maxexp]
           @base[:level]+=1
@@ -167,10 +167,10 @@ class Actor
       @total[:block]+=@state[:block]
       @total[:block]+=@equip[:block]
       
-      if @total[:dodge]>@@Coef[:dodge_max]
-        @total[:block]+=(@total[:dodge]-@@Coef[:dodge_max])*@@Coef[:dtob]
-        @total[:dodge]=@@Coef[:dodge_max]
-      end
+      # if @total[:dodge]>@@Coef[:dodge_max]
+        # @total[:block]+=(@total[:dodge]-@@Coef[:dodge_max])*@@Coef[:dtob]
+        # @total[:dodge]=@@Coef[:dodge_max]
+      # end
     end
     def compute_amp_attrib
       @@Base.each{|base|

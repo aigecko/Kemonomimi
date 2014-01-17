@@ -9,9 +9,9 @@ class Attack
     
     @attrib=info[:attrib]||Hash.new(0)
   end
-  def affect(target,scale=1)
+  def affect(target,position,scale=1)
+    pre_formula_defense(target)
     before(target)
-    
     damage=attack(target)	
     if damage==:miss
       @info[:visible]!=false and
@@ -27,7 +27,7 @@ class Attack
       @info[:visible]!=false and
       show_damage(damage,target)
     end
-    append(target)
+    append(target,position)
     
     return true
   end
@@ -47,6 +47,11 @@ class Attack
       skill=@caster.skill[before] and
       skill.cast(@caster,target,nil,nil,nil)
     end
+  end
+  def pre_formula_defense(target)
+    target.pf_defense_skill.each{|skill|
+      skill.cast(target,@caster,nil,nil,nil)
+    }
   end
   def show_damage(damage,target)
     damage=damage.to_s
@@ -118,7 +123,7 @@ class Attack
           name:'暈眩',sym: :stun,effect_type: :stun,
           icon:'./rc/icon/icon/tklre04/skill_064.png',
           attrib:{},
-          last: time.to_sec).affect(target)
+          last: time.to_sec).affect(target,@caster.position)
         break
       }
     end
@@ -135,27 +140,27 @@ class Attack
         vamp_hp=(damage*@caster.attrib[:skl_vamp]).to_i
       end
       if vamp_hp>0
-        Heal.new(@caster,hp: vamp_hp).affect(@caster)
+        Heal.new(@caster,hp: vamp_hp).affect(@caster,@caster.position)
       end
     end 
   end
-  def append(target)
+  def append(target,position)
     append=@info[:append]
     append and
     if append.respond_to? :each
       append.each{|skill|
         if skill.respond_to? :cast
-          skill.cast(@caster,target,nil,nil,nil)
+          skill.cast(@caster,target,position.x,position.y,position.z)
         else
           skill=@caster.skill[skill] and
-          skill.cast(@caster,target,nil,nil,nil)
+          skill.cast(@caster,target,position.x,position.y,position.z)
         end
       }
     elsif append.respond_to? :cast
-      append.cast(@caster,target,nil,nil,nil)
+      append.cast(@caster,target,position.x,position.y,position.z)
     else
       skill=@caster.skill[append] and
-      skill.cast(@caster,target,nil,nil,nil)
+      skill.cast(@caster,target,position.x,position.y,position.z)
     end
   end
   class<<self  

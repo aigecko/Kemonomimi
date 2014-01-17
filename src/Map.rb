@@ -27,8 +27,9 @@ class Map
     end
     #dbg
     @items=[]#Array.new(1000){
-      # Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(1000),z:rand(400)})
-    # }
+      #Database.get_consum(10).drop
+      #Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(1000),z:rand(400)})
+    #}
     
     @friend=[]
     @enemy=[]
@@ -39,7 +40,7 @@ class Map
     @friend_circle=[]
     @enemy_circle=[]
     
-	@@current_map=self
+    @@current_map=self
   end
   def which_side(player_x)
     if player_x<Game.Width/2
@@ -102,6 +103,9 @@ class Map
   def render_onground_item
     return @items
   end
+  def render_shadow
+    return @items
+  end
   def add_friend_circle(ally,circle)
     if ally==:enemy
       @enemy_circle<<circle
@@ -127,8 +131,8 @@ class Map
     @friend_bullet.reject!{|bullet| bullet.to_delete?}
     @friend_circle.reject!{|circle| circle.to_delete?}    
     @enemy.reject!{|actor|
-      @friend_bullet.reject!{|bullet|	  
-	    Shape.collision?(actor,bullet)&&
+      @friend_bullet.reject!{|bullet|
+	      Shape.collision?(actor,bullet)&&
         bullet.affect(actor)||
         !bullet.position.x.between?(0,@w)
 	  }
@@ -148,11 +152,11 @@ class Map
     update_bullet
   end
   def update_actor
-    if rand(1000)>997
+    if rand(1000)>996
       enemy=Enemy.new("slime","none",
-                         [rand(1000),0,rand(400)],
-                         {exp:100},
-                         "mon_004r")
+                       [rand(1000),0,rand(400)],
+                       {exp:10000},
+                       "mon_004r")
       @enemy<<enemy
     end
     @friend.each{|friend|
