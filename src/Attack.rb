@@ -9,12 +9,10 @@ class Attack
     
     @attrib=info[:attrib]||Hash.new(0)
   end
-  def affect(target,position,scale=1)
-    pre_formula_defense(target)
+  def affect(target,position,scale=1)    
     before(target)
     damage=attack(target)	
-    if damage==:miss
-      @info[:visible]!=false and
+    if damage==:miss      
       show_damage("MISS",target)
       return true
     end
@@ -24,7 +22,6 @@ class Attack
       vamp_damage=target.lose_hp(damage)
       vamp(vamp_damage)
 	
-      @info[:visible]!=false and
       show_damage(damage,target)
     end
     append(target,position)
@@ -41,45 +38,79 @@ class Attack
     if before.respond_to? :each
       before.each{|name|
         skill=@caster.skill[name] and
-      skill.cast(@caster,target,nil,nil,nil)
+        skill.cast(@caster,target,nil,nil,nil)
       }
     else
       skill=@caster.skill[before] and
       skill.cast(@caster,target,nil,nil,nil)
     end
   end
-  def pre_formula_defense(target)
-    target.pf_defense_skill.each{|skill|
+  def pre_attack_defense(target,attack)
+    skill_list=@info[:pre_attack_defense] and
+    if skill_list.respond_to? :each
+      skill_list.each{|name|
+        skill=target.skill[name] and
+        attack=skill.cast_defense(target,@caster,attack)
+      }
+    else
+      skill=target.skill[skill_list] and
+      attack=skill.cast_defense(target,@caster,attack)
+    end
+    return attack
+  end
+  def attack_defense(target)
+    skill_list=@info[:attack_defense] and
+    if skill_list.respond_to? :each
+      skill_list.each{|name|
+        skill=target.skill[name] and
+        skill=cast(target,@caster,nil,nil,nil)
+      }
+    else
+      skill=target.skill[skill_list] and 
       skill.cast(target,@caster,nil,nil,nil)
-    }
+    end
   end
   def show_damage(damage,target)
+    @info[:visible]!=false or return
     damage=damage.to_s
     direct=rand(5)-2
     color=Color[:"attack_#{@info[:type]}"]
     @@buffer<<ParaString.new(damage,target,direct,color,@@FontSize)
   end
   def attack(target)
-    @info[:attack]==0 and return 0    
+    @info[:attack]==0 and return 0
     
-    attack=@info[:attack]
+    ignore=target.attrib[:ignore]
+    if rand(100)<ignore
+      skill=target.skill[:ignore] and
+      skill.cast(target,target,nil,nil,nil)
+      return :miss
+    end
     
+    attack=@info[:attack]    
     attack+=attack*@attrib[:attack_adj]
     attack+=attack*@attrib[:attack_amp]/100
     attack+=attack*@caster.attrib[:attack_amp]/100
-    
+        
     case @info[:type]
     when :phy
       case @info[:cast_type]
       when :attack
         dodge=target.attrib[:dodge]*100
         if rand(10000)<dodge
+          skill=target.skill[:dodge] and
+          skill.cast_defense(target,@caster,attack)
           return :miss
         end
+        
+        attack=pre_attack_defense(target,attack)
         damage=Attack.formula(attack,target.attrib[:def])
-      
+        attack_defense(target)
+        
         block=target.attrib[:block]*100	
         if rand(10000)<block
+          skill=target.skill[:block] and
+          skill.cast_defense(target,@caster,damage)
           damage=(@caster.skill[:catear])? damage*40/100 : 1
         end
         damage=critical(damage)

@@ -10,7 +10,7 @@ class Heal
   str="def affect(target,position)\n"
   [:hp,:sp].each{|type| 
     str+=
-"  if #{type}=@info[:#{type}]    
+" if (#{type}=@info[:#{type}])&&#{type}>0
     target.gain_#{type}(#{type})
     #{type}=\"%+d\"%#{type}
     color=Color[:heal_#{type}_font]

@@ -159,13 +159,13 @@ class Actor
       value=(agi/@@Coef[:agi_div])**@@Coef[:agi_exp]*@@Coef[:agi_mul]
       
       @total[:dodge]=value*(agi**@@Coef[:dodge_exp])/((str+agi)**@@Coef[:dodge_exp])
-      @total[:block]=value-@total[:dodge]
+      @total[:block]=value-@total[:dodge]      
+      @total[:ignore]=0
       
-      @total[:dodge]+=@state[:dodge]
-      @total[:dodge]+=@equip[:dodge]
-      
-      @total[:block]+=@state[:block]
-      @total[:block]+=@equip[:block]
+      [:dodge,:block,:ignore].each{|sym|
+        @total[sym]+=@state[sym]
+        @total[sym]+=@equip[sym]
+      }
       
       # if @total[:dodge]>@@Coef[:dodge_max]
         # @total[:block]+=(@total[:dodge]-@@Coef[:dodge_max])*@@Coef[:dtob]

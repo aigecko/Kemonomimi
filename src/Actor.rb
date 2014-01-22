@@ -32,81 +32,41 @@ class Actor
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
 
-    @skill={}
-
-    @skill_list={}
-    Skill.all_type_list.each{|type|
-      @skill_list[type]=[]
-    }
-    
-    #dbg
-    #100.times{
-    # gain_consum(10)}
-    # gain_equip ([[:head,1],[:head,10],[:head,20],
-      # [:left,1],[:dual,1],[:dual,1],[:right,1],[:single,1],
-      # [:body,1],[:body,10],[:body,20],[:range,1],[:range,10],
-      # [:finger,1],[:finger,2],[:feet,1],[:feet,10],[:deco,5]])
-    
+    @skill=SkillTree.new(self)
+        
     @shape=Shape.new(:col,					 
       r: @animation.w/2,
       h: @animation.h)
-    race_initialize
     class_initialize
     skill_initialize
     
     @var=Hash.new(0)
-  end
-  def race_initialize
-    case @race
-    when :catear
-      add_state(@player,
-	    name:'貓耳之血',sym: :catear,
-        attrib:{wlkspd: 20},
-        magicimu_keep: true,
-        last: nil)	
-      add_skill(:catear,
-        name:'貓耳基里的祝福',type: :none,
-        icon:'./rc/icon/icon/mat_tklre002/skill_029.png:[0,0]',
-        comment:'敵人格檔時可以產生4成傷害')
-    when :dogear
-      add_skill(:dogear,
-        name:'尾刀狗',type: :before,cd: 0,
-        icon:'./rc/icon/icon/mat_tklre002/skill_028.png:[0,0]',
-        base: :dogear,consum: 0,level: 1,table:[0,0],
-        comment:'敵人的生命比例越低對其傷害越高')
-    when :foxear
-      add_skill(:foxear,
-        name:'狐耳基里的祝福',type: :none,		
-        icon:'./rc/icon/skill/2011-12-23_3-078.gif',
-        comment:'最大SP及消耗多1成 魔法輸出多2成')
-      add_state(@player,
-        name:'狐耳之血',sym: :foxear,
-        attrib:{maxsp: 0.1,magic_amp: 20,consum_amp: 10},
-        magicimu_keep: true,
-        last: nil)      
-    when :wolfear
-      add_skill(:wolfear,
-        name:'狼耳基里的祝福',type: :auto,cd: 0.5,
-        icon:'./rc/icon/skill/2011-12-23_3-079.gif',
-        base: :wolfear,consum: 0,level: 1,table:[0,0],
-        comment:'生命越少回復的生命和法力會越多')
-    end
   end
   def class_initialize
     class_data=Database.get_class(@class)
     attack_cd=class_data[:attack_cd]
     arrow_cd=class_data[:arrow_cd]
 	
-    add_skill(:normal_attack,
+    add_base_skill(:normal_attack,
       name:'普通攻擊',type: :attack,cd: attack_cd,
       icon:'./rc/icon/skill/2011-12-23_3-034.gif',
       base: :normal_attack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
-	  add_skill(:arrow,
+    add_base_skill(:attack,
+      name:'',type: :attack,
+      icon: nil,
+      base: :attack,table:[0,0],
+      comment: nil)
+	  add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
-      base: :arrow,level: 1,table:[0,[50,:ratk,1]],
+      base: :arrow,table:[0,[50,25]],
+      data:{sym: :rayk,coef: 1,type: :phy,cast_type: :attack,
+        attack_defense:[:counter_beam,:counter_attack],
+        append:[:enegy_arrow,:fire_burn,:break_armor],
+        pic:'./rc/pic/battle/arrow.png',
+        velocity: 20},
       equip_need: :range,
       common_cd: :normal_attack,
       comment:'快速射出一隻箭造成#{@table[@level][0]}+ratk的傷害')
@@ -114,11 +74,26 @@ class Actor
   def skill_initialize    
     case @class
     when :paladin
-      add_skill(:smash_wave,
-      name:'粉碎波',type: :append,
-      icon:'./rc/icon/skill/2011-12-23_3-037.gif',
-      base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
-      comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}範圍魔法傷害')
+      [:counter_beam,:holy_protect,:paladin_magic_immunity].each{|skill|
+        add_class_skill(:defense,skill,Database.get_skill(skill))
+      }
+      [:paladin_boost,:paladin_smash_wave,:paladin_recover].each{|skill|
+        add_class_skill(:attack,skill,Database.get_skill(skill))
+      }
+      add_skill(:ignore,
+        name:'',type: :none,
+        icon: nil,
+        base: :heal,table:[0,{}],
+        data:{spsym: :def,spcoef: 0.1})
+      # add_class_skill(:attack,:paladin_chop
+        # name:'聖光衝擊',type: :active,
+        # icon:'',
+        # base: :missile,cd: 3,consum: 5,table:[0,[100]],
+        # data: {coef:{matk: 0.8},type: :mag,
+          # pic:'',
+          # live_cycle: :time,live_count: 20,velocity: 18},
+        # comment:'')
+      
     when :darkknight
       add_skill(:smash_wave,
       name:'粉碎波',type: :append,
@@ -126,37 +101,23 @@ class Actor
       base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
       comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}範圍魔法傷害')
     when :fighter
-      add_skill(:counter_attack,
-        name:'反擊之火',type: :pf_defense,
-        icon:'./rc/icon/skill/2011-12-23_3-049.gif',
-        base: :counter_attack,table:[0,[10,0.1]],
-        comment:'受攻擊時反彈#{@table[@level][0]}+#{@table[@level][1]}def絕對傷害')
-      add_skill(:amplify_hp_block,
-        name:'堅忍不拔',type: :auto,
-        icon:'./rc/icon/skill/2011-12-23_3-186.gif',
-        base: :amplify,table:[0,{maxhp: 0.06,block: 11}],
-        data:{name:'堅忍不拔',sym: :amplify_hp_block},
-        comment:'最大生命增幅#{@table[@level][:maxhp]}% 格檔增幅#{@table[@level][:block]}%')
-      add_skill(:fire_circle,
-        name:'熾焰焚身',type: :switch_auto,cd: 1,
-        icon:'./rc/icon/skill/2011-12-23_3-072.gif',
-        base: :fire_circle,consum: 1,table:[0,[50,0]],
-        comment:'焚燒周圍的敵人造成#{@table[@level][0]}傷害')
-      add_skill(:magic_immunity,
-        name:'魔法免疫',type: :active,cd: 30,
-        icon:'./rc/icon/icon/tklre04/skill_053.png',
-        base: :magic_immunity,consum: 100,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},last: 3.to_sec}],#}
-        comment:'數秒內不受大部分魔法及狀態影響')
-      add_skill(:break_armor,
-        name:'破甲斬擊',type: :append,
-        icon:'./rc/icon/icon/tklre05/skill_074.png',
-        base: :break_armor,table:[0,-5],
-        comment:'命中目標降低#{@table[@level]}xLog(matk)的物防')
-    when :mage
+      [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
+        add_class_skill(:defense,skill,Database.get_skill(skill))
+      }
+      [:break_armor,:fire_boost,:attack_increase].each{|skill|
+        add_class_skill(:attack,skill,Database.get_skill(skill))
+      }
+      [:fire_burn,:fire_circle,:fire_burst].each{|skill|
+        add_class_skill(:skill,skill,Database.get_skill(skill))
+      }
+      [:dual_weapon_atkspd,:rl_weapon_heal].each{|skill|
+        add_class_skill(:weapon,skill,Database.get_skill(skill))
+      }      
+   when :mage
       add_skill(:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif',
-        base: :missile,consum: 0,cd: 3,level: 1,table:[0,[100]],
+        base: :missile,consum: 5,cd: 3,table:[0,[100]],
         data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
           live_cycle: :time,live_count: 20,velocity: 15},
@@ -169,12 +130,11 @@ class Actor
         comment:'魔法命中造成#{@table[@level]}+#{@data[:coef][:int]}int範圍絕對傷害')
     when :cleric
       add_skill(:enegy_arrow,
-      name:'碎石杖擊',type: :switch_append,
-      icon:'./rc/icon/skill/2011-12-23_3-125.gif',
-      base: :enegy_arrow,consum: 5,level: 1,table:[0,[40,10]],
-      comment:'開啟後普攻帶#{@table[@level][0]}+#{@table[@level][1]}%現有法力之無視魔免魔傷')
-    end
-    
+        name:'碎石杖擊',type: :switch_append,
+        icon:'./rc/icon/skill/2011-12-23_3-125.gif',
+        base: :enegy_arrow,consum: 5,level: 1,table:[0,[40,10]],
+        comment:'開啟後普攻帶#{@table[@level][0]}+#{@table[@level][1]}%現有法力之無視魔免魔傷')
+    end    
   end
   def rotate(side)
     @animation.rotate(side)
@@ -303,15 +263,8 @@ class Actor
   end
   def update
     @state.update
-    recover
-    
-    @skill_list[:auto].each{|skill|
-      skill.cast_auto(self)
-    }
-    @skill_list[:switch_auto].each{|skill|
-      skill.switch and skill.cast_auto(self)
-    }
-    
+    recover    
+    @skill.update    
     unless has_state?(:stun)
       chase_target
       move2dst
@@ -348,33 +301,47 @@ class Actor
     end
     @state.add(Statement.new(caster,info))
   end
+  def del_state(sym)
+    @state.delete(sym)
+  end
   def has_skill?(name)
-    @skill[name]
+    @skill.has?(name)
+  end
+  def add_base_skill(skill,info)
+    @skill.add_base(skill,info)
+  end
+  def add_class_skill(type,skill,info)
+    @skill.add_class(type,skill,info)
   end
   def add_skill(skill,info)
-    if skill.respond_to? :zip
-      skill.zip(info){|skl,inf|
-        @skill[skl]=Skill.new(inf)
-        @skill_list[inf[:type]]<<@skill[skl]
-      }
-    else
-      @skill[skill]=Skill.new(info)
-      @skill_list[info[:type]]<<@skill[skill]
-    end
+    @skill.add_other(skill,info)
+    # if skill.respond_to? :zip
+      # skill.zip(info){|skl,inf|
+        # @skill[skl]=Skill.new(inf)
+        # @skill_list[inf[:type]]<<@skill[skl]
+      # }
+    # else
+      # @skill[skill]=Skill.new(info)
+      # @skill_list[info[:type]]<<@skill[skill]
+    # end
   end
   def del_skill(skill,info)
-    if skill.respond_to? :zip
-      skill.zip(info){|skl,inf|
-        @skill_list[inf[:type]].delete(@skill[skl])
-        @skill.delete(skl)
-      }
-    else
-      @skill_list[info[:type]].delete(@skill[skill])
-      @skill.delete(skill)
-    end
+    @skill.delete(skill,info)
+    # if skill.respond_to? :zip
+      # skill.zip(info){|skl,inf|
+        # @skill_list[inf[:type]].delete(@skill[skl])
+        # @skill.delete(skl)
+      # }
+    # else
+      # @skill_list[info[:type]].delete(@skill[skill])
+      # @skill.delete(skill)
+    # end
   end
-  def pf_defense_skill
-    return @skill_list[:pf_defense]
+  def attack_defense_skill
+    return @skill_list[:attack_defense]
+  end
+  def pre_attack_defense_skill
+    return @skill_list[:pre_attack_defense]
   end
   def gain_equip(equips)
     equips.each{|equip|
@@ -472,7 +439,7 @@ class Actor
     @state.draw(x,y)
   end
   def draw(dst)
-	@animation.draw(@position,dst)
+    @animation.draw(@position,dst)
     draw_hpbar(dst)
   end
 end

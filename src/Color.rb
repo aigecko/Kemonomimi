@@ -72,7 +72,7 @@ class Color
       attack_acid:[255,255,255],
       
       heal_hp_font:[20,232,9],
-      heal_sp_font:[0,220,0],
+      heal_sp_font:[0,232,232],
       
       statement_back:[0,217,255],
       statement_border:[47,57,128],

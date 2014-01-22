@@ -31,6 +31,17 @@ class Actor
     def keep_if
       @state.keep_if{|sym,state| yield state}
     end
+    def delete(sym)
+      state_list=@state[sym] or return
+      if state_list.respond_to? :each
+        state_list.each{|state|
+          @actor.attrib.lose_state_attrib(state.attrib)
+        }
+      else
+        @actor.attrib.lose_state_attrib(state_list.attrib)
+      end
+      @state.delete(sym)
+    end
     def update
       @state.reject!{|_,state|
         if state.respond_to? :reject!

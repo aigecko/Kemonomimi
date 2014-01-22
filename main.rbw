@@ -107,7 +107,7 @@ class Game
       Item Equipment Consumable ItemArray
       Event Key HotKey
       Actor Player Enemy Friend
-      Statement 
+      Statement SkillTree
       ColorString ParaString DynamicString
       Shape Bullet
       Attack FixAttack Effect Heal)

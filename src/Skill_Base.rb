@@ -29,56 +29,226 @@ class Skill
         Attack.new(info[:caster],
           type: :acid,
           attack: attack).affect(info[:target],info[:target].position)
-        return info[:damage]
+        return info[:attack]
       }
       
       @proc[:amplify]=->(info){
         caster=info[:caster]
+        if caster.has_state?(info[:data][:sym])
+          if caster.var[:amplify_attrib]!=info[:args]
+            caster.var[:amplify_attrib]=info[:args]
+          else
+            return
+          end
+        end
         attrib=info[:args]
         caster.add_state(caster,
           name: info[:data][:name],
           sym: info[:data][:sym],
+          magicimu_keep: true,
           attrib: attrib,
           last: nil
         )
       }
       @proc[:boost]=->(info){
         caster=info[:caster]
+        data=info[:data]
+        args=info[:args]
+        add=args[:add]        
+        attrib=args[:base]
+        attrib.each_key{|sym|
+          add_value=caster.attrib[add[sym][0]]*add[sym][1]
+          attrib[sym]+=(add_value<1)? add_value : add_value.to_i
+        }
+        last=data[:last].to_sec
+        
+        caster.add_state(caster,
+          name: data[:name],sym: data[:sym],
+          icon: data[:icon],
+          magicimu_keep: true,
+          attrib: attrib,
+          last: last)
+      }      
+      @proc[:boost_circle]=->(info){
+        caster=info[:caster]
         args=info[:args]
         data=info[:data]
         
-        if healhp=args[:healhp]
-          healhp+=(caster.attrib[data[:healhp_sym]]*args[:healhp_coef]||0).to_i
-          healhp*=Math.log10(caster.attrib[data[:healhp_amp]||1])
-          caster.gain_hp(healhp)
-        end
+        healhp=args[0]+(caster.attrib[:matk]*0.3).to_i
         
-        #todo atkspd,wlkspd
+        atkspd=args[1]+(caster.attrib[:int]*0.1).to_i
+        Map.add_enemy_bullet(
+          caster.ally,
+          Bullet.new(
+            [Heal.new(caster,hp: healhp),
+             Effect.new(caster,
+               name: data[:name],sym: data[:sym],
+               icon: data[:icon],
+               magicimu_keep: true,
+               attrib:{atkspd: atkspd},
+               last: data[:last].to_sec)],
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 100,h: 50,
+            live_cycle: :frame)
+        )
       }
       
+      @proc[:attack_increase]=->(info){
+        caster=info[:caster]
+        target=info[:target]
+
+        data=info[:data]
+        
+        if target==caster.var[:attack_increase_target]
+          if caster.var[:attack_increase_count]<info[:args]
+            caster.var[:attack_increase_count]+=1
+          end
+        else
+          caster.del_state(data[:sym])
+          caster.var[:attack_increase_target]=target
+          caster.var[:attack_increase_count]=0
+        end
+
+        caster.add_state(caster,
+          name: data[:name],sym: data[:sym],
+          icon: nil,
+          magicimu_keep: true,
+          attrib: {atk: data[:atk]*caster.var[:attack_increase_count]},
+          last: nil)
+      }
+      @proc[:fire_burst]=->(info){
+        caster=info[:caster]
+        target=info[:target]
+        if caster.var[:fire_burst_count]< 2
+          caster.var[:fire_burst_count]+=1
+          return
+        else
+          caster.var[:fire_burst_count]=0
+        end
+        attack=info[:args][0]+(info[:args][1]*caster.attrib[:matk]).to_i
+        Map.add_friend_bullet(
+          caster.ally,
+          Bullet.new(
+            [Attack.new(caster,type: :umag,cast_type: :skill,attack: attack),
+             Effect.new(caster,
+               name:'暈眩',sym: :circle_burst_stun,effect_type: :stun,
+               icon: nil,
+               attrib:{},
+               last: info[:args][2].to_sec)],
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 80,h:50,
+            live_cycle: :frame))
+      }      
+      @proc[:dual_weapon_atkspd_acc]=->(info){
+        caster=info[:caster]
+        right_hand=caster.equip[:right]
+        left_hand=caster.equip[:left]
+        if right_hand&&left_hand&&
+           right_hand.part==:dual&&
+           left_hand.part==:dual
+           
+          atkspd=right_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
+          atkspd+=left_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
+          caster.add_state(caster,
+            name:'雙刀加攻速',sym: :dual_weapon_atkpsd,
+            icon: nil,
+            attrib: {atkspd: atkspd.to_i},
+            magicimu_keep: true,
+            last: nil)
+        else
+          caster.del_state(:dual_weapon_atkpsd)
+        end
+      }
+      @proc[:rl_weapon_heal]=->(info){
+        caster=info[:caster]
+        right_hand=caster.equip[:right]
+        left_hand=caster.equip[:left]
+        if right_hand&&left_hand&&
+           right_hand.part==:right&&
+           left_hand.part==:left          
+          
+          healhp=left_hand.attrib[:def]*0.2
+          healsp=left_hand.attrib[:mdef]*0.2
+          caster.add_state(caster,
+            name:'平衡回復',sym: :rl_weapon_heal,
+            icon: nil,
+            attrib: {healhp: healhp,healsp: healsp},
+            magicimu_keep: true,
+            last: nil)
+        else
+          caster.del_state(:rl_weapon_heal)
+        end
+      }
+      
+      @proc[:counter_beam]=->(info){
+        caster=info[:caster]
+        possibility=info[:data][:possibility]        
+        unless rand(100)<possibility
+          return info[:attack]
+        end        
+        if SDL.get_ticks>caster.var[:counter_beam_endtime]
+          caster.var[:counter_beam_endtime]=SDL.get_ticks+info[:data][:cd].to_sec
+        else
+          return info[:attack]
+        end
+        attack=info[:args][0]+caster.attrib[:def]
+        last=info[:args][1].to_sec
+        
+        Map.add_friend_circle(
+          caster.ally,
+          Bullet.new(
+            [Attack.new(caster,type: :mag,attack: attack),
+             Effect.new(caster,
+               name:'暈眩',sym: :counter_beam_stun,effect_type: :stun,
+               icon: nil,attrib:{},last: last)],
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 90,h: 50,
+            live_cycle: :frame
+          )
+        )
+        return info[:attack]
+      }
+           
       @proc[:arrow]=->(info){
         caster=info[:caster]
-        attack=info[:args][0]+caster.attrib[:ratk]
+        data=info[:data]
+        attack=info[:args][0]+(caster.attrib[data[:sym]]*data[:coef]).to_i
         Map.add_friend_bullet(
           caster.ally,
           Bullet.new(
             Attack.new(caster,
-              type: :phy,
-              cast_type: :attack,
+              type: data[:type],
+              cast_type: data[:cast_type],
               attack: attack,
-              append: [:fire_arrow,:enegy_arrow]),
-            (pic=Surface.load_with_colorkey('./rc/pic/battle/arrow.png')),
+              attack_defense: data[:attack_defense],
+              append: data[:append]),
+            (pic=Surface.load_with_colorkey(data[:pic])),
             :box,
             caster: caster,
             live_cycle: :time,
-            live_count: 25,
+            live_count: info[:args][1],#25,
             x: caster.position.x,
             y: caster.position.y+caster.pic_h/4,
             z: caster.position.z,
             w: pic.w,
             h: pic.w/4,
             t: pic.h,
-            vx: caster.face_side==:right ? 20 : -20)
+            vx: caster.face_side==:right ? data[:velocity] : -data[:velocity])
         )
       }
       @proc[:missile]=->(info){
@@ -115,6 +285,16 @@ class Skill
           )
         )
       }
+      @proc[:chop_wave]=->(info){
+        caster=info[:caster]
+        target=info[:target]
+        attack=info[:args][0]
+        info[:data][:coef].each{|sym,val|
+          attack+=(caster.attrib[sym]*val).to_i
+        }
+        
+        pic=Surface.load_with_colorkey(info[:data][:pic])
+      }
       @proc[:fire_arrow]=->(info){
         attack=info[:args]
         Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target],info[:target].position)
@@ -132,7 +312,8 @@ class Skill
         attrib.each_key{|sym|
           attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
         }
-        last=info[:args][:last]
+        last=info[:args][:last].to_sec
+        
         caster.add_state(caster,
           name:'魔法免疫',sym: :magic_immunity,
           icon:'./rc/icon/icon/tklre04/skill_053.png',
@@ -141,11 +322,15 @@ class Skill
       }
       
       @proc[:burn]=->(info){
-        info[:target].add_state(info[:caster],
-          name:'燒毀',sym: :burn,
-          icon:'./rc/icon/icon/tklre03/skill_041.png',
+        args=info[:args]
+        data=info[:data]
+        caster=info[:caster]
+        attack=args[0]+(args[1]*info[:caster].attrib[:matk]).to_i
+        info[:target].add_state(caster,
+          name: data[:name],sym: data[:sym],
+          icon: data[:icon],
           attrib: {},
-          effect: Attack.new(info[:caster],type: :acid,attack: 50+info[:caster].attrib[:matk]),
+          effect: Attack.new(info[:caster],type: :acid,attack: attack,visible: false),
           effect_amp: 0.04,
           last: 2.to_sec)
       }
@@ -155,13 +340,13 @@ class Skill
         info[:target].add_state(caster,
           name:'破防',sym: :break_armor,
           icon: './rc/icon/skill/2011-12-23_3-146.gif',
-          attrib: {def: dec_armor},#}
+          attrib: {def: dec_armor,mdef: dec_armor},#}
           last: 2.to_sec)
       }
       @proc[:smash_wave]=->(info){
         caster=info[:caster]
 
-        attack=info[:args][0]        
+        attack=info[:args][0]+(caster.attrib[info[:data][:sym]]*info[:data][:coef]).to_i
         probability=info[:args][1]
         
         rand(100)<probability and
@@ -169,10 +354,10 @@ class Skill
           caster.ally,
           Bullet.new(
             Attack.new(
-              caster,type: :mag,cast_type: :skill,attack: attack),
+              caster,type: info[:data][:type],cast_type: :skill,attack: attack),
               nil,
               :col,
-              caster: info[:caster],
+              caster: caster,
               x: caster.position.x,
               y: caster.position.y,
               z: caster.position.z,
@@ -224,19 +409,26 @@ class Skill
         )
       }
       
-      @proc[:normal_attack]=->(info){
-        caster=info[:caster]
-        attack=caster.attrib[:atk]
-        Attack.new(caster,
+      @proc[:attack]=->(info){
+        attack=info[:caster].attrib[:atk]
+        Attack.new(info[:caster],
           type: :phy,
           cast_type: :attack,
           attack: attack,
-          append: [:smash_wave,:enegy_arrow,:shatter,:break_armor,:burn]).affect(info[:target],info[:target].position)
+          pre_attack_defense: [:counter_attack,:counter_beam],
+          append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst]
+        ).affect(info[:target],info[:target].position)
+      }
+      @proc[:normal_attack]=->(info){
+        Attack.new(info[:caster],
+          type: :phy,
+          attack: 0,
+          before: :attack_increase,
+          append: :attack).affect(info[:target],info[:target].position)
       }
       
       @proc[:fire_circle]=->(info){        
-        const=info[:args][0]
-        percent=info[:args][1]
+        attack=info[:args][0]+info[:caster].attrib[:matk]
         if SDL.get_ticks>info[:caster].var[:fire_circle_triger]
           info[:caster].var[:fire_circle_triger]=SDL.get_ticks+1.to_sec
         else
@@ -246,11 +438,11 @@ class Skill
         Map.add_friend_circle(
           info[:caster].ally,
           Bullet.new(
-            [Attack.new(info[:caster],type: :mag,dmg_type: :const_cur,attack: [const,percent]),
+            [Attack.new(info[:caster],type: :mag,cast_type: :skill,attack: attack),
              Effect.new(info[:caster],
-               name:'燃燒',sym: :burn,effect_type: :slow,
+               name:'燃燒',sym: :circle_burn,effect_type: :slow,
                icon:'./rc/icon/skill/2011-12-23_3-049.gif',
-               attrib:{wlkspd: -0.8},
+               attrib:{wlkspd: info[:args][1]},
                last: 5.to_sec)],
             (pic=Surface.load_with_colorkey('./rc/pic/battle/fire_circle.png')),
             :col,
@@ -305,7 +497,7 @@ class Skill
         info[:data][:coef].each{|sym,val|        
           attack+=(caster.attrib[sym]*val).to_i
         }
-        Map.add_friend_bullet(
+        Map.add_friend_circle(
           caster.ally,
           Bullet.new(
             Attack.new(caster,type: :acid,attack: attack),
@@ -332,6 +524,12 @@ class Skill
           
           hp&&=(hp_lost*hp).to_i
           sp&&=(sp_lost*sp).to_i
+        else
+          hp||=0
+          sp||=0
+          data=info[:data]
+          data[:hpsym] and hp+=(target.attrib[data[:hpsym]]*data[:hpcoef]).to_i
+          data[:spsym] and sp+=(target.attrib[data[:spsym]]*data[:spcoef]).to_i
         end
         Heal.new(info[:caster],hp: hp,sp: sp).affect(target,target.position)
       }
@@ -348,6 +546,7 @@ class Skill
           hp=target.attrib[:maxhp]-target.attrib[:hp]*info[:args][:coef]/100
         else
           hp=info[:args][:coef]
+          info[:args][:add] and hp+=(target.attrib[info[:data][:add]]*info[:args][:add]).to_i
         end
         attrib=info[:args][:attrib]
         attrib[:healhp]=hp
@@ -356,7 +555,8 @@ class Skill
           name: info[:data][:name],sym: info[:data][:sym],
           icon: info[:data][:icon],
           attrib: attrib,
-          last: 1.to_sec)
+          magicimu_keep: true,
+          last: info[:data][:last].to_sec)
       }
     end
     def self.[](skill)

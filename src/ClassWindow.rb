@@ -67,7 +67,7 @@ class ClassWindow < SelectWindow
 還能夠使目標持續受到傷害
     EOF
     @detail[:paladin]=<<-EOF
-使用長槍或是以劍盾作為搭配
+使用雙手武器或是單手武器和盾
 本身可以恢復血量
 物理輸出和魔法輸出兼具
 帶有神聖的屬性
@@ -75,7 +75,7 @@ class ClassWindow < SelectWindow
 可以說是多用途的職業
     EOF
     @detail[:darkknight]=<<-EOF
-和聖騎士使用相同的武器
+和聖騎士使用相同類型的武器
 除了普通攻擊的物理傷害
 還可以輸出大量的絕對傷害
 帶有黑暗的屬性

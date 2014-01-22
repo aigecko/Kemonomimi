@@ -30,13 +30,14 @@ class Message
 	  rece_load_failure:['種族載入錯誤','錯誤', :OK, :ERROR],
 	  equip_load_failure:['裝備載入錯誤','錯誤', :OK, :ERROR],
 	  consum_load_failure:['消耗品載入錯誤','錯誤', :OK, :ERROR],
-	  
+	  skill_load_failure:['技能載入錯誤','錯誤', :OK, :ERROR],
+    
 	  actor_pic_lost:['人物圖片遺失','錯誤', :OK, :ERROR],
-      actor_pic_rescue:['使用備用圖片','提示', :OK, :ASTERISK],
+    actor_pic_rescue:['使用備用圖片','提示', :OK, :ASTERISK],
 	  actor_pic_load_failure:['人物圖片載入失敗','錯誤', :OK, :ERROR],
 	  actor_pic_format_wrong:['人物圖片格式錯誤','錯誤', :OK, :ERROR],
-      equip_pic_load_failure:['裝備圖片載入失敗','錯誤', :OK, :ERROR],
-      skill_pic_load_failure:['技能圖片載入失敗','錯誤', :OK, :ERROR],
+    equip_pic_load_failure:['裝備圖片載入失敗','錯誤', :OK, :ERROR],
+    skill_pic_load_failure:['技能圖片載入失敗','錯誤', :OK, :ERROR],
       
 	  ai_fetch_failure:['AI選取失敗','錯誤', :OK, :ERROR],
 	  #提示訊息

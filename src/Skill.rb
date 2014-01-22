@@ -40,11 +40,11 @@ class Skill
     @end_time=0
     
     @level=info[:level]||1
-    @table=info[:table]
+    @table=info[:table]||[0,0]
     @data=info[:data]
     
     @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)    
-    @cd_pic=DynamicString.new('CD: #{@cd}',:skill_comment_font,binding)
+    @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',:skill_comment_font,binding)
   end
   def toggle(x,y,z)
     if @@SwitchTypeList.include?(@type)&&!x&&!y&&!z
@@ -103,6 +103,9 @@ class Skill
     
     call_skill_base(caster,target,nil,nil,nil)
   end
+  def cast_defense(caster,target,attack)
+    @proc.call(caster:caster,target:target,attack:attack,args:@table[@level],data:@data)
+  end
   def reset_cd
     @cd=@org_cd
   end
@@ -119,14 +122,18 @@ class Skill
     Font.draw_solid(@name,15,x,y,255,255,0)
   end
   def draw_cd(x,y)
-    @cd>0 and @cd_pic.draw(x,y)
+    @cd>0 or return
+    @cd_pic.draw(x,y)
+    # x+=Font.draw_solid('CD: ',12,x,y,*Color[:skill_comment_font])[0]
+    # Font.draw_solid('%.3f'% @cd,12,x,y,*Color[:skill_comment_font])
   end
   def draw_comment(x,y)
     @comment.draw(x,y)
   end
   def self.all_type_list
     [:none,:auto,:switch,:active,:append,:before,
-     :attack,:shoot,:defense,:pf_defense,
+     :attack,:shoot,
+     :pre_attack_defense,:attack_defense,:skill_defense,
      :switch_auto,:switch_append]
   end
 end

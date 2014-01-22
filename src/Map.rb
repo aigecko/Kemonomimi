@@ -127,27 +127,46 @@ class Map
       @enemy_bullet<<bullet
     end
   end
-  def update    
+  def delete_live_frame
     @friend_bullet.reject!{|bullet| bullet.to_delete?}
     @friend_circle.reject!{|circle| circle.to_delete?}    
-    @enemy.reject!{|actor|
-      @friend_bullet.reject!{|bullet|
-	      Shape.collision?(actor,bullet)&&
-        bullet.affect(actor)||
-        !bullet.position.x.between?(0,@w)
-	  }
-      actor.died?
-	}
-    @enemy.reject!{|actor|
-      @friend_circle.reject!{|circle|
-        Shape.collision?(actor,circle)&&
-        circle.affect(actor)||
-        !circle.position.x.between?(0,@w)
-      }
-      actor.died?
-    }
+    @enemy_bullet.reject!{|bullet| bullet.to_delete?}
+    @enemy_circle.reject!{|circle| circle.to_delete?}
+  end
+  def mark_live_frame
     @friend_bullet.each{|bullet| bullet.mark_live_frame}
     @friend_circle.each{|circle| circle.mark_live_frame}
+    @enemy_bullet.each{|bullet| bullet.mark_live_frame}
+    @enemy_circle.each{|circle| circle.mark_live_frame} 
+  end
+  def update
+    delete_live_frame
+    [@friend_bullet,@friend_circle].each{|bullet_list|      
+      @enemy.reject!{|actor|
+        bullet_list.reject!{|bullet|
+          Shape.collision?(actor,bullet)&&
+          bullet.affect(actor)||
+          !bullet.position.x.between?(0,@w)
+        }
+        actor.died?
+      }
+    }
+    [@enemy_bullet,@enemy_circle].each{|bullet_list|
+      bullet_list.reject!{|bullet|
+        Shape.collision?(Game.player,bullet)&&
+        bullet.affect(Game.player)||
+        !bullet.position.x.between?(0,@w)
+      }
+      @friend.reject!{|actor|
+        bullet_list.reject!{|bullet|
+          Shape.collision?(actor,bullet)&&
+          bullet.affect(actor)||
+          !bullet.position.x.between?(0,@w)
+        }
+        actor.died?
+      }
+    }    
+    mark_live_frame
     update_actor
     update_bullet
   end
@@ -155,7 +174,7 @@ class Map
     if rand(1000)>996
       enemy=Enemy.new("slime","none",
                        [rand(1000),0,rand(400)],
-                       {exp:10000},
+                       {exp:100000,def:300},
                        "mon_004r")
       @enemy<<enemy
     end

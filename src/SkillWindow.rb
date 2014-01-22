@@ -65,6 +65,7 @@ class SkillWindow < DragWindow
     def draw
       @skeleton.draw(@win_x,@win_y)
       @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
+      #@skill.draw(@win_x,@win_y)
       i=0
       draw_x,draw_y=@win_x+@border,@win_y+24
       @skill.each{|sym,skill|
@@ -80,6 +81,7 @@ class SkillWindow < DragWindow
       }
       if @click_skill
         skill=@skill[@click_skill]
+        skill.invisible and return
         x=skill.draw_name(@win_x+@border,@win_y+85)[0]
         skill.draw_cd(@win_x+@border+x,@win_y+85)
         skill.draw_comment(@win_x+@border,@win_y+100)
@@ -88,7 +90,7 @@ class SkillWindow < DragWindow
   end
   def draw_click_box(skill,draw_x,draw_y)
     Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0])
-    if [:none,:append,:before,:auto,:attack,:defense,:pf_defense].include?(skill.type)
+    unless [:active,:switch_auto,:switch_append,:shoot].include?(skill.type)
       @hotkey_set=false
     else
       @hotkey_set=true
@@ -96,7 +98,7 @@ class SkillWindow < DragWindow
     return draw_x+@box_border_w
   end
   def draw_unclick_box(skill,draw_x,draw_y)
-    if [:none,:append,:before,:auto,:attack,:defense,:pf_defense].include?(skill.type)
+    unless [:active,:switch_auto,:switch_append,:shoot].include?(skill.type)
       Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[128,128,128])
     else
       Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[80,128,255])

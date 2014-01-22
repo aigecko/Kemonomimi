@@ -99,6 +99,8 @@ class Input
       Message.show(:equip_load_failure)
     when :consum
       Message.show(:consum_load_failure)
+    when :skill
+      Message.show(:skill_load_failure)
     end
     Message.show(:please_check_files)
   end
@@ -107,59 +109,58 @@ class Input
   end
   def self.load_actor_pack(path)    
     unless FileTest.exist?(path)
-	  Message.show(:actor_pic_lost)
-	  Message.show(:please_check_files)
-	  exit
-	end
+      Message.show(:actor_pic_lost)
+      Message.show(:please_check_files)
+      exit
+    end
     data=nil
-	File.open(path){|file|
-	  begin
-	    data=Marshal.load(file)
-	  rescue
-        p'here'
-	    Message.show(:actor_pic_load_failure)
-		Message.show(:please_check_files)
-		exit
-	  end
-	}
+    File.open(path){|file|
+      begin
+        data=Marshal.load(file)
+      rescue
+        Message.show(:actor_pic_load_failure)
+        Message.show(:please_check_files)
+        exit
+      end
+    }
     return data
   end
   def self.load_actor_pic_part(path)
     unless FileTest.exist?(path)
-	  Message.show(:actor_pic_lost)
-	  Message.show(:please_check_files)
-	  exit
-	end
-	data=nil
-	Zlib::GzipReader.open(path){|file|	  
-	  begin
-	    data=Marshal.load(file)
-	  rescue
-	    Message.show(:actor_pic_load_failure)
-		Message.show(:please_check_files)
-		exit
-	  end
-	}
-	pics=Hash.new
-	data.each{|name,str|
-	  io=StringIO.new(str)
-	  begin
-	    pic=SDL::Surface.load_bmp_from_io(io)
+      Message.show(:actor_pic_lost)
+      Message.show(:please_check_files)
+      exit
+    end
+    data=nil
+    Zlib::GzipReader.open(path){|file|	  
+      begin
+        data=Marshal.load(file)
+      rescue
+        Message.show(:actor_pic_load_failure)
+        Message.show(:please_check_files)
+        exit
+      end
+    }
+    pics=Hash.new
+    data.each{|name,str|
+      io=StringIO.new(str)
+      begin
+        pic=SDL::Surface.load_bmp_from_io(io)
         pic=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
         SDL.delay(0)
-	  rescue =>e
-	    p e
-	    Message.show(:actor_pic_format_wrong)
-		Message.show(:please_check_files)
-		exit
-	  else
-	    pic.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,pic[0,0])
-		pic.display_format_alpha
-		name=name.split(/\./)[0]
-		pics[name]=pic
-	  end
-	}
-	return pics
+      rescue =>e
+        p e
+        Message.show(:actor_pic_format_wrong)
+        Message.show(:please_check_files)
+        exit
+      else
+        pic.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,pic[0,0])
+        pic.display_format_alpha
+        name=name.split(/\./)[0]
+        pics[name]=pic
+      end
+    }
+    return pics
   end
   def self.load_chipset_pic
     path='./rc/pic/chipset/chipset.bmp'

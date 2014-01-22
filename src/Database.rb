@@ -6,12 +6,13 @@ class Database
   @Actor_pic_cache={}
   @Race= Input.load_database(:race,true)
   @Consum=Input.load_database(:consum,true)
+  @Skill=Input.load_database(:skill,true)
   #@buffer=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
   def self.get_class(key)
-    @Class[key]
+    return @Class[key]
   end
   def self.get_base(key)
-    @Race[key]
+    return @Race[key]
   end
   def self.get_equip(part,index)
     begin
@@ -58,5 +59,8 @@ class Database
     end
     @Actor_pic.delete(name)
     return @Actor_pic_cache[name]
+  end
+  def self.get_skill(sym)
+    return @Skill[sym]
   end
 end
