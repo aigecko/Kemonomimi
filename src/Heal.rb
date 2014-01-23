@@ -10,11 +10,19 @@ class Heal
   str="def affect(target,position)\n"
   [:hp,:sp].each{|type| 
     str+=
-" if (#{type}=@info[:#{type}])&&#{type}>0
+" if (#{type}=@info[:#{type}])
+    case @info[:type]
+    when :percent
+      #{type}&&=(target.attrib[:max#{type}]*#{type}).to_i
+    when :lost
+      #{type}_lost=target.attrib[:max#{type}]-target.attrib[:#{type}]
+      #{type}&&=(#{type}_lost*#{type}).to_i
+    else
+      @info[:#{type}sym] and #{type}+=(target.attrib[@info[:#{type}sym]]*@info[:#{type}coef]).to_i
+    end
     target.gain_#{type}(#{type})
-    #{type}=\"%+d\"%#{type}
     color=Color[:heal_#{type}_font]
-    @@buffer<<ParaString.new(#{type},target,color,@@FontSize)
+    @@buffer<<ParaString.new(\"%+d\"%#{type},target,color,@@FontSize)
   end\n"    
   }
   str+="end"

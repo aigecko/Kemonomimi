@@ -15,7 +15,10 @@ class Player < Actor
     race_initialize
     
     gain_equip([[:dual,1],[:right,1],[:left,1]])
-    gain_equip([[:dual,1],[:range,1]])
+    gain_equip([[:dual,1],[:range,1],[:single,1]])
+    
+    @attrib[:hp]=@attrib[:maxhp]
+    @attrib[:sp]=@attrib[:maxsp]
   end
   def race_initialize
     case @race

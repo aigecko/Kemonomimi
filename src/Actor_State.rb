@@ -7,7 +7,7 @@ class Actor
       @actor=actor
     end
     def add(state)
-      if multi_type=state.multi        
+      if multi_type=state.multi
         @state[state.sym]||=[]
         case multi_type
         when :refresh

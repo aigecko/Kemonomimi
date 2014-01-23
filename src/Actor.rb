@@ -62,9 +62,11 @@ class Actor
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
       base: :arrow,table:[0,[50,25]],
-      data:{sym: :rayk,coef: 1,type: :phy,cast_type: :attack,
+      data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
         attack_defense:[:counter_beam,:counter_attack],
         append:[:enegy_arrow,:fire_burn,:break_armor],
+        launch_y: :center,
+        live_cycle: :time,
         pic:'./rc/pic/battle/arrow.png',
         velocity: 20},
       equip_need: :range,
@@ -83,17 +85,14 @@ class Actor
       add_skill(:ignore,
         name:'',type: :none,
         icon: nil,
-        base: :heal,table:[0,{}],
+        base: :heal,table:[0,{sp: 0}],
         data:{spsym: :def,spcoef: 0.1})
-      # add_class_skill(:attack,:paladin_chop
-        # name:'聖光衝擊',type: :active,
-        # icon:'',
-        # base: :missile,cd: 3,consum: 5,table:[0,[100]],
-        # data: {coef:{matk: 0.8},type: :mag,
-          # pic:'',
-          # live_cycle: :time,live_count: 20,velocity: 18},
-        # comment:'')
-      
+      [:paladin_chop,:paladin_beam,:contribute].each{|skill|
+        add_class_skill(:skill,skill,Database.get_skill(skill))
+      }
+      [:rl_weapon_hpsp,:single_weapon_matk].each{|skill|
+        add_class_skill(:weapon,skill,Database.get_skill(skill))
+      }
     when :darkknight
       add_skill(:smash_wave,
       name:'粉碎波',type: :append,
@@ -112,7 +111,7 @@ class Actor
       }
       [:dual_weapon_atkspd,:rl_weapon_heal].each{|skill|
         add_class_skill(:weapon,skill,Database.get_skill(skill))
-      }      
+      }
    when :mage
       add_skill(:ice_arrow,
         name:'寒冰球',type: :active,
@@ -263,7 +262,7 @@ class Actor
   end
   def update
     @state.update
-    recover    
+    recover
     @skill.update    
     unless has_state?(:stun)
       chase_target
@@ -315,27 +314,9 @@ class Actor
   end
   def add_skill(skill,info)
     @skill.add_other(skill,info)
-    # if skill.respond_to? :zip
-      # skill.zip(info){|skl,inf|
-        # @skill[skl]=Skill.new(inf)
-        # @skill_list[inf[:type]]<<@skill[skl]
-      # }
-    # else
-      # @skill[skill]=Skill.new(info)
-      # @skill_list[info[:type]]<<@skill[skill]
-    # end
   end
   def del_skill(skill,info)
     @skill.delete(skill,info)
-    # if skill.respond_to? :zip
-      # skill.zip(info){|skl,inf|
-        # @skill_list[inf[:type]].delete(@skill[skl])
-        # @skill.delete(skl)
-      # }
-    # else
-      # @skill_list[info[:type]].delete(@skill[skill])
-      # @skill.delete(skill)
-    # end
   end
   def attack_defense_skill
     return @skill_list[:attack_defense]

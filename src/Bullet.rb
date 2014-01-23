@@ -47,7 +47,7 @@ class Bullet
       @trigger and return true
       @trigger=true
       return false
-    when :time    
+    when :time,:time_only
       @live_count-=1
       return @live_count<0
     else
@@ -77,7 +77,8 @@ class Bullet
       @hit_target<<target
       @live_count-=1
       return @live_count<0 ? true : false 
-    when :frame
+    when :frame,:time_only
+      @hit_target<<target
       return false    
     else
       return true

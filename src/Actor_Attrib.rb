@@ -193,16 +193,16 @@ class Actor
       @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
     end
     def compute_total
-      maxhp=@total[:maxhp]
-      maxsp=@total[:maxsp]
+      #maxhp=@total[:maxhp]
+      #maxsp=@total[:maxsp]
 	  
       compute_base_attrib
       compute_state_equip
       compute_block_dodge
       compute_amp_attrib
 	  
-      maxhp>0 and @total[:maxhp]>maxhp and @total[:hp]=@total[:hp]*@total[:maxhp]/maxhp
-      maxsp>0 and @total[:maxsp]>maxsp and @total[:sp]=@total[:sp]*@total[:maxsp]/maxsp
+      #maxhp>0 and @total[:maxhp]>maxhp and @total[:hp]=@total[:hp]*@total[:maxhp]/maxhp
+      #maxsp>0 and @total[:maxsp]>maxsp and @total[:sp]=@total[:sp]*@total[:maxsp]/maxsp
     end
   end
 end

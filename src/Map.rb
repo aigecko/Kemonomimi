@@ -121,11 +121,10 @@ class Map
     end
   end
   def add_enemy_bullet(ally,bullet)
-    if ally==:enemy
-      @friend_bullet<<bullet
-    else
-      @enemy_bullet<<bullet
-    end
+    ((ally==:enemy)? @friend_bullet : @enemy_bullet)<<bullet
+  end
+  def add_enemy_circle(ally,circle)
+    ((ally==:enemy)? @friend_circle : @enemy_circle)<<circle
   end
   def delete_live_frame
     @friend_bullet.reject!{|bullet| bullet.to_delete?}
@@ -171,6 +170,7 @@ class Map
     update_bullet
   end
   def update_actor
+    false and
     if rand(1000)>996
       enemy=Enemy.new("slime","none",
                        [rand(1000),0,rand(400)],

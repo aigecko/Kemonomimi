@@ -77,7 +77,7 @@ class Skill
         healhp=args[0]+(caster.attrib[:matk]*0.3).to_i
         
         atkspd=args[1]+(caster.attrib[:int]*0.1).to_i
-        Map.add_enemy_bullet(
+        Map.add_enemy_circle(
           caster.ally,
           Bullet.new(
             [Heal.new(caster,hp: healhp),
@@ -134,7 +134,7 @@ class Skill
         Map.add_friend_bullet(
           caster.ally,
           Bullet.new(
-            [Attack.new(caster,type: :umag,cast_type: :skill,attack: attack),
+            [Attack.new(caster,type: :mag,cast_type: :skill,attack: attack),
              Effect.new(caster,
                name:'暈眩',sym: :circle_burst_stun,effect_type: :stun,
                icon: nil,
@@ -156,37 +156,70 @@ class Skill
         if right_hand&&left_hand&&
            right_hand.part==:dual&&
            left_hand.part==:dual
-           
-          atkspd=right_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
-          atkspd+=left_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
-          caster.add_state(caster,
-            name:'雙刀加攻速',sym: :dual_weapon_atkpsd,
-            icon: nil,
-            attrib: {atkspd: atkspd.to_i},
-            magicimu_keep: true,
-            last: nil)
+          if caster.var[:dual_weapon_right]!=right_hand||
+             caster.var[:dual_weapon_left]!=left_hand
+            atkspd=right_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
+            atkspd+=left_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
+            caster.add_state(caster,
+              name:'',sym: :dual_weapon_atkpsd,
+              icon: nil,
+              attrib: {atkspd: atkspd.to_i},
+              magicimu_keep: true,
+              last: nil)
+            caster.var[:dual_weapon_right]=right_hand
+            caster.var[:dual_weapon_left]=left_hand
+          end
         else
+          caster.var[:dual_weapon_right]=nil
+          caster.var[:dual_weapon_left]=nil
           caster.del_state(:dual_weapon_atkpsd)
         end
       }
-      @proc[:rl_weapon_heal]=->(info){
+      @proc[:rl_weapon]=->(info){
         caster=info[:caster]
         right_hand=caster.equip[:right]
         left_hand=caster.equip[:left]
         if right_hand&&left_hand&&
            right_hand.part==:right&&
-           left_hand.part==:left          
-          
-          healhp=left_hand.attrib[:def]*0.2
-          healsp=left_hand.attrib[:mdef]*0.2
-          caster.add_state(caster,
-            name:'平衡回復',sym: :rl_weapon_heal,
-            icon: nil,
-            attrib: {healhp: healhp,healsp: healsp},
-            magicimu_keep: true,
-            last: nil)
+           left_hand.part==:left
+          if caster.var[:rl_weapon_right]!=right_hand||
+             caster.var[:rl_weapon_left]!=left_hand
+            def_conv=left_hand.attrib[:def]*info[:data][:def_coef]
+            mdef_conv=left_hand.attrib[:mdef]*info[:data][:mdef_coef]
+            caster.add_state(caster,
+              name:'',sym: :rl_weapon,
+              icon: nil,
+              attrib: {info[:data][:def_conv]=>def_conv,info[:data][:mdef_conv]=>mdef_conv},
+              magicimu_keep: true,
+              last: nil)
+            caster.var[:rl_weapon_right]=right_hand
+            caster.var[:rl_weapon_left]=left_hand
+          end
         else
-          caster.del_state(:rl_weapon_heal)
+          caster.var[:rl_weapon_right]=nil
+          caster.var[:rl_weapon_left]=nil
+          caster.del_state(:rl_weapon)
+        end
+      }
+      @proc[:single_weapon]=->(info){
+        caster=info[:caster]
+        right_hand=caster.equip[:right]
+        left_hand=caster.equip[:left]
+        if right_hand&&!left_hand&&
+           right_hand.part==:single
+          if caster.var[:single_weapon]!=right_hand
+            value=(right_hand.attrib[info[:data][:sym]]*info[:data][:coef]).to_i
+            caster.add_state(caster,
+              name:'',sym: :single_weapon,
+              icon: nil,
+              attrib:{info[:data][:conv]=>value},
+              magicimu_keep: true,
+              last: nil)
+            caster.var[:single_weapon]=right_hand
+          end
+        else
+          caster.var[:single_weapon]=nil
+          caster.del_state(:single_weapon)
         end
       }
       
@@ -240,10 +273,16 @@ class Skill
             (pic=Surface.load_with_colorkey(data[:pic])),
             :box,
             caster: caster,
-            live_cycle: :time,
-            live_count: info[:args][1],#25,
+            live_cycle: data[:live_cycle],
+            live_count: info[:args][1],
             x: caster.position.x,
-            y: caster.position.y+caster.pic_h/4,
+            y: caster.position.y+
+            case data[:launch_y]
+            when :center
+              pic.h/4
+            when :ground
+              0
+            end,
             z: caster.position.z,
             w: pic.w,
             h: pic.w/4,
@@ -285,16 +324,49 @@ class Skill
           )
         )
       }
-      @proc[:chop_wave]=->(info){
+      @proc[:explode]=->(info){
         caster=info[:caster]
-        target=info[:target]
-        attack=info[:args][0]
-        info[:data][:coef].each{|sym,val|
-          attack+=(caster.attrib[sym]*val).to_i
-        }
+        data=info[:data]
+        attack=info[:args]+(caster.attrib[data[:sym]]*data[:coef]).to_i
         
-        pic=Surface.load_with_colorkey(info[:data][:pic])
+        Map.add_friend_circle(
+          caster.ally,
+          Bullet.new(
+            Attack.new(caster,
+              type: data[:type],
+              cast_type: :skill,
+              attack: attack),
+            (pic=Surface.load_with_colorkey(data[:pic])),
+            :col,
+            caster: caster,
+            live_cycle: :frame,
+            r: pic.w/2,
+            h: pic.h,
+            x: info[:x],
+            y: info[:y],
+            z: info[:z]
+          )
+        )
       }
+     
+      @proc[:contribute]=->(info){
+        caster=info[:caster]
+        Map.add_enemy_circle(
+          caster.ally,
+          Bullet.new(
+            Heal.new(caster,type: :percent, hp: info[:args],sp: info[:args]),
+            nil,
+            :col,
+            caster: caster,
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            r: 100,h: 50,
+            live_cycle: :frame
+          )
+        )
+      }
+     
       @proc[:fire_arrow]=->(info){
         attack=info[:args]
         Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target],info[:target].position)
@@ -513,25 +585,12 @@ class Skill
       
       @proc[:heal]=->(info){
         hp,sp=info[:args][:hp],info[:args][:sp]
+        data=info[:data]
         target=info[:target]
-        case info[:type]
-        when :percent
-          hp&&=(target.attrib[:maxhp]*hp).to_i
-          sp&&=(target.attrib[:maxsp]*hp).to_i
-        when :lost
-          hp_lost=target.attrib[:maxhp]-target.attrib[:hp]
-          sp_lost=target.attrib[:maxsp]-target.attrib[:sp]
-          
-          hp&&=(hp_lost*hp).to_i
-          sp&&=(sp_lost*sp).to_i
-        else
-          hp||=0
-          sp||=0
-          data=info[:data]
-          data[:hpsym] and hp+=(target.attrib[data[:hpsym]]*data[:hpcoef]).to_i
-          data[:spsym] and sp+=(target.attrib[data[:spsym]]*data[:spcoef]).to_i
-        end
-        Heal.new(info[:caster],hp: hp,sp: sp).affect(target,target.position)
+        Heal.new(info[:caster],
+          type: data[:type],hp: hp,sp: sp,
+          hpsym: data[:hpsym],hpcoef: data[:hpcoef],
+          spsym: data[:spsym],spcoef: data[:spcoef]).affect(target,target.position)
       }
       @proc[:recover]=->(info){
         caster=info[:caster]

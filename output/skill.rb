@@ -78,10 +78,11 @@ $skill[:dual_weapon_atkspd]={
   base: :dual_weapon_atkspd_acc,
   comment:'雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速'}
 $skill[:rl_weapon_heal]={
-  name:'平衡再生',type: :auto,
+  name:'再生之盾',type: :auto,
   icon:'./rc/icon/icon/mat_tkl003/shield_001r.png:[0,0]',
-  base: :rl_weapon_heal,
-  comment:'增加盾0.2物防的回復生命以及0.2魔防的回復法力'}
+  base: :rl_weapon,
+  data:{def_coef: 0.2,mdef_coef: 0.2,def_conv: :healhp,mdef_conv: :healsp},
+  comment:'增加盾#{@data[:def_coef]}物防的回復生命以及#{@data[:mdef_coef]}魔防的回復法力'}
   
 $skill[:counter_beam]={
   name:'聖光反射',type: :attack_defense,
@@ -98,13 +99,14 @@ $skill[:holy_protect]={
 $skill[:paladin_magic_immunity]={
   name:'魔法免疫',type: :active,cd: 30,
   icon:'./rc/icon/icon/tklre04/skill_053.png',
+  attach: :contribute,
   base: :magic_immunity,consum: 50,
   table:[0,{base:{matk: 10,def: 30},add:{matk:[:int,0.1],def:[:con,0.1]},last: 3}],#}#}#}
   comment:'魔法免疫且增加#{@table[@level][:base][:matk]}+#{@table[@level][:add][:matk][1]}int魔攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}
 $skill[:paladin_boost]={
   name:'輝煌聖光',type: :active,cd: 6,
   icon:'./rc/icon/icon/mat_tkl001/skill_011.png:[0,0]',
-  base: :boost_circle,consum: 10,
+  base: :boost_circle,consum: 10,attach: :contribute,
   table:[0,[30,30]],
   data:{name:'輝煌聖光',sym: :paladin_boost,icon:'./rc/icon/icon/mat_tkl001/skill_011.png',last: 5},
   comment:'範圍回復#{@table[@level][0]}+0.3matk生命並增加#{@table[@level][1]}+0.1int攻速'}
@@ -117,10 +119,44 @@ $skill[:paladin_smash_wave]={
 $skill[:paladin_recover]={
   name:'神聖祝福',type: :active,cd: 15,
   icon:'./rc/icon/icon/mat_tkl001/skill_012.png:[0,0]',
-  base: :recover,consum: 15,
+  base: :recover,consum: 15,attach: :contribute,
   table:[0,{coef: 0,add: 0.2,attrib:{atk: 0.35}}],
   data:{add: :matk,name:'神聖祝福',sym: :paladin_recover,icon:'./rc/icon/icon/mat_tkl001/skill_012.png',last: 10},
   comment:'每秒回復#{@table[@level][:add]}matk生命並增加#{@table[@level][:attrib][:atk]}%攻擊持續#{@data[:last]}秒'}
-  
-  
+$skill[:paladin_chop]={
+  name:'聖光衝擊',type: :active,
+  icon:'./rc/icon/icon/mat_tkl001/skill_002c.png:[0,0]',
+  attach: :contribute,
+  base: :arrow,cd: 3,consum: 5,table:[0,[100,18]],
+  data: {sym: :matk,coef: 0.8,type: :mag,cast_type: :skill,
+    launch_y: :ground,
+    pic:'./rc/pic/battle/paladin_chop.png',
+    live_cycle: :time_only,
+    velocity: 18},
+  comment:'對直線上敵人造成#{@table[@level][0]}+#{@data[:coef]}matk魔法傷害'}
+$skill[:paladin_beam]={
+  name:'光束打擊',type: :active,
+  icon:'./rc/icon/icon/mat_tkl001/skill_003c.png:[0,0]',
+  attach: :contribute,
+  base: :explode,cd: 8,consum: 10,table:[0,200],
+  data:{sym: :matk,coef: 0.7,type: :mag,pic:'./rc/pic/battle/paladin_beam.png'},
+  comment:'對指定地點造成#{@table[@level]}+#{@data[:coef]}matk範圍魔法傷害'}
+$skill[:contribute]={
+  name:'自我奉獻',type: :attach,
+  icon:'./rc/icon/icon/mat_tkl001/skill_010.png:[0,0]',
+  base: :contribute,table:[0,0.03],
+  comment:'施展技能時回復附近友軍#{@table[@level]*100}%最大生命及最大法力'}
+$skill[:rl_weapon_hpsp]={
+  name:'平衡之盾',type: :auto,
+  icon:'./rc/icon/icon/mat_tkl003/shield_001r.png:[0,0]',
+  base: :rl_weapon,
+  data:{def_coef: 8,mdef_coef: 8,def_conv: :maxhp,mdef_conv: :maxsp},
+  comment:'增加盾#{@data[:def_coef]}倍物防的最大生命及#{@data[:mdef_coef]}倍魔防的最大法力'}
+$skill[:single_weapon_matk]={
+  name:'平衡之槍',type: :auto,
+  icon:'./rc/icon/item/2011-12-23_1-033.gif',
+  base: :single_weapon,
+  data:{sym: :atk,coef: 1,conv: :matk},
+  comment:'增加長槍1倍物攻的魔攻'}
+
 Output('skill')

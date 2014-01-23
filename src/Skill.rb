@@ -29,7 +29,7 @@ class Skill
     @equip_need=info[:equip_need]
     
     @consum=info[:consum]||0
-	
+    
     if @@SwitchTypeList.include?(@type)      
       @switch=false
     else
@@ -42,6 +42,8 @@ class Skill
     @level=info[:level]||1
     @table=info[:table]||[0,0]
     @data=info[:data]
+    
+    @attach=info[:attach]
     
     @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)    
     @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',:skill_comment_font,binding)
@@ -64,6 +66,8 @@ class Skill
     caster.lose_sp(consum)
     cd_start
     common_cd(caster)
+    
+    @attach and caster.skill[@attach].cast(caster,target,x,y,z)
     call_skill_base(caster,target,x,y,z)
   end
   def cast_auto(caster)
@@ -131,7 +135,7 @@ class Skill
     @comment.draw(x,y)
   end
   def self.all_type_list
-    [:none,:auto,:switch,:active,:append,:before,
+    [:none,:auto,:switch,:active,:append,:before,:attach,
      :attack,:shoot,
      :pre_attack_defense,:attack_defense,:skill_defense,
      :switch_auto,:switch_append]
