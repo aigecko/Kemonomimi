@@ -82,6 +82,11 @@ class Color
       player_hpbar:[255,128,0],
       
       skill_comment_font:[0,94,0],
+      skill_switch_on_back:[128,255,0],
+      skill_switch_off_back:[255,255,52],
+      skill_active_back:[80,128,255],
+      skill_active_cding_back:[63,72,120],
+      skill_passive_back:[128,128,128],
       
       shadow:[0,0,0]
     }

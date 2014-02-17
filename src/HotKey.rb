@@ -31,7 +31,7 @@ class<<(class HotKey;self;end)
       when :shoot,:active
         position=Game.window(:GameWindow).convert_position and
         Game.player.cast(value,nil,*position)
-      when :switch_auto,:switch_append
+      when :switch_auto,:switch_append,:switch_attack_defense
         position=Game.window(:GameWindow).convert_position and
         Game.player.cast(value,nil,nil,nil,nil)
         @active.delete(key)

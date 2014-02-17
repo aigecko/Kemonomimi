@@ -1,7 +1,7 @@
 #coding: utf-8
 require_relative 'Skill_Base'
 class Skill
-  @@SwitchTypeList=[:switch,:switch_auto,:switch_append]
+  @@SwitchTypeList=[:switch,:switch_auto,:switch_append,:switch_attack_defense]
   attr_reader :switch,:invisible,:type
   attr_writer :cd
   def initialize(info)
@@ -108,6 +108,7 @@ class Skill
     call_skill_base(caster,target,nil,nil,nil)
   end
   def cast_defense(caster,target,attack)
+    @switch and
     @proc.call(caster:caster,target:target,attack:attack,args:@table[@level],data:@data)
   end
   def reset_cd
@@ -118,6 +119,9 @@ class Skill
   end
   def cd_start
     @end_time=SDL.get_ticks+@cd.to_sec.to_i
+  end
+  def cding?
+    return @end_time&&@end_time>SDL.get_ticks
   end
   def draw_icon(x,y)
     @icon.draw(x,y)
@@ -138,6 +142,6 @@ class Skill
     [:none,:auto,:switch,:active,:append,:before,:attach,
      :attack,:shoot,
      :pre_attack_defense,:attack_defense,:skill_defense,
-     :switch_auto,:switch_append]
+     :switch_auto,:switch_append,:switch_attack_defense]
   end
 end

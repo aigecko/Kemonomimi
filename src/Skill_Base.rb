@@ -55,7 +55,10 @@ class Skill
         data=info[:data]
         args=info[:args]
         add=args[:add]        
-        attrib=args[:base]
+        attrib={}
+        args[:base].each{|key,value|
+          attrib[key]=value
+        }
         attrib.each_key{|sym|
           add_value=caster.attrib[add[sym][0]]*add[sym][1]
           attrib[sym]+=(add_value<1)? add_value : add_value.to_i
@@ -378,9 +381,12 @@ class Skill
       }
       
       @proc[:magic_immunity]=->(info){
-        caster=info[:caster]
-        attrib=info[:args][:base]
+        caster=info[:caster]        
         add=info[:args][:add]
+        attrib={}
+        info[:args][:base].each{|key,value|
+          attrib[key]=value
+        }
         attrib.each_key{|sym|
           attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
         }
@@ -487,8 +493,9 @@ class Skill
           type: :phy,
           cast_type: :attack,
           attack: attack,
-          pre_attack_defense: [:counter_attack,:counter_beam],
-          append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst]
+          attack_defense: :snow_shield,
+          pre_attack_defense: [:counter_attack,:counter_beam,:freezing_rain],
+          append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst,:water_smash,:itegumo_erupt]
         ).affect(info[:target],info[:target].position)
       }
       @proc[:normal_attack]=->(info){
@@ -562,7 +569,67 @@ class Skill
         #10%:1.6 15%:1.5 25%:1.4 40%:1.3 60%:1.15
           info[:caster].attrib[:attack_amp]=attack_amp
       }
+            
+      @proc[:snow_shield]=->(info){
+        reduce_percent=info[:args][0]
+        convert_coeff=info[:args][1]
+        caster=info[:caster]
       
+        damage=info[:attack]-info[:attack]*reduce_percent/100
+        consum=damage/convert_coeff.to_i
+        
+        if consum>caster.attrib[:sp]
+          consum=caster.attrib[:sp]
+          damage=info[:attack]-consum*convert_coeff
+        end
+        info[:caster].lose_sp(consum)
+        return damage
+      }
+      @proc[:freezing_rain]=->(info){
+        percent=info[:args][0]+info[:caster].attrib[:int]*info[:data][:coef]
+        percent/=-100.0
+        info[:target].add_state(info[:caster],
+          name:'凍雨凝結',sym: :freezing_rain,
+          icon: info[:data][:icon],
+          attrib: {atk: percent,matk: percent},
+          magicimu_keep: true,
+          last: info[:args][1].to_sec
+        )
+        return info[:attack]
+      }
+      @proc[:ice_body]=->(info){
+        info[:caster].add_state(info[:caster],
+          name:'寒冰之軀',sym: :ice_body,
+          icon: info[:data][:icon],
+          attrib:{def: info[:args][0],mdef: info[:args][0],matk: info[:args][1]/100.0},#}
+          magicimu_keep: true,
+          last: info[:args][2].to_sec)
+      }
+      @proc[:water_smash]=->(info){
+        attack=info[:args][0]+info[:args][1]*info[:caster].attrib[:int]
+        Attack.new(info[:caster],type: :umag,attack: attack.to_i).affect(info[:target],info[:target].position)
+      }
+      @proc[:itegumo_erupt]=->(info){
+        slow=info[:args][1]/-100.0
+        caster=info[:caster]
+        Map.add_friend_bullet(
+          caster.ally,
+          Bullet.new([
+             Attack.new(caster,type: :acid,attack: 0,append: :ice_wave),
+             Effect.new(caster,
+               name:'凍雲緩速',sym: :itegumo_slow,effect_type: :slow,
+               icon:'./rc/icon/skill/2011-12-23_3-057.gif',
+               attrib: {wlkspd: slow,atkspd: slow},
+               magicimu_keep: true,
+               last: info[:args][2].to_sec)],
+            nil,
+            :col,
+            caster: caster,
+            x: info[:x],y: 0,z: info[:z],
+            r: 60,h: 1000,
+            live_cycle: :frame)
+        )
+      }
       @proc[:ice_wave]=->(info){
         caster=info[:caster]
         attack=info[:args]        

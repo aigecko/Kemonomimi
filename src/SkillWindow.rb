@@ -90,7 +90,7 @@ class SkillWindow < DragWindow
   end
   def draw_click_box(skill,draw_x,draw_y)
     Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0])
-    unless [:active,:switch_auto,:switch_append,:shoot].include?(skill.type)
+    unless [:active,:switch_auto,:switch_append,:switch_attack_defense,:shoot].include?(skill.type)
       @hotkey_set=false
     else
       @hotkey_set=true
@@ -98,11 +98,15 @@ class SkillWindow < DragWindow
     return draw_x+@box_border_w
   end
   def draw_unclick_box(skill,draw_x,draw_y)
-    unless [:active,:switch_auto,:switch_append,:shoot].include?(skill.type)
-      Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[128,128,128])
+    case skill.type
+    when :active,:shoot
+      color=(skill.cding?)? :skill_active_cding_back : :skill_active_back
+    when :switch_auto,:switch_append,:switch_attack_defense      
+      color=(skill.switch)? :skill_switch_on_back : :skill_switch_off_back
     else
-      Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[80,128,255])
+      color=:skill_passive_back
     end
+    Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,Color[color])
     return draw_x+@box_border_w
   end
 end

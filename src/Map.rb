@@ -170,7 +170,6 @@ class Map
     update_bullet
   end
   def update_actor
-    false and
     if rand(1000)>996
       enemy=Enemy.new("slime","none",
                        [rand(1000),0,rand(400)],

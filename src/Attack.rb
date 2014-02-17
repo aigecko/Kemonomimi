@@ -58,17 +58,20 @@ class Attack
     end
     return attack
   end
-  def attack_defense(target)
+  def attack_defense(target,damage)
     skill_list=@info[:attack_defense] and
     if skill_list.respond_to? :each
       skill_list.each{|name|
         skill=target.skill[name] and
-        skill=cast(target,@caster,nil,nil,nil)
+        skill.switch and
+        damage=skill.cast_defense(target,@caster,damage)
       }
     else
       skill=target.skill[skill_list] and 
-      skill.cast(target,@caster,nil,nil,nil)
+      skill.switch and
+      damage=skill.cast_defense(target,@caster,damage)
     end
+    return damage
   end
   def show_damage(damage,target)
     @info[:visible]!=false or return
@@ -105,7 +108,7 @@ class Attack
         
         attack=pre_attack_defense(target,attack)
         damage=Attack.formula(attack,target.attrib[:def])
-        attack_defense(target)
+        damage=attack_defense(target,damage)
         
         block=target.attrib[:block]*100	
         if rand(10000)<block

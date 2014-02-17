@@ -63,7 +63,7 @@ class Actor
       icon:'./rc/icon/skill/2011-12-23_3-047.gif',
       base: :arrow,table:[0,[50,25]],
       data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
-        attack_defense:[:counter_beam,:counter_attack],
+        attack_defense:[:counter_beam,:counter_attack,:freezing_rain],
         append:[:enegy_arrow,:fire_burn,:break_armor],
         launch_y: :center,
         live_cycle: :time,
@@ -113,6 +113,34 @@ class Actor
         add_class_skill(:weapon,skill,Database.get_skill(skill))
       }
    when :mage
+      add_class_skill(:defense,:snow_shield,
+        name:'吹雪護盾',type: :switch_attack_defense,
+        icon:'./rc/icon/skill/2011-12-23_3-054.gif',
+        base: :snow_shield,table:[0,[50,1]],
+        comment:'開啟後將#{@table[@level][0]}%傷害轉換成1/#{@table[@level][1]}的法力消耗')
+      add_class_skill(:defense,:freezing_rain,
+        name:'凍雨凝結',type: :pre_attack_defense,
+        icon:'./rc/icon/icon/mat_tkl001/skill_005b.png:[0,0]',
+        base: :freezing_rain,table:[0,[12,10]],
+        data: {coef: 0.02,icon:'./rc/icon/icon/mat_tkl001/skill_005b.png'},
+        comment:'降低攻擊者#{@table[@level][0]}+#{@data[:coef]}int百分比的近攻魔攻持續#{@table[@level][1]}秒')
+      add_class_skill(:defense,:ice_body,
+        name:'寒冰之軀',type: :active,consum: 40,cd: 30,
+        icon:'./rc/icon/skill/2011-12-23_3-187.gif',
+        base: :ice_body,table:[0,[20,5,20]],
+        data:{icon:'./rc/icon/skill/2011-12-23_3-187.gif'},
+        comment:'開啟後提升#{@table[@level][0]}雙防及#{@table[@level][1]}%魔攻持續#{@table[@level][2]}秒')
+      add_class_skill(:attack,:water_smash,
+        name:'水流衝擊',type: :append,
+        icon:'./rc/icon/icon/mat_tkl001/skill_003b.png:[0,0]',
+        base: :water_smash,table:[0,[20,0.7]],
+        comment:'普攻附加#{@table[@level][0]}+#{@table[@level][1]}*int魔傷')
+      add_class_skill(:attack,:itegumo_erupt,
+        name:'凍雲爆發',type: :append,
+        icon:'./rc/icon/skill/2011-12-23_3-057.gif',
+        base: :itegumo_erupt,table:[0,[100,40,6]],
+        comment:'普攻#{@table[@level][0]}%爆發範圍強緩#{@table[@level][1]}%跑速攻速#{@table[@level][2]}秒')
+      
       add_skill(:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif',
