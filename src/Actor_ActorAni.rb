@@ -3,28 +3,28 @@ class Actor
   class ActorAni
     def initialize(pics,actor)
       @pic=[]
-	  pics.to_sym and pics=[pics]
-	  pics.each{|name|
-	    @pic<<Database.get_actor_pic(name)
-	  }
- 	  @idx=0
+      pics.to_sym and pics=[pics]
+      pics.each{|name|
+        @pic<<Database.get_actor_pic(name)
+      }
+      @idx=0
       @face=:right
       
-      @hpbar_color_back=Color[:"actor_hpbar_back"]
+      @hpbar_color_back=Color[:actor_hpbar_back]
       @hpbar_color=Color[:"#{actor}_hpbar"]
-	end
+    end
     def side
       @face
     end
     def rotate(side)
       @face=side
     end
-	def w
-	  return @pic[@idx][@face].w
-	end
-	def h
-	  return @pic[@idx][@face].h
-	end
+    def w
+      return @pic[@idx][@face].w
+    end
+    def h
+      return @pic[@idx][@face].h
+    end
     def under_cursor?(offset_x)
       draw_x,draw_y,* =Mouse.state
       x=draw_x-@draw_x+offset_x
@@ -42,7 +42,7 @@ class Actor
       @draw_x=pos.x-@pic[@idx][@face].w/2
       @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1      
       @pic[@idx][@face].draw(@draw_x,@draw_y,dst)
-	end
+    end
     def draw_hpbar(pos,percent,dst)
       bar_w=40
       bar_h=4

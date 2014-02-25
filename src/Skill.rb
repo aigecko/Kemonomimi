@@ -4,8 +4,9 @@ class Skill
   @@SwitchTypeList=[:switch,:switch_auto,:switch_append,:switch_attack_defense]
   attr_reader :switch,:invisible,:type
   attr_writer :cd
-  def initialize(info)
+  def initialize(info,sym=nil)
     @name=info[:name]
+    @sym=sym
     unless @name
       Message.show_format('技能名稱設定錯誤','錯誤',:ERROR)
       exit
@@ -125,6 +126,13 @@ class Skill
   end
   def draw_icon(x,y)
     @icon.draw(x,y)
+    
+    @sym and 
+    key=HotKey.get_key(@sym) and
+    key!=@hotkey_str and
+    @hotkey_str=Font.render_solid(Key.get_key_name(key).upcase,15,255,255,255)
+    
+    @hotkey_str and @hotkey_str.draw(x+22-@hotkey_str.w,y+24-@hotkey_str.h)
   end
   def draw_name(x,y)
     Font.draw_solid(@name,15,x,y,255,255,0)

@@ -30,19 +30,14 @@ class Database
     name,pic,attrib,price,comment=@Consum[index]
     return Consumable.new(name,pic,attrib,price,comment,{id: index})
   end
-  def self.get_actor_pic(name)
-    @Actor_pic_cache[name] and return @Actor_pic_cache[name]
-    
+  def self.get_actor_pic(name)    
     str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))
     begin
       pic=SDL::Surface.load_bmp_from_io(str)
-      
-      @Actor_pic_cache[name]={}
-      @Actor_pic_cache[name][:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
-            
+      pics={}
+      pics[:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)      
       pic=pic.reverse
-      
-      @Actor_pic_cache[name][:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
+      pics[:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
     rescue NoMethodError,ArgumentError=>e
       Message.show_backtrace(e)
       exit
@@ -52,13 +47,11 @@ class Database
       Message.show(:please_check_files)
       exit
     end
-    
-    @Actor_pic_cache[name].each_value do |pic|
-      pic.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,pic[0,0])
+    pics.each_value do |pic|
+      pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
       pic.display_format_alpha
     end
-    @Actor_pic.delete(name)
-    return @Actor_pic_cache[name]
+    return pics
   end
   def self.get_skill(sym)
     return @Skill[sym]

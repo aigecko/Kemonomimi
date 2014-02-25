@@ -190,7 +190,7 @@ class Game
       draw
 
       delta_time=SDL.get_ticks-time
-      #p delta_time
+      p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

@@ -1,7 +1,7 @@
 #coding: utf-8
 class Input
   def self.load_pic(path)
-    SDL::Surface.load(path)
+    Surface.load(path)
   end
   def self.load_ui_pic
     path='./rc/pic/system/ui.bmp'
@@ -22,45 +22,45 @@ class Input
   end
   def self.load_title
     path='./rc/pic/title/title.jpg'
-	unless FileTest.exist?(path)
-	  Message.show(:title_lost)
-	  Message.show(:please_check_files)
-	  exit
-	end
-	begin
-	  @pic||=Input.load_pic(path)
-	rescue SDL::Error
-	  Message.show(:title_load_failure)
-	  Message.show(:please_check_files)
-	  exit
-	else
-	  @pic.display_format
-      @pic
-	end
+    unless FileTest.exist?(path)
+      Message.show(:title_lost)
+      Message.show(:please_check_files)
+      exit
+    end
+    begin
+      @pic||=Input.load_pic(path)
+    rescue SDL::Error
+      Message.show(:title_load_failure)
+      Message.show(:please_check_files)
+      exit
+    else
+      @pic.display_format
+      return @pic
+    end
   end
   def self.load_font(name,size)
-      unless FileTest.exist?("./rc/font/#{name}.ttf")
+    unless FileTest.exist?("./rc/font/#{name}.ttf")
+      Message.show(:font_lost)
+      Message.show(:config_load_default)
+      Conf.fix                                                                              
+      Message.show(:config_data_rewrite)
+    end
+    retried=false
+    begin
+      font=SDL::TTF.open("./rc/font/#{name}.ttf", size)
+    rescue
+      unless retried
         Message.show(:font_lost)
-        Message.show(:config_load_default)
-        Conf.fix                                                                              
+        Conf.fix
         Message.show(:config_data_rewrite)
+        retried=true
+        retry
+      else
+        Message.show(:several_failure)
+        Message.show(:please_restart_game)
+        exit
       end
-      retried=false
-      begin
-        font=SDL::TTF.open("./rc/font/#{name}.ttf", size)
-      rescue
-        unless retried
-          Message.show(:font_lost)
-          Conf.fix
-          Message.show(:config_data_rewrite)
-          retried=true
-          retry
-        else
-          Message.show(:several_failure)
-          Message.show(:please_restart_game)
-          exit
-        end
-      end
+    end
   end
   def self.load_database(type,encrypt=true)
     name=type.to_s
@@ -124,43 +124,6 @@ class Input
       end
     }
     return data
-  end
-  def self.load_actor_pic_part(path)
-    unless FileTest.exist?(path)
-      Message.show(:actor_pic_lost)
-      Message.show(:please_check_files)
-      exit
-    end
-    data=nil
-    Zlib::GzipReader.open(path){|file|	  
-      begin
-        data=Marshal.load(file)
-      rescue
-        Message.show(:actor_pic_load_failure)
-        Message.show(:please_check_files)
-        exit
-      end
-    }
-    pics=Hash.new
-    data.each{|name,str|
-      io=StringIO.new(str)
-      begin
-        pic=SDL::Surface.load_bmp_from_io(io)
-        pic=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
-        SDL.delay(0)
-      rescue =>e
-        p e
-        Message.show(:actor_pic_format_wrong)
-        Message.show(:please_check_files)
-        exit
-      else
-        pic.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,pic[0,0])
-        pic.display_format_alpha
-        name=name.split(/\./)[0]
-        pics[name]=pic
-      end
-    }
-    return pics
   end
   def self.load_chipset_pic
     path='./rc/pic/chipset/chipset.bmp'

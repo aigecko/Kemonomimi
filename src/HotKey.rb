@@ -11,6 +11,9 @@ class<<(class HotKey;self;end)
     @hotkey[key]=[type,trigger,value]
     @object[value]=key
   end
+  def get_key(object)
+    return @object[object]
+  end
   def turn_on(key)
     @bind_mode and return
     @hotkey[key] and

@@ -3,12 +3,9 @@ class Conf
   @@filename=''
   def self.init  
     @config=Hash.new
-    #@config['HARDWARE_DRAW']=false
     @config['FULL_SCREEN']=false
-    #@config['SDL_VIDEODRIVER']='directx'
     @config['SDL_VIDEO_CENTERED']=true
     @config['FONT_TYPE']='wt064'
-	#@config['GC_STRESS']=false
     @config['MUSIC']=true
     @config['SOUND']=true
     @@filename="./config.yaml"

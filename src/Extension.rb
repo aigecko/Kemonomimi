@@ -1,4 +1,5 @@
 #coding: utf-8
+require_relative 'Surface_Blend'
 class SDL::Surface  
   def save_cmp(filename)    
     Zlib::GzipWriter.open(filename){|file|
@@ -19,15 +20,11 @@ class SDL::Surface
     }
   end
   def reverse
-    #str=pixels
-    #wpixel=w*3
-    
-    ##for i in 0...h
-    ##  str[i*wpixel,wpixel]=str[i*wpixel,wpixel].reverse
-    #end
-    #pic=SDL::Surface.new_from(str,w,h,24,pitch,format.Bmask,format.Gmask,format.Rmask,format.Amask)
     pic=transform_surface(get_pixel(0,0),0,-1,1,SDL::TRANSFORM_SAFE)
-	return pic
+	  return pic
+  end
+  def render_blend(mode,color)
+    
   end
   def draw(dst_x,dst_y,dst=Screen.render)
     SDL::Surface.blit(self,0,0,0,0,dst,dst_x,dst_y)
@@ -46,7 +43,7 @@ class Surface < SDL::Surface
     super(SDL::SWSURFACE,w,h,format)
   end
   def set_color_key(color)
-    super(SDL::SRCCOLORKEY|SDL::RLEACCEL,color)
+    super(SDL::SRCCOLORKEY,color)
   end
   def self.load_with_colorkey(path)
     pic=Surface.load(path)

@@ -31,7 +31,7 @@ class SkillTree
     end
   end
   def add_single_skill(skill,info)
-    @skill[skill]=Skill.new(info)
+    @skill[skill]=Skill.new(info,skill)
     @skill_list[info[:type]]<<@skill[skill]
   end
   def add_other(skill,info)

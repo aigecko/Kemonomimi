@@ -15,7 +15,7 @@ class ColorString
     
     calculate_height
   end  
-  def color_initialize(str,size)    
+  def color_initialize(str,size)
     ary=[]
     sentence=str.split(/(\n)/)
     sentence.each{|str|
