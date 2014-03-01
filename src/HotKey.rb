@@ -7,9 +7,11 @@ class<<(class HotKey;self;end)
     @active={}
   end
   def bind(key,type,trigger,value)
-    @hotkey.delete(@object[value])
+    @object.delete(@hotkey[key] && @hotkey[key][2])
+    @hotkey.delete(key)
+    
     @hotkey[key]=[type,trigger,value]
-    @object[value]=key
+    @object[value]=key    
   end
   def get_key(object)
     return @object[object]

@@ -282,7 +282,7 @@ class Skill
             y: caster.position.y+
             case data[:launch_y]
             when :center
-              pic.h/4
+              caster.pic_h/4
             when :ground
               0
             end,
@@ -610,6 +610,7 @@ class Skill
         Attack.new(info[:caster],type: :umag,attack: attack.to_i).affect(info[:target],info[:target].position)
       }
       @proc[:itegumo_erupt]=->(info){
+        rand(100)<info[:args][0] or return
         slow=info[:args][1]/-100.0
         caster=info[:caster]
         Map.add_friend_bullet(

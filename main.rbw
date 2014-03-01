@@ -163,16 +163,16 @@ class Game
     end
   end
   def self.window(idx)
-    @window[idx]
+    return @window[idx]
   end
   def self.Width
-    @Width
+    return @Width
   end
   def self.Height
-    @Height
+    return @Height
   end
   def self.player
-    @window[:GameWindow].get_player
+    return @window[:GameWindow].get_player
   end
   def self.release
     Font.release
@@ -190,7 +190,7 @@ class Game
       draw
 
       delta_time=SDL.get_ticks-time
-      p delta_time
+      #p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

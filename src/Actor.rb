@@ -138,7 +138,7 @@ class Actor
       add_class_skill(:attack,:itegumo_erupt,
         name:'凍雲爆發',type: :append,
         icon:'./rc/icon/skill/2011-12-23_3-057.gif',
-        base: :itegumo_erupt,table:[0,[100,40,6]],
+        base: :itegumo_erupt,table:[0,[20,20,6]],
         comment:'普攻#{@table[@level][0]}%爆發範圍強緩#{@table[@level][1]}%跑速攻速#{@table[@level][2]}秒')
       
       add_skill(:ice_arrow,

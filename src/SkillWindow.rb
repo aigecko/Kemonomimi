@@ -65,7 +65,6 @@ class SkillWindow < DragWindow
     def draw
       @skeleton.draw(@win_x,@win_y)
       @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
-      #@skill.draw(@win_x,@win_y)
       i=0
       draw_x,draw_y=@win_x+@border,@win_y+24
       @skill.each{|sym,skill|
