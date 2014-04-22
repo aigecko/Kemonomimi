@@ -21,6 +21,11 @@ $skill[:wolfear]={
   icon:'./rc/icon/skill/2011-12-23_3-079.gif',
   base: :wolfear,consum: 0,level: 1,table:[0,0],
   comment:'生命越少回復的生命和法力會越多'}
+$skill[:leopardcatear]={
+  name:'貓科無敵時間',type: :none,cd: 0.6,
+  icon:'./rc/icon/skill/2011-12-23_3-180.gif',
+  comment:'受到攻擊有20%機率減傷50%持續0.5秒'
+}
 
 $skill[:counter_attack]={
   name:'反擊之火',type: :attack_defense,
@@ -102,7 +107,7 @@ $skill[:paladin_magic_immunity]={
   attach: :contribute,
   base: :magic_immunity,consum: 50,
   table:[0,{base:{matk: 10,def: 30},add:{matk:[:int,0.1],def:[:con,0.1]},last: 3}],#}#}#}
-  comment:'魔法免疫且增加#{@table[@level][:base][:matk]}+#{@table[@level][:add][:matk][1]}int魔攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}
+  comment:'魔法免疫且增加#{@table[@level][:base][:matk]}+#{@table[@level][:add][:matk][1]}int魔攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:paladin_boost]={
   name:'輝煌聖光',type: :active,cd: 6,
   icon:'./rc/icon/icon/mat_tkl001/skill_011.png:[0,0]',

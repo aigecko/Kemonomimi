@@ -19,6 +19,8 @@ class Player < Actor
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
+    
+    gain_consum(:"反服貿黑箱")
   end
   def race_initialize
     case @race

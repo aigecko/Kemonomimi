@@ -7,7 +7,11 @@ class RaceWindow < SelectWindow
     
     @alone=true
     
-    @table=[:catear,:foxear,:wolfear,:dogear]
+    if(rand()<0.3)
+      @table=[:catear,:foxear,:wolfear,:dogear,:leopardcatear]
+    else
+      @table=[:catear,:foxear,:wolfear,:dogear]
+    end
     title_initialize('請選擇種族')
     comment_initialize(:default)
     word_initialize
@@ -45,6 +49,13 @@ class RaceWindow < SelectWindow
 在敵人低血量時可以造成更大傷害
 是名為尾刀狗的能力
     EOF
+    @detail[:leopardcatear]=<<-EOF
+帶有石虎耳朵的半獸人種族
+和貓耳很像但是更加敏捷
+由於瀕臨絕種因此不是每次都出現
+受到攻擊時有機率短時間大幅減傷
+名為貓科無敵時間
+    EOF
   end
   def pic_initialize
     @back=Input.load_title
@@ -57,10 +68,10 @@ class RaceWindow < SelectWindow
       when Event::KeyDown
         case event.sym
         when Key::DOWN
-          @select= (@select==3)? 0 : @select+1
+          @select= (@select==@table.size-1)? 0 : @select+1
           @need2draw_word=true
         when Key::UP
-          @select= (@select==0)? 3 : @select-1
+          @select= (@select==0)? @table.size-1 : @select-1
           @need2draw_word=true
         when *Key::CHECK
           select_check

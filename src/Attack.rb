@@ -110,7 +110,7 @@ class Attack
         damage=Attack.formula(attack,target.attrib[:def])
         damage=attack_defense(target,damage)
         
-        block=target.attrib[:block]*100	
+        block=target.attrib[:block]*100
         if rand(10000)<block
           skill=target.skill[:block] and
           skill.cast_defense(target,@caster,damage)

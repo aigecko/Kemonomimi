@@ -21,7 +21,8 @@ class Actor
       catear:'貓耳',
       foxear:'狐耳',
       wolfear:'狼耳',
-      dogear:'狗耳'
+      dogear:'狗耳',
+      leopardcatear:'石虎'
     }
       
     @exp=Array.new(201){|n|
