@@ -7,9 +7,11 @@ std_lib.each{|lib|
 begin
   require "win32api"
 rescue LoadError
-  require_relative "sr/cWin32apiAlt"
+  require_relative "src/linux/Win32api"
+  require_relative "src/linux/Surface_Blend"
 else  
-  require_relative "src/Win32api"
+  require_relative "src/win32/Win32api"
+  require_relative "src/win32/Surface_Blend"
 end
 my_lib=%w(Color Screen Config Message Icon
           Font Input Extension Skill Mouse)

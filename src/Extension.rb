@@ -1,5 +1,4 @@
 #coding: utf-8
-require_relative 'Surface_Blend'
 class SDL::Surface  
   def save_cmp(filename)    
     Zlib::GzipWriter.open(filename){|file|
