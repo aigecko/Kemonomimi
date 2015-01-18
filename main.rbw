@@ -1,10 +1,17 @@
 #coding: utf-8
 $t=Time.now
-std_lib=%w(sdl yaml singleton win32api pathname)
+std_lib=%w(sdl yaml singleton pathname)
 std_lib.each{|lib|
   require "#{lib}"
 }
-my_lib=%w(Color Screen Config win32api Message Icon
+begin
+  require "win32api"
+rescue LoadError
+  require_relative "sr/cWin32apiAlt"
+else  
+  require_relative "src/Win32api"
+end
+my_lib=%w(Color Screen Config Message Icon
           Font Input Extension Skill Mouse)
 my_lib.each{|lib|
   require_relative "src/#{lib}"

@@ -49,6 +49,7 @@ base={
   counter_attack:{table:['I_base','F_coef']},#反彈n+m*def的絕對傷害
   amplify:{table:{'S_symbol'=>'FI_attrib'},data:{name:'s_skill_name',sym:'S_state_symbol'}},
   break_armor:{table:'I_base'},
+  invisible:{talbe:{last:'I_last',damage:'I_damage',wlkspd:'F_wlkspd'}},
   fire_circle:{table:['I_base','F_slow']},
   counter_beam:{table:['I_base','F_coef'],data:{possibility:'I_pos',cd:'F_second'}},
   pressure_erupt:{data:'I_last'},
@@ -87,20 +88,21 @@ klass={
     岩石護盾:開啟後產生n+m*maxsp盾持續r秒#rock_shield
 	
     能量補充:開啟後有n%機率回m%總法力持續r秒#auto->soul_of_Yoshitsugu
-    大地杖擊:開啟後普攻帶n+m*maxsp無視魔免魔傷#append->energy_arrow
+    大地杖擊:開啟後普攻帶n+m*sp無視魔免魔傷#append->energy_arrow
     堅守陣地:普攻後內增加m回血和雙防可疊r層持續n秒#append->solid_defense
 	
     土壤液化:可持續造成指定範圍n+r*matk魔法傷害並強緩m%跑速#explode
     震地重擊:周圍敵人受到範圍n+r*matk魔法傷害暈m秒#explode
     銳利飛石:前方敵人受到範圍n+r*matk魔法傷害#magic_arrow
 	
-    法杖儲能:增加法杖魔攻n倍的maxsp#ward_power
+    法杖儲能:增加法杖魔攻n倍的wis#ward_power
     
-    大地之力:開啟後增加n%攻速及m%雙防持續r秒#metamorphosis
+    大地之力:開啟後增加n%攻速及m%雙防附帶沙塵暴持續r秒#metamorphosis
+    沙塵暴:周圍受到範圍n+m*wis傷害
   ],
   :mage=>%w[
     吹雪護盾:開啟後n%傷害交由m法力承受#switch_attack_defnese->soul_of_Masayuki
-    凍雨凝結:造成攻擊者降低n+m*int近攻魔攻持續r秒#freezing_rain
+    凍雨凝結:造成攻擊者降低n+m*int近攻遠攻持續r秒#freezing_rain
     寒冰之軀:開啟後提升n雙防及m%魔攻持續r秒#boost
 		
     水流衝擊:普攻附加n+m*int魔傷#append->energy_arrow
@@ -113,7 +115,7 @@ klass={
 	
     法杖聚焦:增加法杖魔攻n倍的int#ward_power
     
-    寒冰之力:開啟後增加n%技能吸血m智力s雙防持續r秒#metamorphosis
+    寒冰之力:開啟後增加n%技吸及m雙防並降低m%sp消耗持續r秒#metamorphosis
   ],
   :fighter=>%w[
     反擊之火:受到普攻反彈n+m*def絕對傷害#attack_defnese->counter_attack
@@ -126,7 +128,7 @@ klass={
     火焰升溫:對同目標攻擊增加n近攻最多m層#append->solid_defense
     火圈迸裂:普攻造成範圍n*atk物傷#switch_append->explode
 	
-    熾焰焚身:每秒造成n+m*matk魔法傷害並降低r跑速s攻速#switch_auto->fire_circle
+    熾焰焚身:每秒造成n+m*matk魔法傷害並降低r%跑速#switch_auto->fire_circle
 	
     輕巧雙刀:雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速#auto->dual_weapon_atkspd_acc
     再生之盾:增加盾n物防的回復生命以及m魔防的回復法力#auto->rl_weapon
@@ -136,10 +138,10 @@ klass={
   :paladin=>%w[
     神聖守護:n%機率無視攻擊並增幅m%物防魔防#auto->amplify
     聖光反射:受攻擊n%造成範圍m+r*def魔傷及暈眩s秒#attack_defense->counter_beam
-    逆壓之盾:開啟後吸收傷害並在n秒後造成等量物理傷害#pressure_erupt
+    逆壓之盾:開啟後吸收傷害並在n秒後造成等量物理傷害#pressure_erupt->switch_auto
     聖光庇佑:魔法免疫n秒並增加m物防魔防#magic_immunuty
 	
-    聖光波動:開啟後普攻帶範圍n+m*matk魔傷並增加n%攻速m%跑速#smash_wave
+    聖光波動:開啟後普攻帶範圍n+m*matk魔傷#smash_wave
     神聖祝福:開啟後增加n%近攻及m%魔攻持續r秒#boost
 	
     一瞬閃光:前方直線n+m*matk魔法傷害#magic_arrow
@@ -170,12 +172,12 @@ klass={
     黑暗之力:開啟後增加n%輸出傷害及m最大生命且基礎攻速變為r持續s秒#metamorphosis
   ],
   :crossbowman=>%w[
-    能量轉化:降低受到魔傷n%並增幅物攻輸出m%#auto->amplify
+    能量轉化:降低受到魔傷n%並增加n弓箭射程#auto->amplify
     壓電效應:受到傷害獲得n+m*agi跑速r+s*con回血持續t秒#attack_defense->piezoelectric_effect
     反應裝甲:降低受到的n+m*con普通攻擊#pre_attack_defense->soul_of_Yoshimoto
 		
     震盪輸出:n%機率m倍爆擊並提升r%攻擊速度#auto->amplify
-    電力充能:增加n弓箭射程m攻擊速度#auto->amplify
+    深藏不漏:開啟後隱形並提升n%跑速現行造成m額外物理傷害#invisible
     負電位差:弓箭命中後消減敵方n+m*int法力並造成等量魔法傷害#append->soul_of_Muneshige
     閃電噴發:開啟後弓箭命中後產生範圍n+m*matk魔法傷害#switch_append->explode
     
@@ -187,19 +189,19 @@ klass={
     閃電之力:開啟後魔攻遠攻提升n倍並增加m雙防持續r秒#metamorphosis
   ],
   :archer=>%w[
-    迅捷之風:降低受到魔傷並增幅閃躲m%跑速m#auto->amplify
+    迅捷之風:降低受到魔傷並增幅閃躲m%#auto->amplify
     身輕如燕:瞬間移動到指定的地點#flash
     旋風護盾:每n秒自動產生m+r*mdef護盾持續s秒#soul_of_Ittetsu
 	
     疾風祝福:開啟後回復n+m*matk生命並增加m+r*ratk%攻速#boost
-    精準命中:n%機率m倍爆擊#auto->amplify
+    精準命中:n%機率m倍爆擊並提升r敏捷#auto->amplify
     氣流爆發:n%機率暈m秒額外r傷害#auto->amplify
     無形之箭:弓箭可穿透n敵人並提升弓箭速度m#auto->amplify
 	
     望風披靡:射出可以造成n+m*matk魔法傷害並沉默r秒的弓箭#magic_arrow
     狂風之襲:直線造成n+m*matk魔法傷害並降低閃避r%持續s秒#explode
 	
-    暴風之弓:弓的弓速強化n倍#magic_bow
+    暴風之弓:弓的攻速強化n倍#magic_bow
     
     烈風之力:開啟後隱形並增加n跑速且基礎攻速變為s持續r秒#metamorphosis
   ]

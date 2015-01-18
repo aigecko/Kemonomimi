@@ -26,10 +26,10 @@ class Map
       end
     end
     #dbg
-    @items=[]#Array.new(1000){
-      #Database.get_consum(10).drop
-      #Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(1000),z:rand(400)})
-    #}
+    @items=Array.new(100){
+      Database.get_consum(10).drop
+      Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(1000),z:rand(400)})
+    }
     
     @friend=[]
     @enemy=[]
@@ -41,6 +41,12 @@ class Map
     @enemy_circle=[]
     
     @@current_map=self
+    
+    enemy=Enemy.new("slime","none",
+                       [1000,0,200],{},
+                       #{exp:100000,maxhp:3000,atkspd:400,atk:-20,wlkspd:500},
+                       "mon_001")
+    @enemy<<enemy
   end
   def which_side(player_x)
     if player_x<Game.Width/2
@@ -170,10 +176,11 @@ class Map
     update_bullet
   end
   def update_actor
+    false and
     if rand(1000)>996
       enemy=Enemy.new("slime","none",
                        [rand(1000),0,rand(400)],
-                       {exp:100000,def:300},
+                       {exp:100000,maxhp:2000,},
                        "mon_004r")
       @enemy<<enemy
     end

@@ -3,7 +3,7 @@ class Enemy < Actor
   def initialize(race,klass,pos,attrib,pics)
     super("enemy #{race} #{klass}",
           pos,attrib,pics)          
-    @ai=AI.new({move: :none,action: :agreesive})
+    @ai=AI.new({move: :cycle,action: :peaceful})
   end
   def update
     super

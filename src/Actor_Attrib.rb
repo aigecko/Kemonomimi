@@ -32,7 +32,7 @@ class Actor
       dodge_exp: 1.3,
       dodge_max: 30,
       dtob: 0.8,
-      atkspd_max: 400
+      atkspd_max: 500
     }
     attr_accessor :equip
     attr_reader :total
@@ -66,7 +66,7 @@ class Actor
       @growth=growth_base 
       
       @base[:level]=[@base[:level],1].max
-      @base[:atkspd]=100
+      @base[:atkspd]==0 and @base[:atkspd]=100
 	  
       compute_total
       
