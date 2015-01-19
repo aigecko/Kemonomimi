@@ -56,6 +56,15 @@ class Equipment < Item
     @rect_h+=@attrib.size*@@font_size
     @superposed=false
   end  
+  alias create initialize
+  def initialize(data,*arg)
+    if arg.size>0
+      create(data,*arg)
+    else
+      create(data[:name],data[:pic],data[:part],data[:attrib],data[:price],data[:comment])
+      @material=data[:material]
+    end
+  end
   def attrib
     @attrib.attrib
   end

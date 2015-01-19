@@ -3,11 +3,11 @@ class Actor
   class Attrib
     @@Conv={
 	  str:{atk: 1},
-	  con:{def: 1,maxhp: 10},
+	  con:{def: 1,maxhp: 10},#}
 	  int:{matk: 1},
 	  wis:{mdef: 1,maxsp: 10},
 	  agi:{ratk: 1}
-	}#}
+	}
     @@Max={
       level: 200,
       str: 1024,
@@ -96,9 +96,9 @@ class Actor
     def [](sym)
       return @total[sym]
     end
-	def []=(sym,value)
-	  @total[sym]=value
-	end
+    def []=(sym,value)
+      @total[sym]=value
+    end
     def gain_exp(exp)
       @total[:exp]+=exp
       while @total[:exp]>=@total[:maxexp]
@@ -130,7 +130,7 @@ class Actor
         @total[sym]=@base[sym]
       }      
 	  
-      [:magic_amp,:consum_amp,
+      [:mag_outamp,:consum_amp,
          :atk_vamp,:skl_vamp].each{|sym|
         @total[sym]=0
       }
@@ -143,7 +143,7 @@ class Actor
       [:atk,:def,:matk,:mdef,:ratk,
        :wlkspd,:atkspd,
        :maxhp,:maxsp,:healhp,:healsp,
-       :magic_amp,:consum_amp,
+       :mag_outamp,:consum_amp,
        :atk_vamp,:skl_vamp,
        :critical,:bash].each{|sym|
         @total[sym]+=@state[sym]

@@ -40,24 +40,29 @@ class Actor
       maxhp:'最大生命',maxsp:'最大法力',
       healhp:'生命回復',healsp:'法力回復',
     
-      atk:'近攻',def:'物防',
+      atk:'近攻',def:'物防',#}
       matk:'魔攻',mdef:'魔防',
       ratk:'遠攻',
       
-      block:'格檔',dodge:'閃避',
+      block:'格檔',dodge:'閃避',ignore:'忽略傷害',
       wlkspd:'跑速',atkspd:'攻速',
-      jump:'跳躍',
+      jump:'跳躍',tough:'韌性',
       extra:'剩餘點數',
       
       atk_vamp:'普攻吸血',
       skl_vamp:'技能吸血',
       
-      magic_amp:'魔法輸出強化',
+      mag_outamp:'魔法輸出強化',phy_outamp:'物理輸出強化',
+      mag_resist:'魔法抗性',phy_resist:'物理抗性',atk_resist:'傷害抗性',
+      mag_decatk:'減少魔傷',phy_decatk:'減少物傷',
+      
+      consum_amp:'消耗強化',heal_amp:'治癒強化',
+      
       attack_amp:'輸出強化',
       
       critical:'爆擊',
       bash:'暈眩'
-    }#}
+    }
     
     @part_table={
       head:'頭部',neck:'頸部',body:'軀幹',back:'背部',right:'主手',

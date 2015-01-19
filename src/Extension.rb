@@ -20,7 +20,7 @@ class SDL::Surface
   end
   def reverse
     pic=transform_surface(get_pixel(0,0),0,-1,1,SDL::TRANSFORM_SAFE)
-	  return pic
+    return pic
   end
   def render_blend(mode,color)
     

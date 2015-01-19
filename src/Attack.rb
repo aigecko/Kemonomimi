@@ -125,10 +125,10 @@ class Attack
       if target.has_state?(:magic_immunity)
         return :miss
       end
-      attack+=attack*@caster.attrib[:magic_amp]/100
+      attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
     when :umag
-      attack+=attack*@caster.attrib[:magic_amp]/100
+      attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
     when :acid
       damage=attack

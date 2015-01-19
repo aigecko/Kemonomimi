@@ -20,7 +20,6 @@ class Player < Actor
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
     
-    #gain_consum(:"反服貿黑箱")
   end
   def race_initialize
     case @race
@@ -33,7 +32,7 @@ class Player < Actor
     when :foxear
       add_state(@player,
         name:'狐耳之血',sym: :foxear,
-        attrib:{maxsp: 0.1,magic_amp: 20,consum_amp: 10},
+        attrib:{maxsp: 0.1,mag_outamp: 20,consum_amp: 10},
         magicimu_keep: true,
         last: nil)
     end

@@ -2,7 +2,7 @@
 require 'pp'
 weapon={ 
   :dual=>%w[雙刀(atk,atkspd)],
-  :single=>%w[長槍(atk,con%,-ratk%)],
+  :single=>%w[長槍(atk,con%,-ratk%) 巨斧(atk,str%,-ratk%)],
   :right=>%w[單手劍(atk,wlkspd) 單手斧(atk,-wlkspd,healhp) 單手槌(atk,def)],
   :ward=>%w[法杖(matk,mdef,healsp)],
   :sheild=>%w[盾(def,mdef,-wlkspd,-ratk%) 魔法盾(def,mdef,-wlkspd,-ratk%)],
