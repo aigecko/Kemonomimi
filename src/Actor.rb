@@ -6,7 +6,8 @@
 }
 class Actor
   attr_reader :position,:attrib,:ally,:race,:class
-  attr_reader :equip_list,:item_list,:equip,:skill,:target
+  attr_reader :equip_list,:item_list,:comsumable_list,:pledge_list
+  attr_reader :equip,:skill,:target
   #dbg
   attr_accessor :shape  
   attr_accessor :var
@@ -16,7 +17,7 @@ class Actor
     @ally=str[0].to_sym
     @race=str[1].to_sym
     @class=str[2].to_sym
-	
+
     @face=:right
     @position=Position.new(pos[0],pos[1],pos[2])
       
@@ -26,15 +27,18 @@ class Actor
     
     @state=State.new(self)
     @equip=Equip.new
+    
+    @comsumable_list=ItemArray.new(100,:superposed)
     @equip_list=ItemArray.new(100)
     @item_list=ItemArray.new(100,:superposed)
+    @pledge_list=ItemArray.new(100)
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
 
     @skill=SkillTree.new(self)
         
-    @shape=Shape.new(:col,					 
+    @shape=Shape.new(:col,
       r: @animation.w/2,
       h: @animation.h)
     class_initialize
@@ -252,7 +256,16 @@ class Actor
         @skill[:normal_attack].cast_attack(self,@target,@attrib[:atkspd])
       end
     when :pickup
-      if gain_item(@target)
+      func=nil
+      case @target
+      when Equipment
+        func=:gain_equip
+      when Consumable
+        func=:gain_consumable
+      when Item
+        func=:gain_item
+      end
+      if send(func,@target)
         @target.pickup
         Map.render_onground_item.delete(@target)
       end
@@ -352,13 +365,19 @@ class Actor
   def pre_attack_defense_skill
     return @skill_list[:pre_attack_defense]
   end
-  def gain_equip(equips)
+  def gain_equip(equip)
+    return @equip_list<<equip
+  end
+  def gain_equip_from_database(equips)
     equips.each{|equip|
 	    part,index=equip
       @equip_list<<Database.get_equip(part,index)
 	  }
   end
-  def gain_consum(index)
+  def gain_consumable(consumable)
+    return @comsumable_list<<consumable
+  end
+  def gain_consumable_from_database(index)
     @item_list<<Database.get_consum(index)
   end
   def gain_item(item)

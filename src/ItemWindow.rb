@@ -147,8 +147,7 @@ class ItemWindow < DragWindow
           else            
             @click_box=Position.new(box_x,box_y+offset/5,nil)
             if (box=@boxes[convert_position])&&
-               (!box.respond_to?(:empty?)||
-               !box.empty?)             
+               (!box.respond_to?(:empty? )||!box.empty?)
               @first_click_time=SDL.get_ticks
               @drag=true
             else
@@ -174,7 +173,7 @@ class ItemWindow < DragWindow
          !@boxes[box_idx].empty?
          #@boxes[convert_position].respond_to?(:num)
         @boxes.add(box_idx,convert_position)
-      elsif @boxes[box_idx]&&!@boxes[box_idx].respond_to?(:empty?)&&
+      elsif @boxes[box_idx]&&!@boxes[box_idx].respond_to?(:empty? )&&
             @boxes[convert_position]
         @boxes.exchange(box_idx,convert_position)
       else
@@ -341,7 +340,9 @@ class ItemWindow < DragWindow
   def start_init
     player=Game.player
     @pages[:equip].boxes=player.equip_list
-    @pages[:consum].boxes=player.item_list
+    @pages[:consum].boxes=player.comsumable_list
+    @pages[:other].boxes=player.item_list
+    @pages[:mission].boxes=player.pledge_list
   end
   def update_coord
     super
