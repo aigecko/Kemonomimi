@@ -418,7 +418,7 @@ class Actor
       hp=@attrib[:hp]
       @attrib[:hp]=0
       die
-    end    
+    end
     return hp
   end
   def die

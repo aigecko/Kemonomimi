@@ -130,8 +130,11 @@ class Actor
         @total[sym]=@base[sym]
       }      
 	  
-      [:mag_outamp,:consum_amp,
-         :atk_vamp,:skl_vamp].each{|sym|
+      [:mag_outamp,:phy_outamp,
+       :mag_resist,:phy_resist,:atk_resist,
+       :mag_decatk,:phy_decatk,
+       :consum_amp,:heal_amp,
+       :atk_vamp,:skl_vamp].each{|sym|
         @total[sym]=0
       }
       
@@ -143,7 +146,10 @@ class Actor
       [:atk,:def,:matk,:mdef,:ratk,
        :wlkspd,:atkspd,
        :maxhp,:maxsp,:healhp,:healsp,
-       :mag_outamp,:consum_amp,
+       :mag_outamp,:phy_outamp,
+       :mag_resist,:phy_resist,:atk_resist,
+       :mag_decatk,:phy_decatk,
+       :consum_amp,:heal_amp,
        :atk_vamp,:skl_vamp,
        :critical,:bash].each{|sym|
         @total[sym]+=@state[sym]
@@ -193,16 +199,10 @@ class Actor
       @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
     end
     def compute_total
-      #maxhp=@total[:maxhp]
-      #maxsp=@total[:maxsp]
-	  
       compute_base_attrib
       compute_state_equip
       compute_block_dodge
       compute_amp_attrib
-	  
-      #maxhp>0 and @total[:maxhp]>maxhp and @total[:hp]=@total[:hp]*@total[:maxhp]/maxhp
-      #maxsp>0 and @total[:maxsp]>maxsp and @total[:sp]=@total[:sp]*@total[:maxsp]/maxsp
     end
   end
 end

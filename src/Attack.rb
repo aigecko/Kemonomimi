@@ -9,19 +9,43 @@ class Attack
     
     @attrib=info[:attrib]||Hash.new(0)
   end
-  def affect(target,position,scale=1)    
+  def affect(target,position,scale=1)
     before(target)
-    damage=attack(target)	
-    if damage==:miss      
+    damage=attack(target)
+    if damage==:miss
       show_damage("MISS",target)
       return true
     end
     
     damage=(damage*scale).to_i
     if damage!=0
-      vamp_damage=target.lose_hp(damage)
+      real_damage=damage
+      vamp_damage=0
+      if @info[:type]!=:acid
+        if target.attrib[:atk_shield]>=damage
+          target.attrib[:atk_shield]-=damage
+          real_damage=0
+          vamp_damage+=damage
+        else
+          real_damage-=target.attrib[:atk_shield]
+          vamp_damage+=target.attrib[:atk_shield]
+          target.attrib[:atk_shield]=0
+        end
+      end
+      if @info[:type]==:mag||@info[:type]==:umag
+        if target.attrib[:mag_shield]>=real_damage
+          target.attrib[:mag_shield]-=real_damage
+          real_damage=0
+          vamp_damage+=damage
+        else
+          real_damage-=target.attrib[:mag_shield]
+          vamp_damage+=target.attrib[:mag_shield]
+          target.attrib[:mag_shield]=0
+        end
+      end
+      vamp_damage+=target.lose_hp(real_damage)
       vamp(vamp_damage)
-	
+      
       show_damage(damage,target)
     end
     append(target,position)
@@ -90,7 +114,7 @@ class Attack
       return :miss
     end
     
-    attack=@info[:attack]    
+    attack=@info[:attack]
     attack+=attack*@attrib[:attack_adj]
     attack+=attack*@attrib[:attack_amp]/100
     attack+=attack*@caster.attrib[:attack_amp]/100
@@ -105,34 +129,63 @@ class Attack
           skill.cast_defense(target,@caster,attack)
           return :miss
         end
+        
         attack=pre_attack_defense(target,attack)
+        attack-=target.attrib[:phy_decatk]
+        attack<=0 and attack=1
+        
+        attack+=attack*@caster.attrib[:phy_outamp]/100
+        
         damage=Attack.formula(attack,target.attrib[:def])
         damage=attack_defense(target,damage)
+        
         block=target.attrib[:block]*100
         if rand(10000)<block
           skill=target.skill[:block] and
           skill.cast_defense(target,@caster,damage)
           damage=(@caster.skill[:catear])? damage*40/100 : 1
         end
+        
         damage=critical(damage)
         damage=bash(target,damage)
-      when :skill        
+        
+        damage-=damage*target.attrib[:phy_resist]/100
+      when :skill
+        attack-=target.attrib[:phy_decatk]
+        attack<=0 and attack=1
+        attack+=attack*@caster.attrib[:phy_outamp]/100
+        
         damage=Attack.formula(attack,target.attrib[:def])
-      else        
+        
+        damage-=damage*target.attrib[:phy_resist]/100
+      else
+        attack-=target.attrib[:phy_decatk]
+        attack<=0 and attack=1
+        attack+=attack*@caster.attrib[:phy_outamp]/100
+        
         damage=Attack.formula(attack,target.attrib[:def])
+        
+        damage-=damage*target.attrib[:phy_resist]/100
       end
     when :mag
       if target.has_state?(:magic_immunity)
         return :miss
       end
+      attack-=target.attrib[:mag_decatk]
+      attack>=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
+      damage-=damage*target.attrib[:mag_resist]/100
     when :umag
+      attack-=target.attrib[:mag_decatk]
+      attack>=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
+      damage-=damage*target.attrib[:mag_resist]/100
     when :acid
       damage=attack
-    end	
+    end
+    damage-=damage*target.attrib[:atk_resist]/100
     return damage.confine(1,damage)
   end
   def critical(damage)

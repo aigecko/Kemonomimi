@@ -55,6 +55,7 @@ class Actor
       mag_outamp:'魔法輸出強化',phy_outamp:'物理輸出強化',
       mag_resist:'魔法抗性',phy_resist:'物理抗性',atk_resist:'傷害抗性',
       mag_decatk:'減少魔傷',phy_decatk:'減少物傷',
+      mag_shield:'魔法護盾',atk_shield:'傷害護盾',
       
       consum_amp:'消耗強化',heal_amp:'治癒強化',
       
