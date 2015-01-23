@@ -1,6 +1,6 @@
 #coding: utf-8
 class Statement
-  attr_reader :attrib,:sym,:multi,:num_limit
+  attr_reader :attrib,:sym,:multi,:num_limit,:negative
   def initialize(caster,info)
     @caster=caster
     
@@ -23,6 +23,7 @@ class Statement
     @last_time and @end_time=@start_time+@last_time
     
     @magicimu_keep=info[:magicimu_keep]
+    @negative=info[:negative]
   end
   def refresh
     @end_time=SDL.get_ticks+@last_time
@@ -33,6 +34,10 @@ class Statement
   end
   def keep_when_magicimmunity?
     @magicimu_keep
+  end
+  def tough_compute(tough)
+    @last_time-=@last_time*tough/100
+    @last_time<0 and @last_time=0
   end
   def end?
     @last_time and

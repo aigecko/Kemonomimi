@@ -26,21 +26,27 @@ class Map
       end
     end
     #dbg
-    @items=Array.new(10){
-      Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(100),z:rand(400)})
-    }
-    @items+=Array.new(10){
-      item=Database.get_consum(10).drop
-      item.position.x=rand(100)
+    # @items=Array.new(10){
+      # Item.new('鑽石','item/2011-12-23_1-132.gif',100,'今天五倍',{onground:true,x:rand(100),z:rand(400)})
+    # }
+    @items=Array.new(7){|n|
+      item=Database.get_consum(10+n).drop
+      item.position.x=200+rand(100)
       item.position.z=rand(400)
       item
     }
-    @items+=Array.new(10){
-      equip=Database.get_equip(:left,1).drop      
-      equip.position.x=rand(100)
-      equip.position.z=rand(400)
-      equip
+    @items+=Array.new(7){|n|
+      item=Database.get_consum(20+n).drop
+      item.position.x=100+rand(100)
+      item.position.z=rand(400)
+      item
     }
+    # @items+=Array.new(10){
+      # equip=Database.get_equip(:left,1).drop      
+      # equip.position.x=rand(100)
+      # equip.position.z=rand(400)
+      # equip
+    # }
     
     @friend=[]
     @enemy=[]

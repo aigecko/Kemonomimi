@@ -29,6 +29,7 @@ class Game
     
     Color.init
     Skill.init 
+    Icon.init
     
     self.check_multi_window
     

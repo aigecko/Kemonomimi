@@ -653,7 +653,7 @@ class Skill
       
       @proc[:heal]=->(info){
         hp,sp=info[:args][:hp],info[:args][:sp]
-        data=info[:data]
+        data=info[:data]||{}
         target=info[:target]
         Heal.new(info[:caster],
           type: data[:type],hp: hp,sp: sp,

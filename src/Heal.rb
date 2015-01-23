@@ -17,7 +17,7 @@ class Heal
     when :lost
       #{type}_lost=target.attrib[:max#{type}]-target.attrib[:#{type}]
       #{type}&&=(#{type}_lost*#{type}).to_i
-    else
+    when :coef
       @info[:#{type}sym] and #{type}+=(target.attrib[@info[:#{type}sym]]*@info[:#{type}coef]).to_i
     end
     target.gain_#{type}(#{type})

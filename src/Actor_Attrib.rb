@@ -133,7 +133,7 @@ class Actor
       [:mag_outamp,:phy_outamp,
        :mag_resist,:phy_resist,:atk_resist,
        :mag_decatk,:phy_decatk,
-       :consum_amp,:heal_amp,
+       :consum_amp,:heal_amp,:tough,
        :atk_vamp,:skl_vamp].each{|sym|
         @total[sym]=0
       }
@@ -142,6 +142,7 @@ class Actor
       @total[:bash]=[]
       @total[:healhp]=@total[:str]*@@Coef[:healhp]
 	    @total[:healsp]=@total[:int]*@@Coef[:healsp]
+      @total[:tough]=@base[:level]
 	  
       [:atk,:def,:matk,:mdef,:ratk,
        :wlkspd,:atkspd,
@@ -149,7 +150,7 @@ class Actor
        :mag_outamp,:phy_outamp,
        :mag_resist,:phy_resist,:atk_resist,
        :mag_decatk,:phy_decatk,
-       :consum_amp,:heal_amp,
+       :consum_amp,:heal_amp,:tough,
        :atk_vamp,:skl_vamp,
        :critical,:bash].each{|sym|
         @total[sym]+=@state[sym]

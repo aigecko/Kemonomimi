@@ -16,7 +16,7 @@ class Database
   end
   def self.get_equip(part,index)
     begin
-      data=@Equip[part][index]      
+      data=@Equip[part][index]
     rescue NoMethodError
       print "part: #{part} index: #{index}"
       Message.show(:unvalid_equip)

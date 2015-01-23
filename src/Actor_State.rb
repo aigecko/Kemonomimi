@@ -7,6 +7,9 @@ class Actor
       @actor=actor
     end
     def add(state)
+      if state.negative
+        state.tough_compute(@actor.attrib[:tough])
+      end
       if multi_type=state.multi
         @state[state.sym]||=[]
         case multi_type
@@ -20,7 +23,7 @@ class Actor
       else
         if @state[state.sym]
           @actor.attrib.lose_state_attrib(@state[state.sym].attrib)
-        end      
+        end
         @state[state.sym]=state
       end
       @actor.attrib.gain_state_attrib(state.attrib)
@@ -46,7 +49,7 @@ class Actor
       @state.reject!{|_,state|
         if state.respond_to? :reject!
           state.reject!{|s|
-            if s.end?              
+            if s.end?
               @actor.attrib.lose_state_attrib(s.attrib)
               true
             end
