@@ -4,8 +4,12 @@ class Icon
     @pattern=Regexp.new(
       '(?<rc>(\.\/rc\/icon\/))?'+
       '(?<path>([0-9a-zA-Z_\/\.\-\/]*))'+
-      '((:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
-      '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\]))*')
+      '('+
+      '(:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
+      '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
+      '((?<addMode>(\+))\[(?<addR>(\d+)),(?<addG>(\d+)),(?<addB>(\d+))\])|'+
+      '((?<subMode>(\-))\[(?<subR>(\d+)),(?<subG>(\d+)),(?<subB>(\d+))\])'+
+      ')*')
     @icon_set={}
     currentDir=Dir.pwd
     Dir.chdir './rc/icon/merge'
@@ -25,15 +29,25 @@ class Icon
     else
       img=Surface.load(info[:rc]+info[:path])
     end
+    base=Surface.new(Surface.flag,24,24,Screen.format)
+    img.draw(0,0,base)
+    img.destroy
+    img=base
+    if info[:addMode]
+      img.add_blend([
+        info[:addR].to_i,
+        info[:addG].to_i,
+        info[:addB].to_i
+      ])
+    end
+    if info[:subMode]
+      img.sub_blend([
+        info[:subR].to_i,
+        info[:subG].to_i,
+        info[:subB].to_i
+      ])
+    end
     if info[:colorKeyAtX]&&info[:colorKeyAtY]
-      unless @base
-        @base=Surface.new(Surface.flag,24,24,Screen.format)
-      else
-        @base.draw_rect(0,0,24,24,[0,0,0])
-      end
-      img.draw(0,0,@base)
-      img.destroy
-      img=@base.copy_rect(0,0,@base.w,@base.h)
       img.set_color_key(SDL::SRCCOLORKEY,img[info[:colorKeyAtX].to_i,info[:colorKeyAtY].to_i])
     end
     img.display_format

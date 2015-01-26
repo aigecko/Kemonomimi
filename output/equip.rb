@@ -87,7 +87,7 @@ $equip[:dual][1]=['紙製雙劍','icon/mat_tkl002/we_sword006.png:[5,0]',
 $equip[:left][1]=['紙製圓盾','icon/mat_tkl003/shield_001.png:[0,0]',
   {def: 5,mdef: 4,wlkspd: -10},300,'薄弱的紙製盾牌']#}
   
-$equip[:single][1]=['紙製長槍','icon/tklre05/we_spear020c.png',
+$equip[:single][1]=['紙製長槍','icon/tklre05/we_spear020c.png:[0,10]',
   {atk: 10,def: 3,mdef: 3},650,'弱弱的長槍聊勝於無~~']#}
   
 

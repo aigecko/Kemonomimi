@@ -36,7 +36,7 @@ class Message
     actor_pic_rescue:['使用備用圖片','提示', :OK, :ASTERISK],
     actor_pic_load_failure:['人物圖片載入失敗','錯誤', :OK, :ERROR],
     actor_pic_format_wrong:['人物圖片格式錯誤','錯誤', :OK, :ERROR],
-    equip_pic_load_failure:['裝備圖片載入失敗','錯誤', :OK, :ERROR],
+    equip_pic_load_failure:['物品圖示載入失敗','錯誤', :OK, :ERROR],
     skill_pic_load_failure:['技能圖片載入失敗','錯誤', :OK, :ERROR],
       
     ai_fetch_failure:['AI選取失敗','錯誤', :OK, :ERROR],

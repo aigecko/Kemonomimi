@@ -50,7 +50,4 @@ $consum[26]=['法力果凍','icon-2_1.png@[14,2]:[0,0]',
   {name:'法力藥水',type: :active,table:[0,{sp: 1}],data:{type: :percent},icon: nil,base: :heal},
   100,'自身回復100%SP']
 
-$consum[30]=['爆裂彈','',{skill: :bomb,type: :value,hp:500},5000,'範圍內敵人減少500HP']
-
-
 Output('consum')

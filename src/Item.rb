@@ -12,7 +12,7 @@ class Item
     @price=price
     begin
       @pic=Icon.load("./rc/icon/#{pic}")
-    rescue
+    rescue => e
       Message.show(:equip_pic_load_failure)
       puts "pic=#{pic}"
       exit
