@@ -11,15 +11,74 @@ $equip=Hash.new
 #[部位][編號]=[名稱,圖檔,屬性,價格,敘述]
 $equip[:head][ 0]=['測試用頭盔','test/head.png',
   {def:5,mdef:5},500,'保護頭部的頭盔']#}
-$equip[:head][ 1]=['紙製頭盔','icon/mat_tklre002/helm_003b.png:[0,0]',
+$equip[:head][ 1.01]=['紙製頭盔','icon/mat_tklre002/helm_003b.png:[0,0]',
   {def: 2,mdef: 1},100,'薄弱的頭盔提供些許防禦']#}
-  
+$equip[:head][ 1]=['翠綠頭盔','icon/mat_tklre002/helm_003.png:[0,0]+[0,50,0]',
+  {def: 5},100,'']#}
+$equip[:head][ 2]=['木紋頭盔','icon/mat_tklre002/helm_003.png:[0,0]-[0,40,80]',
+  {def: 10},100,'']#}
+$equip[:head][ 3]=['湛藍頭盔','icon/mat_tklre002/helm_003.png:[0,0]-[20,0,0]+[0,0,50]',
+  {def: 20},100,'']#}
+$equip[:head][ 4]=['橘黃頭盔','icon/mat_tklre002/helm_003.png:[0,0]+[100,50,0]',
+  {def: 40},100,'']#}
+$equip[:head][ 5]=['銀白頭盔','icon/mat_tklre002/helm_003.png:[0,0]',
+  {def: 80},100,'']#}
+$equip[:head][ 6]=['鐵灰頭盔','icon/mat_tklre002/helm_003.png:[0,0]-[50,50,50]',
+  {def: 160},100,'']#}
+$equip[:head][ 7]=['血紅頭盔','icon/mat_tklre002/helm_003.png:[0,0]+[50,0,0]',
+  {def: 320},100,'']#}
+
+$equip[:head][11]=['翠綠角盔','icon/mat_tklre002/helm_003b.png:[0,0]+[0,50,0]',
+  {def: 4,atk: 1},100,'']#}
+$equip[:head][12]=['木紋角盔','icon/mat_tklre002/helm_003b.png:[0,0]-[0,40,80]',
+  {def: 8,atk: 2},100,'']#}
+$equip[:head][13]=['湛藍角盔','icon/mat_tklre002/helm_003b.png:[0,0]-[20,0,0]+[0,0,50]',
+  {def: 16,atk: 4},100,'']#}
+$equip[:head][14]=['橘黃角盔','icon/mat_tklre002/helm_003b.png:[0,0]+[100,50,0]',
+  {def: 32,atk: 8},100,'']#}
+$equip[:head][15]=['銀白角盔','icon/mat_tklre002/helm_003b.png:[0,0]',
+  {def: 64,atk: 16},100,'']#}
+$equip[:head][16]=['鐵灰角盔','icon/mat_tklre002/helm_003b.png:[0,0]-[50,50,50]',
+  {def: 128,atk: 32},100,'']#}
+$equip[:head][17]=['血紅角盔','icon/mat_tklre002/helm_003b.png:[0,0]+[50,0,0]',
+  {def: 256,atk: 64},100,'']#}
+
 $equip[:head][10]=['紙製頭巾','item/2011-12-23_1-065.gif',
   {def: 1,mdef: 1,ratk: 1},100,'輕飄飄的頭巾微幅增加遠攻']#}
+$equip[:head][21]=['翠綠頭巾','icon/tklre06/helm_014.png:[0,0]+[0,50,0]',
+  {def: 3,mdef: 2},100,'']#}
+$equip[:head][22]=['木紋頭巾','icon/tklre06/helm_014.png:[0,0]+[40,40,0]',
+  {def: 6,mdef: 4},100,'']#}
+$equip[:head][23]=['湛藍頭巾','icon/tklre06/helm_014.png:[0,0]+[0,0,30]',
+  {def: 12,mdef: 8},100,'']#}
+$equip[:head][24]=['橘黃頭巾','icon/tklre06/helm_014.png:[0,0]-[0,20,40]',
+  {def: 24,mdef: 16},100,'']#}
+$equip[:head][25]=['銀白頭巾','icon/tklre06/helm_014.png:[0,0]',
+  {def: 48,mdef: 32},100,'']#}
+$equip[:head][26]=['鐵灰頭巾','icon/tklre06/helm_014.png:[0,0]-[50,50,50]B[0,0,255]',
+  {def: 96,mdef: 64},100,'']#}
+$equip[:head][27]=['血紅頭巾','icon/tklre06/helm_014.png:[0,0]-[0,50,50]',
+  {def: 192,mdef: 128},100,'']#}
+  'helm_004.png'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 $equip[:head][20]=['紙製魔法帽','icon/mat_tklre002/helm_005.png:[0,0]',
   {def: 1,mdef: 1,matk: 1},100,'微幅增加魔攻的魔法帽']#}
-
+'helm_005.png'
 
 $equip[:neck][0]=['測試用項鍊','test/neck.png',
   {int:5,wis:5},500,'超硬質的金屬項鍊']

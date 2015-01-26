@@ -42,16 +42,15 @@ class SDL::Surface
     bm=self.format.Bmask
     
     color=(color[0]<<roffset)+(color[1]<<goffset)+(color[2]<<boffset)
-    
     x=0
     while(x<self.w)
       y=0
       while(y<self.h)
         pxl=self[x,y]
-        (r=(pxl&rm)"+((func==:add)? '+':'-')+"(color&rm))"+((func==:add)? '>rm and r=rm':'<0 and r=0')+ "
-        (g=(pxl&gm)"+((func==:add)? '+':'-')+"(color&gm))"+((func==:add)? '>gm and g=gm':'<0 and g=0')+ "
-        (b=(pxl&bm)"+((func==:add)? '+':'-')+"(color&bm))"+((func==:add)? '>bm and b=bm':'<0 and b=0')+ "
-        self[x,y]=r+g+b+am
+        (r=(pxl&rm)"+((func==:add)? '+':'-')+"(color&rm))"+((func==:add)? '>rm and r=rm':'<=0 and r=0')+ "
+        (g=(pxl&gm)"+((func==:add)? '+':'-')+"(color&gm))"+((func==:add)? '>gm and g=gm':'<=0 and g=0')+ "
+        (b=(pxl&bm)"+((func==:add)? '+':'-')+"(color&bm))"+((func==:add)? '>bm and b=bm':'<=0 and b=0')+ "
+        self[x,y]=r|g|b|am
         y+=1
       end
       x+=1

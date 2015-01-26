@@ -8,7 +8,8 @@ class Icon
       '(:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
       '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
       '((?<addMode>(\+))\[(?<addR>(\d+)),(?<addG>(\d+)),(?<addB>(\d+))\])|'+
-      '((?<subMode>(\-))\[(?<subR>(\d+)),(?<subG>(\d+)),(?<subB>(\d+))\])'+
+      '((?<subMode>(\-))\[(?<subR>(\d+)),(?<subG>(\d+)),(?<subB>(\d+))\])|'+
+      '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])'+
       ')*')
     @icon_set={}
     currentDir=Dir.pwd
@@ -30,6 +31,12 @@ class Icon
       img=Surface.load(info[:rc]+info[:path])
     end
     base=Surface.new(Surface.flag,24,24,Screen.format)
+    if info[:base]
+      base.fill_rect(0,0,base.w,base.h,[
+        info[:baseR].to_i,
+        info[:baseG].to_i,
+        info[:baseB].to_i])
+    end
     img.draw(0,0,base)
     img.destroy
     img=base
@@ -37,15 +44,13 @@ class Icon
       img.add_blend([
         info[:addR].to_i,
         info[:addG].to_i,
-        info[:addB].to_i
-      ])
+        info[:addB].to_i])
     end
     if info[:subMode]
       img.sub_blend([
         info[:subR].to_i,
         info[:subG].to_i,
-        info[:subB].to_i
-      ])
+        info[:subB].to_i])
     end
     if info[:colorKeyAtX]&&info[:colorKeyAtY]
       img.set_color_key(SDL::SRCCOLORKEY,img[info[:colorKeyAtX].to_i,info[:colorKeyAtY].to_i])
