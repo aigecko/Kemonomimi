@@ -26,10 +26,10 @@ class Map
       end
     end
     #dbg
-    @items=Array.new(100){
-      Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[1,1,1]',100,'今天五倍',
-        {onground:true,x:rand(1000),z:rand(400)})
-    }
+    @items=[]#Array.new(100){
+      # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[1,1,1]',100,'今天五倍',
+        # {onground:true,x:rand(1000),z:rand(400)})
+    # }
     # @items=Array.new(7){|n|
       # item=Database.get_consum(10+n).drop
       # item.position.x=200+rand(100)

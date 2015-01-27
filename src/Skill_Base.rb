@@ -539,7 +539,7 @@ class Skill
         caster=info[:caster]
         attrib=caster.attrib
     
-        healhp=(attrib[:maxhp]-attrib[:hp])*0.04
+        healhp=(attrib[:maxhp]-attrib[:hp])*0.02
         healsp=healhp*attrib[:maxsp]/attrib[:maxhp]
       
         caster.add_state(caster,

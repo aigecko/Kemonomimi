@@ -13,6 +13,7 @@ class Item
     begin
       @pic=Icon.load("./rc/icon/#{pic}")
     rescue => e
+      p e
       Message.show(:equip_pic_load_failure)
       puts "pic=#{pic}"
       exit

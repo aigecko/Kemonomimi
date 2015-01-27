@@ -53,7 +53,7 @@ class Actor
 	
     add_base_skill(:normal_attack,
       name:'普通攻擊',type: :attack,cd: attack_cd,
-      icon:'./rc/icon/skill/2011-12-23_3-034.gif',
+      icon:'./rc/icon/skill/2011-12-23_3-034.gif:[0,0]B[255,255,0]',
       base: :normal_attack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
@@ -64,7 +64,7 @@ class Actor
       comment: nil)
 	  add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
-      icon:'./rc/icon/skill/2011-12-23_3-047.gif',
+      icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
       base: :arrow,table:[0,[50,25]],
       data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
         attack_defense:[:counter_beam,:counter_attack,:freezing_rain],

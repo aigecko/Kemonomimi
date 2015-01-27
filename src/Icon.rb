@@ -3,12 +3,12 @@ class Icon
   def self.init
     @pattern=Regexp.new(
       '(?<rc>(\.\/rc\/icon\/))?'+
-      '(?<path>([0-9a-zA-Z_\/\.\-\/]*))'+
+      '(?<path>([0-9a-zA-Z_\/\.\-\/]*[a-zA-Z]))'+
       '('+
       '(:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
       '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
-      '((?<addMode>(\+))\[(?<addR>(\d+)),(?<addG>(\d+)),(?<addB>(\d+))\])|'+
-      '((?<subMode>(\-))\[(?<subR>(\d+)),(?<subG>(\d+)),(?<subB>(\d+))\])|'+
+      '(((?<firstMode>(\-|\+))\[(?<R1st>(\d+)),(?<G1st>(\d+)),(?<B1st>(\d+))\])'+
+      '((?<secondMode>(\+|\-))\[(?<R2nd>(\d+)),(?<G2nd>(\d+)),(?<B2nd>(\d+))\])?)|'+
       '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])'+
       ')*')
     @icon_set={}
@@ -40,21 +40,20 @@ class Icon
     img.draw(0,0,base)
     img.destroy
     img=base
-    if info[:addMode]
-      img.add_blend([
-        info[:addR].to_i,
-        info[:addG].to_i,
-        info[:addB].to_i])
+    if info[:firstMode]
+      img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
+        [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
     end
-    if info[:subMode]
-      img.sub_blend([
-        info[:subR].to_i,
-        info[:subG].to_i,
-        info[:subB].to_i])
+    if info[:secondMode]
+      img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
+        [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
     end
+    colorkey_x=colorkey_y=0
     if info[:colorKeyAtX]&&info[:colorKeyAtY]
-      img.set_color_key(SDL::SRCCOLORKEY,img[info[:colorKeyAtX].to_i,info[:colorKeyAtY].to_i])
+      colorkey_x=info[:colorKeyAtX].to_i
+      colorkey_y=info[:colorKeyAtY].to_i
     end
+    img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
     img.display_format
     return img
   end
