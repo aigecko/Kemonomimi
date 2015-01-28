@@ -14,11 +14,11 @@ $skill[:dogear]={
   comment:'敵人的生命比例越低對其傷害越高'}
 $skill[:foxear]={
   name:'狐耳基里的祝福',type: :none,
-  icon:'./rc/icon/skill/2011-12-23_3-078.gif',
+  icon:'./rc/icon/skill/2011-12-23_3-078.gif:[0,0]B[255,255,255]',
   comment:'最大SP及消耗多1成 魔法輸出多2成'}
 $skill[:wolfear]={
   name:'狼耳基里的祝福',type: :auto,cd: 0.5,
-  icon:'./rc/icon/skill/2011-12-23_3-079.gif',
+  icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,255,255]',
   base: :wolfear,consum: 0,level: 1,table:[0,0],
   comment:'生命越少回復的生命和法力會越多'}
 $skill[:leopardcatear]={

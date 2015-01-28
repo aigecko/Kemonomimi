@@ -378,9 +378,9 @@ class Actor
   end
   def gain_equip_from_database(equips)
     equips.each{|equip|
-	    part,index=equip
+      part,index=equip
       @equip_list<<Database.get_equip(part,index)
-	  }
+    }
   end
   def gain_consumable(consumable)
     return @comsumable_list<<consumable

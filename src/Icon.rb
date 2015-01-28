@@ -20,6 +20,7 @@ class Icon
       @icon_set[name]=Surface.load(name)
     }
     Dir.chdir(currentDir)
+    @base_w=@base_h=24
   end
   def self.load(str)
     info=str.match(@pattern)
@@ -27,7 +28,18 @@ class Icon
     if info[:imgAtX]&&info[:imgAtY]
       x=info[:imgAtX].to_i
       y=info[:imgAtY].to_i
-      img=@icon_set[info[:path]].copy_rect(x*24,y*24,24,24)
+      unless @icon_set[info[:path]]
+        begin
+          raise "IconNotInSet"
+        rescue => e
+          #p info
+          #p @icon_set
+          Message.show_format("圖示:#{info[:path]}不在圖組中","錯誤",:ASTERISK)
+          #Message.show_backtrace(e)
+          exit
+        end
+      end
+      img=@icon_set[info[:path]].copy_rect(x*@base_w,y*@base_h,@base_w,@base_h)
     else
       path=info[:rc]+info[:path]
       if @cache[path]
@@ -36,9 +48,9 @@ class Icon
         @cache[path]=(img=Surface.load(path))
       end
     end
-    base=Surface.new(Surface.flag,24,24,Screen.format)
+    base=Surface.new(Surface.flag,@base_w,@base_h,Screen.format)
     if info[:base]
-      base.fill_rect(0,0,base.w,base.h,[
+      base.fill_rect(0,0,@base_w,@base_h,[
         info[:baseR].to_i,
         info[:baseG].to_i,
         info[:baseB].to_i])

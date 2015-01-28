@@ -14,8 +14,8 @@ class Player < Actor
     super(comment,pos,attrib,pics)
     race_initialize
         
-    for i in 21..27 ; gain_equip_from_database [[:right,i]] ;end
-    for i in 31..37 ; gain_equip_from_database [[:right,i]] ;end
+    for i in 1..5 ; gain_equip_from_database [[:deco,i]] ;end
+    for i in 11..15 ; gain_equip_from_database [[:deco,i]] ;end
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
@@ -25,7 +25,7 @@ class Player < Actor
     case @race
     when :catear
       add_state(@player,
-	    name:'貓耳之血',sym: :catear,
+      name:'貓耳之血',sym: :catear,
         attrib:{wlkspd: 20},
         magicimu_keep: true,
         last: nil)

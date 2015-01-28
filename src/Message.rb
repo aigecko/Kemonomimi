@@ -55,7 +55,6 @@ class Message
     WIN32API.ShowMessage(format, title, :OK, type)
   end
   def self.show_backtrace(e)
-    p e
     e.backtrace.each{|line|
       print "\t"
       puts line

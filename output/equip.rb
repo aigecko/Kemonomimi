@@ -6,7 +6,7 @@ $equip=Hash.new
 [:head,:neck,:body,:back,
  :right,:left,:single,:dual,
  :range,:finger,:feet,:deco].each{|sym|
-   $equip[sym]=[]
+   $equip[sym]={}
 }
 #[部位][編號]=[名稱,圖檔,屬性,價格,敘述]
 $equip[:head][ 0]=['測試用頭盔','test/head.png',
@@ -262,25 +262,171 @@ $equip[:right][37]=['血紅魔劍','icon/mat_tklre001/we_sword024.png:[10,0]',
   {atk: 576,matk: 384,wis: 145},1000,'']
 
   
-$equip[:dual][1]=['紙製雙劍','icon/mat_tkl002/we_sword006.png:[5,0]',
+$equip[:dual][1.01]=['紙製雙劍','icon/mat_tkl002/we_sword006.png:[5,0]',
   {atk: 8,atkspd: 10},400,'輕薄短小的紙製雙劍']
+$equip[:dual][ 1]=['翠綠雙斧','icon/mat_tkl002/we_axe002d.png',
+  {atk: 10,healhp: 5},1000,'']
+$equip[:dual][ 2]=['木紋雙斧','icon/mat_tkl002/we_axe002e.png',
+  {atk: 20,healhp: 10},1000,'']
+$equip[:dual][ 3]=['銀白雙斧','icon/mat_tkl002/we_axe002.png',
+  {atk: 40,healhp: 20},1000,'']
+$equip[:dual][ 4]=['湛藍雙斧','icon/mat_tkl002/we_axe002c.png',
+  {atk: 80,healhp: 35},1000,'']
+$equip[:dual][ 5]=['緋紅雙斧','icon/mat_tkl002/we_axe002b.png',
+  {atk: 160,healhp: 55},1000,'']
+$equip[:dual][ 6]=['蒼灰雙斧','icon/mat_tkl002/we_axe003.png',
+  {atk: 320,healhp: 80},1000,'']
+$equip[:dual][ 7]=['血紅雙斧','icon/mat_tkl002/we_axe003b.png',
+  {atk: 640,healhp: 110},1000,'']
 
-$equip[:left][1]=['紙製圓盾','icon/mat_tkl003/shield_001.png:[0,0]',
+$equip[:dual][11]=['迷你雙劍','icon/mat_tkl001/we_sword001.png',
+  {atk: 10,atkspd: 10},1000,'']
+$equip[:dual][12]=['普通雙劍','icon/mat_tkl001/we_sword002.png:[10,0]',
+  {atk: 20,atkspd: 20},1000,'']
+$equip[:dual][13]=['銀白雙劍','icon/mat_tkl002/we_sword007.png:[10,0]',
+  {atk: 40,atkspd: 30},1000,'']
+$equip[:dual][14]=['湛藍雙劍','icon/mat_tkl002/we_sword007d.png:[10,0]',
+  {atk: 80,atkspd: 40},1000,'']
+$equip[:dual][15]=['緋紅雙劍','icon/mat_tkl002/we_sword007c.png:[10,0]',
+  {atk: 160,atkspd: 50},1000,'']
+$equip[:dual][16]=['鐵灰雙劍','icon/mat_tkl002/we_sword014b.png:[10,0]',
+  {atk: 320,atkspd: 60},1000,'']
+$equip[:dual][17]=['蒼灰雙劍','icon/mat_tkl002/we_sword014.png:[10,0]',
+  {atk: 640,atkspd: 70},1000,'']
+
+
+$equip[:left][1.01]=['紙製圓盾','icon/mat_tkl003/shield_001.png:[0,0]',
   {def: 5,mdef: 4,wlkspd: -10},300,'薄弱的紙製盾牌']#}
-  
-$equip[:single][1]=['紙製長槍','icon/tklre05/we_spear020c.png:[0,10]',
-  {atk: 10,def: 3,mdef: 3},650,'弱弱的長槍聊勝於無~~']#}
-  
+$equip[:left][ 1]=['普通重盾','icon/mat_tkl003/shield_001.png',
+  {def: 4,block: 5},1000,'']#}
+$equip[:left][ 2]=['強化重盾','icon/mat_tkl003/shield_001b.png',
+  {def: 8,block: 6},1000,'']#}
+$equip[:left][ 3]=['龍形重盾','icon/mat_tkl003/shield_001b.png',
+  {def: 16,block: 8},1000,'']#}
+$equip[:left][ 4]=['華麗重盾','icon/mat_tkl003/shield_001d.png',
+  {def: 32,block: 11},1000,'']#}
+$equip[:left][ 5]=['棘刺重盾','icon/mat_tkl003/shield_001e.png',
+  {def: 64,block: 15},1000,'']#}
+$equip[:left][ 6]=['球面重盾','icon/mat_tkl003/shield_002.png',
+  {def: 128,block: 20},1000,'']#}
+$equip[:left][ 7]=['硬化重盾','icon/mat_tkl003/shield_002d.png',
+  {def: 256,block: 26},1000,'']#}
 
+$equip[:left][11]=['普通魔盾','icon/mat_tkl003/shield_001h.png',
+  {def: 3,mdef: 3},1000,'']#}
+$equip[:left][12]=['強化魔盾','icon/mat_tkl003/shield_001i.png',
+  {def: 6,mdef: 6},1000,'']#}
+$equip[:left][13]=['龍形魔盾','icon/mat_tkl003/shield_001j.png',
+  {def: 12,mdef: 12},1000,'']#}
+$equip[:left][14]=['華麗魔盾','icon/mat_tkl003/shield_001k.png',
+  {def: 24,mdef: 24},1000,'']#}
+$equip[:left][15]=['棘刺魔盾','icon/mat_tkl003/shield_001l.png',
+  {def: 48,mdef: 48},1000,'']#}
+$equip[:left][16]=['球面魔盾','icon/mat_tkl003/shield_002e.png',
+  {def: 96,mdef: 96},1000,'']#}
+$equip[:left][17]=['硬化魔盾','icon/mat_tkl003/shield_002h.png',
+  {def: 192,mdef: 192},1000,'']#}
+
+$equip[:left][21]=['普通輕盾','icon/mat_tkl003/shield_001m.png',
+  {def: 3,tough: 5,wlkspd: 5},1000,'']#}
+$equip[:left][22]=['強化輕盾','icon/mat_tkl003/shield_001n.png',
+  {def: 6,tough: 10,wlkspd: 10},1000,'']#}
+$equip[:left][23]=['龍形輕盾','icon/mat_tkl003/shield_001o.png',
+  {def: 12,tough: 15,wlkspd: 15},1000,'']#}
+$equip[:left][24]=['華麗輕盾','icon/mat_tkl003/shield_001p.png',
+  {def: 24,tough: 20,wlkspd: 20},1000,'']#}
+$equip[:left][25]=['棘刺輕盾','icon/mat_tkl003/shield_001q.png',
+  {def: 48,tough: 25,wlkspd: 25},1000,'']#}
+$equip[:left][26]=['球面輕盾','icon/mat_tkl003/shield_002i.png',
+  {def: 96,tough: 30,wlkspd: 30},1000,'']#}
+$equip[:left][27]=['硬化輕盾','icon/mat_tkl003/shield_002l.png',
+  {def: 192,tough: 35,wlkspd: 35},1000,'']#}
+  
+$equip[:left][31]=['口袋魔法書','icon/mat_tklre001/book_001.png',
+  {atk: 2,def: 2,mdef: 4,consum_amp: -5},1000,'']#}
+$equip[:left][32]=['翠綠魔法書','icon/tklre06/book_002b.png',
+  {atk: 4,def: 4,mdef: 8,consum_amp: -6},1000,'']#}
+$equip[:left][33]=['緋紅魔法書','icon/tklre06/book_002c.png',
+  {atk: 8,def: 8,mdef: 16,consum_amp: -8},1000,'']#}
+$equip[:left][34]=['湛藍魔法書','icon/mat_tklre001/book_002.png',
+  {atk: 16,def: 16,mdef: 32,consum_amp: -10},1000,'']#}
+$equip[:left][35]=['絳紫魔法書','icon/mat_tklre001/book_004.png',
+  {atk: 32,def: 32,mdef: 64,consum_amp: -12},1000,'']#}
+$equip[:left][36]=['精裝魔法書','icon/tklre03/book_005.png',
+  {atk: 64,def: 64,mdef: 128,consum_amp: -14},1000,'']#}
+$equip[:left][37]=['上古魔法石版','icon-1_2.png@[1,6]:[0,0]',
+  {atk: 128,def: 128,mdef: 256,consum_amp: -16},1000,'']#}
+
+$equip[:single][1.01]=['紙製長槍','icon/tklre05/we_spear020c.png:[0,10]',
+  {atk: 10,def: 3,mdef: 3},650,'弱弱的長槍聊勝於無~~']#}
+$equip[:single][ 1]=['翠綠長槍','icon/mat_tkl002/we_spear006d.png:[0,10]',
+  {atk: 15,con: 10},1000,'']
+$equip[:single][ 2]=['木紋長槍','icon/mat_tkl002/we_spear006e.png:[0,10]',
+  {atk: 30,con: 20},1000,'']
+$equip[:single][ 3]=['銀白長槍','icon/mat_tkl002/we_spear006.png:[0,10]',
+  {atk: 60,con: 35},1000,'']
+$equip[:single][ 4]=['湛藍長槍','icon/mat_tkl002/we_spear006c.png:[0,10]',
+  {atk: 120,con: 55},1000,'']
+$equip[:single][ 5]=['緋紅長槍','icon/mat_tkl002/we_spear006b.png:[0,10]',
+  {atk: 240,con: 80},1000,'']
+$equip[:single][ 6]=['鐵灰長槍','icon/mat_tkl002/we_spear017.png:[0,10]',
+  {atk: 480,con: 110},1000,'']
+$equip[:single][ 7]=['蒼灰長槍','icon/mat_tkl002/we_spear017b.png:[0,10]',
+  {atk: 960,con: 145},1000,'']
+
+$equip[:single][11]=['翠綠大斧','icon/mat_tkl002/we_axe008e.png',
+  {atk: 15,str: 10},1000,'']
+$equip[:single][12]=['木紋大斧','icon/mat_tkl002/we_axe008b.png',
+  {atk: 30,str: 20},1000,'']
+$equip[:single][13]=['銀白大斧','icon/mat_tkl002/we_axe012.png:[0,10]',
+  {atk: 60,str: 35},1000,'']
+$equip[:single][14]=['湛藍大斧','icon/mat_tkl002/we_axe012c.png:[0,10]',
+  {atk: 120,str: 55},1000,'']
+$equip[:single][15]=['緋紅大斧','icon/mat_tkl002/we_axe012b.png:[0,10]',
+  {atk: 240,str: 80},1000,'']
+$equip[:single][16]=['鐵灰大斧','icon/mat_tkl002/we_axe013.png',
+  {atk: 480,str: 110},1000,'']
+$equip[:single][17]=['血紅大斧','icon/mat_tkl002/we_axe013c.png',
+  {atk: 960,str: 145},1000,'']
+
+  
 $equip[:range][0]=['測試用弩弓','test/crsbow.png',
   {ratk: 10,agi: 5},1000,'輕型遠距離武器']
-$equip[:range][1]=['紙製弓','icon/mat_tkl002/we_bow001b.png:[0,0]',
+$equip[:range][1.01]=['紙製弓','icon/mat_tkl002/we_bow001b.png:[0,0]',
   {ratk: 7,agi: 3,atkspd: 10},500,'微幅提高攻速的輕量弓']
-  
+$equip[:range][ 1]=['湛藍短弓','icon/mat_tkl002/we_bow001b.png',
+  {ratk: 10,atkspd: 10,wlkspd: 0.02},1000,'']
+$equip[:range][ 2]=['木紋短弓','icon/mat_tkl002/we_bow001.png',
+  {ratk: 20,atkspd: 20,wlkspd: 0.03},1000,'']
+$equip[:range][ 3]=['湛藍長弓','icon/mat_tkl002/we_bow002b.png',
+  {ratk: 40,atkspd: 30,wlkspd: 0.04},1000,'']
+$equip[:range][ 4]=['木紋長弓','icon/mat_tkl002/we_bow002.png',
+  {ratk: 80,atkspd: 40,wlkspd: 0.05},1000,'']
+$equip[:range][ 5]=['緋紅長弓','icon/mat_tkl002/we_bow003b.png',
+  {ratk: 160,atkspd: 50,wlkspd: 0.06},1000,'']
+$equip[:range][ 6]=['銀白機械弓','icon/mat_tkl002/we_bow009.png:[10,0]',
+  {ratk: 320,atkspd: 60,wlkspd: 0.07},1000,'']
+$equip[:range][ 7]=['血紅機械弓','icon/mat_tkl002/we_bow009b.png:[10,0]',
+  {ratk: 640,atkspd: 70,wlkspd: 0.08},1000,'']
+
 $equip[:range][10]=['紙製弩','icon/mat_tkl002/we_bow013.png:[0,0]',
   {ratk: 10,agi: 3},500,'威力比弓略高的紙製弩']
-  
+$equip[:range][11]=['翠綠弩弓','icon/mat_tkl002/we_bow015b.png',
+  {ratk: 20,atkspd: 5,def: 2},1000,'']#}
+$equip[:range][12]=['木紋弩弓','icon/mat_tkl002/we_bow015.png',
+  {ratk: 40,atkspd: 10,def: 4},1000,'']#}
+$equip[:range][13]=['緋紅弩弓','icon/mat_tkl002/we_bow014b.png',
+  {ratk: 70,atkspd: 15,def: 8},1000,'']#}
+$equip[:range][14]=['鐵灰弩弓','icon/mat_tkl002/we_bow014.png',
+  {ratk: 120,atkspd: 20,def: 16},1000,'']#}
+$equip[:range][15]=['木紋連弩','icon/mat_tkl002/we_bow016.png',
+  {ratk: 210,atkspd: 25,def: 32},1000,'']#}
+$equip[:range][16]=['銀白連弩','icon/mat_tkl002/we_bow016b.png',
+  {ratk: 380,atkspd: 30,def: 64},1000,'']#}
+$equip[:range][17]=['血紅弩弓','icon/mat_tkl002/we_bow013b.png',
+  {ratk: 710,atkspd: 35,def: 128},1000,'']#}
 
+ 
 $equip[:finger][0]=['測試用戒指','test/ring.png',
   {matk:5,mdef:5},400,'金光閃閃~~']
 $equip[:finger][1]=['白銅戒指','icon/mat_tkl003/acce_004b.png:[0,0]',
@@ -288,23 +434,72 @@ $equip[:finger][1]=['白銅戒指','icon/mat_tkl003/acce_004b.png:[0,0]',
 $equip[:finger][2]=['白銀戒指','item/2011-12-23_1-108.gif',
   {matk: 0.2},20000,'少量增幅魔攻的銀製戒指']
 
-#$equip[:finger][]
-  
+
 $equip[:feet][0]=['測試用重靴','test/feet.png',
   {str:2,def:2,mdef:2},400,'保護腳底']#}
-$equip[:feet][1]=['紙製鞋','icon/mat_tkl003/boots_002.png:[0,0]',
+$equip[:feet][1.01]=['紙製鞋','icon/mat_tkl003/boots_002.png:[0,0]',
   {wlkspd: 10},100,'微幅增加跑速的鞋子']
+$equip[:feet][ 1]=['茶褐皮鞋','icon-1_1.png@[4,6]',
+  {wlkspd: 30},1000,'']
+$equip[:feet][ 2]=['土黃皮鞋','icon/mat_tkl003/boots_005.png',
+  {wlkspd: 35},1000,'']
+$equip[:feet][ 3]=['雪白皮鞋','icon/mat_tkl003/boots_005b.png',
+  {wlkspd: 42},1000,'']
+$equip[:feet][ 4]=['翠綠皮鞋','icon/mat_tkl003/boots_003.png',
+  {wlkspd: 50},1000,'']
+$equip[:feet][ 5]=['翠綠羽翼皮鞋','icon/mat_tkl003/boots_003c.png',
+  {wlkspd: 60},1000,'']
 
 $equip[:feet][10]=['紙製靴','icon/mat_tkl003/boots_005b.png:[0,0]',
   {wlkspd: 8,def: 2},100,'微幅增加跑速及防禦的靴子']#}
+$equip[:feet][11]=['茶褐皮靴','icon-1_1.png@[5,6]',
+  {wlkspd: 20,con: 4},1000,'']
+$equip[:feet][12]=['土黃皮靴','icon/tklre06/boots_008.png:[0,0]B[255,0,0]',
+  {wlkspd: 25,con: 8},1000,'']
+$equip[:feet][13]=['土黃長皮靴','icon/mat_tkl003/boots_006.png',
+  {wlkspd: 30,con: 12},1000,'']
+$equip[:feet][14]=['雙色裝甲靴','icon/mat_tkl003/boots_004b.png',
+  {wlkspd: 35,con: 16},1000,'']
+$equip[:feet][15]=['銀白裝甲靴','icon/mat_tkl003/boots_004.png',
+  {wlkspd: 40,con: 20},1000,'']
 
 
 $equip[:deco][0]=['測試用徽章','test/deco.png',{agi:5},700,'徽章']
-$equip[:deco][1]=['1.5跑速','test/deco.png',{wlkspd:0.5},700,'1.5跑速']
-$equip[:deco][2]=['1.5HP','test/deco.png',{maxhp:0.5},700,'1.5HP']
-$equip[:deco][3]=['1.5倍atk加成','test/deco.png',{atk:0.5},700,'atk變為原先的1.5倍']#}
-$equip[:deco][4]=['1.5閃避','test/deco.png',{dodge:0.5},700,'1.5閃避']
-$equip[:deco][5]=['茶具','icon/tklre05/food_028c.png',
+$equip[:deco][0.1]=['1.5跑速','test/deco.png',{wlkspd:0.5},700,'1.5跑速']
+$equip[:deco][0.2]=['1.5HP','test/deco.png',{maxhp:0.5},700,'1.5HP']
+$equip[:deco][0.3]=['1.5倍atk加成','test/deco.png',{atk:0.5},700,'atk變為原先的1.5倍']#}
+$equip[:deco][0.4]=['1.5閃避','test/deco.png',{dodge:0.5},700,'1.5閃避']
+$equip[:deco][0.5]=['茶具','icon/tklre05/food_028c.png',
   {healhp: 5,healsp: 2},1600,'茶具...不解釋...']
+  
+$equip[:deco][1]=['初級茶具','icon-2_1.png@[8,9]',
+  {healhp: 5,healsp: 5},1600,'']
+$equip[:deco][2]=['普通茶具','icon-2_1.png@[8,9]',
+  {healhp: 10,healsp: 10},1600,'']
+$equip[:deco][3]=['高級茶具','icon-2_1.png@[8,9]',
+  {healhp: 15,healsp: 15},1600,'']
+$equip[:deco][4]=['進階茶具','icon-2_1.png@[8,9]',
+  {healhp: 20,healsp: 20},1600,'']
+$equip[:deco][5]=['完美茶具','icon-2_1.png@[8,9]',
+  {healhp: 25,healsp: 25},1600,'']
+
+$equip[:deco][11]=['初級平蜘蛛釜','icon-2_1.png@[9,9]',
+  {healhp: 10,healsp: 5},3550,'']
+$equip[:deco][12]=['普通平蜘蛛釜','icon-2_1.png@[9,9]',
+  {healhp: 20,healsp: 10},3550,'']
+$equip[:deco][13]=['高級平蜘蛛釜','icon-2_1.png@[9,9]',
+  {healhp: 30,healsp: 15},3550,'']
+$equip[:deco][14]=['進階平蜘蛛釜','icon-2_1.png@[9,9]',
+  {healhp: 40,healsp: 20},3550,'']
+$equip[:deco][15]=['完美平蜘蛛釜','icon-2_1.png@[9,9]',
+  {healhp: 50,healsp: 25},3550,'']
+
+'抗擊護符'
+'禦魔護符'
+'鬼面'
+'能面'
+'短甲'
+'抗魔短甲'
+'御守'
 
 Output('equip')

@@ -57,7 +57,7 @@ class Actor
       mag_decatk:'減少魔傷',phy_decatk:'減少物傷',
       mag_shield:'魔法護盾',atk_shield:'傷害護盾',
       
-      consum_amp:'消耗強化',heal_amp:'治癒強化',
+      consum_amp:'消耗係數',heal_amp:'治癒係數',
       
       attack_amp:'輸出強化',
       

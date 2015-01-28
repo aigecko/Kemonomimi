@@ -16,14 +16,16 @@ class Database
   end
   def self.get_equip(part,index)
     begin
-      data=@Equip[part][index]
+      data=@Equip[part][index] or raise "EquipDatabaseOutOfIndex"
+      name,pic,attrib,price,comment=data
+      return Equipment.new(name,pic,part,attrib,price,comment)
     rescue NoMethodError
       print "part: #{part} index: #{index}"
       Message.show(:unvalid_equip)
-      return nil
-    else
-      name,pic,attrib,price,comment=data
-      return Equipment.new(name,pic,part,attrib,price,comment)
+      exit
+    rescue => e
+      Message.show_format("裝備:#{part}編號:#{index}不存在","錯誤",:ASTERISK)
+      exit
     end
   end
   def self.get_consum(index)   
