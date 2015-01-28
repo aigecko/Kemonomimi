@@ -312,14 +312,22 @@ class Actor
     end
   end
   def wear_equip(index)
+    hp=@attrib[:hp]
+    sp=@attrib[:sp]
+
     part=@equip_list[index].part
     equip=@equip_list[index]
     @equip_list.delete_at(index)
     takeon_equip(part,equip)
+
+    hp < @attrib[:maxhp] and @attrib[:hp]<hp and @attrib[:hp]=hp
+    sp < @attrib[:maxsp] and @attrib[:sp]<sp and @attrib[:sp]=sp
+    hp > @attrib[:maxhp] and @attrib[:hp]=@attrib[:maxhp]
+    sp > @attrib[:maxsp] and @attrib[:sp]=@attrib[:maxsp]
   end
   def takeon_equip(part,equip)
     @equip.wear(self,part,equip)
-	  @attrib.gain_equip_attrib(equip.attrib)
+    @attrib.gain_equip_attrib(equip.attrib)
     if equip.skill
       add_skill(equip.sym,equip.skill)
     end

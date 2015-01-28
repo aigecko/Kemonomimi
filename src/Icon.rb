@@ -12,6 +12,7 @@ class Icon
       '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])'+
       ')*')
     @icon_set={}
+    @cache={}
     currentDir=Dir.pwd
     Dir.chdir './rc/icon/merge'
     Dir.foreach('.'){|name|
@@ -28,7 +29,12 @@ class Icon
       y=info[:imgAtY].to_i
       img=@icon_set[info[:path]].copy_rect(x*24,y*24,24,24)
     else
-      img=Surface.load(info[:rc]+info[:path])
+      path=info[:rc]+info[:path]
+      if @cache[path]
+        img=@cache[path]
+      else
+        @cache[path]=(img=Surface.load(path))
+      end
     end
     base=Surface.new(Surface.flag,24,24,Screen.format)
     if info[:base]
@@ -38,7 +44,6 @@ class Icon
         info[:baseB].to_i])
     end
     img.draw(0,0,base)
-    img.destroy
     img=base
     if info[:firstMode]
       img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,

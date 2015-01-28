@@ -1,6 +1,7 @@
 module Mouse
   BUTTON_RIGHT=SDL::Mouse::BUTTON_RIGHT
   BUTTON_LEFT=SDL::Mouse::BUTTON_LEFT
+  BUTTON_MIDDLE=SDL::Mouse::BUTTON_MIDDLE
   DOUBLECLICK_DELAY=0.3
   def init
     @cursors={}

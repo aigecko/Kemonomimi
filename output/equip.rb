@@ -171,11 +171,11 @@ $equip[:right][0.1]=['勝利寶劍','icon/mat_tkl002/we_sword018d.png:[0,0]',
   65535,"MJ勝利寶劍\n附帶#ff0000|燒毀#00327d|技能"]
 $equip[:right][0.2]=['蜻蛉切‧銘槍','icon/mat_tkl002/we_spear006.png:[5,0]',
   {str:25,con:25,wlkspd: 0.25,
-   skill:[{
-     sym: :smash_wave,name:'蜻切',type: :append,table:[0,[300,20]],
+   skill:[
+    {sym: :smash_wave,name:'蜻切',type: :append,table:[0,[300,20]],
      icon:'./rc/icon/icon/mat_tkl002/we_spear006.png:[0,5]',
-     base: :smash_wave,comment:'20%300粉碎波'},{
-     sym: :Tonbogiri,name:'蜻切',type: :auto,
+     base: :smash_wave,comment:'20%300粉碎波'},
+    {sym: :Tonbogiri,name:'蜻切',type: :auto,
      table:[0,{coef: 1,attrib:{}}],
      data:{type: :max,name:'蜻切',icon:nil,sym: :Tonbogiri},
      icon: nil,
@@ -200,7 +200,38 @@ $equip[:right][0.8]=['長曾彌虎撤','icon/mat_tkl002/we_sword018c.png:[0,0]',
   8600,'普通攻擊以及弓箭射擊會有30%機率擊暈0.4秒並增加該下普攻20傷害']
 $equip[:right][1.01]=['紙製單手斧','icon/mat_tkl002/we_axe002.png:[0,0]',
   {atk: 10},400,'強調攻擊的紙製斧頭']
-  
+
+$equip[:right][ 1]=['翠綠長劍','icon/mat_tkl002/we_sword018.png',
+  {atk: 10,def: 3},1000,'']#}
+$equip[:right][ 2]=['木紋長劍','icon/mat_tkl002/we_sword018d.png',
+  {atk: 20,def: 6},1000,'']#}
+$equip[:right][ 3]=['銀白長劍','icon/mat_tkl002/we_sword006.png:[10,0]',
+  {atk: 40,def: 12},1000,'']#}
+$equip[:right][ 4]=['湛藍長劍','icon/mat_tkl002/we_sword018c.png',
+  {atk: 80,def: 24},1000,'']#}
+$equip[:right][ 5]=['緋紅長劍','icon/mat_tkl002/we_sword018b.png',
+  {atk: 160,def: 48},1000,'']#}
+$equip[:right][ 6]=['鐵灰長劍','icon/mat_tklre002/we_sword028.png:[10,0]',
+  {atk: 320,def: 96},1000,'']#}
+$equip[:right][ 7]=['蒼灰長劍','icon/mat_tkl002/we_sword008.png:[10,0]',
+  {atk: 640,def: 192},1000,'']#}
+
+$equip[:right][11]=['翠綠重鎚','icon/mat_tkl002/we_staff005.png',
+  {atk: 10,maxhp: 40},1000,'']
+$equip[:right][12]=['木紋重鎚','icon/mat_tkl002/we_staff005b.png',
+  {atk: 20,maxhp: 80},1000,'']
+$equip[:right][13]=['銀白重鎚','icon/mat_tkl002/we_axe017.png',
+  {atk: 40,maxhp: 160},1000,'']
+$equip[:right][14]=['湛藍重鎚','icon/mat_tkl002/we_axe017b.png',
+  {atk: 80,maxhp: 280},1000,'']
+$equip[:right][15]=['緋紅戰鎚','icon/mat_tkl002/we_axe015b.png',
+  {atk: 160,maxhp: 440},1000,'']
+$equip[:right][16]=['鐵灰戰鎚','icon/mat_tkl002/we_axe015.png',
+  {atk: 320,maxhp: 640},1000,'']
+$equip[:right][17]=['蒼灰戰鎚','icon/mat_tkl002/we_axe016.png',
+  {atk: 640,maxhp: 880},1000,'']
+
+
 $equip[:dual][1]=['紙製雙劍','icon/mat_tkl002/we_sword006.png:[5,0]',
   {atk: 8,atkspd: 10},400,'輕薄短小的紙製雙劍']
 

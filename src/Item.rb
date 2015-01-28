@@ -12,11 +12,13 @@ class Item
     @price=price
     begin
       @pic=Icon.load("./rc/icon/#{pic}")
-    rescue => e
+    rescue SDL::Error=> e
       p e
       Message.show(:equip_pic_load_failure)
       puts "pic=#{pic}"
       exit
+    rescue =>e
+      p Message.show_backtrace(e)
     end    
     @onground=args[:onground]
     @position=Position.new(args[:x]||0,0,args[:z]||0)

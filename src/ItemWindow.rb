@@ -310,20 +310,23 @@ class ItemWindow < DragWindow
     Event.each{|event|
       case event
       when Event::MouseButtonDown
-        @drag_bar.check_click(event.x,event.y)
-        @pages.each{|name,page| 
-          if page.check_click(event.x,event.y,@drag_bar.offset)
+        case event.button
+        when Mouse::BUTTON_LEFT
+          @drag_bar.check_click(event.x,event.y)
+          @pages.each{|name,page| 
+            page.check_click(event.x,event.y,@drag_bar.offset) or next
             @current=name
             @drag_bar.reinit
             page.tag
             break
-          end
-        }
-        @pages.each{|name,page|
-          unless @current==name
-            page.untag
-          end
-        }
+          }
+          @pages.each{|name,page|
+            unless @current==name
+              page.untag
+            end
+          }
+        when Mouse::BUTTON_RIGHT
+        end
       when Event::MouseMotion
         keep_drag(event.x,event.y)
         bar_drag(event.x,event.y)

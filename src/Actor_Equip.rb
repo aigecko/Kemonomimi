@@ -29,8 +29,8 @@ class Actor
         return
       when :dual
         if @wear[:right]
-          if @wear[:right].part==:single            
-            actor.takeoff_equip(:right)            
+          if @wear[:right].part==:single
+            actor.takeoff_equip(:right)
             @wear[:left]=equip
           elsif @wear[:left]
             actor.takeoff_equip(:right)
@@ -51,13 +51,12 @@ class Actor
           actor.takeoff_equip(:left)
         end
       end
-      if @wear[part]
-        actor.takeoff_equip(part)
-      end
-      @wear[part]=equip
+      
+      @wear[part] and actor.takeoff_equip(part)
+      @wear[part]=equip      
     end
     def parts
-      @@Part
+      return @@Part
     end
     def each
       @wear.each{|part,equip| yield part,equip}
