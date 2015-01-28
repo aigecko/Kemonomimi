@@ -71,6 +71,7 @@ class MenuWindow < SelectWindow
       @need2draw=false
     end
     if @need2draw_word
+      super
       draw_select(@text_pic,Array(0..3))
       @need2draw_word=false
     end

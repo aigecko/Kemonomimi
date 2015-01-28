@@ -231,7 +231,37 @@ $equip[:right][16]=['鐵灰戰鎚','icon/mat_tkl002/we_axe015.png',
 $equip[:right][17]=['蒼灰戰鎚','icon/mat_tkl002/we_axe016.png',
   {atk: 640,maxhp: 880},1000,'']
 
+$equip[:right][21]=['翠綠法杖','icon/mat_tkl002/we_staff011d.png:[10,0]',
+  {atk: 5,matk: 10,int: 10},1000,'']
+$equip[:right][22]=['木紋法杖','icon/mat_tkl002/we_staff011c.png:[10,0]',
+  {atk: 10,matk: 20,int: 20},1000,'']
+$equip[:right][23]=['銀白法杖','icon/tklre04/we_staff020b.png:[10,0]',
+  {atk: 20,matk: 40,int: 35},1000,'']
+$equip[:right][24]=['湛藍法杖','icon/mat_tkl002/we_staff011.png:[10,0]',
+  {atk: 40,matk: 80,int: 55},1000,'']
+$equip[:right][25]=['緋紅法杖','icon/mat_tkl002/we_staff011b.png:[10,0]',
+  {atk: 80,matk: 160,int: 80},1000,'']
+$equip[:right][26]=['雪白法杖','icon/mat_tkl002/we_staff016.png',
+  {atk: 160,matk: 320,int: 110},1000,'']
+$equip[:right][27]=['血紅法杖','icon/mat_tkl002/we_staff016b.png',
+  {atk: 320,matk: 640,int: 145},1000,'']
 
+$equip[:right][31]=['翠綠魔劍','icon/mat_tkl002/we_sword016c.png',
+  {atk: 9,matk: 6,wis: 10},1000,'']
+$equip[:right][32]=['木紋魔劍','icon/mat_tkl002/we_sword016b.png',
+  {atk: 18,matk: 12,wis: 20},1000,'']
+$equip[:right][33]=['鐵灰魔劍','icon/mat_tkl002/we_sword020.png:[10,0]',
+  {atk: 36,matk: 24,wis: 35},1000,'']
+$equip[:right][34]=['湛藍魔劍','icon/mat_tkl002/we_sword016d.png',
+  {atk: 72,matk: 48,wis: 55},1000,'']
+$equip[:right][35]=['緋紅魔劍','icon/mat_tkl002/we_sword016.png',
+  {atk: 144,matk: 96,wis: 80},1000,'']
+$equip[:right][36]=['绛紫魔劍','icon/mat_tklre001/we_sword024b.png:[10,0]',
+  {atk: 288,matk: 192,wis: 110},1000,'']
+$equip[:right][37]=['血紅魔劍','icon/mat_tklre001/we_sword024.png:[10,0]',
+  {atk: 576,matk: 384,wis: 145},1000,'']
+
+  
 $equip[:dual][1]=['紙製雙劍','icon/mat_tkl002/we_sword006.png:[5,0]',
   {atk: 8,atkspd: 10},400,'輕薄短小的紙製雙劍']
 

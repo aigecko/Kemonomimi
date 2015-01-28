@@ -39,15 +39,15 @@ class Input
     end
   end
   def self.load_font(name,size)
-    unless FileTest.exist?("./rc/font/#{name}.ttf")
+    unless FileTest.exist?("./rc/font/#{name}")
       Message.show(:font_lost)
       Message.show(:config_load_default)
-      Conf.fix                                                                              
+      Conf.fix
       Message.show(:config_data_rewrite)
     end
     retried=false
     begin
-      font=SDL::TTF.open("./rc/font/#{name}.ttf", size)
+      font=SDL::TTF.open("./rc/font/#{name}", size)
     rescue
       unless retried
         Message.show(:font_lost)
@@ -79,7 +79,7 @@ class Input
         decrypt_data=cipher.update(encrypt_data)<<cipher.final
       else
         decrypt_data=encrypt_data
-      end	  
+      end
     }
     begin
       data=Marshal.load(decrypt_data)
@@ -87,7 +87,7 @@ class Input
       load_failure_message(type)
       exit
     end
-	return data
+    return data
   end
   def self.load_failure_message(type)
     case type
@@ -154,7 +154,7 @@ class Input
       icons[name]=Surface.new(Surface.flag,w,h,Screen.format)
       Input.load_pic("#{path}/MI_#{name}.png").draw(0,0,icons[name])
     }
-    
+
     pic=Input.load_pic("#{path}/book_005.png")
     font=Input.load_pic("#{path}/font_skill.png")
     icons[:skill]=Surface.new(Surface.flag,w,h,Screen.format)
@@ -166,12 +166,12 @@ class Input
     icons[:tool]=Surface.new(Surface.flag,w,h,Screen.format)
     pic.draw(0,0,icons[:tool])
     font.draw(0,0,icons[:tool])
-    
+
     icons.each_value{|pic|
       pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
       pic.display_format_alpha
     }
-    
+
     return icons
   end
 end

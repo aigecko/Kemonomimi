@@ -57,8 +57,8 @@ class SettingWindow < SelectWindow
   def font_select_initialize
     @fonts=[]
     Dir.foreach('./rc/font'){|name|
-      if name=~/ttf/
-        @fonts<<name.split(/\.ttf/)[0]
+      if name=~/tt[f|c]/
+        @fonts<<name
       end
     }
     
@@ -99,11 +99,7 @@ class SettingWindow < SelectWindow
   end
   def select_check
     key=@table[@select]
-    if key=='FONT_TYPE'
-      font_change
-    else
-      other_change
-    end
+    other_change
     refresh_pic
     @need2draw_word=true
   end

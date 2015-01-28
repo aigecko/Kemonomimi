@@ -13,16 +13,9 @@ class Player < Actor
     
     super(comment,pos,attrib,pics)
     race_initialize
-    
-    gain_equip_from_database [[:head,1],[:head,2],[:head,3],[:head,4],[:head,5],[:head,6],[:head,7]]
-    gain_equip_from_database [[:head,11],[:head,12],[:head,13],[:head,14],[:head,15],[:head,16],[:head,17]]
-    gain_equip_from_database [[:head,21],[:head,22],[:head,23],[:head,24],[:head,25],[:head,26],[:head,27]]
-    gain_equip_from_database [[:head,31],[:head,32],[:head,33],[:head,34],[:head,35],[:head,36],[:head,37]]
-    gain_equip_from_database [[:head,41],[:head,42],[:head,43],[:head,44],[:head,45],[:head,46],[:head,47]]
-    for i in 1..7 ; gain_equip_from_database [[:right,i]] ;end
-    for i in 11..17 ; gain_equip_from_database [[:right,i]] ;end
-    # gain_equip_from_database([[:dual,1],[:right,1],[:left,1]])
-    # gain_equip_from_database([[:dual,1],[:range,1],[:single,1]])
+        
+    for i in 21..27 ; gain_equip_from_database [[:right,i]] ;end
+    for i in 31..37 ; gain_equip_from_database [[:right,i]] ;end
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]

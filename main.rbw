@@ -77,7 +77,13 @@ class Game
                LevelWindow BarsWindow ButtonWindow)
     @window=Hash.new
     windows.each{|window|
-      eval("@window[:#{window}]=#{window}.new")
+      begin
+        eval("@window[:#{window}]=#{window}.new")
+      rescue => e
+        p window
+        Message.show_backtrace(e)
+        exit
+      end
     }
     @window[:MenuWindow].open
   end

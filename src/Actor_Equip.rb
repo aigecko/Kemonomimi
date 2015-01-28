@@ -53,7 +53,7 @@ class Actor
       end
       
       @wear[part] and actor.takeoff_equip(part)
-      @wear[part]=equip      
+      @wear[part]=equip
     end
     def parts
       return @@Part

@@ -6,7 +6,7 @@ class LoadWindow < BaseWindow
     win_x=0
     win_y=0
     super(win_x,win_y,win_w,win_h)
-    @text=Font.render_solid('施工中',20,255,255,255)
+    @text=Font.render_solid('施工中',@font_size,255,255,255)
   end
   def interact
     Event.each{|event|

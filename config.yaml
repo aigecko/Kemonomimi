@@ -1,6 +1,5 @@
 ---
 FULL_SCREEN: false
 SDL_VIDEO_CENTERED: true
-FONT_TYPE: wt064
-MUSIC: false
-SOUND: false
+MUSIC: true
+SOUND: true

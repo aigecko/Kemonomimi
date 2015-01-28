@@ -5,7 +5,6 @@ class Conf
     @config=Hash.new
     @config['FULL_SCREEN']=false
     @config['SDL_VIDEO_CENTERED']=true
-    @config['FONT_TYPE']='wt064'
     @config['MUSIC']=true
     @config['SOUND']=true
     @@filename="./config.yaml"
