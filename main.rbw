@@ -78,7 +78,8 @@ class Game
     @window=Hash.new
     windows.each{|window|
       begin
-        eval("@window[:#{window}]=#{window}.new")
+        symbol=window.to_sym
+        @window[symbol]=Object.const_get(symbol).new
       rescue => e
         p window
         Message.show_backtrace(e)

@@ -14,8 +14,9 @@ class Player < Actor
     super(comment,pos,attrib,pics)
     race_initialize
         
-    for i in 1..5 ; gain_equip_from_database [[:deco,i]] ;end
-    for i in 11..15 ; gain_equip_from_database [[:deco,i]] ;end
+    for i in 1..1 ; gain_equip_from_database [[:head,i]] ;end
+    #for i in 11..15 ; gain_equip_from_database [[:head,i]] ;end
+    #for i in 21..25 ; gain_equip_from_database [[:head,i]] ;end
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]

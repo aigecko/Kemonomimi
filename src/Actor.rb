@@ -50,7 +50,7 @@ class Actor
     class_data=Database.get_class(@class)
     attack_cd=class_data[:attack_cd]
     arrow_cd=class_data[:arrow_cd]
-	
+
     add_base_skill(:normal_attack,
       name:'普通攻擊',type: :attack,cd: attack_cd,
       icon:'./rc/icon/skill/2011-12-23_3-034.gif:[0,0]B[255,255,0]',

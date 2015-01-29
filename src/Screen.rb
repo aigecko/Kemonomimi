@@ -4,7 +4,7 @@ class Screen
     screen_surface=SDL::SWSURFACE
     full_screen=Conf['FULL_SCREEN']? SDL::FULLSCREEN : 0
     begin
-      @screen=SDL::Screen.open(Game.Width,Game.Height,32,screen_surface|full_screen)
+      @screen=SDL::Screen.open(Game.Width,Game.Height,24,screen_surface|full_screen)
     rescue SDL::Error
       #puts e
       Message.show(:initialize_failure)

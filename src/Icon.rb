@@ -32,10 +32,7 @@ class Icon
         begin
           raise "IconNotInSet"
         rescue => e
-          #p info
-          #p @icon_set
           Message.show_format("圖示:#{info[:path]}不在圖組中","錯誤",:ASTERISK)
-          #Message.show_backtrace(e)
           exit
         end
       end
