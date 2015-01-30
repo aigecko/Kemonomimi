@@ -18,7 +18,8 @@ class Skill
       else
         @invisible=true
       end
-    rescue
+    rescue => e
+      p e
       p info[:icon]
       Message.show(:skill_pic_load_failure)
       exit

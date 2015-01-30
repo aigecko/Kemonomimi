@@ -150,26 +150,13 @@ class Input
     w=h=24
     icons={}
     
-    [:status,:item,:equip,:save].each{|name|
-      icons[name]=Surface.new(Surface.flag,w,h,Screen.format)
-      Input.load_pic("#{path}/MI_#{name}.png").draw(0,0,icons[name])
-    }
-
-    pic=Input.load_pic("#{path}/book_005.png")
-    font=Input.load_pic("#{path}/font_skill.png")
-    icons[:skill]=Surface.new(Surface.flag,w,h,Screen.format)
-    pic.draw(0,0,icons[:skill])
-    font.draw(0,0,icons[:skill])
-    
-    pic=Input.load_pic("#{path}/other_025.png")
-    font=Input.load_pic("#{path}/font_tool.png")
-    icons[:tool]=Surface.new(Surface.flag,w,h,Screen.format)
-    pic.draw(0,0,icons[:tool])
-    font.draw(0,0,icons[:tool])
-
+    [:status,:item,:equip,:save,:tool,:skill].each{|name|
+      icons[name]=Icon.load("#{path}/MI_#{name}.png:[0,0]B[255,255,0]")
+    } 
     icons.each_value{|pic|
       pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-      pic.display_format_alpha
+      pic.display_format
+      pic.gen_texture
     }
 
     return icons

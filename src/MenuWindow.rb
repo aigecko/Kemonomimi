@@ -65,15 +65,8 @@ class MenuWindow < SelectWindow
     end
   end
   def draw
-    if @need2draw
-      @title.draw(0,0)
-      super
-      @need2draw=false
-    end
-    if @need2draw_word
-      super
-      draw_select(@text_pic,Array(0..3))
-      @need2draw_word=false
-    end
+    @title.draw(0,0)
+    super
+    draw_select(@text_pic,Array(0..3))
   end
 end

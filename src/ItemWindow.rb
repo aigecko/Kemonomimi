@@ -302,7 +302,7 @@ class ItemWindow < DragWindow
     @moneybar_init_x=->{@win_x+@border}
     @moneybar_init_y=->{@win_y+308}
     @money_bar=MoneyBar.new(@moneybar_init_x.call,@moneybar_init_y.call)
-	
+
     title_initialize('道具物品')
     pic_initialize
   end
@@ -361,17 +361,14 @@ class ItemWindow < DragWindow
   def bar_drag(x,y)
     @drag_bar.drag(x,y) and @pages[@current].cancel_item_tag
   end
-  def draw(dst)
-    super(dst)
-    @pages[@current].draw_back(dst)
-    @pages[@current].draw_boxes(dst)
-    draw_title(dst)    
-    def draw      
-      @skeleton.draw(@win_x,@win_y)
-      @drag_bar.draw
-      @pages[@current].draw_page(@drag_bar.offset)
-      @pages.each_value{|page| page.draw_title}
-      @money_bar.draw
-    end
+  def draw
+    super
+    @pages[@current].draw_back
+    @pages[@current].draw_boxes
+    draw_title
+    @drag_bar.draw
+    @pages[@current].draw_page(@drag_bar.offset)
+    @pages.each_value{|page| page.draw_title}
+    @money_bar.draw
   end
 end

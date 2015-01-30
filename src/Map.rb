@@ -26,7 +26,8 @@ class Map
       end
     end
     #dbg
-    @items=[]#Array.new(100){
+    @items=[]
+    # Array.new(100){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
     # }
@@ -230,7 +231,7 @@ class Map
     end
     y=230
     
-    Surface.blit(@map_pic,x,0,Game.Width,@h/2,dst,x,y)
+    SDL::Surface.blit(@map_pic,x,0,Game.Width,@h/2,dst,x,y)
   end
   meta=class<<Map
     def method_missing(method,*arg)

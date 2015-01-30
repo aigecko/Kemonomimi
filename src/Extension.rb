@@ -57,7 +57,11 @@ class SDL::Surface
     end
   end"}
   def draw(dst_x,dst_y,dst=Screen.render)
-    SDL::Surface.blit(self,0,0,0,0,dst,dst_x,dst_y)
+    if @id
+      $queue<<[@id[0],dst_x,dst_y,self.w-8,self.h-8]
+    else
+      SDL::Surface.blit(self,0,0,0,0,dst,dst_x,dst_y)
+     end
   end
   def draw_rotate(angle,pivot_x,pivot_y,dst_x,dst_y)
     SDL::Surface.transform_blit(self,Screen.render,angle,1,1,
@@ -65,6 +69,20 @@ class SDL::Surface
   end
   def draw_scale(dst_x,dst_y,scale_x,scale_y,dst=Screen.render)
     SDL::Surface.transform_blit(self,dst,0,scale_x,scale_y,0,0,dst_x,dst_y,0)
+  end
+  def gen_texture
+    @id=Gl::glGenTextures(1)
+    Gl::glBindTexture(Gl::GL_TEXTURE_2D,@id[0])
+    for x in 0...self.w
+      for y in 0...self.h
+        self[x,y]==self.colorkey and self[x,y]&&=0xffffff
+      end
+    end
+    Glu::gluBuild2DMipmaps(Gl::GL_TEXTURE_2D,
+      Gl::GL_RGBA,self.w,self.h,
+      Gl::GL_RGBA,Gl::GL_UNSIGNED_BYTE,
+      self.pixels)
+    return @id
   end
 end
 
@@ -82,7 +100,7 @@ class Surface < SDL::Surface
     return pic
   end
   def self.flag
-    SDL::SWSURFACE
+    SDL::OPENGLBLIT|SDL::SWSURFACE|SDL::SRCCOLORKEY
   end
 end
 

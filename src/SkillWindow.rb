@@ -60,35 +60,33 @@ class SkillWindow < DragWindow
     @click_box=nil
     @click_skill=nil
   end
-  def draw(dst)   
-    super(dst)
-    def draw
-      @skeleton.draw(@win_x,@win_y)
-      @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
-      i=0
-      draw_x,draw_y=@win_x+@border,@win_y+24
-      @skill.each{|sym,skill|
-        skill.invisible and next
-        if i==@click_box         
-          draw_x=draw_click_box(skill,draw_x,draw_y)        
-          @click_skill=sym
-        else
-          draw_x=draw_unclick_box(skill,draw_x,draw_y)
-        end
-        skill.draw_icon(@win_x+@border+@box_border_w*i,@win_y+24)
-        i+=1
-      }
-      if @click_skill
-        skill=@skill[@click_skill]
-        skill.invisible and return
-        x=skill.draw_name(@win_x+@border,@win_y+85)[0]
-        skill.draw_cd(@win_x+@border+x,@win_y+85)
-        skill.draw_comment(@win_x+@border,@win_y+100)
+  def draw
+    super
+    draw_title
+    @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
+    i=0
+    draw_x,draw_y=@win_x+@border,@win_y+24
+    @skill.each{|sym,skill|
+      skill.invisible and next
+      if i==@click_box         
+        draw_x=draw_click_box(skill,draw_x,draw_y)        
+        @click_skill=sym
+      else
+        draw_x=draw_unclick_box(skill,draw_x,draw_y)
       end
+      skill.draw_icon(@win_x+@border+@box_border_w*i,@win_y+24)
+      i+=1
+    }
+    if @click_skill
+      skill=@skill[@click_skill]
+      skill.invisible and return
+      x=skill.draw_name(@win_x+@border,@win_y+85)[0]
+      skill.draw_cd(@win_x+@border+x,@win_y+85)
+      skill.draw_comment(@win_x+@border,@win_y+100)
     end
   end
   def draw_click_box(skill,draw_x,draw_y)
-    Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0])
+    Screen.draw_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0],true,255)
     unless [:active,:switch_auto,:switch_append,:switch_attack_defense,:shoot].include?(skill.type)
       @hotkey_set=false
     else
@@ -105,7 +103,7 @@ class SkillWindow < DragWindow
     else
       color=:skill_passive_back
     end
-    Screen.fill_rect(draw_x,draw_y,@box_w,@box_h,Color[color])
+    Screen.draw_rect(draw_x,draw_y,@box_w,@box_h,Color[color],true,255)
     return draw_x+@box_border_w
   end
 end

@@ -1,6 +1,6 @@
 #coding: utf-8
 $t=Time.now
-std_lib=%w(sdl yaml singleton pathname)
+std_lib=%w(sdl gl glu yaml singleton pathname)
 std_lib.each{|lib|
   require "#{lib}"
 }
@@ -25,6 +25,7 @@ class Game
     Conf.init
     Conf.load
     self.sdl_initialize
+    self.gl_initialize
     self.sdl_putenv
     
     Color.init
@@ -41,6 +42,7 @@ class Game
     Event.init
     Screen.flip
     self.win_initialize
+    
     puts "start #{Time.now-$t}"
   end
   private
@@ -67,6 +69,15 @@ class Game
       end
     end
   end
+  def self.gl_initialize
+    SDL::GL.set_attr SDL::GL_RED_SIZE,8
+    SDL::GL.set_attr SDL::GL_GREEN_SIZE,8
+    SDL::GL.set_attr SDL::GL_BLUE_SIZE,8
+    SDL::GL.set_attr SDL::GL_DEPTH_SIZE,24
+    SDL::GL.set_attr SDL::GL_DOUBLEBUFFER,1
+    
+    
+  end
   def self.font_initialize
     SDL::TTF.init
     Font.init
@@ -77,14 +88,14 @@ class Game
                LevelWindow BarsWindow ButtonWindow)
     @window=Hash.new
     windows.each{|window|
-      begin
+     # begin
         symbol=window.to_sym
         @window[symbol]=Object.const_get(symbol).new
-      rescue => e
-        p window
-        Message.show_backtrace(e)
-        exit
-      end
+      # rescue => e
+        # p window
+        # Message.show_backtrace(e)
+        # exit
+      # end
     }
     @window[:MenuWindow].open
   end
@@ -93,10 +104,7 @@ class Game
       Message.show(:game_already_run)
       exit
     end
-  end
-  def self.screen_initialize
-    Screen.init
-  end
+  end  
   def self.load_lib
     t=Thread.new{
       text=Font.render_solid('Loading',30,*Color[:loading_font])
@@ -154,7 +162,7 @@ class Game
     Event.poll
     @window.each_value{|window|
       if window.enable
-	    window.interact
+        window.interact
         if window.alone
           break
         end
@@ -200,12 +208,53 @@ class Game
     exit
   end
   def self.show
+    Gl::glViewport( 0, 0, 640, 480 );
+    Gl::glEnable Gl::GL_TEXTURE_2D
+    Gl::glTexParameteri(Gl::GL_TEXTURE_2D,
+      Gl::GL_TEXTURE_MAG_FILTER, Gl::GL_LINEAR);
+    Gl::glTexParameteri(Gl::GL_TEXTURE_2D,
+      Gl::GL_TEXTURE_MIN_FILTER,
+      Gl::GL_LINEAR_MIPMAP_LINEAR);
+    
+    Gl::glEnable Gl::GL_BLEND
+    Gl::glEnable Gl::GL_ALPHA_TEST
+    Gl::glBlendFunc Gl::GL_SRC_ALPHA,Gl::GL_ONE_MINUS_SRC_ALPHA
+    Gl::glEnable(Gl::GL_DEPTH_TEST);
+
+    Gl::glDepthFunc(Gl::GL_LESS);
+    Gl::glShadeModel(Gl::GL_SMOOTH);
+  
+    $queue=[]
     loop{
       time=SDL.get_ticks
 
       update
+      Gl::glClearColor(1.0,0,0,1.0);
+      Gl::glClear(Gl::GL_COLOR_BUFFER_BIT|Gl::GL_DEPTH_BUFFER_BIT);
+      
       draw
-
+      #Gl::glDisable Gl::GL_BLEND
+      $queue.each{|pack|
+        id,x,y,w,h=*pack
+        Gl::glBindTexture(Gl::GL_TEXTURE_2D,id)
+        Gl::glBegin(Gl::GL_QUADS)
+        # Gl::glTexCoord2d(0,0)
+        Gl::glTexCoord2d(0,0)
+        Gl::glVertex3f -1+(x/320.0),1-y/240.0+0,0
+        # Gl::glTexCoord2d(1,0)  
+        Gl::glTexCoord2d(0.75,0)
+        Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0+0,0
+        # Gl::glTexCoord2d(1,1)
+        Gl::glTexCoord2d(0.75,0.75)
+        Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0-(h)/240.0,0
+        # Gl::glTexCoord2d(0,1)
+        Gl::glTexCoord2d(0,0.75)
+        Gl::glVertex3f -1+(x/320.0),1-y/240.0-(h)/240.0,0
+        Gl::glEnd
+      }
+      $queue.clear
+      # Screen.flip
+      SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
       #p delta_time
       delta_time<40 and SDL.delay(40-delta_time)

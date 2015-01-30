@@ -18,7 +18,9 @@ class Item
       puts "pic=#{pic}"
       exit
     rescue =>e
+      p e
       p Message.show_backtrace(e)
+      exit
     end    
     @onground=args[:onground]
     @position=Position.new(args[:x]||0,0,args[:z]||0)

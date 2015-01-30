@@ -15,13 +15,13 @@ class DragWindow < BaseWindow
     @title_y=@drag_y+1
   end
   def pic_initialize    
-    surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
-    draw(surface)
-    draw_title(surface)
+    #surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
+    # draw(surface)
+    # draw_title(surface)
     
-    @skeleton=surface.copy_rect(@win_x,@win_y,@win_w,@win_h)
-    @skeleton.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,@skeleton[0,0])
-    @skeleton.display_format_alpha
+    # @skeleton=surface.copy_rect(@win_x,@win_y,@win_w,@win_h)
+    # @skeleton.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,@skeleton[0,0])
+    # @skeleton.display_format_alpha
   end
   def detect_click_window(event)
     @enable or return false
@@ -55,6 +55,9 @@ class DragWindow < BaseWindow
     
     @drag_x=@win_x+@border
     @drag_y=@win_y
+    
+    @title_x=@drag_x+(@drag_w-@title_pic.w)/2
+    @title_y=@drag_y+1
   end
   def close
     super

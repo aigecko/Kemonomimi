@@ -100,24 +100,24 @@ class StatusWindow < DragWindow
       end
       return false
     end
-	def detect_undo_plus
-	  x,y,* =SDL::Mouse.state
+    def detect_undo_plus
+      x,y,* =SDL::Mouse.state
       if x.between?(@plus_x,@plus_x+@plus_w)&&
          y.between?(@plus_y,@plus_y+@plus_h)
-		if @plus_val>1
-		  @plus_val-=1
+        if @plus_val>1
+          @plus_val-=1
           return true
-		elsif @plus_val==1
-		  @plus_val=0
-		  @click_plus=false
-		  return true
-		else
-		  @click_plus=false
-		  return false
-		end
+        elsif @plus_val==1
+          @plus_val=0
+          @click_plus=false
+          return true
+        else
+          @click_plus=false
+          return false
+        end
       end
       return false
-	end
+    end
     def update_coord(win_x,win_y)
       @x=win_x
       @y=win_y
@@ -126,8 +126,8 @@ class StatusWindow < DragWindow
     def any_value_plus?
 	  return @plus_val>0 ? true : false
 	end
-	def sure2plus      
-	  attrib=Game.player.gain_attrib @name => @plus_val
+    def sure2plus      
+      attrib=Game.player.gain_attrib @name => @plus_val
       @plus_val=0
       @click_plus=false
       @value=nil
@@ -140,43 +140,43 @@ class StatusWindow < DragWindow
 	  update
       return val
     end
-    def draw_back(dst=Screen.render)
-      dst.fill_rect(@str_back_x,@str_back_y,@str_back_w,@str_back_h,Color[:attrib_str])
-      dst.fill_rect(@val_back_x,@val_back_y,@val_back_w,@val_back_h,Color[:attrib_val])
-      @str_pic.draw(@str_font_x,@str_font_y,dst)
+    def draw_back
+      Screen.draw_rect(@str_back_x,@str_back_y,@str_back_w,@str_back_h,Color[:attrib_str],true,255)
+      Screen.draw_rect(@val_back_x,@val_back_y,@val_back_w,@val_back_h,Color[:attrib_val],true,255)
+      @str_pic.draw(@str_font_x,@str_font_y)
     end
     def draw
       if @plus_pic
-        Screen.fill_rect(@plus_x,@plus_y,@plus_w,@plus_h,[125,125,125])
+        Screen.draw_rect(@plus_x,@plus_y,@plus_w,@plus_h,[125,125,125],true,255)
       end
       @val_pic.draw(@val_font_x,@val_font_y)
     end
   end
   class Button
     def initialize(str,name,x,y)
-	  @str=str
+      @str=str
       @name=name
-	  @x=x
-	  @y=y
-	  @str_pic=Font.render_solid(str,20,*Color[:attrib_font])
-	  @w,@h=@str_pic.w,@str_pic.h
-	end
+      @x=x
+      @y=y
+      @str_pic=Font.render_solid(str,20,*Color[:attrib_font])
+      @w,@h=@str_pic.w,@str_pic.h
+    end
     def update_coord(x,y)
       @x=x
       @y=y
     end
-	def detect_click(x,y)
-	  if x.between?(@x,@x+@w)&&
-	     y.between?(@y,@y+@h)
-		return true
+    def detect_click(x,y)
+      if x.between?(@x,@x+@w)&&
+        y.between?(@y,@y+@h)
+        return true
       else
-	    return false
-	  end
-	end
-	def draw
-	  Screen.fill_rect(@x,@y,@w,@h,Color[:attrib_val])
-	  @str_pic.draw(@x,@y)
-	end
+        return false
+      end
+    end
+    def draw
+      Screen.draw_rect(@x,@y,@w,@h,Color[:attrib_val],true,255)
+      @str_pic.draw(@x,@y)
+    end
   end
 end
 class StatusWindow
@@ -185,18 +185,17 @@ class StatusWindow
     win_x,win_y=10,50
     super(win_x,win_y,win_w,win_h)
     @bars=[]
-	@buttons={}
+    @buttons={}
     title_initialize('人物狀態')
   end
   def pic_initialize
-    surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
-    draw(surface)
-    draw_title(surface)
-    @bars.each{|bar| bar.draw_back(surface)}
+    # surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
+    # draw(surface)
+    # draw_title(surface)
     
-    @skeleton=surface.copy_rect(@win_x,@win_y,@win_w,@win_h)
-    @skeleton.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,@skeleton[0,0])
-    @skeleton.display_format_alpha
+    # @skeleton=surface.copy_rect(@win_x,@win_y,@win_w,@win_h)
+    # @skeleton.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,@skeleton[0,0])
+    # @skeleton.display_format_alpha
   end
   def coord_init
     @coord={}
@@ -207,29 +206,27 @@ class StatusWindow
       @coord[sym]=[@win_x+90+@border,@win_y+75+i*20]
     }
     @coord[:maxhp]=[@win_x+@border,@win_y+25]
-	@coord[:maxsp]=[@win_x+@border,@win_y+45]
-	
-	@coord[:block]=[@win_x+@border,@win_y+185]
+    @coord[:maxsp]=[@win_x+@border,@win_y+45]
+
+    @coord[:block]=[@win_x+@border,@win_y+185]
     @coord[:dodge]=[@win_x+@border+75,@win_y+185]
     
     @coord[:wlkspd]=[@win_x+@border,@win_y+215]
     @coord[:atkspd]=[@win_x+@border,@win_y+235]
     
     @coord[:extra]=[@win_x+@border+70,@win_y+215]
-	
-	@coord[:button_check]=[@win_x+@border+119,@win_y+240]
-	@coord[:button_close]=[@win_x+@border+70,@win_y+240]
+
+    @coord[:button_check]=[@win_x+@border+119,@win_y+240]
+    @coord[:button_close]=[@win_x+@border+70,@win_y+240]
   end
   def start_init
     coord_init
     [:str,:con,:int,:wis,:agi].each{|sym|
       @bars<<Bar.new(sym,*@coord[sym],:plus)
     }
-	[:maxhp,:maxsp].each{|sym|
-	  @bars<<Bar.new(sym,*@coord[sym],:long)
-	}
-	
-	
+    [:maxhp,:maxsp].each{|sym|
+      @bars<<Bar.new(sym,*@coord[sym],:long)
+    }
     [:atk,:def,:matk,:mdef,:ratk,:wlkspd,:atkspd].each{|sym|
       @bars<<Bar.new(sym,*@coord[sym],:short)
     }
@@ -238,31 +235,31 @@ class StatusWindow
     }
     @bars<<Bar.new(:extra,*@coord[:extra],:extra)
     
-	button_str={
-	  button_check:'確定',
-	  button_close:'關閉'
-	}
-	[:button_check,:button_close].each{|sym|
-	  @buttons[sym]=Button.new(button_str[sym],sym,*@coord[sym])
-	}
-	get_active_button
-	pic_initialize    
+    button_str={
+      button_check:'確定',
+      button_close:'關閉'
+    }
+    [:button_check,:button_close].each{|sym|
+      @buttons[sym]=Button.new(button_str[sym],sym,*@coord[sym])
+    }
+    get_active_button
+    pic_initialize
     def start_init;end
   end
   def interact
     attrib=Game.player.attrib
     @bars.each{|bar| bar.update}
-	get_active_button
+    get_active_button
     Event.each{|event|
       case event
       when Event::MouseButtonDown
         case event.button
         when SDL::Mouse::BUTTON_LEFT		  
-		  detect_click_button(event.x,event.y)
+          detect_click_button(event.x,event.y)
           attrib[:extra]>0 or next
           detect_click_plus
-		when SDL::Mouse::BUTTON_RIGHT
-		  detect_undo_plus(attrib)
+        when SDL::Mouse::BUTTON_RIGHT
+          detect_undo_plus(attrib)
         end
       when Event::MouseMotion
         keep_drag(event.x,event.y)
@@ -276,12 +273,12 @@ class StatusWindow
   end
   def get_active_button
     @active_check=false
-	@bars.take(5).each{|bar|
-	  if bar.any_value_plus?	    
-	    @active_check=true
-	    break
-	  end
-	}
+    @bars.take(5).each{|bar|
+      if bar.any_value_plus?	    
+        @active_check=true
+        break
+      end
+    }
   end
   def detect_click_plus
     @bars.take(5).each{|bar|
@@ -301,12 +298,12 @@ class StatusWindow
   end
   def detect_click_button(x,y)
     if @active_check
-	  @buttons[:button_check].detect_click(x,y) and
-	  @bars.take(5).each{|bar| bar.sure2plus}
-	end
-	if @buttons[:button_close].detect_click(x,y)
-	  close
-	end
+      @buttons[:button_check].detect_click(x,y) and
+      @bars.take(5).each{|bar| bar.sure2plus}
+    end
+    if @buttons[:button_close].detect_click(x,y)
+      close
+    end
   end
   def update_coord
     super
@@ -316,26 +313,25 @@ class StatusWindow
   end
   def close
     super
-	point=0
+    point=0
     @bars.take(5).each{|bar| point+=bar.not2plus}
     Game.player.attrib[:extra]+=point
-	@active_check=false
+    @active_check=false
   end
   def draw_button
     if @active_check
-	  @buttons[:button_check].draw
-	end
-	@buttons[:button_close].draw
-  end
-  def draw(dst)
-    super(dst)
-    def draw
-      @skeleton.draw(@win_x,@win_y)
-      @bars.each{|bar|
-        bar.update
-        bar.draw
-      }
-      draw_button
+      @buttons[:button_check].draw
     end
+    @buttons[:button_close].draw
+  end
+  def draw
+    super
+    draw_title
+    @bars.each{|bar|
+      bar.update
+      bar.draw_back
+      bar.draw
+    }
+    draw_button
   end
 end

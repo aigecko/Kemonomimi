@@ -86,10 +86,13 @@ public
       @@skeleton[:loca4].draw(@win_x,y,dst)
       @@skeleton[:loca6].draw(@right_margin,y,dst)
     end
-    dst.fill_rect(@win_x+@ske_w,@win_y+@ske_h,
+    r=(@@skeleton[:loca5][0,0]&0xff0000)>>16
+    g=(@@skeleton[:loca5][0,0]&0xff00)>>8
+    b=@@skeleton[:loca5][0,0]&0xff
+    dst.draw_rect(@win_x+@ske_w,@win_y+@ske_h,
                   @row_draw_times<<@ske_mv,
                   @column_draw_times<<@ske_mv,
-                  @@skeleton[:loca5][0,0])
+                  r|g<<8|b<<16,true,255)
     @@skeleton[:loca8].draw(@right_margin-@ske_w,@win_y,dst)
     @@skeleton[:loca2].draw(@right_margin-@ske_w,@down_margin,dst)
     if @win_y<@down_margin-@ske_h

@@ -61,45 +61,43 @@ class EquipWindow < DragWindow
     @click_equip_y=nil
     @show_equip_detail=false
   end
-  def draw(dst)
-    super(dst)
+  def draw
+    dst=Screen.render
+    super
     draw_title(dst)
     (0...@Parts.size).each{|n|
-       dst.fill_rect(@win_x+10,@win_y+22+n*27,26,26,Color[:equip_pic_back])    
-       dst.fill_rect(@win_x+36,@win_y+22+n*27,110,26,Color[:equip_str_back])
+       dst.draw_rect(@win_x+10,@win_y+22+n*27,26,25,Color[:equip_pic_back],true,255)    
+       dst.draw_rect(@win_x+36,@win_y+22+n*27,110,25,Color[:equip_str_back],true,255)
     }
-    def draw
-      @skeleton.draw(@win_x,@win_y)
-      
-      @click_equip_y and
-      Screen.fill_rect(@win_x+10,@win_y+22+@click_equip_y*27,26,26,Color[:click_box_back])
-      
-      draw_x,draw_y=@win_x+39,@win_y+27
-      icon_x=@win_x+11
-      @equip.each{|part,equip|
-        if equip
-          equip.draw_name(draw_x,draw_y)
-          equip.draw(icon_x,draw_y-4)
-        else
-          Font.draw_solid(@part_table[part],15,draw_x,draw_y,*Color[:part_str_font])
-        end
-        draw_y+=27
-      }
-      
-      if @click_equip_y&&@show_equip_detail
-        unless @equip[@Parts[@click_equip_y]]
-          @show_equip_detail=@click_equip_y=nil
-          return
-        end
-        equip=@equip[@Parts[@click_equip_y]]
-        draw_x,draw_y=@win_x+10,@win_y+22+@click_equip_y*27
-        if @click_equip_y>5
-          draw_y=equip.draw_detail(draw_x,draw_y,:above)
-        else
-          draw_y=equip.draw_detail(draw_x,draw_y,:below)
-        end
-        equip.draw_comment(draw_x,draw_y)
+    
+    @click_equip_y and
+    Screen.draw_rect(@win_x+10,@win_y+22+@click_equip_y*27,26,26,Color[:click_box_back],true,255)
+    
+    draw_x,draw_y=@win_x+39,@win_y+27
+    icon_x=@win_x+11
+    @equip.each{|part,equip|
+      if equip
+        equip.draw_name(draw_x,draw_y)
+        equip.draw(icon_x,draw_y-4)
+      else
+        Font.draw_solid(@part_table[part],15,draw_x,draw_y,*Color[:part_str_font])
       end
+      draw_y+=27
+    }
+    
+    if @click_equip_y&&@show_equip_detail
+      unless @equip[@Parts[@click_equip_y]]
+        @show_equip_detail=@click_equip_y=nil
+        return
+      end
+      equip=@equip[@Parts[@click_equip_y]]
+      draw_x,draw_y=@win_x+10,@win_y+22+@click_equip_y*27
+      if @click_equip_y>5
+        draw_y=equip.draw_detail(draw_x,draw_y,:above)
+      else
+        draw_y=equip.draw_detail(draw_x,draw_y,:below)
+      end
+      equip.draw_comment(draw_x,draw_y)
     end
   end
 end
