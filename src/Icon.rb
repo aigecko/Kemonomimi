@@ -72,7 +72,7 @@ class Icon
     end
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
     img.display_format
-    gen and img=Texture.new(img)
+    gen and img=img.to_texture
     return img
   end
 end

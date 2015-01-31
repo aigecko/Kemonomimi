@@ -151,15 +151,10 @@ class Input
     icons={}
     
     [:status,:item,:equip,:save,:tool,:skill].each{|name|
-      icons[name]=Icon.load("#{path}/MI_#{name}.png:[0,0]B[255,255,0]",false)
-      icons[name]=Texture.new icons[name]
-    } 
-    # icons.each_value{|pic|
-      # p pic
-      # pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-      # pic.display_format
-      # pic.gen_texture
-    # }
+      icons[name]=Icon.load(
+        "#{path}/MI_#{name}.png:[0,0]B[255,255,0]",false
+      ).to_texture
+    }
 
     return icons
   end

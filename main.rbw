@@ -245,7 +245,6 @@ class Game
         Gl::glEnd
       }
       $queue.clear
-      # Screen.flip
       SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
       #p delta_time

@@ -10,7 +10,6 @@ class Texture
     @surface.fill_rect(0,0,@w,@h,[0,0,0])
     SDL::Surface.blit(surface,0,0,@origin_w,@origin_h,@surface,0,0)
     @surface.set_color_key(SDL::SRCCOLORKEY,surface.colorkey)
-    # surface.draw(0,0,@surface)
     
     @id=Gl::glGenTextures(1)
     Gl::glBindTexture(Gl::GL_TEXTURE_2D,@id[0])
@@ -24,17 +23,7 @@ class Texture
       Gl::GL_RGBA,Gl::GL_UNSIGNED_BYTE,
       @surface.pixels)
   end
-  # def [](x,y)
-    # return @surface[x,y]
-  # end
-  # def set_color_key(*arg)
-    # @surface.set_color_key(*arg)
-  # end
-  # def display_format
-  # end
   def draw(dst_x,dst_y)
-    #@surface.draw(dst_x,dst_y)
-    #$queue<<[@id[0],dst_x,dst_y,@w-8,@h-8]
     $queue<<[@id[0],dst_x,dst_y,@origin_w,@origin_h,0]
   end
 end
