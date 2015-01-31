@@ -20,7 +20,7 @@ class Icon
       @icon_set[name]=Surface.load(name)
     }
     Dir.chdir(currentDir)
-    @base_w=@base_h=32
+    @base_w=@base_h=24
   end
   def self.load(str,gen=true)
     info=str.match(@pattern)
@@ -47,7 +47,6 @@ class Icon
     end
     base=SDL::Surface.new SDL::SRCCOLORKEY|SDL::OPENGLBLIT,@base_w,@base_h,32,
       0xff,0xff00,0xff0000,0xff000000
-    #base=Surface.new(Surface.flag,@base_w,@base_h,Screen.format)
     if info[:base]
       base.fill_rect(0,0,@base_w,@base_h,[
         info[:baseR].to_i,
@@ -73,7 +72,7 @@ class Icon
     end
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
     img.display_format
-    gen and img.gen_texture
+    gen and img=Texture.new(img)
     return img
   end
 end

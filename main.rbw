@@ -14,7 +14,7 @@ else
   require_relative "src/win32/Surface_Blend"
 end
 my_lib=%w(Color Screen Config Message Icon
-          Font Input Extension Skill Mouse)
+          Font Input Extension Skill Mouse Texture)
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
@@ -75,8 +75,6 @@ class Game
     SDL::GL.set_attr SDL::GL_BLUE_SIZE,8
     SDL::GL.set_attr SDL::GL_DEPTH_SIZE,24
     SDL::GL.set_attr SDL::GL_DOUBLEBUFFER,1
-    
-    
   end
   def self.font_initialize
     SDL::TTF.init
@@ -88,14 +86,8 @@ class Game
                LevelWindow BarsWindow ButtonWindow)
     @window=Hash.new
     windows.each{|window|
-     # begin
-        symbol=window.to_sym
-        @window[symbol]=Object.const_get(symbol).new
-      # rescue => e
-        # p window
-        # Message.show_backtrace(e)
-        # exit
-      # end
+      symbol=window.to_sym
+      @window[symbol]=Object.const_get(symbol).new
     }
     @window[:MenuWindow].open
   end
