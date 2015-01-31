@@ -119,7 +119,7 @@ class Actor
    when :mage
       add_class_skill(:defense,:snow_shield,
         name:'吹雪護盾',type: :switch_attack_defense,
-        icon:'./rc/icon/skill/2011-12-23_3-054.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-054.gif:[0,0]B[255,0,0]',
         base: :snow_shield,table:[0,[50,1]],
         comment:'開啟後將#{@table[@level][0]}%傷害轉換成1/#{@table[@level][1]}的法力消耗')
       add_class_skill(:defense,:freezing_rain,
@@ -130,7 +130,7 @@ class Actor
         comment:'降低攻擊者#{@table[@level][0]}+#{@data[:coef]}int百分比的近攻魔攻持續#{@table[@level][1]}秒')
       add_class_skill(:defense,:ice_body,
         name:'寒冰之軀',type: :active,consum: 40,cd: 30,
-        icon:'./rc/icon/skill/2011-12-23_3-187.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
         base: :ice_body,table:[0,[20,5,20]],
         data:{icon:'./rc/icon/skill/2011-12-23_3-187.gif'},
         comment:'開啟後提升#{@table[@level][0]}雙防及#{@table[@level][1]}%魔攻持續#{@table[@level][2]}秒')
@@ -141,13 +141,13 @@ class Actor
         comment:'普攻附加#{@table[@level][0]}+#{@table[@level][1]}*int魔傷')
       add_class_skill(:attack,:itegumo_erupt,
         name:'凍雲爆發',type: :append,
-        icon:'./rc/icon/skill/2011-12-23_3-057.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-057.gif:[0,0]B[255,0,0]',
         base: :itegumo_erupt,table:[0,[20,20,6]],
         comment:'普攻#{@table[@level][0]}%爆發範圍強緩#{@table[@level][1]}%跑速攻速#{@table[@level][2]}秒')
       
       add_skill(:ice_arrow,
         name:'寒冰球',type: :active,
-        icon:'./rc/icon/skill/2011-12-23_3-053.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
         base: :missile,consum: 5,cd: 3,table:[0,[100]],
         data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
@@ -155,7 +155,7 @@ class Actor
         comment:'對指定地點發射冰塊造成#{@table[@level][0]}+#{@data[:coef][:matk]}matk魔法傷害')
       add_skill(:ice_wave,
         name:'寒霜結界',type: :append,
-        icon:'./rc/icon/skill/2011-12-23_3-052.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
         base: :ice_wave,consum: 0,table:[0,20],
         data:{coef:{int: 0.8}},
         comment:'魔法命中造成#{@table[@level]}+#{@data[:coef][:int]}int範圍絕對傷害')

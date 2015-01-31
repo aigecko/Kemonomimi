@@ -195,11 +195,11 @@ class Map
     update_bullet
   end
   def update_actor
-    false and
-    if rand(1000)>996
+    true and
+    if rand(1000)>990
       enemy=Enemy.new("slime","none",
                        [rand(1000),0,rand(400)],
-                       {exp:100000,maxhp:2000,},
+                       {exp:100000},
                        "mon_004r")
       @enemy<<enemy
     end

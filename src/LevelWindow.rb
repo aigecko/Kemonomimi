@@ -15,7 +15,7 @@ class LevelWindow < BaseWindow
 private
   def level_initialize(player)
     @level=player.attrib[:level]
-    @level_pic=Font.render_solid("Level: #{@level}",15,*Color[:level_win_font])
+    @level_pic=Font.render_texture("Level: #{@level}",15,*Color[:level_win_font])
     
     @level_draw_x=@win_x+@border
     @level_draw_y=@win_y+@border
@@ -23,7 +23,7 @@ private
   def race_initialize(player)
     @race=player.race
     @race_str=Actor.race_table[player.race]
-    @race_pic=Font.render_solid(@race_str,15,*Color[:level_win_font])
+    @race_pic=Font.render_texture(@race_str,15,*Color[:level_win_font])
     
     @race_draw_x=@level_draw_x
     @race_draw_y=@level_draw_y+@level_pic.h
@@ -31,9 +31,7 @@ private
   def class_initialize(player)
     @class=player.class
     @class_str=Actor.class_table[player.class]
-    # @class_pic=Font.render_solid(@class_str,15,*Color[:level_win_font])
     @class_pic=Font.render_texture(@class_str,15,*Color[:level_win_font])
-    # @class_pic=FontTexture.new @class_pic
     
     @class_draw_x=@race_draw_x+@race_pic.w
     @class_draw_y=@race_draw_y
@@ -43,28 +41,19 @@ public
     player=Game.player
     if player.attrib[:level]!=@level
       level_initialize(player)
-      @need2draw=true
     end
     if player.race!=@race
       race_initialize(player)
-      @need2draw=true
     end
     if player.class!=@class
       class_initialize(player)
-      @need2draw=true
     end
   end
-  def open
-    super
-    @need2draw=true
-  end
   def draw
-    #@need2draw or return
     draw_corner(:clear)
     super
     @level_pic.draw(@level_draw_x,@level_draw_y)
     @race_pic.draw(@race_draw_x,@race_draw_y)
     @class_pic.draw(@class_draw_x,@class_draw_y)
-    @need2draw=false
   end
 end

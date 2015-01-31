@@ -8,8 +8,6 @@ class BaseWindow
     @win_h=h
     @win_x=x
     @win_y=y
-    #@
-    #pic_init
     stat_init
   end
 private
@@ -27,10 +25,10 @@ private
     @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
     @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
     @@colorkey=@@skeleton[:loca7][0,0]
-	  @@skeleton.each_value{|ske|
-	  ske.set_color_key(SDL::SRCCOLORKEY,@@colorkey)
-	  ske.display_format_alpha
-	}
+    @@skeleton.each_value{|ske|
+      ske.set_color_key(SDL::SRCCOLORKEY,@@colorkey)
+      ske.display_format_alpha
+    }
   end
   self.init
   def stat_init

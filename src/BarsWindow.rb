@@ -19,10 +19,12 @@ class BarsWindow < BaseWindow
       @color_sym=:"bar_#{@type}"
     end
     def draw(percent)
-      Screen.fill_rect(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym])
-      Screen.fill_rect(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym])
+      # Screen.fill_rect(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym])
+      Rectangle.new(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym]).draw(-0.3)
+      # Screen.fill_rect(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym])
+      Rectangle.new(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym]).draw(-0.4)
       bar_w=@bar_w*percent
-      Screen.fill_rect(@bar_x,@bar_y,bar_w,@bar_h,Color[@color_sym])
+      Rectangle.new(@bar_x,@bar_y,bar_w,@bar_h,Color[@color_sym]).draw(-0.5)
     end
   end
 end
@@ -73,7 +75,7 @@ class BarsWindow
       @#{p}_font.clear
       ["#{p.upcase}: ","\#{@#{p}}","/","\#{@max#{p}}",
        " %.#{p!="exp" ? 1 : 3}f"%(@#{p}_percent*100),"%"].each{|str|
-        @#{p}_font<<Font.render_solid(str,@font_size,*Color[:font_#{p}])
+        @#{p}_font<<Font.render_texture(str,@font_size,*Color[:font_#{p}])
       }
     end
   end
@@ -86,7 +88,7 @@ class BarsWindow
   end
   }
   end
-  def value_init    
+  def value_init
     hp_update(@attrib)
     sp_update(@attrib)
     exp_update(@attrib)

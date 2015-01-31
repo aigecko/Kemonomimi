@@ -14,7 +14,8 @@ else
   require_relative "src/win32/Surface_Blend"
 end
 my_lib=%w(Color Screen Config Message Icon
-          Font Input Extension Skill Mouse Texture)
+          Font Input Extension Skill Mouse
+          Texture Drawable)
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
@@ -226,29 +227,25 @@ class Game
       
       draw
       #Gl::glDisable Gl::GL_BLEND
-      $queue.each{|pack|
-        id,x,y,w,h,vx,vy=*pack
-        Gl::glBindTexture(Gl::GL_TEXTURE_2D,id)
-        Gl::glBegin(Gl::GL_QUADS)
+      $queue.each{|text|
+        text.display
+        # id,x,y,w,h,vx,vy=*text.display
+        # Gl::glBindTexture(Gl::GL_TEXTURE_2D,id)
+        # Gl::glBegin(Gl::GL_QUADS)
         # Gl::glTexCoord2d(0,0)
-        Gl::glTexCoord2d(0,0)
-        Gl::glVertex3f -1+(x/320.0),1-y/240.0+0,0
-        # Gl::glTexCoord2d(1,0)  
-        Gl::glTexCoord2d(vx,0)
-        Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0+0,0
-        # Gl::glTexCoord2d(1,1)
-        Gl::glTexCoord2d(vx,vy)
-        Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0-(h)/240.0,0
-        # Gl::glTexCoord2d(0,1)
-        Gl::glTexCoord2d(0,vy)
-        Gl::glVertex3f -1+(x/320.0),1-y/240.0-(h)/240.0,0
-        Gl::glEnd
+        # Gl::glVertex3f x,y,0
+        # Gl::glTexCoord2d(vx,0)
+        # Gl::glVertex3f x+w,y,0
+        # Gl::glTexCoord2d(vx,vy)
+        # Gl::glVertex3f x+w,y-h,0
+        # Gl::glTexCoord2d(0,vy)
+        # Gl::glVertex3f x,y-h,0
+        # Gl::glEnd
       }
       $queue.clear
-      # Screen.flip
       SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
-      #p delta_time
+      delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

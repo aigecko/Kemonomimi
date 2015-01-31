@@ -19,7 +19,7 @@ class Color
       bar_hp_back:[255,220,215],
       bar_hp_leave:[236,159,159],
       bar_hp:[255,73,47],
-      font_hp:[105,16,16],
+      font_hp:[70,0,0],
       
       bar_sp_back:[179,228,255],
       bar_sp_leave:[140,192,255],
@@ -29,7 +29,7 @@ class Color
       bar_exp_back:[255,249,170],
       bar_exp_leave:[255,228,121],
       bar_exp:[236,189,0],
-      font_exp:[66,64,0],
+      font_exp:[50,50,0],
       
       icon_light:[128,191,255],
       icon_dark:[9,132,255],
