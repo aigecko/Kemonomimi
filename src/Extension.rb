@@ -67,7 +67,7 @@ class SDL::Surface
     SDL::Surface.transform_blit(self,dst,0,scale_x,scale_y,0,0,dst_x,dst_y,0)
   end
   def to_texture
-    return Texture.new(self)
+    return SurfaceTexture.new(self)
   end
   def self.new_2N_length(w,h)
     w=2**(Math.log2(w).ceil.to_i)

@@ -234,13 +234,13 @@ class Game
         Gl::glTexCoord2d(0,0)
         Gl::glVertex3f -1+(x/320.0),1-y/240.0+0,0
         # Gl::glTexCoord2d(1,0)  
-        Gl::glTexCoord2d(0.75,0)
+        Gl::glTexCoord2d(vx,0)
         Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0+0,0
         # Gl::glTexCoord2d(1,1)
-        Gl::glTexCoord2d(0.75,0.75)
+        Gl::glTexCoord2d(vx,vy)
         Gl::glVertex3f -1+(x/320.0)+(w)/320.0,1-y/240.0-(h)/240.0,0
         # Gl::glTexCoord2d(0,1)
-        Gl::glTexCoord2d(0,0.75)
+        Gl::glTexCoord2d(0,vy)
         Gl::glVertex3f -1+(x/320.0),1-y/240.0-(h)/240.0,0
         Gl::glEnd
       }

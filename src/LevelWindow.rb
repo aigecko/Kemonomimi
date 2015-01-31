@@ -31,8 +31,9 @@ private
   def class_initialize(player)
     @class=player.class
     @class_str=Actor.class_table[player.class]
-    @class_pic=Font.render_solid(@class_str,15,*Color[:level_win_font])
-    @class_pic=Texture.new @class_pic,false
+    # @class_pic=Font.render_solid(@class_str,15,*Color[:level_win_font])
+    @class_pic=Font.render_texture(@class_str,15,*Color[:level_win_font])
+    # @class_pic=FontTexture.new @class_pic
     
     @class_draw_x=@race_draw_x+@race_pic.w
     @class_draw_y=@race_draw_y

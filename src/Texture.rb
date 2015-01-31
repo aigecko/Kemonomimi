@@ -1,18 +1,16 @@
 #coding: utf-8
+class Texture;end
+require_relative 'FontTexture'
+require_relative 'SurfaceTexture'
 class Texture
-  def initialize(surface,preproc=true)
+  def initialize(surface)
     @origin_w,@origin_h=surface.w,surface.h
-    if preproc
-      @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
-      @surface.set_color_key(SDL::SRCCOLORKEY,surface.colorkey)
-      @surface.fill_rect(0,0,@surface.w,@surface.h,[0,0,0])
-      SDL::Surface.blit(surface,0,0,@origin_w,@origin_h,@surface,0,0)
-    else
-      @surface=surface
-    end
-    p @w=@surface.w
-    p @h=@surface.h
-    
+    @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
+    @w=@surface.w
+    @h=@surface.h
+    gen_texture
+  end
+  def gen_texture
     @id=Gl::glGenTextures(1)
     Gl::glBindTexture(Gl::GL_TEXTURE_2D,@id[0])
     for x in 0...@surface.w

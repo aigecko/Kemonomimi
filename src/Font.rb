@@ -40,6 +40,9 @@ class Font
     end
     return @cache[size][color][text]
   end
+  def self.render_texture(text,size,r,g,b)
+    return FontTexture.new(self.render_solid(text,size,r,g,b))
+  end
   def self.draw_solid(text,size,x,y,r,g,b,dst=Screen.render)
     pic=self.render_solid(text,size,r,g,b)
     pic.draw(x,y,dst)
