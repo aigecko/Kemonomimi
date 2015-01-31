@@ -227,7 +227,7 @@ class Game
       draw
       #Gl::glDisable Gl::GL_BLEND
       $queue.each{|pack|
-        id,x,y,w,h=*pack
+        id,x,y,w,h,vx,vy=*pack
         Gl::glBindTexture(Gl::GL_TEXTURE_2D,id)
         Gl::glBegin(Gl::GL_QUADS)
         # Gl::glTexCoord2d(0,0)
@@ -245,6 +245,7 @@ class Game
         Gl::glEnd
       }
       $queue.clear
+      # Screen.flip
       SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
       #p delta_time

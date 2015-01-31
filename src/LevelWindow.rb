@@ -32,6 +32,7 @@ private
     @class=player.class
     @class_str=Actor.class_table[player.class]
     @class_pic=Font.render_solid(@class_str,15,*Color[:level_win_font])
+    @class_pic=Texture.new @class_pic,false
     
     @class_draw_x=@race_draw_x+@race_pic.w
     @class_draw_y=@race_draw_y
@@ -57,7 +58,7 @@ public
     @need2draw=true
   end
   def draw
-    @need2draw or return
+    #@need2draw or return
     draw_corner(:clear)
     super
     @level_pic.draw(@level_draw_x,@level_draw_y)
