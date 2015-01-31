@@ -201,7 +201,7 @@ class Game
     exit
   end
   def self.show
-    Gl::glViewport( 0, 0, 640, 480 );
+    Gl::glViewport( 0, 0, Game.Width, Game.Height );
     Gl::glEnable Gl::GL_TEXTURE_2D
     Gl::glTexParameteri(Gl::GL_TEXTURE_2D,
       Gl::GL_TEXTURE_MAG_FILTER, Gl::GL_LINEAR);
@@ -226,26 +226,13 @@ class Game
       Gl::glClear(Gl::GL_COLOR_BUFFER_BIT|Gl::GL_DEPTH_BUFFER_BIT);
       
       draw
-      #Gl::glDisable Gl::GL_BLEND
       $queue.each{|text|
         text.display
-        # id,x,y,w,h,vx,vy=*text.display
-        # Gl::glBindTexture(Gl::GL_TEXTURE_2D,id)
-        # Gl::glBegin(Gl::GL_QUADS)
-        # Gl::glTexCoord2d(0,0)
-        # Gl::glVertex3f x,y,0
-        # Gl::glTexCoord2d(vx,0)
-        # Gl::glVertex3f x+w,y,0
-        # Gl::glTexCoord2d(vx,vy)
-        # Gl::glVertex3f x+w,y-h,0
-        # Gl::glTexCoord2d(0,vy)
-        # Gl::glVertex3f x,y-h,0
-        # Gl::glEnd
       }
       $queue.clear
       SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
-      delta_time
+      p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end
