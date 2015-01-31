@@ -2,12 +2,8 @@
 class Texture
   def initialize(surface)
     @origin_w,@origin_h=surface.w,surface.h
-    @w=2**(Math.log2(@origin_w).ceil.to_i)
-    @h=2**(Math.log2(@origin_h).ceil.to_i)
-    @surface=SDL::Surface.new(SDL::SRCCOLORKEY|SDL::OPENGLBLIT,
-      @w,@h,32,
-      0xff,0xff00,0xff0000,0xff000000)
-    @surface.fill_rect(0,0,@w,@h,[0,0,0])
+    @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
+    @surface.fill_rect(0,0,@surface.w,@surface.h,[0,0,0])
     SDL::Surface.blit(surface,0,0,@origin_w,@origin_h,@surface,0,0)
     @surface.set_color_key(SDL::SRCCOLORKEY,surface.colorkey)
     
