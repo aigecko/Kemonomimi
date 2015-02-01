@@ -1,10 +1,17 @@
 #coding: utf-8
 class Drawable
   def initialize(x,y,color)
-    @x,@y=x,y
-    @x=-1+@x/(Game.Width.to_f/2)
-    @y=1-@y/(Game.Height.to_f/2)
-    
+    self.x=x
+    self.y=y
+    self.color=color
+  end
+  def x=(x)
+    @x=-1+x/(Game.Width.to_f/2)
+  end
+  def y=(y)
+    @y=1-y/(Game.Height.to_f/2)
+  end
+  def color=(color)
     @r,@g,@b=*color
     @r/=255.0
     @g/=255.0
@@ -16,12 +23,17 @@ class Drawable
   end
 end
 class Rectangle < Drawable
+  attr_reader :w,:h
   def initialize(x,y,w,h,color)
     super(x,y,color)
-    @w,@h=w,h
-   
-    @w/=(Game.Width.to_f/2)
-    @h/=(Game.Height.to_f/2)
+    self.w=w
+    self.h=h
+  end
+  def w=(w)
+    @w=w/(Game.Width.to_f/2)
+  end
+  def h=(h)
+    @h=h/(Game.Height.to_f/2)
   end
   def display
     Gl::glLoadIdentity
@@ -37,7 +49,7 @@ class Rectangle < Drawable
   end
 end
 class Line < Drawable
-  def initialize(x1,y1,x2,y2,color,width=1)
+  def initialize(x1,y1,x2,y2,color=[0,0,0],width=1)
     super(x1,y1,color)
     @x1,@y1=@x,@y
     @x2=-1+x2/(Game.Width.to_f/2)

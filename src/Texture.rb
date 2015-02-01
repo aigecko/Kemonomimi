@@ -30,6 +30,8 @@ class Texture
       Gl::GL_RGBA,Gl::GL_UNSIGNED_BYTE,
       @surface.pixels)
   end
+  def [](x,y);return @surface[x,y];end
+  def colorkey;return @surface.colorkey;end
   def w;return @origin_w;end
   def h;return @origin_h;end
   def destroy

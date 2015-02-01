@@ -212,7 +212,8 @@ class Game
     Gl::glEnable Gl::GL_BLEND
     Gl::glEnable Gl::GL_ALPHA_TEST
     Gl::glBlendFunc Gl::GL_SRC_ALPHA,Gl::GL_ONE_MINUS_SRC_ALPHA
-    Gl::glEnable(Gl::GL_DEPTH_TEST);
+    #dbg
+    #Gl::glEnable(Gl::GL_DEPTH_TEST);
 
     Gl::glDepthFunc(Gl::GL_LESS);
     Gl::glShadeModel(Gl::GL_SMOOTH);
@@ -232,7 +233,7 @@ class Game
       $queue.clear
       SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
-      p delta_time
+      #p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

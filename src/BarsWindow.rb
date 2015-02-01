@@ -17,14 +17,16 @@ class BarsWindow < BaseWindow
       @color_back_sym=:"bar_#{@type}_back"
       @color_leave_sym=:"bar_#{@type}_leave"
       @color_sym=:"bar_#{@type}"
+      
+      @back_bar=Rectangle.new(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym])
+      @leave_bar=Rectangle.new(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym])
+      @solid_bar=Rectangle.new(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_sym])
     end
     def draw(percent)
-      # Screen.fill_rect(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym])
-      Rectangle.new(@ske_x,@ske_y,@max_w,@max_h,Color[@color_back_sym]).draw(-0.3)
-      # Screen.fill_rect(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym])
-      Rectangle.new(@bar_x,@bar_y,@bar_w,@bar_h,Color[@color_leave_sym]).draw(-0.4)
-      bar_w=@bar_w*percent
-      Rectangle.new(@bar_x,@bar_y,bar_w,@bar_h,Color[@color_sym]).draw(-0.5)
+      @back_bar.draw
+      @leave_bar.draw
+      @solid_bar.w=@bar_w*percent
+      @solid_bar.draw
     end
   end
 end
