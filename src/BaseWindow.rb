@@ -52,26 +52,16 @@ private
   end
 public
   def close
-    @visible=false
-    @enable=false
+    @visible=@enable=false
   end
   def open
-    @visible=true
-    @enable=true
+    @visible=@enable=true
   end
   def close?
     not open?
   end
   def open?
-    if @visible and @enable
-      true
-    else
-      false
-    end
-  end
-  def pre_draw
-    range_x=(@win_x/32+1)..(@win_x+@win_w)/32
-    range_y=(@win_y/32+1)..(@win_y+@win_h)/32
+    return @visible&&@enable
   end
   def draw(dst=Screen.render)
     for row in 1..@row_draw_times-1

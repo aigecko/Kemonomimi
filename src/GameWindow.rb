@@ -14,9 +14,6 @@ class GameWindow < BaseWindow
     @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow]
     @drag_list.each{|window|
       @windows[window]=Object.const_get(window).new
-      # eval %Q{
-        # @windows[:#{window}]=#{window}.new
-      # }
     }
     @contral=true
     

@@ -29,7 +29,8 @@ class Input
       exit
     end
     begin
-      @pic=BigTexture.new(Input.load_pic(path))
+      @pic=#BigTexture.new(
+        Input.load_pic(path)#)
     rescue SDL::Error
       Message.show(:title_load_failure)
       Message.show(:please_check_files)

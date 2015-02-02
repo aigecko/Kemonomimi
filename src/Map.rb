@@ -54,8 +54,8 @@ class Map
     @enemy=[]
     
     @friend_bullet=[]
-	  @enemy_bullet=[]
-	
+    @enemy_bullet=[]
+
     @friend_circle=[]
     @enemy_circle=[]
     

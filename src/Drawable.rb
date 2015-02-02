@@ -39,14 +39,16 @@ class Rectangle < Drawable
   def display
     glLoadIdentity
     glDisable GL_BLEND
+    glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
-    glColor3d @r,@g,@b
+    glColor4d @r,@g,@b,1.0
     glVertex3f @x,@y,@z
     glVertex3f @x+@w,@y,@z
     glVertex3f @x+@w,@y-@h,@z
     glVertex3f @x,@y-@h,@z
     glEnd
     glEnable GL_BLEND
+    glEnable GL_TEXTURE_2D
   end
 end
 class Line < Drawable
@@ -60,12 +62,14 @@ class Line < Drawable
   def display
     glLoadIdentity
     glDisable GL_BLEND
+    glDisable GL_TEXTURE_2D
     glLineWidth(@width)
     glBegin(GL_LINES)
-    glColor3d @r,@g,@b
+    glColor4d @r,@g,@b,1.0
     glVertex3f @x1,@y1,@z
     glVertex3f @x2,@y2,@z
     glEnd
     glEnable GL_BLEND
+    glEnable GL_TEXTURE_2D
   end
 end

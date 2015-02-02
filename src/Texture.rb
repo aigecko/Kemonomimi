@@ -53,8 +53,8 @@ class Texture
   def display
     id,x,y,w,h,vx,vy=*@data
     glBindTexture(GL_TEXTURE_2D,id)
+    glColor4d 1.0,1.0,1.0,1.0
     glBegin(GL_QUADS)
-    glColor3d 1.0,1.0,1.0
     glTexCoord2d(0,0)
     glVertex3f x,y,-1
     glTexCoord2d(vx,0)

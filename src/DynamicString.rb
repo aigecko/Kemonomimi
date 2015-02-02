@@ -10,7 +10,7 @@ class DynamicString
     end
     def draw(x,y)
       @w,@h=
-      Font.draw_solid(eval(@value,@binding).to_s,12,x,y,*Color[@color])
+      Font.draw_texture(eval(@value,@binding).to_s,12,x,y,*Color[@color])
     end
   end
   def initialize(str,color,binding)
@@ -20,7 +20,7 @@ class DynamicString
       if regexp=~str
         Variable.new(str,color,binding)
       else
-        Font.render_solid(str,12,*Color[color])
+        Font.render_texture(str,12,*Color[color])
       end
     }
   end
