@@ -7,7 +7,7 @@ class StatusWindow::Bar
   require_relative 'StatusWindow_MidBar'
   require_relative 'StatusWindow_LongBar'
   require_relative 'StatusWindow_ExtraBar'
-  def initialize(name,x,y,len)
+  def initialize(name,x,y)
     @name=name
     @str=@@attrib_table[name]
     @value=Game.player.attrib[@name]
@@ -15,7 +15,6 @@ class StatusWindow::Bar
     @x,@y=x,y
     
     @font_size=12
-    @len=len
     
     value_init
     pic_init

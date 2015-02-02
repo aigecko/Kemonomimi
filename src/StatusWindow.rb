@@ -44,18 +44,18 @@ class StatusWindow < DragWindow
   def start_init
     coord_init
     [:str,:con,:int,:wis,:agi].each{|sym|
-      @bars<<PlusBar.new(sym,*@coord[sym],:plus)
+      @bars<<PlusBar.new(sym,*@coord[sym])
     }
     [:maxhp,:maxsp].each{|sym|
-      @bars<<LongBar.new(sym,*@coord[sym],:long)
+      @bars<<LongBar.new(sym,*@coord[sym])
     }
     [:atk,:def,:matk,:mdef,:ratk,:wlkspd,:atkspd].each{|sym|
-      @bars<<ShortBar.new(sym,*@coord[sym],:short)
+      @bars<<ShortBar.new(sym,*@coord[sym])
     }
     [:block,:dodge].each{|sym|
-      @bars<<MidBar.new(sym,*@coord[sym],:mid)
+      @bars<<MidBar.new(sym,*@coord[sym])
     }
-    @bars<<ExtraBar.new(:extra,*@coord[:extra],:extra)
+    @bars<<ExtraBar.new(:extra,*@coord[:extra])
     
     button_str={
       button_check:'確定',

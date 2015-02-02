@@ -1,6 +1,7 @@
 #coding: utf-8
 class Drawable
   include Gl
+  @@max=255.0
   def initialize(x,y,color)
     self.x=x
     self.y=y
@@ -14,9 +15,10 @@ class Drawable
   end
   def color=(color)
     @r,@g,@b=*color
-    @r/=255.0
-    @g/=255.0
-    @b/=255.0
+    @r/=@@max
+    @g/=@@max
+    @b/=@@max
+    @a=(color[3]||@@max)/@@max
   end
   def draw(z=0)
     @z=z
@@ -38,16 +40,14 @@ class Rectangle < Drawable
   end
   def display
     glLoadIdentity
-    glDisable GL_BLEND
     glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
-    glColor4d @r,@g,@b,1.0
+    glColor4d @r,@g,@b,@a
     glVertex3f @x,@y,@z
     glVertex3f @x+@w,@y,@z
     glVertex3f @x+@w,@y-@h,@z
     glVertex3f @x,@y-@h,@z
     glEnd
-    glEnable GL_BLEND
     glEnable GL_TEXTURE_2D
   end
 end
@@ -61,15 +61,13 @@ class Line < Drawable
   end
   def display
     glLoadIdentity
-    glDisable GL_BLEND
     glDisable GL_TEXTURE_2D
     glLineWidth(@width)
     glBegin(GL_LINES)
-    glColor4d @r,@g,@b,1.0
+    glColor4d @r,@g,@b,@a
     glVertex3f @x1,@y1,@z
     glVertex3f @x2,@y2,@z
     glEnd
-    glEnable GL_BLEND
     glEnable GL_TEXTURE_2D
   end
 end

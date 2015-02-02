@@ -39,7 +39,7 @@ class Color
       attrib_font:[0,0,128],
       attrib_plus:[180,2,255],
       
-      drag_bar:[0,0,255],
+      drag_bar:[0,0,255,100],
       drag_title:[147,190,255,],
       
       item_tag_font:[22,66,148],

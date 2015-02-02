@@ -64,7 +64,7 @@ class EquipWindow < DragWindow
   def draw
     dst=Screen.render
     super
-    draw_title(dst)
+    draw_title
     (0...@Parts.size).each{|n|
        dst.draw_rect(@win_x+10,@win_y+22+n*27,26,25,Color[:equip_pic_back],true,255)    
        dst.draw_rect(@win_x+36,@win_y+22+n*27,110,25,Color[:equip_str_back],true,255)

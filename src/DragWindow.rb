@@ -6,15 +6,17 @@ class DragWindow < BaseWindow
     @drag_y=@win_y
     @drag_w=@win_w-@border*2
     @drag_h=20
+    
+    @drag_rect=Rectangle.new(@drag_x,@drag_y,@drag_w,@drag_h,Color[:drag_bar])
   end
   def title_initialize(title)
     @title=title
-    @title_pic=Font.render_solid(@title,@font_size,*Color[:drag_title])
+    @title_pic=Font.render_texture(@title,@font_size,*Color[:drag_title])
     
     @title_x=@drag_x+(@drag_w-@title_pic.w)/2
     @title_y=@drag_y+1
   end
-  def pic_initialize    
+  def pic_initialize
     #surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
     # draw(surface)
     # draw_title(surface)
@@ -53,8 +55,8 @@ class DragWindow < BaseWindow
     @right_margin=@win_x+@win_w-@ske_w
     @down_margin=@win_y+@win_h-@ske_h
     
-    @drag_x=@win_x+@border
-    @drag_y=@win_y
+    @drag_rect.x=@drag_x=@win_x+@border
+    @drag_rect.y=@drag_y=@win_y
     
     @title_x=@drag_x+(@drag_w-@title_pic.w)/2
     @title_y=@drag_y+1
@@ -81,11 +83,11 @@ class DragWindow < BaseWindow
     @win_x=x-@delta_x
     @win_y=y-@delta_y
   end
-  def draw(dst=Screen.render)
+  def draw
     super
-    dst.draw_rect(@drag_x,@drag_y,@drag_w,@drag_h,Color[:drag_bar],true,100)
+    @drag_rect.draw
   end
-  def draw_title(dst=Screen.render)
-    @title_pic.draw(@title_x,@title_y,dst)
+  def draw_title
+    @title_pic.draw(@title_x,@title_y)
   end
 end
