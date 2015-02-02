@@ -1,9 +1,9 @@
 #coding: utf-8
-class Texture;end
-require_relative 'FontTexture'
-require_relative 'SurfaceTexture'
 class Texture
   include Gl
+  require_relative 'FontTexture'
+  require_relative 'SurfaceTexture'
+  require_relative 'BigTexture'
   def initialize(surface)
     @origin_w,@origin_h=surface.w,surface.h
     @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
@@ -13,7 +13,6 @@ class Texture
     @draw_h=@origin_h/(Game.Height.to_f/2)
     @text_w=@origin_w/@w.to_f
     @text_h=@origin_h/@h.to_f
-    gen_texture
   end
   def gen_texture
     @id=glGenTextures(1)

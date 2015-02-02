@@ -190,7 +190,7 @@ class<<Game
     end
   end
   def draw
-    @window.each_value{|window| window.visible and window.draw}
+    @window.each{|name,window| window.visible and window.draw}
     Screen.flip
   end
   def draw_back

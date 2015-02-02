@@ -21,6 +21,7 @@ class Input
     end
   end
   def self.load_title
+    @pic and return @pic
     path='./rc/pic/title/title.jpg'
     unless FileTest.exist?(path)
       Message.show(:title_lost)
@@ -28,13 +29,12 @@ class Input
       exit
     end
     begin
-      @pic||=Input.load_pic(path)
+      @pic=BigTexture.new(Input.load_pic(path))
     rescue SDL::Error
       Message.show(:title_load_failure)
       Message.show(:please_check_files)
       exit
     else
-      @pic.display_format
       return @pic
     end
   end
