@@ -32,11 +32,7 @@ class Skill
     
     @consum=info[:consum]||0
     
-    if @@SwitchTypeList.include?(@type)      
-      @switch=false
-    else
-      @switch=true
-    end
+    @switch=!@@SwitchTypeList.include?(@type)
     
     @org_cd=@cd=info[:cd]||0
     @end_time=0
@@ -131,19 +127,17 @@ class Skill
     @sym and 
     if key=HotKey.get_key(@sym)
       key!=@hotkey_str and
-      @hotkey_str=Font.render_solid(Key.get_key_name(key).upcase,15,0,0,0)
+      @hotkey_str=Font.render_texture(Key.get_key_name(key).upcase,15,*Color[:hotkey_font])
       
       @hotkey_str and @hotkey_str.draw(x+22-@hotkey_str.w,y+24-@hotkey_str.h)
     end    
   end
   def draw_name(x,y)
-    Font.draw_solid(@name,15,x,y,255,255,0)
+    Font.draw_texture(@name,15,x,y,*Color[:skill_name])
   end
   def draw_cd(x,y)
     @cd>0 or return
     @cd_pic.draw(x,y)
-    # x+=Font.draw_solid('CD: ',12,x,y,*Color[:skill_comment_font])[0]
-    # Font.draw_solid('%.3f'% @cd,12,x,y,*Color[:skill_comment_font])
   end
   def draw_comment(x,y)
     @comment.draw(x,y)
