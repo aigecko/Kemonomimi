@@ -69,12 +69,18 @@ class SDL::Surface
   def to_texture
     return SurfaceTexture.new(self)
   end
-  def self.new_2N_length(w,h)
-    w=2**(Math.log2(w).ceil.to_i)
-    h=2**(Math.log2(h).ceil.to_i)
+  def self.new_32bpp(w,h)
     return SDL::Surface.new(SDL::SRCCOLORKEY|SDL::OPENGLBLIT,
       w,h,32,
       0xff,0xff00,0xff0000,0xff000000)
+  end
+  def self.new_2N_length(w,h)
+    w=2**(Math.log2(w).ceil.to_i)
+    h=2**(Math.log2(h).ceil.to_i)
+    # return SDL::Surface.new(SDL::SRCCOLORKEY|SDL::OPENGLBLIT,
+      # w,h,32,
+      # 0xff,0xff00,0xff0000,0xff000000)
+    return SDL::Surface.new_32bpp(w,h)
   end
 end
 

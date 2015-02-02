@@ -20,6 +20,11 @@ class Drawable
     @b/=@@max
     @a=(color[3]||@@max)/@@max
   end
+  def draw_at(x,y,z=0)
+    self.x=x
+    self.y=y
+    @z=z
+  end
   def draw(z=0)
     @z=z
     $queue<<self

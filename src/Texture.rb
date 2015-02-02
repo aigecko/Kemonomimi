@@ -4,6 +4,7 @@ class Texture
   require_relative 'FontTexture'
   require_relative 'SurfaceTexture'
   require_relative 'BigTexture'
+  require_relative 'WindowTexture'
   def initialize(surface)
     @origin_w,@origin_h=surface.w,surface.h
     @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
@@ -22,7 +23,7 @@ class Texture
       @surface.format.Bmask
     for x in 0...@surface.w
       for y in 0...@surface.h
-        @surface[x,y]==@surface.colorkey and @surface[x,y]&&=mask
+        @surface[x,y]==@surface.colorkey and @surface[x,y]&=mask
       end
     end
     Glu::gluBuild2DMipmaps(GL_TEXTURE_2D,
@@ -52,6 +53,7 @@ class Texture
   end
   def display
     id,x,y,w,h,vx,vy=*@data
+    glEnable GL_BLEND
     glBindTexture(GL_TEXTURE_2D,id)
     glColor4d 1.0,1.0,1.0,1.0
     glBegin(GL_QUADS)

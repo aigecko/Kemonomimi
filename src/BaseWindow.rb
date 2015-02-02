@@ -8,7 +8,45 @@ class BaseWindow
     @win_h=h
     @win_x=x
     @win_y=y
+    
+    @skeleton=SDL::Surface.new_32bpp(@win_w,@win_h)
+    @skeleton.fill_rect(0,0,@win_w,@win_h,@@colorkey)
+    tmp_x,tmp_y=@win_x,@win_y
+    @win_x=@win_y=0
     stat_init
+    dst=@skeleton
+    for row in 1..@row_draw_times-1
+      x=@win_x+(row<<@ske_mv)
+      @@skeleton[:loca8].draw(x,@win_y,dst)
+      @@skeleton[:loca2].draw(x,@down_margin,dst)
+    end
+    for column in 1..@column_draw_times-1
+      y=@win_y+(column<<@ske_mv)
+      @@skeleton[:loca4].draw(@win_x,y,dst)
+      @@skeleton[:loca6].draw(@right_margin,y,dst)
+    end
+    r=(@@skeleton[:loca5][0,0]&0xff0000)>>16
+    g=(@@skeleton[:loca5][0,0]&0xff00)>>8
+    b=@@skeleton[:loca5][0,0]&0xff
+    dst.fill_rect(@win_x+@ske_w,@win_y+@ske_h,
+                  @row_draw_times<<@ske_mv,
+                  @column_draw_times<<@ske_mv,
+                  [r,g,b])
+    @@skeleton[:loca8].draw(@right_margin-@ske_w,@win_y,dst)
+    @@skeleton[:loca2].draw(@right_margin-@ske_w,@down_margin,dst)
+    if @win_y<@down_margin-@ske_h
+      @@skeleton[:loca4].draw(@win_x,@down_margin-@ske_h,dst)
+      @@skeleton[:loca6].draw(@right_margin,@down_margin-@ske_h,dst)
+    end
+    @@skeleton[:loca7].draw(@win_x,@win_y,dst)
+    @@skeleton[:loca1].draw(@win_x,@down_margin,dst)
+    @@skeleton[:loca9].draw(@right_margin,@win_y,dst)
+    @@skeleton[:loca3].draw(@right_margin,@down_margin,dst)
+    @skeleton.set_color_key(SDL::SRCCOLORKEY,@skeleton[0,0])
+    
+    @win_x,@win_y=tmp_x,tmp_y
+    stat_init
+    @skeleton=WindowTexture.new(@skeleton)
   end
 private
   def self.init
@@ -25,10 +63,6 @@ private
     @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
     @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
     @@colorkey=@@skeleton[:loca7][0,0]
-    @@skeleton.each_value{|ske|
-      ske.set_color_key(SDL::SRCCOLORKEY,@@colorkey)
-      ske.display_format_alpha
-    }
   end
   self.init
   def stat_init
@@ -64,39 +98,14 @@ public
     return @visible&&@enable
   end
   def draw(dst=Screen.render)
-    for row in 1..@row_draw_times-1
-      x=@win_x+(row<<@ske_mv)
-      @@skeleton[:loca8].draw(x,@win_y,dst)
-      @@skeleton[:loca2].draw(x,@down_margin,dst)
-    end
-    for column in 1..@column_draw_times-1
-      y=@win_y+(column<<@ske_mv)
-      @@skeleton[:loca4].draw(@win_x,y,dst)
-      @@skeleton[:loca6].draw(@right_margin,y,dst)
-    end
-    r=(@@skeleton[:loca5][0,0]&0xff0000)>>16
-    g=(@@skeleton[:loca5][0,0]&0xff00)
-    b=@@skeleton[:loca5][0,0]&0xff
-    dst.draw_rect(@win_x+@ske_w,@win_y+@ske_h,
-                  @row_draw_times<<@ske_mv,
-                  @column_draw_times<<@ske_mv,
-                  r|g|b<<16,true,255)
-    @@skeleton[:loca8].draw(@right_margin-@ske_w,@win_y,dst)
-    @@skeleton[:loca2].draw(@right_margin-@ske_w,@down_margin,dst)
-    if @win_y<@down_margin-@ske_h
-      @@skeleton[:loca4].draw(@win_x,@down_margin-@ske_h,dst)
-      @@skeleton[:loca6].draw(@right_margin,@down_margin-@ske_h,dst)
-    end
-    @@skeleton[:loca7].draw(@win_x,@win_y,dst)
-    @@skeleton[:loca1].draw(@win_x,@down_margin,dst)
-    @@skeleton[:loca9].draw(@right_margin,@win_y,dst)
-    @@skeleton[:loca3].draw(@right_margin,@down_margin,dst)
+    @skeleton.draw(@win_x,@win_y)
   end
   def draw_corner(color)
     w=h=10
-    Screen.fill_rect(@win_x,@win_y,w,h,Color[color])
-    Screen.fill_rect(@win_x+@win_w-w,@win_y,w,h,Color[color])
-    Screen.fill_rect(@win_x,@win_y+@win_h-h,w,h,Color[color])
-    Screen.fill_rect(@win_x+@win_w-w,@win_y+@win_h-h,w,h,Color[color])
+    @rect||=Rectangle.new(0,0,w,h,Color[color])
+    @rect.draw_at(@win_x,@win_y)
+    @rect.draw_at(@win_x+@win_w-w,@win_y)
+    @rect.draw_at(@win_x,@win_y+@win_h-h)
+    @rect.draw_at(@win_x+@win_w-w,@win_y+@win_h-h)
   end
 end
