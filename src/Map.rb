@@ -26,8 +26,8 @@ class Map
       end
     end
     #dbg
-    @items=
-    Array.new(100){
+    @items=#[]
+    Array.new(5){
       Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         {onground:true,x:rand(1000),z:rand(400)})
     }

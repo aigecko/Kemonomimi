@@ -69,10 +69,8 @@ class RaceWindow < SelectWindow
         case event.sym
         when Key::DOWN
           @select= (@select==@table.size-1)? 0 : @select+1
-          @need2draw_word=true
         when Key::UP
           @select= (@select==0)? @table.size-1 : @select-1
-          @need2draw_word=true
         when *Key::CHECK
           select_check
         when *Key::BACK
@@ -90,7 +88,6 @@ class RaceWindow < SelectWindow
         end
       when Event::MouseMotion
         check_select_index(@race_pic,@table)
-        @need2draw_word=true
       when Event::Quit
         Game.quit
       end
@@ -109,21 +106,13 @@ class RaceWindow < SelectWindow
   end
   def open
     super
-    @need2draw_word=true
-    @need2draw_back=true
   end
   def draw
-    if @need2draw_back
-      @back.draw(0,0)
-      @need2draw_back=false
-    end
-    if @need2draw_word
-      super
-      draw_title
-      draw_select_detail(@race_pic,@text_pic,@table)
-      draw_comment
-      @need2draw_word=false
-    end
+    @back.draw(0,0)
+    super
+    draw_title
+    draw_select_detail(@race_pic,@text_pic,@table)
+    draw_comment
   end
  
 end

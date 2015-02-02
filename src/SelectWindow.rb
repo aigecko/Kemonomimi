@@ -1,12 +1,12 @@
  #coding: utf-8
 class SelectWindow < BaseWindow
   def initialize(x,y,w,h)
-    super(x,y,w,h)    
+    super(x,y,w,h)
     @select=0
     word_init
   end
 private
-  def word_init    
+  def word_init
     @comment_size=15
   
     @Comment=Hash.new("")
@@ -24,14 +24,16 @@ private
 public
   def title_initialize(text)
     @title=text
-    @title_pic=Font.render_solid(@title,@font_size,*Color[:title])
+    @title_pic=Font.render_texture(@title,@font_size,*Color[:title])
   end
   def select_pic_initialize(list)
     pic=Hash.new([])
+    @select_cache={}
     list.each{|key,val|
-      pic[key]=[
-        Font.render_solid(val,@font_size,*Color[:normal_select]),
-        Font.render_solid(val,@font_size,*Color[:focused_select])]
+      @select_cache[val]=[
+        Font.render_texture(val,@font_size,*Color[:normal_select]),
+        Font.render_texture(val,@font_size,*Color[:focused_select])]
+      pic[key]=@select_cache[val]
     }    
     @w_long=0
     pic.each_value{|p| p[0].w>@w_long and @w_long=p[0].w}
@@ -50,13 +52,13 @@ public
   end
   def comment_initialize(*ary)
     @comment=get_comment(*ary)
-    @comment_pic=Font.render_solid(@comment,@comment_size,*Color[:comment])
+    @comment_pic=Font.render_texture(@comment,@comment_size,*Color[:comment])
     
     @cmt_draw_x=@win_x+@border
     @cmt_draw_y=@win_y+@win_h-@comment_pic.h-@border
   end
  
- def get_comment(*ary)
+  def get_comment(*ary)
     str=""
     for sym in ary
       str<<@Comment[sym]<<", "
@@ -111,7 +113,7 @@ public
       else
         pic=list_pic[table[i]][0]
       end
-      pic.draw(pic_draw_x,pic_draw_y)            
+      pic.draw(pic_draw_x,pic_draw_y)
       pic_draw_y+=pic.h
     end
   end

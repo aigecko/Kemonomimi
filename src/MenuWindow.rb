@@ -3,7 +3,7 @@ class MenuWindow < SelectWindow
   def initialize
     @text={0=>'開始遊戲',1=>'載入遊戲',2=>'遊戲設定',3=>'結束遊戲'}
     @text_w,@text_h=Font[20].text_size(@text[0])
-	
+
     @title=Input.load_title
     @border=10
 
@@ -25,11 +25,9 @@ class MenuWindow < SelectWindow
         when Key::DOWN
           @select+=1
           @select==4 and @select=0
-          @need2draw_word=true
         when Key::UP
           @select-=1
           @select==-1 and @select=3
-          @need2draw_word=true
         when *Key::CHECK
           select_check
         end
@@ -38,7 +36,6 @@ class MenuWindow < SelectWindow
         result and select_check
       when Event::MouseMotion
         check_select_index(@text_pic,Array(0..3))
-        @need2draw_word=true
       when Event::Quit
         Game.quit
       end
@@ -46,8 +43,6 @@ class MenuWindow < SelectWindow
   end
   def open
     super
-    @need2draw=true
-    @need2draw_word=true
   end
   def select_check
     case @select

@@ -19,39 +19,43 @@ my_lib=%w(Color Screen Config Message Icon
 my_lib.each{|lib|
   require_relative "src/#{lib}"
 }
-class Game
-  def self.init
+class Game;end
+class<<Game
+  include Gl
+  def init
     @Width=640
     @Height=480
     Conf.init
     Conf.load
-    self.sdl_initialize
-    self.gl_initialize
-    self.sdl_putenv
+    sdl_initialize
+    gl_initialize
+    sdl_putenv
     
     Color.init
     Skill.init 
     Icon.init
     
-    self.check_multi_window
+    check_multi_window
     
     Mouse.init 
     Screen.init
     
-    self.font_initialize
-    self.load_lib
+    font_initialize
+    gl_parameters
+    
+    load_lib
     Event.init
     Screen.flip
-    self.win_initialize
+    win_initialize
     
     puts "start #{Time.now-$t}"
   end
   private
-  def self.sdl_putenv
+  def sdl_putenv
     SDL.putenv("SDL_VIDEODRIVER=directx")
     SDL.putenv("SDL_VIDEO_CENTERED=#{Conf['SDL_VIDEO_CENTERED']}")
   end
-  def self.sdl_initialize
+  def sdl_initialize
     retried=false
     begin
       SDL.init(SDL::INIT_VIDEO | SDL::INIT_AUDIO)
@@ -70,18 +74,18 @@ class Game
       end
     end
   end
-  def self.gl_initialize
+  def gl_initialize
     SDL::GL.set_attr SDL::GL_RED_SIZE,8
     SDL::GL.set_attr SDL::GL_GREEN_SIZE,8
     SDL::GL.set_attr SDL::GL_BLUE_SIZE,8
     SDL::GL.set_attr SDL::GL_DEPTH_SIZE,24
     SDL::GL.set_attr SDL::GL_DOUBLEBUFFER,1
   end
-  def self.font_initialize
+  def font_initialize
     SDL::TTF.init
     Font.init
   end
-  def self.win_initialize
+  def win_initialize
     windows=%w(RaceWindow ClassWindow LoadWindow
                MenuWindow GameWindow SettingWindow
                LevelWindow BarsWindow ButtonWindow)
@@ -92,66 +96,86 @@ class Game
     }
     @window[:MenuWindow].open
   end
-  def self.check_multi_window
+  def check_multi_window
     if WIN32API.FindWindow('遊戲視窗')>0||WIN32API.FindWindow('初始化中...')>0
       Message.show(:game_already_run)
       exit
     end
   end  
-  def self.load_lib
+  def gl_parameters
+    glViewport( 0, 0, Game.Width, Game.Height );
+    glEnable GL_TEXTURE_2D
+    glTexParameteri(GL_TEXTURE_2D,
+      GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,
+      GL_TEXTURE_MIN_FILTER,
+      GL_LINEAR_MIPMAP_LINEAR);
+    
+    glEnable GL_BLEND
+    glEnable GL_ALPHA_TEST
+    glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
+    #dbg
+    #glEnable(GL_DEPTH_TEST);
+
+    glDepthFunc(GL_LESS);
+    glShadeModel(GL_SMOOTH);
+  end
+  def load_lib
+    done=false
     t=Thread.new{
-      text=Font.render_solid('Loading',30,*Color[:loading_font])
-      dot=Font.render_solid('.',30,*Color[:loading_font])
-      num=0
-      loop{
-        Screen.fill_rect(0,0,@Width,@Height,0)
-        text.draw(230,240)
-        num=(num<3) ? num+1 : 0
-        for i in 0..num
-          dot.draw(370+i*30,240)
-        end
-        Screen.flip
-        SDL.delay(80)
+      require 'openssl'
+      require 'digest'
+      require 'zlib'
+      require 'stringio'
+      
+      library_list=%w(
+        Database Position 
+        Item Equipment Consumable ItemArray
+        Event Key HotKey
+        Actor Player Enemy Friend
+        Statement SkillTree
+        ColorString ParaString DynamicString
+        Shape Bullet
+        Attack FixAttack Effect Heal)
+      library_list.each{|lib|
+        require_relative "src/#{lib}"
       }
+      Actor.init
+      Equipment.init
+      HotKey.init
+      window_list=%w(BaseWindow SelectWindow DragWindow
+                     MenuWindow 
+                     RaceWindow ClassWindow LoadWindow GameWindow
+                     SettingWindow LevelWindow BarsWindow
+                     ButtonWindow StatusWindow ItemWindow
+                     EquipWindow SkillWindow)
+      window_list.each{|window|
+        require_relative "src/#{window}"
+      }
+      
+      require_relative 'src/Map'
+      done=true
     }
     
-    require 'openssl'
-    require 'digest'
-    require 'zlib'
-    require 'stringio'
-    
-    library_list=%w(
-      Database Position 
-      Item Equipment Consumable ItemArray
-      Event Key HotKey
-      Actor Player Enemy Friend
-      Statement SkillTree
-      ColorString ParaString DynamicString
-      Shape Bullet
-      Attack FixAttack Effect Heal)
-    library_list.each{|lib|
-      require_relative "src/#{lib}"
-    }
-    Actor.init
-    Equipment.init
-    HotKey.init
-    window_list=%w(BaseWindow SelectWindow DragWindow
-                   MenuWindow 
-                   RaceWindow ClassWindow LoadWindow GameWindow
-                   SettingWindow LevelWindow BarsWindow
-                   ButtonWindow StatusWindow ItemWindow
-                   EquipWindow SkillWindow)
-    window_list.each{|window|
-      require_relative "src/#{window}"
-    }
-    
-    require_relative 'src/Map'
-    Thread.kill(t)
+    text=Font.render_texture('Loading',30,*Color[:loading_font])
+    dot=Font.render_texture('.',30,*Color[:loading_font])
+    num=0
+    until done
+      glClearColor(0,0,0,1.0);
+      glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+      text.direct_draw(230,240)
+      num=(num<3) ? num+1 : 0
+      num.times{|i|
+        dot.direct_draw(370+i*30,240)
+      }
+      SDL::GL.swap_buffers
+      SDL.delay(40)
+    end
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)
   end
 
-  def self.update
+  def update
     Event.poll
     @window.each_value{|window|
       if window.enable
@@ -165,66 +189,49 @@ class Game
       Game.quit
     end
   end
-  def self.draw
+  def draw
     @window.each_value{|window| window.visible and window.draw}
     Screen.flip
   end
-  def self.draw_back
+  def draw_back
     Screen.fill_rect(0,0,@Width,@Height,0)
   end
   public
-  def self.set_window(name,state)
+  def set_window(name,state)
     if state==:open
       @window[name].open
     else
       @window[name].close
     end
   end
-  def self.window(idx)
+  def window(idx)
     return @window[idx]
   end
-  def self.Width
+  def Width
     return @Width
   end
-  def self.Height
+  def Height
     return @Height
   end
-  def self.player
+  def player
     return @window[:GameWindow].get_player
   end
-  def self.release
+  def release
     Font.release
   end
-  def self.quit
+  def quit
     Screen.destroy
     SDL.quit
     exit
   end
-  def self.show
-    Gl::glViewport( 0, 0, Game.Width, Game.Height );
-    Gl::glEnable Gl::GL_TEXTURE_2D
-    Gl::glTexParameteri(Gl::GL_TEXTURE_2D,
-      Gl::GL_TEXTURE_MAG_FILTER, Gl::GL_LINEAR);
-    Gl::glTexParameteri(Gl::GL_TEXTURE_2D,
-      Gl::GL_TEXTURE_MIN_FILTER,
-      Gl::GL_LINEAR_MIPMAP_LINEAR);
-    
-    Gl::glEnable Gl::GL_BLEND
-    Gl::glEnable Gl::GL_ALPHA_TEST
-    Gl::glBlendFunc Gl::GL_SRC_ALPHA,Gl::GL_ONE_MINUS_SRC_ALPHA
-    #dbg
-    #Gl::glEnable(Gl::GL_DEPTH_TEST);
-
-    Gl::glDepthFunc(Gl::GL_LESS);
-    Gl::glShadeModel(Gl::GL_SMOOTH);
-  
+  def show
     $queue=[]
     loop{
       time=SDL.get_ticks
 
       update
-      Gl::glClearColor(1.0,0,0,1.0);
-      Gl::glClear(Gl::GL_COLOR_BUFFER_BIT|Gl::GL_DEPTH_BUFFER_BIT);
+      glClearColor(1.0,0,0,1.0);
+      glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
       
       draw
       $queue.each{|text|
@@ -237,7 +244,7 @@ class Game
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end
-  def self.get_real_path
+  def get_real_path
     realpath=Pathname.new(__FILE__).realpath.to_s
     until realpath[-1]=="/"
       realpath.chop!

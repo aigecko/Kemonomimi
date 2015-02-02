@@ -39,9 +39,11 @@ class Icon
       img=@icon_set[info[:path]].copy_rect(x*@base_w,y*@base_h,@base_w,@base_h)
     else
       path=info[:rc]+info[:path]
-      if @cache[path]
-        img=@cache[path]
-      else
+      if img=@cache[str]
+        gen and img=img.to_texture
+        return img
+      end
+      unless img=@cache[path]
         @cache[path]=(img=Surface.load(path))
       end
     end
@@ -55,8 +57,10 @@ class Icon
     else
       base.fill_rect(0,0,@base_w,@base_h,img[0,0])
     end
+
     img.draw(0,0,base)
     img=base
+
     if info[:firstMode]
       img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
         [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
@@ -65,13 +69,16 @@ class Icon
       img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
         [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
     end
+    
     colorkey_x=colorkey_y=0
     if info[:colorKeyAtX]&&info[:colorKeyAtY]
       colorkey_x=info[:colorKeyAtX].to_i
       colorkey_y=info[:colorKeyAtY].to_i
     end
+    
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
     img.display_format
+    @cache[str]=img
     gen and img=img.to_texture
     return img
   end

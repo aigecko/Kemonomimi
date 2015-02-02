@@ -12,7 +12,6 @@ class SettingWindow < SelectWindow
     comment_initialize(:save,:change)
     word_initialize
     pic_initialize
-    
   end
   def word_initialize
     @table=[]
@@ -21,7 +20,6 @@ class SettingWindow < SelectWindow
     @name={
       'FULL_SCREEN'=>'全螢幕-  ：',
       'SDL_VIDEO_CENTERED'=>'視窗置中-：',
-      'FONT_TYPE'=>'字體檔名-：',
       'MUSIC'=>'音樂開啟 ：',
       'SOUND'=>'音效開啟 ：'
     }
@@ -47,23 +45,10 @@ class SettingWindow < SelectWindow
     @value_draw_x=@win_x+@border*2+w_long
     @value_draw_y=@win_y+@border+@title_pic.h
         
-    @extra_comment_pic=Font.render_solid(@extra_comment,@comment_size,*Color[:comment])
+    @extra_comment_pic=Font.render_texture(@extra_comment,@comment_size,*Color[:comment])
     
     @ex_cmt_draw_x=@cmt_draw_x-2
     @ex_cmt_draw_y=@cmt_draw_y-@extra_comment_pic.h-@border/2
-    
-    @font_demo_pic=Font.render_solid(@font_demo_str,@font_size,*Color[:font_demo])
-  end
-  def font_select_initialize
-    @fonts=[]
-    Dir.foreach('./rc/font'){|name|
-      if name=~/tt[f|c]/
-        @fonts<<name
-      end
-    }
-    
-    current_font_select=Conf['FONT_TYPE']
-    @font_select=@fonts.find_index(current_font_select)
   end
   def interact
     Event.each{|event|
@@ -72,10 +57,8 @@ class SettingWindow < SelectWindow
         case event.sym
         when Key::UP
           @select=(@select==0) ? @table.size-1: @select-1
-          @need2draw_word=true
         when Key::DOWN
           @select=(@select==@table.size-1) ? 0: @select+1
-          @need2draw_word=true
         when *Key::BACK
           select_back
         when *Key::CHECK
@@ -91,7 +74,6 @@ class SettingWindow < SelectWindow
         end
       when Event::MouseMotion
         check_select_index
-        @need2draw_word=true
       when Event::Quit
         Game.quit
       end
@@ -101,7 +83,6 @@ class SettingWindow < SelectWindow
     key=@table[@select]
     other_change
     refresh_pic
-    @need2draw_word=true
   end
   def select_back
     close
@@ -121,13 +102,6 @@ class SettingWindow < SelectWindow
   def value_pic_end
     @select_draw_x,@value_draw_x=@value_draw_x,@select_draw_x
   end
-  def font_change
-    font_select_initialize
-    @font_select=(@font_select==@fonts.size-1)? 0 : @font_select+1
-    Conf['FONT_TYPE']=@fonts[@font_select]
-    Font.demo_init(@font_size)
-    @font_demo_pic=Font.demo_render(@font_demo_str,*Color[:font_demo])
-  end
   def other_change
     if Conf[@table[@select]]
       Conf[@table[@select]]=false
@@ -140,36 +114,26 @@ class SettingWindow < SelectWindow
     @value[key]=Conf[@table[@select]]
     
     str=@value[key].to_s
-    @value_pic[key]=[
-      Font.render_solid(str,@font_size,*Color[:normal_select]),
-      Font.render_solid(str,@font_size,*Color[:focused_select])]
-      
+    if @select_cache[str]
+      @value_pic[key]=@select_cache[str]
+    else
+      @select_cache[str]=@value_pic[key]=[
+        Font.render_texture(str,@font_size,*Color[:normal_select]),
+        Font.render_texture(str,@font_size,*Color[:focused_select])]
+    end
   end
   def open
     super
-    @need2draw_back=true
-    @need2draw_word=true
   end
   def draw
-    if @need2draw_back
-      @back.draw(0,0)
-      @need2draw_back=false
-    end
-    if @need2draw_word
-      super
-      draw_title
-      draw_select(@name_pic,@table)
-      value_pic_start
-      draw_select(@value_pic,@table)
-      value_pic_end
-      @extra_comment_pic.draw(@ex_cmt_draw_x,@ex_cmt_draw_y)
-    
-      if @table[@select]=='FONT_TYPE'
-        @font_demo_pic.draw(@win_x+@border*2,@ex_cmt_draw_y-@font_demo_pic.h-@border)
-      end
-      
-      draw_comment
-      @need2draw_word=false
-    end
+    @back.draw(0,0)
+    super
+    draw_title
+    draw_select(@name_pic,@table)
+    value_pic_start
+    draw_select(@value_pic,@table)
+    value_pic_end
+    @extra_comment_pic.draw(@ex_cmt_draw_x,@ex_cmt_draw_y)
+    draw_comment
   end
 end

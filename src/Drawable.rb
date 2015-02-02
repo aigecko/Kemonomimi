@@ -1,5 +1,6 @@
 #coding: utf-8
 class Drawable
+  include Gl
   def initialize(x,y,color)
     self.x=x
     self.y=y
@@ -36,16 +37,16 @@ class Rectangle < Drawable
     @h=h/(Game.Height.to_f/2)
   end
   def display
-    Gl::glLoadIdentity
-    Gl::glDisable Gl::GL_BLEND
-    Gl::glBegin(Gl::GL_QUADS)
-    Gl::glColor3d @r,@g,@b
-    Gl::glVertex3f @x,@y,@z
-    Gl::glVertex3f @x+@w,@y,@z
-    Gl::glVertex3f @x+@w,@y-@h,@z
-    Gl::glVertex3f @x,@y-@h,@z
-    Gl::glEnd
-    Gl::glEnable Gl::GL_BLEND
+    glLoadIdentity
+    glDisable GL_BLEND
+    glBegin(GL_QUADS)
+    glColor3d @r,@g,@b
+    glVertex3f @x,@y,@z
+    glVertex3f @x+@w,@y,@z
+    glVertex3f @x+@w,@y-@h,@z
+    glVertex3f @x,@y-@h,@z
+    glEnd
+    glEnable GL_BLEND
   end
 end
 class Line < Drawable
@@ -57,14 +58,14 @@ class Line < Drawable
     @width=width
   end
   def display
-    Gl::glLoadIdentity
-    Gl::glDisable Gl::GL_BLEND
-    Gl::glLineWidth(@width)
-    Gl::glBegin(Gl::GL_LINES)
-    Gl::glColor3d @r,@g,@b
-    Gl::glVertex3f @x1,@y1,@z
-    Gl::glVertex3f @x2,@y2,@z
-    Gl::glEnd
-    Gl::glEnable Gl::GL_BLEND
+    glLoadIdentity
+    glDisable GL_BLEND
+    glLineWidth(@width)
+    glBegin(GL_LINES)
+    glColor3d @r,@g,@b
+    glVertex3f @x1,@y1,@z
+    glVertex3f @x2,@y2,@z
+    glEnd
+    glEnable GL_BLEND
   end
 end
