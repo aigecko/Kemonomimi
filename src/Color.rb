@@ -60,7 +60,7 @@ class Color
       item_drag_bar:[186,205,242],
       
       item_comment_font:[34,65,102],
-      item_rect_back:[240,240,255],
+      item_rect_back:[240,240,255,220],
       item_name_font:[32,32,94],
       item_count_font:[210,249,255],
       equip_attrib_sym_font:[21,120,230],

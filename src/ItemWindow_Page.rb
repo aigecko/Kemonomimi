@@ -1,22 +1,25 @@
 #coding: utf-8
 class ItemWindow::Page
   attr_accessor :boxes
+  @@box_row_num=5
   def initialize(name,x,y,idx)
     @title=name
-    @title_pic=Font.render_solid(@title,15,*Color[:item_tag_font])
+    @title_pic=Font.render_texture(@title,15,*Color[:item_tag_font])
     @idx=idx
     
     @w=148
     @h=271
-    update_coord(x,y)
-    
-    @box_limit=100
-    @box_draw_n=50
-    @boxes
     
     @title_w=@w/4
     @title_h=15
-    
+    update_coord(x,y)
+
+    @box_w=@box_h=26
+    @box_back=Rectangle.new(0,0,@box_w,@box_h,Color[:item_box])
+    @box_limit=100
+    @box_draw_n=50
+    @boxes
+
     case @title
     when '裝備'
       @click_proc=->{
@@ -50,8 +53,20 @@ class ItemWindow::Page
     @x=x
     @y=y+@title_pic.h
     
+    @page_back||=Rectangle.new(@x,@y,@w,@h,Color[:item_page])
+    @page_back.x=@x
+    @page_back.y=@y
+    
     @title_back_x=@x+@w*@idx/4
     @title_back_y=y
+    
+    @title_focus||=Rectangle.new(
+      @title_back_x,@title_back_y,@title_w,@title_h,Color[:item_tag_focus])
+    @title_normal||=Rectangle.new(
+      @title_back_x,@title_back_y,@title_w,@title_h,Color[:item_tag_normal])
+    
+    @title_focus.x=@title_normal.x=@title_back_x
+    @title_focus.y=@title_normal.y=@title_back_y
     
     @title_font_x=@title_back_x+(@w/4-@title_pic.w)/2
     @title_font_y=y
@@ -76,7 +91,7 @@ class ItemWindow::Page
             @drag=true
           else
             @first_click_time=nil
-            @click_box=nil              
+            @click_box=nil
             @drag=false
           end
         end
@@ -92,10 +107,9 @@ class ItemWindow::Page
     @drag or return
     box_x=((x-@x-1)/27).confine(0,4)
     box_y=((y-@y-1)/27).confine(0,9)
-    box_idx=box_x+box_y*5+offset
+    box_idx=box_x+box_y*@@box_row_num+offset
     if @boxes[box_idx].respond_to?(:item)&&
        !@boxes[box_idx].empty?
-       #@boxes[convert_position].respond_to?(:num)
       @boxes.add(box_idx,convert_position)
     elsif @boxes[box_idx]&&!@boxes[box_idx].respond_to?(:empty? )&&
           @boxes[convert_position]
@@ -104,7 +118,7 @@ class ItemWindow::Page
       @boxes.swap(box_idx,convert_position)
     end
     @click_box.x=box_x
-    @click_box.y=box_y+offset/5
+    @click_box.y=box_y+offset/@@box_row_num
     @drag=false
   end
   def stop_drag
@@ -132,37 +146,43 @@ class ItemWindow::Page
   end
   def convert_position
     @click_box and
-    @click_box.x+@click_box.y*5
+    @click_box.x+@click_box.y*@@box_row_num
   end
   def draw_title
     if @select
-      Screen.fill_rect(@title_back_x,@title_back_y,@title_w,@title_h,Color[:item_tag_focus])
+      @title_focus.draw
     else
-      Screen.fill_rect(@title_back_x,@title_back_y,@title_w,@title_h,Color[:item_tag_normal])
+      @title_normal.draw
     end
     @title_pic.draw(@title_font_x,@title_font_y)
   end
-  def draw_back(dst=Screen.render)
-    dst.fill_rect(@x,@y,@w,@h,Color[:item_page])
+  def draw_back
+    @page_back.draw
   end
   def draw_boxes(dst=Screen.render)
     @box_draw_n.times{|n|
-      col=n%5
-      row=n/5
-      dst.fill_rect(@x+col*27+1,@y+row*27+1,26,26,Color[:item_box])
+      col=n% @@box_row_num
+      row=n/ @@box_row_num
+      @box_back.x=@x+col*27+1
+      @box_back.y=@y+row*27+1
+      @box_back.draw
     }
   end
   def draw_page(offset)
     if @click_box
       box_draw_x=@x+@click_box.x*27+1
-      box_draw_y=@y+(@click_box.y-offset/5)*27+1
-      Screen.fill_rect(box_draw_x,box_draw_y,26,26,Color[:click_box_back])
+      box_draw_y=@y+(@click_box.y-offset/@@box_row_num)*27+1
+      @click_box_back||=Rectangle.new(
+        box_draw_x,box_draw_y,@box_w,@box_h,Color[:click_box_back])
+      @click_box_back.x=box_draw_x
+      @click_box_back.y=box_draw_y
+      @click_box_back.draw
     end
     @boxes and
     @boxes[offset,50].each_with_index{|item,n|
       item or next
-      col=n%5
-      row=n/5
+      col=n% @@box_row_num
+      row=n/ @@box_row_num
       item_draw_x=@x+col*27+2
       item_draw_y=@y+row*27+2
       if item.respond_to? :num
@@ -176,7 +196,8 @@ class ItemWindow::Page
         when 100...1000
           offset_x=0
         end
-        Font.draw_solid(item.num.to_s,12,item_draw_x+offset_x,item_draw_y+13,*Color[:item_count_font])
+        Font.draw_texture(item.num.to_s,12,
+          item_draw_x+offset_x,item_draw_y+13,*Color[:item_count_font])
       else
         item.draw(item_draw_x,item_draw_y)
       end
@@ -188,7 +209,7 @@ class ItemWindow::Page
       end
       draw_x=@x
       draw_y=box_draw_y
-      if @click_box.y*5-offset>=25
+      if @click_box.y*@@box_row_num-offset>=25
         draw_y=item.draw_detail(draw_x,draw_y,:above)
       else
         draw_y=item.draw_detail(draw_x,draw_y,:below)

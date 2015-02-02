@@ -1,7 +1,6 @@
 #coding: utf-8
 class Item
   attr_reader :position,:superposed,:name,:id
-  @@rect_alpha=220    
   @@low_bound=350
   @@font_size=12
   @@rect_w=135
@@ -19,7 +18,7 @@ class Item
       exit
     rescue =>e
       p e
-      p Message.show_backtrace(e)
+      Message.show_backtrace(e)
       exit
     end    
     @onground=args[:onground]
@@ -29,6 +28,7 @@ class Item
     @comment=ColorString.new(comment,@@font_size,Color[:item_comment_font],11)
     
     @rect_h=28+@comment.h
+    @rect_back=Rectangle.new(0,0,@@rect_w,@rect_h,Color[:item_rect_back])
   end
   def pickup
     @onground=false
@@ -70,10 +70,12 @@ class Item
     when :below
       y+=27
     end
-    Screen.draw_rect(x,y,@@rect_w,@rect_h,Color[:item_rect_back],true,@@rect_alpha)
-    y+=Font.draw_solid(@name,@@font_size,x,y,*Color[:item_name_font])[1]
-    x+=Font.draw_solid("價格：",@@font_size,x,y,*[198,192,0])[0]
-    y+=Font.draw_solid(@price.to_s,@@font_size,x,y,*[189,133,0])[1]
+    @rect_back.x=x
+    @rect_back.y=y
+    @rect_back.draw
+    y+=Font.draw_texture(@name,@@font_size,x,y,*Color[:item_name_font])[1]
+    x+=Font.draw_texture("價格：",@@font_size,x,y,*[198,192,0])[0]
+    y+=Font.draw_texture(@price.to_s,@@font_size,x,y,*[189,133,0])[1]
     return y
   end
   def draw_comment(x,y)

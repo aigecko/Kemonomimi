@@ -12,7 +12,7 @@ class SkillWindow < DragWindow
     @box_border_w=@box_border_h=26
     
     @comment='滑鼠左鍵: 選擇技能, ctrl+按鍵:設定快捷鍵'
-    @comment_pic=Font.render_solid(@comment,12,*Color[:comment])
+    @comment_pic=Font.render_texture(@comment,12,*Color[:comment])
   end
   def start_init
     @skill=Game.player.skill
@@ -68,8 +68,8 @@ class SkillWindow < DragWindow
     draw_x,draw_y=@win_x+@border,@win_y+24
     @skill.each{|sym,skill|
       skill.invisible and next
-      if i==@click_box         
-        draw_x=draw_click_box(skill,draw_x,draw_y)        
+      if i==@click_box
+        draw_x=draw_click_box(skill,draw_x,draw_y)
         @click_skill=sym
       else
         draw_x=draw_unclick_box(skill,draw_x,draw_y)

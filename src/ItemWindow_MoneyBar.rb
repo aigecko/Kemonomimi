@@ -7,14 +7,18 @@ class ItemWindow::MoneyBar
     update_coord(x,y)
   end
   def update_coord(x,y)
-    @x,@y=x,y
+    @x=x
+    @y=y
+    @bar_back||=Rectangle.new(@x,@y,@w,@h,Color[:item_page])
+    @bar_back.x=@x=x
+    @bar_back.y=@y=y
   end
   def update
   end
   def draw
-    Screen.fill_rect(@x,@y,@w,@h,Color[:item_page])
-    Font.draw_solid(Game.player.attrib[:money].to_s,@font_size,
-      @x+2+Font.draw_solid(@text,@font_size,@x+1,@y+2,*Color[:item_tag_font])[0],
+    @bar_back.draw
+    Font.draw_texture(Game.player.attrib[:money].to_s,@font_size,
+      @x+2+Font.draw_texture(@text,@font_size,@x+1,@y+2,*Color[:item_tag_font])[0],
       @y+2,*Color[:item_money_font])
     
   end
