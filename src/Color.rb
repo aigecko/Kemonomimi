@@ -87,6 +87,7 @@ class Color
       skill_active_back:[80,128,255],
       skill_active_cding_back:[63,72,120],
       skill_passive_back:[128,128,128],
+      skill_clicked:[255,0,0],
       
       shadow:[0,0,0]
     }

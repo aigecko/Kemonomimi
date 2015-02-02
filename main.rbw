@@ -161,8 +161,7 @@ class<<Game
     dot=Font.render_texture('.',30,*Color[:loading_font])
     num=0
     until done
-      glClearColor(0,0,0,1.0);
-      glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+      draw_back
       text.direct_draw(230,240)
       num=(num<3) ? num+1 : 0
       num.times{|i|
@@ -190,11 +189,16 @@ class<<Game
     end
   end
   def draw
-    @window.each{|name,window| window.visible and window.draw}
+    @window[:GameWindow].visible and @window[:GameWindow].draw
+    @window.each{|name,window|
+      name==:GameWindow and next
+      window.visible and window.draw
+    }
     Screen.flip
   end
   def draw_back
-    Screen.fill_rect(0,0,@Width,@Height,0)
+    glClearColor(0,0,0,1.0);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   end
   public
   def set_window(name,state)
@@ -230,9 +234,7 @@ class<<Game
       time=SDL.get_ticks
 
       update
-      glClearColor(1.0,0,0,1.0);
-      glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-      
+      draw_back
       draw
       $queue.each{|text|
         text.display

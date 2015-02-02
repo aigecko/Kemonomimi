@@ -39,7 +39,6 @@ class Rectangle < Drawable
     @h=h/(Game.Height.to_f/2)
   end
   def display
-    glLoadIdentity
     glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
     glColor4d @r,@g,@b,@a
@@ -60,7 +59,6 @@ class Line < Drawable
     @width=width
   end
   def display
-    glLoadIdentity
     glDisable GL_TEXTURE_2D
     glLineWidth(@width)
     glBegin(GL_LINES)

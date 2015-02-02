@@ -6,7 +6,12 @@ class EquipWindow < DragWindow
     win_y=50
     super(win_x,win_y,win_w,win_h)
     
-    title_initialize('角色裝備')    
+    title_initialize('角色裝備')
+    @edge=27
+    @box_w=@box_h=26
+    
+    @pic_back=Rectangle.new(0,0,@box_w,25,Color[:equip_pic_back])
+    @str_back=Rectangle.new(0,0,110,25,Color[:equip_str_back])
   end
   def start_init
     @equip=Game.player.equip
@@ -23,8 +28,8 @@ class EquipWindow < DragWindow
       when Event::MouseButtonDown
         case event.button
         when SDL::Mouse::BUTTON_LEFT
-          if event.x.between?(@win_x+10,@win_x+@win_w-10)
-            y=(event.y-@win_y-22)/27
+          if event.x.between?(@win_x+@border,@win_x+@win_w-@border)
+            y=(event.y-@win_y-22)/@edge
             if y.between?(0,@Parts.size-1)&&@equip[@Parts[y]]
               if @first_click_time&&
                  @first_click_time+0.22.to_sec>SDL.get_ticks&&
@@ -42,7 +47,7 @@ class EquipWindow < DragWindow
             end
           end
         when SDL::Mouse::BUTTON_RIGHT
-          if (event.y-@win_y-22)/27==@click_equip_y
+          if (event.y-@win_y-22)/@edge==@click_equip_y
             @show_equip_detail=false
           end
         end
@@ -66,23 +71,28 @@ class EquipWindow < DragWindow
     super
     draw_title
     (0...@Parts.size).each{|n|
-       dst.draw_rect(@win_x+10,@win_y+22+n*27,26,25,Color[:equip_pic_back],true,255)    
-       dst.draw_rect(@win_x+36,@win_y+22+n*27,110,25,Color[:equip_str_back],true,255)
+       @pic_back.x=@win_x+@border
+       @str_back.x=@win_x+@border+@box_w
+       @pic_back.y=@str_back.y=@win_y+22+n*@edge
+       @pic_back.draw
+       @str_back.draw
+       #dst.draw_rect(@win_x+@border,@win_y+22+n*@edge,@box_w,25,Color[:equip_pic_back],true,255)    
+       #dst.draw_rect(@win_x+36,@win_y+22+n*@edge,110,25,Color[:equip_str_back],true,255)
     }
     
     @click_equip_y and
-    Screen.draw_rect(@win_x+10,@win_y+22+@click_equip_y*27,26,26,Color[:click_box_back],true,255)
+    Screen.draw_rect(@win_x+@border,@win_y+22+@click_equip_y*@edge,@box_w,@box_h,Color[:click_box_back],true,255)
     
-    draw_x,draw_y=@win_x+39,@win_y+27
+    draw_x,draw_y=@win_x+39,@win_y+@edge
     icon_x=@win_x+11
     @equip.each{|part,equip|
       if equip
         equip.draw_name(draw_x,draw_y)
         equip.draw(icon_x,draw_y-4)
       else
-        Font.draw_solid(@part_table[part],15,draw_x,draw_y,*Color[:part_str_font])
+        Font.draw_texture(@part_table[part],15,draw_x,draw_y,*Color[:part_str_font])
       end
-      draw_y+=27
+      draw_y+=@edge
     }
     
     if @click_equip_y&&@show_equip_detail
@@ -91,7 +101,7 @@ class EquipWindow < DragWindow
         return
       end
       equip=@equip[@Parts[@click_equip_y]]
-      draw_x,draw_y=@win_x+10,@win_y+22+@click_equip_y*27
+      draw_x,draw_y=@win_x+@border,@win_y+22+@click_equip_y*@edge
       if @click_equip_y>5
         draw_y=equip.draw_detail(draw_x,draw_y,:above)
       else

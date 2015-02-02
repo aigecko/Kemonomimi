@@ -225,12 +225,12 @@ class GameWindow < BaseWindow
   end
   def set_draw_actor
     add_actor_buffer(@player)
-	
+
     @actor_buffer+=@map.render_friend
     @actor_buffer+=@map.render_enemy
     
     @actor_buffer+=@map.render_friend_bullet
-	  @actor_buffer+=@map.render_enemy_bullet
+    @actor_buffer+=@map.render_enemy_bullet
     
     @actor_buffer+=@map.render_onground_item
     @shadow_buffer=@map.render_shadow
@@ -256,7 +256,7 @@ class GameWindow < BaseWindow
   def draw
     @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
     @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
-    @surface.draw_rect(@offset_x,@map_up_margin,Game.Width,50,Color[:clear],true)
+    # @surface.draw_rect(@offset_x,@map_up_margin,Game.Width,50,Color[:clear],true)
     @map.draw(@surface)
     draw_circle
     draw_actor

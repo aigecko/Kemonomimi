@@ -13,6 +13,13 @@ class SkillWindow < DragWindow
     
     @comment='滑鼠左鍵: 選擇技能, ctrl+按鍵:設定快捷鍵'
     @comment_pic=Font.render_texture(@comment,12,*Color[:comment])
+    
+    @skill_backs={}
+    [:skill_active_cding_back,:skill_active_back,
+     :skill_switch_on_back,:skill_switch_off_back,
+     :skill_passive_back,:skill_clicked].each{|name|
+      @skill_backs[name]=Rectangle.new(0,0,@box_w,@box_h,Color[name])
+    }
   end
   def start_init
     @skill=Game.player.skill
@@ -35,9 +42,9 @@ class SkillWindow < DragWindow
       when Event::MouseButtonDown
         case event.button
         when Mouse::BUTTON_LEFT
-          if (event.x-@win_x-10)/@box_border_w<@skill.size&&
+          if (event.x-@win_x-@border)/@box_border_w<@skill.size&&
              (event.y-@win_y-24).between?(0,@box_h-1)
-            @click_box=(event.x-@win_x-10)/@box_border_w
+            @click_box=(event.x-@win_x-@border)/@box_border_w
           else
             @click_box=nil
             @click_skill=nil
@@ -86,12 +93,12 @@ class SkillWindow < DragWindow
     end
   end
   def draw_click_box(skill,draw_x,draw_y)
-    Screen.draw_rect(draw_x,draw_y,@box_w,@box_h,[255,0,0],true,255)
-    unless [:active,:switch_auto,:switch_append,:switch_attack_defense,:shoot].include?(skill.type)
-      @hotkey_set=false
-    else
-      @hotkey_set=true
-    end  
+    back=@skill_backs[:skill_clicked]
+    back.x=draw_x
+    back.y=draw_y
+    back.draw
+    @hotkey_set=
+      [:active,:shoot,:switch_auto,:switch_append,:switch_attack_defense].include?(skill.type)
     return draw_x+@box_border_w
   end
   def draw_unclick_box(skill,draw_x,draw_y)
@@ -103,7 +110,10 @@ class SkillWindow < DragWindow
     else
       color=:skill_passive_back
     end
-    Screen.draw_rect(draw_x,draw_y,@box_w,@box_h,Color[color],true,255)
+    back=@skill_backs[color]
+    back.x=draw_x
+    back.y=draw_y
+    back.draw
     return draw_x+@box_border_w
   end
 end
