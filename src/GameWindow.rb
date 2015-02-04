@@ -265,6 +265,7 @@ class GameWindow < BaseWindow
     Effect.draw(@surface)
     SDL::Surface.blit(@surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
                  Screen.render,0,0)
+    Screen.flip
     draw_sub_window
     @player.draw_state(200,400)
   end

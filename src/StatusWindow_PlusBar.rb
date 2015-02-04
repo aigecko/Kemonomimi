@@ -1,24 +1,17 @@
 #coding: utf-8
 class StatusWindow::PlusBar < StatusWindow::Bar
-  def value_init
+  def value_init(win_x,win_y)
     @val_back_w=65
     super
-    @val_font_x=@str_font_x+33
-    @plus_x=@str_back_x+@val_back_w+@str_back_w
-    @plus_y=@val_back_y
+    @val_font_x=@x+35
+    @plus_x=@x+@val_back_w+@str_back_w
+    @plus_y=@y
     @plus_w=@plus_h=18
     @plus_val||=0
-    
-    @plus_back||=Rectangle.new(@plus_x,@plus_y,@plus_w,@plus_h,[125,125,125])
-    @plus_back.x=@plus_x
-    @plus_back.y=@plus_y
   end
-  def pic_init
+  def pic_init(skeleton)
+    skeleton.fill_rect(@val_back_x+@val_back_w,@val_back_y,@plus_w,@plus_h,[125,125,125])
     @val=->{sprintf("%4d",@value)}
     super
-  end
-  def draw
-    super
-    @plus_back.draw
   end
 end

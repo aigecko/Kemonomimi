@@ -36,14 +36,6 @@ class Texture
   def w;return @origin_w;end
   def h;return @origin_h;end
   def draw(dst_x,dst_y,z=0)
-    $queue<<self
-    @data=[@id[0],
-      -1+dst_x/320.0,1-dst_y/240.0,
-      @draw_w,@draw_h,
-      @text_w,@text_h,
-      z]
-  end
-  def direct_draw(dst_x,dst_y,z=0)
     @data=[@id[0],
       -1+dst_x/320.0,1-dst_y/240.0,
       @draw_w,@draw_h,

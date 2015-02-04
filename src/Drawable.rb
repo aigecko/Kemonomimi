@@ -24,10 +24,11 @@ class Drawable
     self.x=x
     self.y=y
     @z=z
+    display
   end
   def draw(z=0)
     @z=z
-    $queue<<self
+    display
   end
 end
 class Rectangle < Drawable

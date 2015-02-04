@@ -1,11 +1,11 @@
 #coding: utf-8
 class StatusWindow::ShortBar < StatusWindow::Bar
-  def value_init
+  def value_init(win_x,win_y)
     @val_back_w=65
     super
-    @val_font_x=@str_font_x+33
+    @val_font_x=@x+35
   end
-  def pic_init
+  def pic_init(skeleton)
     @val=->{sprintf("%4d",@value)}
     super
   end

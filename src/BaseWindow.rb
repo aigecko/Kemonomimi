@@ -9,6 +9,26 @@ class BaseWindow
     @win_x=x
     @win_y=y
     
+    stat_init
+  end
+private
+  def self.init
+    @ske_w=@ske_h=32
+    base=Input.load_ui_pic
+    @@skeleton=Hash.new
+    @@skeleton[:loca7]=base.copy_rect(0, 0, @ske_w,@ske_h)
+    @@skeleton[:loca8]=base.copy_rect(32,0,@ske_w,@ske_h)
+    @@skeleton[:loca9]=base.copy_rect(64,0,@ske_w,@ske_h)
+    @@skeleton[:loca4]=base.copy_rect(0,32,@ske_w,@ske_h)
+    @@skeleton[:loca5]=base.copy_rect(32,32,@ske_w,@ske_h)
+    @@skeleton[:loca6]=base.copy_rect(64,32,@ske_w,@ske_h)
+    @@skeleton[:loca1]=base.copy_rect(0,64,@ske_w,@ske_h)
+    @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
+    @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
+    @@colorkey=@@skeleton[:loca7][0,0]
+  end
+  self.init
+  def skeleton_initialize
     @skeleton=SDL::Surface.new_32bpp(@win_w,@win_h)
     @skeleton.fill_rect(0,0,@win_w,@win_h,@@colorkey)
     tmp_x,tmp_y=@win_x,@win_y
@@ -45,26 +65,10 @@ class BaseWindow
     @skeleton.set_color_key(SDL::SRCCOLORKEY,@skeleton[0,0])
     
     @win_x,@win_y=tmp_x,tmp_y
-    stat_init
+  end
+  def gen_skeleton_texture
     @skeleton=WindowTexture.new(@skeleton)
   end
-private
-  def self.init
-    @ske_w=@ske_h=32
-    base=Input.load_ui_pic
-    @@skeleton=Hash.new
-    @@skeleton[:loca7]=base.copy_rect(0, 0, @ske_w,@ske_h)
-    @@skeleton[:loca8]=base.copy_rect(32,0,@ske_w,@ske_h)
-    @@skeleton[:loca9]=base.copy_rect(64,0,@ske_w,@ske_h)
-    @@skeleton[:loca4]=base.copy_rect(0,32,@ske_w,@ske_h)
-    @@skeleton[:loca5]=base.copy_rect(32,32,@ske_w,@ske_h)
-    @@skeleton[:loca6]=base.copy_rect(64,32,@ske_w,@ske_h)
-    @@skeleton[:loca1]=base.copy_rect(0,64,@ske_w,@ske_h)
-    @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
-    @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
-    @@colorkey=@@skeleton[:loca7][0,0]
-  end
-  self.init
   def stat_init
     @enable=false
     @visible=false

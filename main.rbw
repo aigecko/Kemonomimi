@@ -162,10 +162,10 @@ class<<Game
     num=0
     until done
       draw_back
-      text.direct_draw(230,240)
+      text.draw(230,240)
       num=(num<3) ? num+1 : 0
       num.times{|i|
-        dot.direct_draw(370+i*30,240)
+        dot.draw(370+i*30,240)
       }
       SDL::GL.swap_buffers
       SDL.delay(40)
@@ -194,7 +194,7 @@ class<<Game
       name==:GameWindow and next
       window.visible and window.draw
     }
-    Screen.flip
+    SDL::GL.swap_buffers
   end
   def draw_back
     glClearColor(0,0,0,1.0);
@@ -229,20 +229,14 @@ class<<Game
     exit
   end
   def show
-    $queue=[]
     loop{
       time=SDL.get_ticks
 
       update
       draw_back
       draw
-      $queue.each{|text|
-        text.display
-      }
-      $queue.clear
-      SDL::GL.swap_buffers
       delta_time=SDL.get_ticks-time
-      #p delta_time
+      # p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

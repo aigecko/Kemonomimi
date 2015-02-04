@@ -5,19 +5,30 @@ class EquipWindow < DragWindow
     win_x=377
     win_y=50
     super(win_x,win_y,win_w,win_h)
-    
+
+    skeleton_initialize
     title_initialize('角色裝備')
     @edge=27
     @box_w=@box_h=26
     
-    @pic_back=Rectangle.new(0,0,@box_w,25,Color[:equip_pic_back])
-    @str_back=Rectangle.new(0,0,110,25,Color[:equip_str_back])
+    @click_rect=Rectangle.new(0,0,@box_w,@box_h,Color[:click_box_back])
+  end
+  def back_initialize
+    @Parts.size.times{|n|
+       pic_back_x=@border
+       str_back_x=pic_back_x+@box_w
+       pic_back_y=str_back_y=22+n*@edge
+       @skeleton.fill_rect(pic_back_x,pic_back_y,@box_w,@box_h,Color[:equip_pic_back])
+       @skeleton.fill_rect(str_back_x,str_back_y,110,@box_h,Color[:equip_str_back])
+    }
   end
   def start_init
     @equip=Game.player.equip
     @Parts=@equip.parts
     @part_table=Actor.part_table
-    @skeleton or pic_initialize
+    back_initialize
+    gen_skeleton_texture
+    def start_init;end
   end
   def update_coord
     super
@@ -67,21 +78,9 @@ class EquipWindow < DragWindow
     @show_equip_detail=false
   end
   def draw
-    dst=Screen.render
     super
-    draw_title
-    (0...@Parts.size).each{|n|
-       @pic_back.x=@win_x+@border
-       @str_back.x=@win_x+@border+@box_w
-       @pic_back.y=@str_back.y=@win_y+22+n*@edge
-       @pic_back.draw
-       @str_back.draw
-       #dst.draw_rect(@win_x+@border,@win_y+22+n*@edge,@box_w,25,Color[:equip_pic_back],true,255)    
-       #dst.draw_rect(@win_x+36,@win_y+22+n*@edge,110,25,Color[:equip_str_back],true,255)
-    }
-    
     @click_equip_y and
-    Screen.draw_rect(@win_x+@border,@win_y+22+@click_equip_y*@edge,@box_w,@box_h,Color[:click_box_back],true,255)
+    @click_rect.draw_at(@win_x+@border,@win_y+22+@click_equip_y*@edge)
     
     draw_x,draw_y=@win_x+39,@win_y+@edge
     icon_x=@win_x+11

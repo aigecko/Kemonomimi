@@ -5,6 +5,9 @@ class LevelWindow < BaseWindow
     win_x=0
     win_y=Game.Height-win_h
     super(win_x,win_y,win_w,win_h)
+
+    skeleton_initialize
+    gen_skeleton_texture
   end
   def start_init
     player=Game.player

@@ -20,7 +20,7 @@ class Item
       p e
       Message.show_backtrace(e)
       exit
-    end    
+    end
     @onground=args[:onground]
     @position=Position.new(args[:x]||0,0,args[:z]||0)
     

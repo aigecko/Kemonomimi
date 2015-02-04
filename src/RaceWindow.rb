@@ -12,10 +12,12 @@ class RaceWindow < SelectWindow
     else
       @table=[:catear,:foxear,:wolfear,:dogear]
     end
+    skeleton_initialize
     title_initialize('請選擇種族')
     comment_initialize(:default)
     word_initialize
     pic_initialize
+    gen_skeleton_texture
   end
   def word_initialize
     @race=Actor.race_table
@@ -104,15 +106,10 @@ class RaceWindow < SelectWindow
   def get_race
     return @table[@select]
   end
-  def open
-    super
-  end
   def draw
     @back.draw(0,0)
     super
-    draw_title
     draw_select_detail(@race_pic,@text_pic,@table)
-    draw_comment
   end
  
 end

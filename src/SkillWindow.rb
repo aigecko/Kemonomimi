@@ -5,8 +5,8 @@ class SkillWindow < DragWindow
     win_w,win_h=300,200
     super(win_x,win_y,win_w,win_h)
     
+    skeleton_initialize
     title_initialize('角色技能')
-    pic_initialize
     
     @box_w=@box_h=24
     @box_border_w=@box_border_h=26
@@ -20,6 +20,8 @@ class SkillWindow < DragWindow
      :skill_passive_back,:skill_clicked].each{|name|
       @skill_backs[name]=Rectangle.new(0,0,@box_w,@box_h,Color[name])
     }
+    
+    gen_skeleton_texture
   end
   def start_init
     @skill=Game.player.skill
@@ -69,7 +71,6 @@ class SkillWindow < DragWindow
   end
   def draw
     super
-    draw_title
     @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
     i=0
     draw_x,draw_y=@win_x+@border,@win_y+24

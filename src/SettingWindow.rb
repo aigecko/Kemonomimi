@@ -7,11 +7,12 @@ class SettingWindow < SelectWindow
     super(win_x,win_y,win_w,win_h)
     
     @alone=true
-    
+    skeleton_initialize
     title_initialize('變更遊戲設定')
     comment_initialize(:save,:change)
     word_initialize
     pic_initialize
+    gen_skeleton_texture
   end
   def word_initialize
     @table=[]
@@ -45,10 +46,12 @@ class SettingWindow < SelectWindow
     @value_draw_x=@win_x+@border*2+w_long
     @value_draw_y=@win_y+@border+@title_pic.h
         
-    @extra_comment_pic=Font.render_texture(@extra_comment,@comment_size,*Color[:comment])
+    extra_comment_pic=Font.render_solid(@extra_comment,@comment_size,*Color[:comment])
     
-    @ex_cmt_draw_x=@cmt_draw_x-2
-    @ex_cmt_draw_y=@cmt_draw_y-@extra_comment_pic.h-@border/2
+    ex_cmt_draw_x=@cmt_draw_x-2
+    ex_cmt_draw_y=@cmt_draw_y-extra_comment_pic.h-@border/2
+    
+    extra_comment_pic.draw(ex_cmt_draw_x,ex_cmt_draw_y,@skeleton)
   end
   def interact
     Event.each{|event|
@@ -105,7 +108,7 @@ class SettingWindow < SelectWindow
   def other_change
     if Conf[@table[@select]]
       Conf[@table[@select]]=false
-    else        
+    else
       Conf[@table[@select]]=true
     end
   end
@@ -122,18 +125,12 @@ class SettingWindow < SelectWindow
         Font.render_texture(str,@font_size,*Color[:focused_select])]
     end
   end
-  def open
-    super
-  end
   def draw
     @back.draw(0,0)
     super
-    draw_title
     draw_select(@name_pic,@table)
     value_pic_start
     draw_select(@value_pic,@table)
     value_pic_end
-    @extra_comment_pic.draw(@ex_cmt_draw_x,@ex_cmt_draw_y)
-    draw_comment
   end
 end

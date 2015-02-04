@@ -11,11 +11,12 @@ class ClassWindow < SelectWindow
     @table=[:crossbowman,:archer,
             :mage,:cleric,
             :fighter,:paladin,:darkknight]
-    
+    skeleton_initialize
     title_initialize('請選擇職業')
     word_initialize
     pic_initialize
     comment_initialize(:default)
+    gen_skeleton_texture
   end
   def pic_initialize
     @back=Input.load_title
@@ -126,14 +127,9 @@ class ClassWindow < SelectWindow
   def get_class
     return @table[@select]
   end
-  def open
-    super
-  end
   def draw
     @back.draw(0,0)
     super
-    draw_title
     draw_select_detail(@class_pic,@detail_pic,@table)
-    draw_comment
   end
 end

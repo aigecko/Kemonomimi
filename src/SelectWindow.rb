@@ -4,6 +4,8 @@ class SelectWindow < BaseWindow
     super(x,y,w,h)
     @select=0
     word_init
+    skeleton_initialize
+    gen_skeleton_texture
   end
 private
   def word_init
@@ -24,7 +26,8 @@ private
 public
   def title_initialize(text)
     @title=text
-    @title_pic=Font.render_texture(@title,@font_size,*Color[:title])
+    @title_pic=Font.render_solid(@title,@font_size,*Color[:title])
+    @title_pic.draw(@border,@border,@skeleton)
   end
   def select_pic_initialize(list)
     pic=Hash.new([])
@@ -52,10 +55,12 @@ public
   end
   def comment_initialize(*ary)
     @comment=get_comment(*ary)
-    @comment_pic=Font.render_texture(@comment,@comment_size,*Color[:comment])
+    comment_pic=Font.render_solid(@comment,@comment_size,*Color[:comment])
     
-    @cmt_draw_x=@win_x+@border
-    @cmt_draw_y=@win_y+@win_h-@comment_pic.h-@border
+    @cmt_draw_x=@border
+    @cmt_draw_y=@win_h-comment_pic.h-@border
+    
+    comment_pic.draw(@cmt_draw_x,@cmt_draw_y,@skeleton)
   end
  
   def get_comment(*ary)
@@ -80,12 +85,6 @@ public
       return index
     end
     return nil
-  end
-  def draw_comment
-    @comment_pic.draw(@cmt_draw_x,@cmt_draw_y)
-  end
-  def draw_title
-    @title_pic.draw(@win_x+@border,@win_y+@border)
   end
   def draw_select_detail(list_pic,text_pic,table)
     pic_draw_x=@select_draw_x

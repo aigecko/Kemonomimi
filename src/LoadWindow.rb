@@ -6,7 +6,8 @@ class LoadWindow < BaseWindow
     win_x=0
     win_y=0
     super(win_x,win_y,win_w,win_h)
-    @text=Font.render_solid('施工中',@font_size,255,255,255)
+    skeleton_initialize
+    gen_skeleton_texture
   end
   def interact
     Event.each{|event|
@@ -36,6 +37,6 @@ class LoadWindow < BaseWindow
   end
   def draw
     super
-    @text.draw(10,10)
+    @text=Font.draw_texture('施工中',@font_size,@win_x+@border,@win_y+@border,255,255,255)
   end
 end

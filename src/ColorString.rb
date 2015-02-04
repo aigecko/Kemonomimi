@@ -82,14 +82,14 @@ class ColorString
         x=start_x
         accum=0
       else
-        pack.empty? or     
+        pack.empty? or
         x+=Font.draw_texture(pack,@size,x,y,*color)[0]
         if @limit_len
           accum+=pack.size
           accum<@limit_len and next
           accum=0
         end
-        x=start_x            
+        x=start_x
         y+=@size
       end
     }

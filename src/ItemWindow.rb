@@ -32,9 +32,10 @@ class ItemWindow < DragWindow
     @moneybar_init_x=->{@win_x+@border}
     @moneybar_init_y=->{@win_y+308}
     @money_bar=MoneyBar.new(@moneybar_init_x.call,@moneybar_init_y.call)
-
+    
+    skeleton_initialize
     title_initialize('道具物品')
-    pic_initialize
+    gen_skeleton_texture
   end
   def interact
     Event.each{|event|
@@ -95,7 +96,6 @@ class ItemWindow < DragWindow
     super
     @pages[@current].draw_back
     @pages[@current].draw_boxes
-    draw_title
     @drag_bar.draw
     @pages[@current].draw_page(@drag_bar.offset)
     @pages.each_value{|page| page.draw_title}

@@ -8,35 +8,27 @@ class StatusWindow < DragWindow
     super(win_x,win_y,win_w,win_h)
     @bars=[]
     @buttons={}
+    skeleton_initialize
     title_initialize('人物狀態')
-  end
-  def pic_initialize
-    # surface=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
-    # draw(surface)
-    # draw_title(surface)
-    
-    # @skeleton=surface.copy_rect(@win_x,@win_y,@win_w,@win_h)
-    # @skeleton.set_color_key(SDL::SRCCOLORKEY|SDL::RLEACCEL,@skeleton[0,0])
-    # @skeleton.display_format_alpha
   end
   def coord_init
     @coord={}
     [:str,:con,:int,:wis,:agi].each_with_index{|sym,i|
-      @coord[sym]=[@win_x+@border,@win_y+75+i*20]
+      @coord[sym]=[@win_x,@win_y,@win_x+@border,@win_y+75+i*20]
     }
     [:atk,:def,:matk,:mdef,:ratk].each_with_index{|sym,i|
-      @coord[sym]=[@win_x+90+@border,@win_y+75+i*20]
+      @coord[sym]=[@win_x,@win_y,@win_x+90+@border,@win_y+75+i*20]
     }
-    @coord[:maxhp]=[@win_x+@border,@win_y+25]
-    @coord[:maxsp]=[@win_x+@border,@win_y+45]
+    @coord[:maxhp]=[@win_x,@win_y,@win_x+@border,@win_y+25]
+    @coord[:maxsp]=[@win_x,@win_y,@win_x+@border,@win_y+45]
 
-    @coord[:block]=[@win_x+@border,@win_y+185]
-    @coord[:dodge]=[@win_x+@border+75,@win_y+185]
+    @coord[:block]=[@win_x,@win_y,@win_x+@border,@win_y+185]
+    @coord[:dodge]=[@win_x,@win_y,@win_x+@border+75,@win_y+185]
     
-    @coord[:wlkspd]=[@win_x+@border,@win_y+215]
-    @coord[:atkspd]=[@win_x+@border,@win_y+235]
+    @coord[:wlkspd]=[@win_x,@win_y,@win_x+@border,@win_y+215]
+    @coord[:atkspd]=[@win_x,@win_y,@win_x+@border,@win_y+235]
     
-    @coord[:extra]=[@win_x+@border+70,@win_y+215]
+    @coord[:extra]=[@win_x,@win_y,@win_x+@border+70,@win_y+215]
 
     @coord[:button_check]=[@win_x+@border+119,@win_y+240]
     @coord[:button_close]=[@win_x+@border+70,@win_y+240]
@@ -44,18 +36,18 @@ class StatusWindow < DragWindow
   def start_init
     coord_init
     [:str,:con,:int,:wis,:agi].each{|sym|
-      @bars<<PlusBar.new(sym,*@coord[sym])
+      @bars<<PlusBar.new(sym,*@coord[sym],@skeleton)
     }
     [:maxhp,:maxsp].each{|sym|
-      @bars<<LongBar.new(sym,*@coord[sym])
+      @bars<<LongBar.new(sym,*@coord[sym],@skeleton)
     }
     [:atk,:def,:matk,:mdef,:ratk,:wlkspd,:atkspd].each{|sym|
-      @bars<<ShortBar.new(sym,*@coord[sym])
+      @bars<<ShortBar.new(sym,*@coord[sym],@skeleton)
     }
     [:block,:dodge].each{|sym|
-      @bars<<MidBar.new(sym,*@coord[sym])
+      @bars<<MidBar.new(sym,*@coord[sym],@skeleton)
     }
-    @bars<<ExtraBar.new(:extra,*@coord[:extra])
+    @bars<<ExtraBar.new(:extra,*@coord[:extra],@skeleton)
     
     button_str={
       button_check:'確定',
@@ -65,7 +57,7 @@ class StatusWindow < DragWindow
       @buttons[sym]=Button.new(button_str[sym],sym,*@coord[sym])
     }
     get_active_button
-    pic_initialize
+    gen_skeleton_texture
     def start_init;end
   end
   def interact
@@ -146,10 +138,8 @@ class StatusWindow < DragWindow
   end
   def draw
     super
-    draw_title
     @bars.each{|bar|
       bar.update
-      bar.draw_back
       bar.draw
     }
     draw_button

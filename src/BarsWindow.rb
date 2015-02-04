@@ -13,8 +13,6 @@ class BarsWindow < BaseWindow
     @sp_bar=Bar.new(:sp,@win_x+@border*2+bar_w,@win_y+@border,bar_w,bar_h)
     @exp_bar=Bar.new(:exp,@win_x+@border,@win_y+@border+bar_h+5,bar_w*2+@border,bar_h)
     
-    @font_size=12
-    
     @hp_font=[]
     @sp_font=[]
     @exp_font=[]
@@ -26,6 +24,10 @@ class BarsWindow < BaseWindow
     @exp_font_x=@exp_bar.ske_x+2
     @exp_font_y=@exp_bar.ske_y
     
+    skeleton_initialize
+    gen_skeleton_texture
+    
+    @font_size=12
   end
   def start_init
     @attrib=Game.player.attrib

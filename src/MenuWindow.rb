@@ -12,10 +12,12 @@ class MenuWindow < SelectWindow
     win_x=Game.Width/2-win_w/2
     win_y=Game.Height/2-win_h/2
     super(win_x,win_y,win_w,win_h)
+    skeleton_initialize
     @text_pic=select_pic_initialize(@text)
     @select_draw_x=win_x+@border
     @select_draw_y=win_y+@border
     @alone=true
+    gen_skeleton_texture
   end
   def interact
     Event.each{|event|
@@ -40,9 +42,6 @@ class MenuWindow < SelectWindow
         Game.quit
       end
     }
-  end
-  def open
-    super
   end
   def select_check
     case @select
