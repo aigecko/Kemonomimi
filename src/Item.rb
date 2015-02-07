@@ -52,7 +52,7 @@ class Item
   end
   def draw(*args)
     if @onground
-      @pic.draw(@draw_x,@draw_y,args[0])
+      @pic.blit(@draw_x,@draw_y,args[0])
     else
       @pic.draw(*args)
     end

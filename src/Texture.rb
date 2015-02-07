@@ -21,8 +21,8 @@ class Texture
     mask=@surface.format.Rmask|
       @surface.format.Gmask|
       @surface.format.Bmask
-    for x in 0...@surface.w
-      for y in 0...@surface.h
+    for x in 0...@origin_w
+      for y in 0...@origin_h
         @surface[x,y]==@surface.colorkey and @surface[x,y]&=mask
       end
     end
@@ -42,6 +42,9 @@ class Texture
       @text_w,@text_h,
       z]
     display
+  end
+  def blit(dst_x,dst_y,dst)
+    SDL::Surface.blit(@surface,0,0,@origin_w,@origin_h,dst,dst_x,dst_y)
   end
   def display
     id,x,y,w,h,vx,vy=*@data
