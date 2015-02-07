@@ -29,7 +29,7 @@ class Actor
       @actor.attrib.gain_state_attrib(state.attrib)
     end
     def include?(name)
-      return @state[name] ? true : false
+      @state[name]
     end
     def keep_if
       @state.keep_if{|sym,state| yield state}
@@ -73,8 +73,8 @@ class Actor
     def draw(x,y)
       n=0
       @state.each_value{|state|
-        if state.respond_to? :each
-          if state.empty? then next end          
+        if state.respond_to? :empty?
+          state.empty? and next
           state=state[-1]
         end
         state.draw_icon(x+n*30,y) and n+=1

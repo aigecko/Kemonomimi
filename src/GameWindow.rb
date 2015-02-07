@@ -256,15 +256,15 @@ class GameWindow < BaseWindow
   def draw
     @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
     @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
-    # @surface.draw_rect(@offset_x,@map_up_margin,Game.Width,50,Color[:clear],true)
     @map.draw(@surface)
     draw_circle
     draw_actor
     Attack.draw(@surface)
     Heal.draw(@surface)
     Effect.draw(@surface)
-    SDL::Surface.blit(@surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
-                 Screen.render,0,0)
+    SDL::Surface.blit(
+      @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
+      Screen.render,0,0)
     Screen.flip
     draw_sub_window
     @player.draw_state(200,400)

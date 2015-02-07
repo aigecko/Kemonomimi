@@ -506,7 +506,7 @@ class Skill
           append: :attack).affect(info[:target],info[:target].position)
       }
       
-      @proc[:fire_circle]=->(info){        
+      @proc[:fire_circle]=->(info){
         attack=info[:args][0]+info[:caster].attrib[:matk]
         if SDL.get_ticks>info[:caster].var[:fire_circle_triger]
           info[:caster].var[:fire_circle_triger]=SDL.get_ticks+1.to_sec
@@ -544,7 +544,7 @@ class Skill
       
         caster.add_state(caster,
           name:'狼耳之血',sym: :wolfear,
-          icon:'./rc/icon/skill/2011-12-23_3-079.gif',
+          icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,0,0]',
           attrib: {healhp: healhp,healsp: healsp},          
           magicimu_keep: true,
           last: nil)

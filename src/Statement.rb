@@ -1,14 +1,15 @@
 #coding: utf-8
 class Statement
   attr_reader :attrib,:sym,:multi,:num_limit,:negative
+  @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
+  @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
   def initialize(caster,info)
     @caster=caster
     
     @name=info[:name]||""
     @sym=info[:sym]
     
-    info[:icon] and
-    @icon=SDL::Surface.load(info[:icon])
+    info[:icon] and @icon=Icon.load(info[:icon])
     
     @attrib=info[:attrib]
     @effect=info[:effect]
@@ -29,7 +30,7 @@ class Statement
     @end_time=SDL.get_ticks+@last_time
   end
   def update(actor)
-    @effect or return    
+    @effect or return
     @effect.affect(actor,actor.position,@effect_amp)
   end
   def keep_when_magicimmunity?
@@ -40,13 +41,12 @@ class Statement
     @last_time<0 and @last_time=0
   end
   def end?
-    @last_time and
-    @end_time<SDL.get_ticks ? true : false
+    return @last_time&&@end_time<SDL.get_ticks
   end
   def draw_icon(x,y)
     @icon or return false
-    Screen.fill_rect(x-1,y-1,26,26,Color[:statement_border])
-    Screen.fill_rect(x,y,24,24,Color[:statement_back])
+    @@border_box.draw_at(x-1,y-1)
+    @@back_box.draw_at(x,y)
     @icon.draw(x,y)
   end
   def draw_name
