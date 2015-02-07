@@ -15,9 +15,10 @@ class ItemWindow::Page
     update_coord(x,y)
 
     @box_w=@box_h=26
-    @box_back=Rectangle.new(0,0,@box_w,@box_h,Color[:item_box])
+    @w_with_edge=@h_with_edge=27
     @box_limit=100
     @box_draw_n=50
+    @box_draw_half_n=@box_draw_n/2
     @boxes
 
     case @title
@@ -53,10 +54,6 @@ class ItemWindow::Page
     @x=x
     @y=y+@title_pic.h
     
-    @page_back||=Rectangle.new(@x,@y,@w,@h,Color[:item_page])
-    @page_back.x=@x
-    @page_back.y=@y
-    
     @title_back_x=@x+@w*@idx/4
     @title_back_y=y
     
@@ -75,8 +72,8 @@ class ItemWindow::Page
     if check_click_title(x,y)
       return true
     elsif check_cilck_window(x,y)
-      box_x=(x-@x-1)/27
-      box_y=(y-@y-1)/27
+      box_x=(x-@x-1)/@w_with_edge
+      box_y=(y-@y-1)/@h_with_edge
       if box_x+box_y*5<@boxes.size
         if check_double_click(box_x,box_y)
           @click_proc.call
@@ -105,8 +102,8 @@ class ItemWindow::Page
   end
   def end_drag(x,y,offset)
     @drag or return
-    box_x=((x-@x-1)/27).confine(0,4)
-    box_y=((y-@y-1)/27).confine(0,9)
+    box_x=((x-@x-1)/@w_with_edge).confine(0,4)
+    box_y=((y-@y-1)/@h_with_edge).confine(0,9)
     box_idx=box_x+box_y*@@box_row_num+offset
     if @boxes[box_idx].respond_to?(:item)&&
        !@boxes[box_idx].empty?
@@ -156,35 +153,33 @@ class ItemWindow::Page
     end
     @title_pic.draw(@title_font_x,@title_font_y)
   end
-  def draw_back
-    @page_back.draw
+  def draw_back(dst)
+    dst.fill_rect(10,21+@title_h,@w,@h,Color[:item_page])
   end
-  def draw_boxes(dst=Screen.render)
+  def draw_boxes(dst)
     @box_draw_n.times{|n|
       col=n% @@box_row_num
       row=n/ @@box_row_num
-      @box_back.x=@x+col*27+1
-      @box_back.y=@y+row*27+1
-      @box_back.draw
+      draw_x=col*@w_with_edge+10+1
+      draw_y=row*@h_with_edge+21+@title_h+1
+      dst.fill_rect(draw_x,draw_y,@box_w,@box_h,Color[:item_box])
     }
   end
   def draw_page(offset)
     if @click_box
-      box_draw_x=@x+@click_box.x*27+1
-      box_draw_y=@y+(@click_box.y-offset/@@box_row_num)*27+1
+      box_draw_x=@x+@click_box.x*@w_with_edge+1
+      box_draw_y=@y+(@click_box.y-offset/@@box_row_num)*@h_with_edge+1
       @click_box_back||=Rectangle.new(
         box_draw_x,box_draw_y,@box_w,@box_h,Color[:click_box_back])
-      @click_box_back.x=box_draw_x
-      @click_box_back.y=box_draw_y
-      @click_box_back.draw
+      @click_box_back.draw_at(box_draw_x,box_draw_y)
     end
     @boxes and
-    @boxes[offset,50].each_with_index{|item,n|
+    @boxes[offset,@box_draw_n].each_with_index{|item,n|
       item or next
       col=n% @@box_row_num
       row=n/ @@box_row_num
-      item_draw_x=@x+col*27+2
-      item_draw_y=@y+row*27+2
+      item_draw_x=@x+col*@w_with_edge+2
+      item_draw_y=@y+row*@h_with_edge+2
       if item.respond_to? :num
         item.item or next
         item.draw(item_draw_x,item_draw_y)
@@ -209,7 +204,7 @@ class ItemWindow::Page
       end
       draw_x=@x
       draw_y=box_draw_y
-      if @click_box.y*@@box_row_num-offset>=25
+      if @click_box.y*@@box_row_num-offset>=@box_draw_half_n
         draw_y=item.draw_detail(draw_x,draw_y,:above)
       else
         draw_y=item.draw_detail(draw_x,draw_y,:below)

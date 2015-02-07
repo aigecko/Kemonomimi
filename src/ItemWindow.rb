@@ -35,6 +35,10 @@ class ItemWindow < DragWindow
     
     skeleton_initialize
     title_initialize('道具物品')
+    
+    @pages[@current].draw_back(@skeleton)
+    @pages[@current].draw_boxes(@skeleton)
+    @money_bar.draw_back(@skeleton)
     gen_skeleton_texture
   end
   def interact
@@ -52,9 +56,7 @@ class ItemWindow < DragWindow
             break
           }
           @pages.each{|name,page|
-            unless @current==name
-              page.untag
-            end
+            @current==name or page.untag
           }
         when Mouse::BUTTON_RIGHT
         end
@@ -94,8 +96,6 @@ class ItemWindow < DragWindow
   end
   def draw
     super
-    @pages[@current].draw_back
-    @pages[@current].draw_boxes
     @drag_bar.draw
     @pages[@current].draw_page(@drag_bar.offset)
     @pages.each_value{|page| page.draw_title}
