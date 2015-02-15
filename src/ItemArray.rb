@@ -27,7 +27,6 @@ class ItemArray <Array
   end
   def <<(obj)
     if obj.superposed #可疊
-      #p :sp
       @vac.each{|idx|
         pack=self[idx]
         if pack.empty?
@@ -52,7 +51,7 @@ class ItemArray <Array
     a==b and return
     box_a=self[a]
     box_b=self[b]
-    if !box_a||box_a.empty?      
+    if !box_a||box_a.empty?
       @vac.delete(a)
       @vac<<b
       @vac.sort!

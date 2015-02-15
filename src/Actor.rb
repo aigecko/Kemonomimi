@@ -256,19 +256,27 @@ class Actor
         @skill[:normal_attack].cast_attack(self,@target,@attrib[:atkspd])
       end
     when :pickup
-      func=nil
       case @target
       when Equipment
         func=:gain_equip
       when Consumable
         func=:gain_consumable
+      when OnGroundItem
+        func=:gain_consumable
       when Item
         func=:gain_item
+      else
+        begin
+          raise "UnknownItemOnGround"
+        rescue => e
+          p e
+          Message.show_format("拾起的物件型別未知","錯誤",:ERROR)
+          exit
+        end
       end
-      if send(func,@target)
-        @target.pickup
-        Map.render_onground_item.delete(@target)
-      end
+      Map.render_onground_item.delete(@target)
+      @target=@target.pickup
+      send(func,@target)
       set_target(nil)
     end
   end
@@ -304,7 +312,7 @@ class Actor
   def update
     @state.update
     recover
-    @skill.update    
+    @skill.update
     unless has_state?(:stun)
       chase_target
       move2dst

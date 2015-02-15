@@ -1,6 +1,6 @@
 #coding: utf-8
 class Item
-  attr_reader :position,:superposed,:name,:id
+  attr_reader :position,:superposed,:name,:id,:pic
   @@low_bound=350
   @@font_size=12
   @@rect_w=135
@@ -21,8 +21,6 @@ class Item
       Message.show_backtrace(e)
       exit
     end
-    @onground=args[:onground]
-    @position=Position.new(args[:x]||0,0,args[:z]||0)
     
     @superposed=true 
     @comment=ColorString.new(comment,@@font_size,Color[:item_comment_font],11)
@@ -30,37 +28,11 @@ class Item
     @rect_h=28+@comment.h
     @rect_back=Rectangle.new(0,0,@@rect_w,@rect_h,Color[:item_rect_back])
   end
-  def pickup
-    @onground=false
-    return self
-  end
   def drop
-    @onground=true
-    return self
-  end
-  def under_cursor?(offset_x)
-    draw_x,draw_y,* =Mouse.state
-    x=draw_x-@draw_x+offset_x
-    y=draw_y-@draw_y    
-    if x.between?(0,@pic.w)&&
-       y.between?(0,@pic.h)&&
-       @pic[x,y]!=@pic.colorkey
-      return true
-    else
-      return false
-    end
+    return OnGroundItem.new(self)
   end
   def draw(*args)
-    if @onground
-      @pic.blit(@draw_x,@draw_y,args[0])
-    else
-      @pic.draw(*args)
-    end
-  end
-  def draw_shadow(dst)    
-    @draw_x=@position.x-@pic.w/2
-    @draw_y=Map.h-@position.y-@position.z/2
-    dst.draw_ellipse(@position.x,@draw_y+@pic.h,10,5,Color[:shadow],true,false,150)
+    @pic.draw(*args)
   end
   def draw_detail(x,y,direct)
     y>@@low_bound and y=@@low_bound

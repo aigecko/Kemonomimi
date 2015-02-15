@@ -3,7 +3,7 @@ class Attack
   @@FontSize=30
   @@buffer=[]
   attr_accessor :attrib
-  def initialize(caster,info)  
+  def initialize(caster,info)
     @info=info
     @caster=caster
     

@@ -7,7 +7,6 @@ class Database
   @Race= Input.load_database(:race,true)
   @Consum=Input.load_database(:consum,true)
   @Skill=Input.load_database(:skill,true)
-  #@buffer=Surface.new(Surface.flag,Game.Width,Game.Height,Screen.format)
   def self.get_class(key)
     return @Class[key]
   end
@@ -28,9 +27,13 @@ class Database
       exit
     end
   end
-  def self.get_consum(index)   
-    name,pic,attrib,price,comment=@Consum[index]
-    return Consumable.new(name,pic,attrib,price,comment,{id: index})
+  def self.get_consum(index)
+    consumable=@Consum[index]
+    unless consumable.respond_to? :use
+      name,pic,attrib,price,comment=consumable
+      @Consum[index]=Consumable.new(name,pic,attrib,price,comment,{id: index})
+    end
+    return @Consum[index]
   end
   def self.get_actor_pic(name)    
     str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))
