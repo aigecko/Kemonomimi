@@ -94,8 +94,12 @@ class Color
       
       shadow:[0,0,0]
     }
+    @invert=@color.invert
   end
   def self.[](sym)
-    @color[sym]
+    return @color[sym]
+  end
+  def self.find(color)
+    return @invert[color]
   end
 end

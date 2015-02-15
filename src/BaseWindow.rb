@@ -1,6 +1,7 @@
 #coding: utf-8
 class BaseWindow
-  attr_accessor :enable,:visible,:alone
+  attr_accessor :enable,:visible
+  attr_reader :alone
   def initialize(x,y,w,h)
     @ske_w=@ske_h=32
     @ske_mv=5
@@ -70,10 +71,7 @@ private
     @skeleton=WindowTexture.new(@skeleton)
   end
   def stat_init
-    @enable=false
-    @visible=false
-    
-    @alone=false
+    @enable=@visible=@alone=false
      
     @row=(@win_w/@ske_w.to_f).ceil
     @column=(@win_h/@ske_h.to_f).ceil

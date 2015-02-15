@@ -1,15 +1,14 @@
 #coding: utf-8
-%w{Actor_Attrib Actor_ActorAni Actor_Equip 
-   Actor_State Actor_AI
-   ActorSingleton}.each{|actor_lib|
-  require_relative actor_lib
-}
 class Actor
+    %w{Actor_Attrib Actor_ActorAni Actor_Equip 
+     Actor_State Actor_AI ActorSingleton}.each{|actor_lib|
+    require_relative actor_lib
+  }
   attr_reader :position,:attrib,:ally,:race,:class
   attr_reader :equip_list,:item_list,:comsumable_list,:pledge_list
   attr_reader :equip,:skill,:target
   #dbg
-  attr_accessor :shape  
+  attr_accessor :shape
   attr_accessor :var
   def initialize(comment,pos,attrib,pics)
     str=comment.split
@@ -247,7 +246,7 @@ class Actor
                            @target.position.x,@target.position.z)<=51
     end
   end
-  def interact_target    
+  def interact_target
     @target and reach_target? and
     case @action
     when :attack
@@ -285,7 +284,7 @@ class Actor
     case @action
     when :attack
       if @target.position.x>@position.x
-        rotate(:right)		
+        rotate(:right)
         dst_x=@target.position.x-(@target.pic_w+pic_w)/2+1
       else
         rotate(:left)
@@ -485,5 +484,23 @@ class Actor
   def draw(dst)
     @animation.draw(@position,dst)
     draw_hpbar(dst)
+  end
+  def marshal_dump
+    data={
+      :@ally=>@ally,:@race=>@race,:@class=>@class,:@face=>@face,
+      :@position=>@position,:@shape=>@shape,:@var=>@var,
+      :@accum_hp=>@accum_hp, :@accum_sp=>@accum_sp,
+      :@attrib=>@attrib,:@animation=>@animation
+    }
+    #:@state, :@equip
+    #:@comsumable_list, :@equip_list, :@item_list, :@pledge_list
+    #:@skill, 
+    # p instance_variables#.each{|sym|
+      # data[sym]=instance_variable_get(sym)
+    # }
+    return [data]
+  end
+  def marshal_load(array)
+    p data=array[0]
   end
 end

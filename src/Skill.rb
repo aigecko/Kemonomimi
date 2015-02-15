@@ -54,9 +54,7 @@ class Skill
     return false
   end
   def cast(caster,target,x,y,z)
-    if toggle(x,y,z)
-      return
-    end
+    toggle(x,y,z) and return
     @switch or return
     
     consum=@consum*(100+caster.attrib[:consum_amp])/100
@@ -70,7 +68,7 @@ class Skill
   end
   def cast_auto(caster)
     consum=@consum*(100+caster.attrib[:consum_amp])/100
-    caster.can_cast_auto?(@end_time,consum) or return    
+    caster.can_cast_auto?(@end_time,consum) or return
     caster.lose_sp(consum)
     
     cd_start

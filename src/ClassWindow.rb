@@ -5,9 +5,6 @@ class ClassWindow < SelectWindow
     win_x=(Game.Width-win_w)/2
     win_y=(Game.Height-win_h)/2
     super(win_x,win_y,win_w,win_h)
-    
-    @alone=true
-    
     @table=[:crossbowman,:archer,
             :mage,:cleric,
             :fighter,:paladin,:darkknight]
@@ -17,6 +14,7 @@ class ClassWindow < SelectWindow
     pic_initialize
     comment_initialize(:default)
     gen_skeleton_texture
+    @alone=true
   end
   def pic_initialize
     @back=Input.load_title

@@ -34,11 +34,10 @@ class ItemWindow::Page
         player=Game.player
         pack=@boxes[convert_position]
         pack.item or return
-        pack.item.use(player,player,*Game.window(:GameWindow).convert_position)
-        pack.num-=1
-        if pack.num==0
-          pack.item=nil
+        if pack.item.use(player,player,*Game.window(:GameWindow).convert_position)
+          pack.num-=1
         end
+        pack.num==0 and pack.item=nil
       }
     else
       @click_proc=->{}

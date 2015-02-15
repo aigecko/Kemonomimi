@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #coding: utf-8
 line=0
 Dir.foreach('src'){|name|

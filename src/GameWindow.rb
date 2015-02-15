@@ -10,7 +10,7 @@ class GameWindow < BaseWindow
     
     @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow]
        
-    @windows={}       
+    @windows={}
     @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow]
     @drag_list.each{|window|
       @windows[window]=Object.const_get(window).new
@@ -24,6 +24,8 @@ class GameWindow < BaseWindow
     HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
     HotKey.bind(Key::F3,:proc,:once,->{switch_window(:SkillWindow)})
     HotKey.bind(Key::F4,:proc,:once,->{switch_window(:EquipWindow)})
+    HotKey.bind(Key::F5,:proc,:once,->{Game.save})
+    HotKey.bind(Key::F6,:proc,:once,->{Game.load})
     HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
     
   end
@@ -213,6 +215,9 @@ class GameWindow < BaseWindow
     else
       @windows[name].close
     end
+  end
+  def close_all_subwindows
+    @drag_list.each{|name| @windows[name].close}
   end
   def add_actor_buffer(actor)
     @actor_buffer<<actor

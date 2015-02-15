@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 #coding: utf-8
 $t=Time.now
 std_lib=%w(sdl gl glu yaml singleton pathname)
@@ -122,7 +123,7 @@ class<<Game
   end
   def load_lib
     done=false
-    t=Thread.new{
+    # t=Thread.new{
       require 'openssl'
       require 'digest'
       require 'zlib'
@@ -130,7 +131,7 @@ class<<Game
       
       library_list=%w(
         Database Position 
-        Item Equipment Consumable ItemArray
+        Item Equipment Consumable ItemArray OnGroundItem
         Event Key HotKey
         Actor Player Enemy Friend
         Statement SkillTree
@@ -155,7 +156,7 @@ class<<Game
       
       require_relative 'src/Map'
       done=true
-    }
+    # }
     
     text=Font.render_texture('Loading',30,*Color[:loading_font])
     dot=Font.render_texture('.',30,*Color[:loading_font])
@@ -176,13 +177,10 @@ class<<Game
 
   def update
     Event.poll
-    @window.each_value{|window|
-      if window.enable
-        window.interact
-        if window.alone
-          break
-        end
-      end
+    @window.each{|name,window|
+      window.enable or next
+      window.interact
+      window.alone and break
     }
     if Event[:Quit]
       Game.quit
@@ -197,10 +195,25 @@ class<<Game
     SDL::GL.swap_buffers
   end
   def draw_back
-    glClearColor(0,0,0,1.0);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glClearColor(0,0,0,1.0)
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
   end
   public
+  def save
+    @window[:GameWindow].close_all_subwindows
+    time=SDL.get_ticks
+    def saving_time;return time;end
+    File.open('test.sav','w'){|file|
+      Marshal.dump({
+        Player: @window[:GameWindow].get_player
+      },file)
+    }
+  end
+  def load
+    File.open('test.sav','r'){|file|
+      data=Marshal.load(file)
+    }
+  end
   def set_window(name,state)
     if state==:open
       @window[name].open

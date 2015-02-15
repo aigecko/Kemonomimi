@@ -4,8 +4,6 @@ class SelectWindow < BaseWindow
     super(x,y,w,h)
     @select=0
     word_init
-    skeleton_initialize
-    gen_skeleton_texture
   end
 private
   def word_init

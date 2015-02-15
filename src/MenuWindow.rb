@@ -16,8 +16,8 @@ class MenuWindow < SelectWindow
     @text_pic=select_pic_initialize(@text)
     @select_draw_x=win_x+@border
     @select_draw_y=win_y+@border
-    @alone=true
     gen_skeleton_texture
+    @alone=true
   end
   def interact
     Event.each{|event|

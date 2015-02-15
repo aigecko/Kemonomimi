@@ -9,6 +9,8 @@ class Consumable < Item
     @skill=Skill.new(attrib)
   end
   def use(caster,target,x,y,z)
+    @skill.cding? and return false
     @skill.cast(caster,target,x,y,z)
+    return true
   end
 end

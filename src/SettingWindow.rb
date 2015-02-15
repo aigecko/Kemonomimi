@@ -5,14 +5,14 @@ class SettingWindow < SelectWindow
     win_x=(Game.Width-win_w)/2
     win_y=(Game.Height-win_h)/2
     super(win_x,win_y,win_w,win_h)
-    
-    @alone=true
+
     skeleton_initialize
     title_initialize('變更遊戲設定')
     comment_initialize(:save,:change)
     word_initialize
     pic_initialize
     gen_skeleton_texture
+    @alone=true
   end
   def word_initialize
     @table=[]

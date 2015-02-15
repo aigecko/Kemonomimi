@@ -5,8 +5,6 @@ class RaceWindow < SelectWindow
     win_x,win_y=(Game.Width-win_w)/2,(Game.Height-win_h)/2
     super(win_x,win_y,win_w,win_h)
     
-    @alone=true
-    
     if(rand()<0.3)
       @table=[:catear,:foxear,:wolfear,:dogear,:leopardcatear]
     else
@@ -18,6 +16,7 @@ class RaceWindow < SelectWindow
     word_initialize
     pic_initialize
     gen_skeleton_texture
+    @alone=true
   end
   def word_initialize
     @race=Actor.race_table
