@@ -75,7 +75,7 @@ class Actor
       :p=>:@position,:sh=>:@shape,:v=>:@var,
       :ach=>:@accum_hp,:acs=>:@accum_sp,
       :at=>:@attrib,:an=>:@animation,
-      :st=>:@state
+      :st=>:@state,:sk=>:@skill
     }
   end
   def self.attrib_table

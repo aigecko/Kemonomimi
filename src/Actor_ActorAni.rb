@@ -13,7 +13,7 @@ class Actor::ActorAni
   end
   def pic_initialize
     @pic=[]
-    @pics.to_sym and @pics=[@pics]
+    @pics.respond_to? :each or @pics=[@pics]
     @pics.each{|name|
       @pic<<Database.get_actor_pic(name)
     }
@@ -65,6 +65,7 @@ class Actor::ActorAni
   def marshal_load(array)
     data=array[0]
     @pics=data[:p]
+    pic_initialize
     @idx=data[:i]
     @face=data[:f]
     @hpbar_color=Color[data[:c]]

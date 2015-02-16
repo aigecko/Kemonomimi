@@ -485,11 +485,6 @@ class Actor
   end
   def marshal_dump
     data={}
-      # :@ally=>@ally,:@race=>@race,:@class=>@class,:@face=>@face,
-      # :@position=>@position,:@shape=>@shape,:@var=>@var,
-      # :@accum_hp=>@accum_hp, :@accum_sp=>@accum_sp,
-      # :@attrib=>@attrib,:@animation=>@animation,
-      # :@state=>@state
     @@marshal_table.each{|abbrev,sym|
       data[abbrev]=instance_variable_get(sym)
     }
@@ -499,7 +494,7 @@ class Actor
     # p instance_variables#.each{|sym|
       # data[sym]=instance_variable_get(sym)
     # }
-    # pp data[:@state]
+    # pp data[:skill]
     return [data]
   end
   def marshal_load(array)
@@ -507,7 +502,7 @@ class Actor
     @@marshal_table.each{|abbrev,sym|
       instance_variable_set(sym,data[abbrev])
     }
-    # pp data[:@state]
+    # pp data
     #data[:state].bind_actor(self)
   end
 end

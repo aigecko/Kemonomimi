@@ -182,14 +182,14 @@ class<<Game
     @window[:GameWindow].close_all_subwindows
     @time=SDL.get_ticks
     def saving_time;return @time;end
-    File.open('../test.sav','w'){|file|
+    File.open('test.sav','w'){|file|
       Marshal.dump({
         Player: @window[:GameWindow].get_player
       },file)
     }
   end
   def load
-    File.open('../test.sav','r'){|file|
+    File.open('test.sav','r'){|file|
       data=Marshal.load(file)
     }
   end

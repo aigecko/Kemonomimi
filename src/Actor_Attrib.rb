@@ -1,38 +1,6 @@
 #coding: utf-8
 class Actor::Attrib
-  @@Conv={
-    str:{atk: 1},
-    con:{def: 1,maxhp: 10},#}
-    int:{matk: 1},
-    wis:{mdef: 1,maxsp: 10},
-    agi:{ratk: 1}
-  }
-  @@Max={
-    level: 200,
-    str: 1024,
-    con: 1024,
-    int: 1024,
-    wis: 1024,
-    agi: 1024
-  }
-  @@Base=[:str,:con,:int,:wis,:agi]
-  @@Coef={
-    extra: 7,      
-    healhp: 0.01,
-    healsp: 0.02,
-    
-    growth: 10,
-    amped: 100,
-    step: 40,
-    
-    agi_div: 50.0,
-    agi_exp: 1.06,
-    agi_mul: 2,
-    dodge_exp: 1.3,
-    dodge_max: 30,
-    dtob: 0.8,
-    atkspd_max: 500
-  }
+  require_relative 'Actor_AttribSingleton'
   attr_accessor :equip
   attr_reader :total
   def initialize(attrib,race,klass)
@@ -158,7 +126,7 @@ class Actor::Attrib
     @total[:hlhpstep]=@total[:healhp]/25.to_f
     @total[:hlspstep]=@total[:healsp]/25.to_f
   end
-  def compute_block_dodge    
+  def compute_block_dodge
     agi=@total[:agi]
     str=@total[:str]
     value=(agi/@@Coef[:agi_div])**@@Coef[:agi_exp]*@@Coef[:agi_mul]
@@ -205,14 +173,28 @@ class Actor::Attrib
   end
   def marshal_dump
     data={}
-    instance_variables.each{|var|
-      data[var]=instance_variable_get(var)
+    @@marshal_table.each{|abbrev,name|
+      variable=instance_variable_get(name)
+      hash=data[abbrev]={}
+      attrib_list=variable.keys&@@marshal_attrib_table.keys
+      attrib_list.each{|sym|
+        (value=variable[sym])!=0 and
+        hash[@@marshal_attrib_table[sym]]=value
+      }
     }
     return [data]
   end
   def marshal_load(array)
-    array[0].each{|sym,val|
-      instance_variable_set(sym,val)
+    data=array[0]
+    @@marshal_table.each{|abbrev,name|
+      hash=Hash.new(0)
+      variable=data[abbrev]
+      variable.each{|abbsym,value|
+        hash[@@marshal_abbrev_table[abbsym]]=value
+      }
+      instance_variable_set(name,hash)
     }
+    @growth=Database.get_class(Game.player.class)
+    @total[:maxexp]=Actor.get_need_exp(@base[:level])
   end
 end

@@ -18,7 +18,7 @@ class SkillTree
     add_single_skill(skill,info)
     @base[skill]=@skill[skill]
   end
-  def add_class(type,skill,info)    
+  def add_class(type,skill,info)
     @class[type]||=[]
     if skill.respond_to? :zip
       skill.zip(info){|skl,inf|
@@ -77,7 +77,7 @@ class SkillTree
   end
   def check_click(x,y)
     x=x/26
-    y=y/26    
+    y=y/26
   end
   def draw(x,y)
     draw_x=x+10
@@ -89,7 +89,7 @@ class SkillTree
     }
     draw_x=x+10
     draw_y+=26
-    @class.each_value{|skill_ary|      
+    @class.each_value{|skill_ary|
       draw_x=x
       skill_ary.each{|skill|
         skill.draw_icon(draw_x,draw_y)
@@ -103,5 +103,14 @@ class SkillTree
       skill.draw_icon(draw_x,draw_y)
       draw_x+=26
     }
+  end
+  def marshal_dump
+    [:@caster, :@skill, :@skill_list, :@base, :@class, :@other]
+    data={
+      :c=>Map.find_actor(@caster)
+    }
+    return [data]
+  end
+  def marshal_load(array)
   end
 end
