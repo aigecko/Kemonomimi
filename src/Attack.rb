@@ -17,8 +17,9 @@ class Attack
       return true
     end
     
-    damage=(damage*scale).to_i
     if damage!=0
+      damage=(damage*scale).to_i
+      damage==0 and damage=1
       real_damage=damage
       vamp_damage=0
       if @info[:type]!=:acid
@@ -198,7 +199,7 @@ class Attack
     end
     return damage
   end
-  def bash(target,damage)    
+  def bash(target,damage)
     if !@caster.attrib[:bash].empty?
       @caster.attrib[:bash].each{|data|
         possibility,time,add_damage=data
@@ -248,28 +249,23 @@ class Attack
       skill.cast(@caster,target,position.x,position.y,position.z)
     end
   end
-  class<<self  
-    def draw(dst)
-      @@buffer.reject!{|dmg|
-        dmg.draw(dst)
-      }
-    end
-    def formula(attack,defense)
-      defense=defense.confine(0,defense)
-      return (attack**2/(attack+defense)).to_i
-    end
-    alias create new
-    def new(caster,info)    
-      case info[:dmg_type]      
-      when :const
-        return ConstAttack.new(caster,info)
-      when :max,:cur,:lose
-        return PercentAttack.new(caster,info)
-      when :const_max,:const_cur,:const_lose
-        return ConstMixAttack.new(caster,info)
-      else
-        return ConstAttack.new(caster,info)
-      end
-    end
+  def self.draw(dst)
+    @@buffer.reject!{|dmg|
+      dmg.draw(dst)
+    }
   end
+  def marshal_dump
+    return [{
+      :i=>@info,
+      :a=>@attrib,
+      :c=>Map.find_actor(@caster)
+    }]
+  end
+  def marshal_load(array)
+    data=array[0]
+    @info=data[:i]
+    @attrib=data[:a]
+    @caster=Map.load_actor(data[:c])
+  end
+  require_relative 'AttackSingleton' #must at last line
 end

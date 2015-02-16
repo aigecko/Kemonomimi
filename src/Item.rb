@@ -22,7 +22,7 @@ class Item
       exit
     end
     
-    @superposed=true 
+    @superposed=true
     @comment=ColorString.new(comment,@@font_size,Color[:item_comment_font],11)
     
     @rect_h=28+@comment.h
@@ -52,5 +52,9 @@ class Item
   end
   def draw_comment(x,y)
     @comment.draw(x,y)
+  end
+  def marshal_dump
+  end
+  def marshal_load(array)
   end
 end

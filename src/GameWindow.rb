@@ -88,7 +88,7 @@ class GameWindow < BaseWindow
           name:'燒毀',sym: :burn,
           icon:'./rc/icon/icon/tklre03/skill_041.png',
           attrib: {},
-          effect: Attack.new(@player,type: :acid,attack: 25,visible: false),
+          effect: Attack.new(@player,type: :acid,attack: 25,visible: false,dmg_type: :lose),
           effect_amp: 0.04,
           last: 2000)
         when Key::LCTRL

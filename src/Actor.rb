@@ -7,9 +7,7 @@ class Actor
   attr_reader :position,:attrib,:ally,:race,:class
   attr_reader :equip_list,:item_list,:comsumable_list,:pledge_list
   attr_reader :equip,:skill,:target
-  #dbg
-  attr_accessor :shape
-  attr_accessor :var
+  attr_accessor :shape,:var
   def initialize(comment,pos,attrib,pics)
     str=comment.split
     
@@ -76,7 +74,7 @@ class Actor
       common_cd: :normal_attack,
       comment:'快速射出一隻箭造成#{@table[@level][0]}+ratk的傷害')
   end  
-  def skill_initialize    
+  def skill_initialize
     case @class
     when :paladin
       [:counter_beam,:holy_protect,:paladin_magic_immunity].each{|skill|
@@ -486,21 +484,30 @@ class Actor
     draw_hpbar(dst)
   end
   def marshal_dump
-    data={
-      :@ally=>@ally,:@race=>@race,:@class=>@class,:@face=>@face,
-      :@position=>@position,:@shape=>@shape,:@var=>@var,
-      :@accum_hp=>@accum_hp, :@accum_sp=>@accum_sp,
-      :@attrib=>@attrib,:@animation=>@animation
+    data={}
+      # :@ally=>@ally,:@race=>@race,:@class=>@class,:@face=>@face,
+      # :@position=>@position,:@shape=>@shape,:@var=>@var,
+      # :@accum_hp=>@accum_hp, :@accum_sp=>@accum_sp,
+      # :@attrib=>@attrib,:@animation=>@animation,
+      # :@state=>@state
+    @@marshal_table.each{|abbrev,sym|
+      data[abbrev]=instance_variable_get(sym)
     }
-    #:@state, :@equip
+    #, :@equip
     #:@comsumable_list, :@equip_list, :@item_list, :@pledge_list
     #:@skill, 
     # p instance_variables#.each{|sym|
       # data[sym]=instance_variable_get(sym)
     # }
+    # pp data[:@state]
     return [data]
   end
   def marshal_load(array)
-    p data=array[0]
+    data=array[0]
+    @@marshal_table.each{|abbrev,sym|
+      instance_variable_set(sym,data[abbrev])
+    }
+    # pp data[:@state]
+    #data[:state].bind_actor(self)
   end
 end

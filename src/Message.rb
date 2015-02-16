@@ -40,6 +40,8 @@ class Message
     skill_pic_load_failure:['技能圖片載入失敗','錯誤', :OK, :ERROR],
       
     ai_fetch_failure:['AI選取失敗','錯誤', :OK, :ERROR],
+    actor_unknown_type:['匯入或匯出非Actor實體','錯誤', :OK, :ERROR],
+    actor_index_wrong:['Actor實體索引值錯誤','錯誤', :OK,:ERROR],
     #提示訊息
     unvalid_equip:['裝備不存在','錯誤', :OK, :ASTERISK],
 

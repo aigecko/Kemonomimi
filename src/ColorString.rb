@@ -38,7 +38,7 @@ class ColorString
   def cut_initialize(ary)
     accum=0;str=''
     for i in 0...ary.size
-      if ary[i].respond_to?(:take)          
+      if ary[i].respond_to?(:take)
         @ary<<str<<ary[i]
         str='';accum=0
         next

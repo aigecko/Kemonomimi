@@ -1,13 +1,6 @@
 #coding: utf-8
 class Map
-  class Chipset
-    @@chipsets=Input.load_chipset_pic
-    def self.[](idx)
-      @@chipsets[idx]
-    end
-  end
-end
-class Map
+  require_relative 'Map_Chipset'
   attr_reader :w,:h
   @@current_map=nil
   def initialize
@@ -150,6 +143,42 @@ class Map
   end
   def add_enemy_circle(ally,circle)
     ((ally==:enemy)? @friend_circle : @enemy_circle)<<circle
+  end
+  def find_actor(actor)
+    if idx=@enemy.find_index(actor)
+      return [:e,idx]
+    elsif idx=@friend.find_index(actor)
+      return [:f,idx]
+    elsif Game.player==actor
+      return :p
+    else
+      return nil
+    end
+  end
+  def load_actor(data)
+    if data==:p
+      return Game.player
+    elsif data[0]==:e
+      begin
+        actor=@enemy[data[1]] and return actor
+      rescue
+        Message.show(:actor_index_wrong)
+        exit
+      end
+    elsif data[0]==:f
+      begin
+        actor=@friend[data[1]] and return actor
+      rescue
+        Message.show(:actor_index_wrong)
+        exit
+      end
+    elsif data==nil
+      return nil
+    end
+    Message.show(:actor_unknown_type)
+    exit
+  end
+  def find_bullet(bullet)
   end
   def delete_live_frame
     @friend_bullet.reject!{|bullet| bullet.to_delete?}

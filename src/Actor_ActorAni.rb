@@ -58,15 +58,15 @@ class Actor::ActorAni
   end
   def marshal_dump
     return [{
-      :@pics=>@pics,:@idx=>@idx,:@face=>@face,
-      :@hpbar_color=>Color.find(@hpbar_color)
+      :p=>@pics,:i=>@idx,:f=>@face,
+      :c=>Color.find(@hpbar_color)
     }]
   end
   def marshal_load(array)
     data=array[0]
-    @pics=data[:@pics]
-    @idx=data[:@idx]
-    @face=data[:@face]
-    @hpbar_color=Color[data[:@hpbar_color]]
+    @pics=data[:p]
+    @idx=data[:i]
+    @face=data[:f]
+    @hpbar_color=Color[data[:c]]
   end
 end

@@ -3,6 +3,14 @@ class Statement
   attr_reader :attrib,:sym,:multi,:num_limit,:negative
   @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
   @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
+  @@marshal_table={
+    :n=>:@name,:s=>:@sym,
+    :i=>:@icon_string,:a=>:@attrib,
+    :ea=>:@effect_amp,:e=>:@effect,
+    :iv=>:@interval,:mu=>:@multi,
+    :nl=>:@num_limit,:mk=>:@magicimu_keep,
+    :ne=>:@negative
+  }
   def initialize(caster,info)
     @caster=caster
     
@@ -10,6 +18,7 @@ class Statement
     @sym=info[:sym]
     
     info[:icon] and @icon=Icon.load(info[:icon])
+    @icon_string=info[:icon]
     
     @attrib=info[:attrib]
     @effect=info[:effect]
@@ -20,7 +29,7 @@ class Statement
     @num_limit=info[:num_limit]
     
     @start_time=SDL.get_ticks
-    @last_time=info[:last]    
+    @last_time=info[:last]
     @last_time and @end_time=@start_time+@last_time
     
     @magicimu_keep=info[:magicimu_keep]
@@ -50,5 +59,31 @@ class Statement
     @icon.draw(x,y)
   end
   def draw_name
+  end
+  def marshal_dump
+    data={}
+    data[:c]=Map.find_actor(@caster)
+    data[:st]=@start_time-Game.saving_time
+    @end_time and data[:et]=@end_time-Game.saving_time
+    @last_time and data[:lt]=@last_time-Game.saving_time
+
+    @@marshal_table.each{|abbrev,sym|
+      var=instance_variable_get(sym) and
+      data[abbrev]=var
+    }
+    return [data]
+  end
+  def marshal_load(array)
+    data=array[0]
+    @caster=Map.load_actor(data[:c])
+    @@marshal_table.each{|abbrev,sym|
+      var=data[abbrev] and
+      instance_variable_set(sym,var)
+    }
+    data[:i] and @icon=Icon.load(data[:i])
+    #dbg
+    @start_time
+    @end_time
+    @last_time
   end
 end
