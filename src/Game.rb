@@ -112,7 +112,7 @@ class<<Game
         Database Position 
         Item Equipment Consumable ItemArray OnGroundItem
         Event Key HotKey
-        Actor Player Enemy Friend
+        Actor Player Enemy Friend Attribute
         Statement SkillTree
         ColorString ParaString DynamicString
         Shape Bullet

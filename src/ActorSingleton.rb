@@ -31,40 +31,6 @@ class Actor
       600+200*n*(n-1)
     }
 
-    @attrib_table={
-      str:'力量',con:'體質',
-      int:'智力',wis:'智慧',
-      agi:'敏捷',
-
-      hp:'生命',sp:'法力',
-      maxhp:'最大生命',maxsp:'最大法力',
-      healhp:'生命回復',healsp:'法力回復',
-
-      atk:'近攻',def:'物防',#}
-      matk:'魔攻',mdef:'魔防',
-      ratk:'遠攻',
-
-      block:'格檔',dodge:'閃避',ignore:'忽略傷害',
-      wlkspd:'跑速',atkspd:'攻速',
-      jump:'跳躍',tough:'韌性',
-      extra:'剩餘點數',
-
-      atk_vamp:'普攻吸血',
-      skl_vamp:'技能吸血',
-
-      mag_outamp:'魔法輸出強化',phy_outamp:'物理輸出強化',
-      mag_resist:'魔法抗性',phy_resist:'物理抗性',atk_resist:'傷害抗性',
-      mag_decatk:'減少魔傷',phy_decatk:'減少物傷',
-      mag_shield:'魔法護盾',atk_shield:'傷害護盾',
-
-      consum_amp:'消耗係數',heal_amp:'治癒係數',
-
-      attack_amp:'輸出強化',
-
-      critical:'爆擊',
-      bash:'暈眩'
-    }
-
     @part_table={
       head:'頭部',neck:'頸部',body:'軀幹',back:'背部',right:'主手',
       left:'副手',range:'遠距',finger:'手指',feet:'足部',deco:'裝飾'
@@ -79,7 +45,7 @@ class Actor
     }
   end
   def self.attrib_table
-    return @attrib_table
+    return Attribute.name_table
   end
   def self.class_table
     return @class_table

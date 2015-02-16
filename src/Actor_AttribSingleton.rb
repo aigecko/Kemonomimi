@@ -33,35 +33,5 @@ class Actor::Attrib
     dtob: 0.8,
     atkspd_max: 500
   }
-  @@marshal_abbrev_table={
-    :l=>:level,:G=>:money,:x=>:exp,
-    :s=>:str,:c=>:con,:i=>:int,:w=>:wis,:a=>:agi,
-
-    :hp=>:hp,:sp=>:sp,
-    :mh=>:maxhp,:ms=>:maxsp,
-    :hh=>:healhp,:hs=>:healsp,
-
-    :at=>:atk,:d=>:def,:ma=>:matk,:md=>:mdef,:ra=>:ratk,
-
-    :b=>:block,:g=>:dodge,:n=>:ignore,
-    :ws=>:wlkspd,:as=>:atkspd,
-    :j=>:jump,:t=>:tough,
-    :e=>:extra,
-
-    :av=>:atk_vamp,:sv=>:skl_vamp,
-    :mo=>:mag_outamp,:po=>:phy_outamp,
-    :mr=>:mag_resist,:pr=>:phy_resist,:ar=>:atk_resist,
-    :mc=>:mag_decatk,:pc=>:phy_decatk,
-    :msh=>:mag_shield,:psh=>:atk_shield,
-
-    :ca=>:consum_amp,:ha=>:heal_amp,:aa=>:attack_amp,
-
-    :cr=>:critical,:ba=>:bash,
-  
-    #below attribute will be re-initialize after load
-    #:tc=>:attack_cd,:rc=>:arrow_cd
-    #:me=>:maxexp
-  }
-  @@marshal_attrib_table=@@marshal_abbrev_table.invert
-  @@marshal_table={:b=>:@base,:s=>:@state,:e=>:@equip,:a=>:@amped,:t=>:@total}
+  @@MarshalTable={:b=>:@base,:s=>:@state,:e=>:@equip,:a=>:@amped,:t=>:@total}
 end

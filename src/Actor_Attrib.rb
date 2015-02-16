@@ -81,11 +81,11 @@ class Actor::Attrib
     end
     compute_total
   end
+private
   def compute_base_attrib
     @@Base.each{|base|
       @total[base]=@base[base]+@equip[base]+@state[base]+
                    @growth[base]*@base[:level]/@@Coef[:growth]
-           
       @@Conv[base].each{|key,val|
         @total[key]=@base[key]+@total[base]*val
       }
@@ -95,7 +95,7 @@ class Actor::Attrib
     [:wlkspd,:atkspd,:jump,:level].each{|sym|
       @total[sym]=@base[sym]
     }      
-  
+
     [:mag_outamp,:phy_outamp,
      :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
@@ -103,13 +103,13 @@ class Actor::Attrib
      :atk_vamp,:skl_vamp].each{|sym|
       @total[sym]=0
     }
-    
+
     @total[:critical]=[]
     @total[:bash]=[]
     @total[:healhp]=@total[:str]*@@Coef[:healhp]
     @total[:healsp]=@total[:int]*@@Coef[:healsp]
     @total[:tough]=@base[:level]
-  
+
     [:atk,:def,:matk,:mdef,:ratk,
      :wlkspd,:atkspd,
      :maxhp,:maxsp,:healhp,:healsp,
@@ -122,24 +122,21 @@ class Actor::Attrib
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
     }
-    @total[:wlkstep]=@total[:wlkspd]/@@Coef[:step].to_f
-    @total[:hlhpstep]=@total[:healhp]/25.to_f
-    @total[:hlspstep]=@total[:healsp]/25.to_f
   end
   def compute_block_dodge
     agi=@total[:agi]
     str=@total[:str]
     value=(agi/@@Coef[:agi_div])**@@Coef[:agi_exp]*@@Coef[:agi_mul]
-    
+
     @total[:dodge]=value*(agi**@@Coef[:dodge_exp])/((str+agi)**@@Coef[:dodge_exp])
     @total[:block]=value-@total[:dodge]      
     @total[:ignore]=0
-    
+
     [:dodge,:block,:ignore].each{|sym|
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
     }
-    
+
     # if @total[:dodge]>@@Coef[:dodge_max]
       # @total[:block]+=(@total[:dodge]-@@Coef[:dodge_max])*@@Coef[:dtob]
       # @total[:dodge]=@@Coef[:dodge_max]
@@ -154,43 +151,50 @@ class Actor::Attrib
         @total[key]+=delta_base*val
         @total[key]+=@amped[key]*@total[key]/@@Coef[:amped]
       }
-    }      
-    
+    }
+
     @total[:hp]>@total[:maxhp] and @total[:hp]=@total[:maxhp]
     @total[:sp]>@total[:maxsp] and @total[:sp]=@total[:maxsp]
-          
+
     @total[:wlkspd]+=@total[:wlkspd]*@amped[:wlkspd]/@@Coef[:amped]
     @total[:wlkstep]=@total[:wlkspd].confine(0,@total[:wlkspd])
-    @total[:wlkstep]=@total[:wlkspd]/@@Coef[:step].to_f
-    
+
     @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
   end
+  def compute_step
+    @total[:wlkstep]=@total[:wlkspd]/@@Coef[:step].to_f
+    @total[:hlhpstep]=@total[:healhp]/25.to_f
+    @total[:hlspstep]=@total[:healsp]/25.to_f
+  end
+public
   def compute_total
     compute_base_attrib
     compute_state_equip
     compute_block_dodge
     compute_amp_attrib
+    compute_step
   end
   def marshal_dump
     data={}
-    @@marshal_table.each{|abbrev,name|
+    @@MarshalTable.each{|abbrev,name|
       variable=instance_variable_get(name)
       hash=data[abbrev]={}
-      attrib_list=variable.keys&@@marshal_attrib_table.keys
+      attrib_list=variable.keys&Attribute.attrib_table.keys
       attrib_list.each{|sym|
         (value=variable[sym])!=0 and
-        hash[@@marshal_attrib_table[sym]]=value
+        hash[Attribute.attrib_table[sym]]=value
       }
     }
+    p data
     return [data]
   end
   def marshal_load(array)
     data=array[0]
-    @@marshal_table.each{|abbrev,name|
+    @@MarshalTable.each{|abbrev,name|
       hash=Hash.new(0)
       variable=data[abbrev]
       variable.each{|abbsym,value|
-        hash[@@marshal_abbrev_table[abbsym]]=value
+        hash[Attribute.abbrev_table[abbsym]]=value
       }
       instance_variable_set(name,hash)
     }
