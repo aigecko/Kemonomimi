@@ -2,6 +2,8 @@
 class Actor::ActorAni
   require_relative 'Actor_ActorAniSingleton'
   @@hpbar_color_back=Color[:actor_hpbar_back]
+  @@hpbar_ske=Rectangle.new(0,0,42,6,@@hpbar_color_back)
+  @@hpbar_bar=Rectangle.new(0,0,40,4,@@hpbar_color_back)
   def initialize(pics,actor)
     @pics=pics
     pic_initialize
@@ -48,13 +50,14 @@ class Actor::ActorAni
     @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
     @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z/401.0)
   end
-  def draw_hpbar(pos,percent,dst)
-    bar_w=40
-    bar_h=4
-    draw_x=pos.x-bar_w/2
+  def draw_hpbar(pos,percent)
+    draw_x=pos.x-20
     draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+15
-    dst.draw_rect(draw_x-1,draw_y,bar_w+2,bar_h+2,@@hpbar_color_back,true,255)
-    dst.draw_rect(draw_x,draw_y+1,bar_w*percent,bar_h,@hpbar_color,true,255)
+    
+    @@hpbar_bar.w=40*percent
+    @@hpbar_bar.color=@hpbar_color
+    @@hpbar_bar.draw_at(draw_x,draw_y+1,pos.z/401.0)
+    @@hpbar_ske.draw_at(draw_x-1,draw_y,pos.z/401.0)
   end
   def marshal_dump
     return [{

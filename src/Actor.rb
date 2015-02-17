@@ -472,16 +472,16 @@ class Actor
   def lose_attrib(attrib)
     @attrib.lose_base_attrib(attrib)
   end
-  def draw_hpbar(dst)
+  def draw_hpbar
     percent=@attrib[:hp]/@attrib[:maxhp].to_f
-    @animation.draw_hpbar(@position,percent,dst)
+    @animation.draw_hpbar(@position,percent)
   end
   def draw_state(x,y)
     @state.draw(x,y)
   end
   def draw
     @animation.draw(@position)
-    # draw_hpbar(dst)
+    draw_hpbar
   end
   def marshal_dump
     data={}
