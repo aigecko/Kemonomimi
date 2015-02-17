@@ -220,9 +220,9 @@ class GameWindow < BaseWindow
   def close_all_subwindows
     @drag_list.each{|name| @windows[name].close}
   end
-  def add_actor_buffer(actor)
-    @actor_buffer<<actor
-  end
+  # def add_actor_buffer(actor)
+    # @actor_buffer<<actor
+  # end
   def draw_sub_window
     @drag_list.reverse.each{|name|
       window=@windows[name]
@@ -230,10 +230,10 @@ class GameWindow < BaseWindow
     }
   end
   def set_draw_actor
-    add_actor_buffer(@player)
+    # add_actor_buffer(@player)
 
-    @actor_buffer+=@map.render_friend
-    @actor_buffer+=@map.render_enemy
+    # @actor_buffer+=@map.render_friend
+    # @actor_buffer+=@map.render_enemy
     
     @actor_buffer+=@map.render_friend_bullet
     @actor_buffer+=@map.render_enemy_bullet
@@ -273,6 +273,10 @@ class GameWindow < BaseWindow
     glPushMatrix
     glTranslatef(-@offset_x/320.0,0,0)
     glEnable GL_DEPTH_TEST
+    
+    @player.draw
+    @map.render_friend.each{|friend| friend.draw}
+    @map.render_enemy.each{|enemy| enemy.draw}
     
     Attack.draw
     Heal.draw

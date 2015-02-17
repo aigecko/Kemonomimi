@@ -43,6 +43,12 @@ class Database
       pics[:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
       pic=pic.reverse
       pics[:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
+      # pics.each_value do |pic|
+        # pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
+        # pic.display_format_alpha
+      # end
+      pics[:right]=pics[:right].to_texture
+      pics[:left]=pics[:left].to_texture
     rescue NoMethodError,ArgumentError=>e
       Message.show_backtrace(e)
       exit
@@ -52,10 +58,7 @@ class Database
       Message.show(:please_check_files)
       exit
     end
-    pics.each_value do |pic|
-      pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-      pic.display_format_alpha
-    end
+    
     return pics
   end
   def self.get_skill(sym)

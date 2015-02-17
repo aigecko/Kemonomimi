@@ -49,19 +49,19 @@ class Texture
       dst,dst_x,dst_y)
   end
   def display
-    id,x,y,w,h,vx,vy=*@data
+    id,x,y,w,h,vx,vy,z=*@data
     glEnable GL_BLEND
     glBindTexture(GL_TEXTURE_2D,id)
     glColor4d 1.0,1.0,1.0,1.0
     glBegin(GL_QUADS)
     glTexCoord2d(0,0)
-    glVertex3f x,y,-1
+    glVertex3f x,y,z
     glTexCoord2d(vx,0)
-    glVertex3f x+w,y,-1
+    glVertex3f x+w,y,z
     glTexCoord2d(vx,vy)
-    glVertex3f x+w,y-h,-1
+    glVertex3f x+w,y-h,z
     glTexCoord2d(0,vy)
-    glVertex3f x,y-h,-1
+    glVertex3f x,y-h,z
     glEnd
   end
 end

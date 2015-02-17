@@ -43,10 +43,10 @@ class Actor::ActorAni
       return false
     end
   end
-  def draw(pos,dst)
+  def draw(pos)
     @draw_x=pos.x-@pic[@idx][@face].w/2
     @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
-    @pic[@idx][@face].draw(@draw_x,@draw_y,dst)
+    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z/401.0)
   end
   def draw_hpbar(pos,percent,dst)
     bar_w=40

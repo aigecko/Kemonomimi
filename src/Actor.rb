@@ -479,9 +479,9 @@ class Actor
   def draw_state(x,y)
     @state.draw(x,y)
   end
-  def draw(dst)
-    @animation.draw(@position,dst)
-    draw_hpbar(dst)
+  def draw
+    @animation.draw(@position)
+    # draw_hpbar(dst)
   end
   def marshal_dump
     data={}
