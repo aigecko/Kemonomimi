@@ -22,11 +22,13 @@ class OnGroundItem
     return @origin
   end
   def draw
-    @draw_x=@position.x-@pic.w/2
-    @draw_y=Map.h-@position.y-@position.z/2
     @pic.draw(@draw_x,@draw_y,@position.z/401.0)
   end
-  def draw_shadow(dst)
-    dst.draw_ellipse(@position.x,@draw_y+@pic.h,10,5,Color[:shadow],true,false,150)
+  def draw_shadow
+    @draw_x=@position.x-@pic.w/2
+    @draw_y=Map.h-@position.y-@position.z/2
+    # @@shadow.draw(@position.x-10,@draw_y+@pic.h-5,@position.z/401.0)
+    Shadow.draw(@position.x-10,@draw_y+@pic.h-5,@position.z/401.0)
+    # dst.draw_ellipse(@position.x,@draw_y+@pic.h,10,5,Color[:shadow],true,false,150)
   end
 end

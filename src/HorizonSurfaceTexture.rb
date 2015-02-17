@@ -21,7 +21,4 @@ class HorizonSurfaceTexture < SurfaceTexture
     glVertex3f x,y-h,zf
     glEnd
   end
-  def display
-    
-  end
 end

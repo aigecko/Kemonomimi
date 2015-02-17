@@ -61,7 +61,6 @@ class Database
       Message.show(:please_check_files)
       exit
     end
-    
     return pics
   end
   def self.get_skill(sym)

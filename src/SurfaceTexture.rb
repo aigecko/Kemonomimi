@@ -1,5 +1,6 @@
 #coding: utf-8
 class SurfaceTexture < Texture
+  require_relative 'HorizonSurfaceTexture'
   def initialize(surface)
     super
     @surface.set_color_key(SDL::SRCCOLORKEY,surface.colorkey)

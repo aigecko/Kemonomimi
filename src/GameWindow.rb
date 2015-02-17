@@ -226,14 +226,14 @@ class GameWindow < BaseWindow
     }
   end
   def set_draw_actor
-    @shadow_buffer=@map.render_shadow
+    # @shadow_buffer=@map.render_shadow
   end
   def draw_circle
-    @shadow_buffer.sort_by!{|shadow|
-      -shadow.position.z
-    }.each{|shadow|
-      shadow.draw_shadow(@surface)
-    }
+    # @shadow_buffer.sort_by!{|shadow|
+      # -shadow.position.z
+    # }.each{|shadow|
+      # shadow.draw_shadow(@surface)
+    # }
     @map.render_friend_circle.sort_by!{|circle|
       -circle.position.z
     }.each{|circle|
@@ -252,8 +252,10 @@ class GameWindow < BaseWindow
     #OpenGL
     glPushMatrix
     glEnable GL_DEPTH_TEST
+    glDepthFunc GL_LESS
 
     glTranslatef(-@offset_x/320.0,0,0)
+    @map.render_shadow.each{|item| item.draw_shadow}
     @player.draw
     @map.render_friend.each{|friend| friend.draw}
     @map.render_enemy.each{|enemy| enemy.draw}

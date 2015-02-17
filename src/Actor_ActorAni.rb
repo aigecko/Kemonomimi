@@ -54,10 +54,10 @@ class Actor::ActorAni
     draw_x=pos.x-20
     draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+15
     
-    @@hpbar_ske.draw_at(draw_x-1,draw_y,pos.z/401.0)
     @@hpbar_bar.w=40*percent
     @@hpbar_bar.color=@hpbar_color
     @@hpbar_bar.draw_at(draw_x,draw_y+1,pos.z/401.0)
+    @@hpbar_ske.draw_at(draw_x-1,draw_y,pos.z/401.0)
   end
   def marshal_dump
     return [{

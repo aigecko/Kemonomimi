@@ -95,10 +95,7 @@ class<<Game
     glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
     glEnable GL_ALPHA_TEST
     glAlphaFunc GL_GREATER,0
-    #dbg
-    #glEnable(GL_DEPTH_TEST);
-
-    glDepthFunc(GL_LEQUAL);
+    
     glShadeModel(GL_SMOOTH);
   end
   def load_lib
@@ -116,7 +113,7 @@ class<<Game
         Actor Player Enemy Friend Attribute
         Statement SkillTree
         ColorString ParaString DynamicString
-        Shape Bullet
+        Shape Bullet Shadow
         Attack FixAttack Effect Heal)
       library_list.each{|lib|
         require_relative(lib)
