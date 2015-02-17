@@ -35,18 +35,21 @@ class Database
     end
     return @Consum[index]
   end
-  def self.get_actor_pic(name)    
+  def self.get_actor_pic(name)
     str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))
     begin
-      pic=SDL::Surface.load_bmp_from_io(str)
+      img=SDL::Surface.load_bmp_from_io(str)
+      img=img.transform_surface(img[0,0],0,2,2,SDL::TRANSFORM_SAFE)
+      base=SDL::Surface.new_32bpp(img.w,img.h)
+      img.draw(0,0,base)
+      
       pics={}
-      pics[:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
-      pic=pic.reverse
-      pics[:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
-      # pics.each_value do |pic|
-        # pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-        # pic.display_format_alpha
-      # end
+      pics[:right]=base
+      pics[:left]=base.reverse
+      
+      pics.each_value do |pic|
+        pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
+      end
       pics[:right]=pics[:right].to_texture
       pics[:left]=pics[:left].to_texture
     rescue NoMethodError,ArgumentError=>e

@@ -92,12 +92,13 @@ class<<Game
       GL_LINEAR_MIPMAP_LINEAR);
     
     glEnable GL_BLEND
-    glEnable GL_ALPHA_TEST
     glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
+    glEnable GL_ALPHA_TEST
+    glAlphaFunc GL_GREATER,0
     #dbg
     #glEnable(GL_DEPTH_TEST);
 
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
     glShadeModel(GL_SMOOTH);
   end
   def load_lib

@@ -251,9 +251,9 @@ class GameWindow < BaseWindow
     Screen.flip
     #OpenGL
     glPushMatrix
-    glTranslatef(-@offset_x/320.0,0,0)
     glEnable GL_DEPTH_TEST
-    
+
+    glTranslatef(-@offset_x/320.0,0,0)
     @player.draw
     @map.render_friend.each{|friend| friend.draw}
     @map.render_enemy.each{|enemy| enemy.draw}
@@ -263,6 +263,7 @@ class GameWindow < BaseWindow
     
     @map.render_onground_item.each{|item| item.draw}
     
+
     Attack.draw
     Heal.draw
     Effect.draw
