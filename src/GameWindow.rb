@@ -235,8 +235,8 @@ class GameWindow < BaseWindow
     # @actor_buffer+=@map.render_friend
     # @actor_buffer+=@map.render_enemy
     
-    @actor_buffer+=@map.render_friend_bullet
-    @actor_buffer+=@map.render_enemy_bullet
+    # @actor_buffer+=@map.render_friend_bullet
+    # @actor_buffer+=@map.render_enemy_bullet
     
     @actor_buffer+=@map.render_onground_item
     @shadow_buffer=@map.render_shadow
@@ -269,7 +269,7 @@ class GameWindow < BaseWindow
       @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
       Screen.render,0,0)
     Screen.flip
-    
+    #OpenGL
     glPushMatrix
     glTranslatef(-@offset_x/320.0,0,0)
     glEnable GL_DEPTH_TEST
@@ -277,6 +277,9 @@ class GameWindow < BaseWindow
     @player.draw
     @map.render_friend.each{|friend| friend.draw}
     @map.render_enemy.each{|enemy| enemy.draw}
+    
+    @map.render_friend_bullet.each{|bullet| bullet.draw}
+    @map.render_enemy_bullet.each{|bullet| bullet.draw}
     
     Attack.draw
     Heal.draw

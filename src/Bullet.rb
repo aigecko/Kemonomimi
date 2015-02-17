@@ -1,20 +1,12 @@
 #coding: utf-8
 class Bullet
-  class Position
-    attr_accessor :x,:y,:z
-    def initialize(x,y,z)
-      @x,@y,@z=x,y,z
-    end
-  end
-end
-class Bullet
   attr_reader :shape,:position,:caster
   @@draw_proc={
-    box: ->(ani,position,shape,dst){
-      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h,dst)
+    box: ->(ani,position,shape){
+      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h,position.z/401.0)
     },
-    col: ->(ani,position,shape,dst){
-      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h/2,dst)
+    col: ->(ani,position,shape){
+      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h/2,position.z/401.0)
     }
   }
   def initialize(effect,ani,shape,info)
@@ -23,20 +15,23 @@ class Bullet
     
     @effect=effect
         
-    @caster=info[:caster]    
+    @caster=info[:caster]
     @position=Position.new(info[:x],info[:y],info[:z])
     
     @ani=ani
-	  @vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]	    
+    @vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]
     if @vector[0]<0
       @ani=@ani.reverse
-      @ani.set_color_key(SDL::SRCCOLORKEY,@ani[0,0])
     end
+    ani_initialize
     
     @live_cycle=info[:live_cycle]
     @live_count=info[:live_count]
     
     @hit_target=[info[:exclude]]
+  end
+  def ani_initialize
+    @ani and @ani=@ani.to_texture
   end
   def mark_live_frame
     @trigger=true
@@ -67,9 +62,9 @@ class Bullet
     if @effect.respond_to?(:each)
       @effect.each{|effect| effect.affect(target,@position)}
     else
-      @effect.affect(target,@position)    
+      @effect.affect(target,@position)
     end
-	
+
     case @live_cycle
     when :once,:time
       return true
@@ -84,8 +79,8 @@ class Bullet
       return true
     end
   end
-  def draw(dst)
+  def draw
     @ani and
-    @@draw_proc[@type].call(@ani,@position,@shape,dst)
+    @@draw_proc[@type].call(@ani,@position,@shape)
   end
 end
