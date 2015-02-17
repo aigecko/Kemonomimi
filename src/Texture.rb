@@ -43,11 +43,6 @@ class Texture
       z]
     display
   end
-  def blit(dst_x,dst_y,dst)
-    SDL::Surface.blit(
-      @surface,0,0,@origin_w,@origin_h,
-      dst,dst_x,dst_y)
-  end
   def display
     id,x,y,w,h,vx,vy,z=*@data
     glEnable GL_BLEND

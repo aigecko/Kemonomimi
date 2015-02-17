@@ -18,7 +18,6 @@ class GameWindow < BaseWindow
     }
     @contral=true
     
-    @actor_buffer=[]
     @shadow_buffer=[]
     #dbg
     HotKey.bind(Key::F1,:proc,:once,->{switch_window(:StatusWindow)})
@@ -220,9 +219,6 @@ class GameWindow < BaseWindow
   def close_all_subwindows
     @drag_list.each{|name| @windows[name].close}
   end
-  # def add_actor_buffer(actor)
-    # @actor_buffer<<actor
-  # end
   def draw_sub_window
     @drag_list.reverse.each{|name|
       window=@windows[name]
@@ -230,17 +226,7 @@ class GameWindow < BaseWindow
     }
   end
   def set_draw_actor
-    # add_actor_buffer(@player)
-
-    # @actor_buffer+=@map.render_friend
-    # @actor_buffer+=@map.render_enemy
-    
-    # @actor_buffer+=@map.render_friend_bullet
-    # @actor_buffer+=@map.render_enemy_bullet
-    
-    @actor_buffer+=@map.render_onground_item
     @shadow_buffer=@map.render_shadow
-    
   end
   def draw_circle
     @shadow_buffer.sort_by!{|shadow|
@@ -254,17 +240,11 @@ class GameWindow < BaseWindow
       circle.draw(@surface)
     }
   end
-  def draw_actor
-    @actor_buffer.sort_by!{|actor| -actor.position.z}
-    @actor_buffer.each{|actor| actor.draw(@surface)}
-    @actor_buffer.clear
-  end
   def draw
     @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
     @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
     @map.draw(@surface)
     draw_circle
-    draw_actor
     SDL::Surface.blit(
       @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
       Screen.render,0,0)
@@ -280,6 +260,8 @@ class GameWindow < BaseWindow
     
     @map.render_friend_bullet.each{|bullet| bullet.draw}
     @map.render_enemy_bullet.each{|bullet| bullet.draw}
+    
+    @map.render_onground_item.each{|item| item.draw}
     
     Attack.draw
     Heal.draw

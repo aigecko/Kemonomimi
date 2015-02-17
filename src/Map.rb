@@ -19,18 +19,18 @@ class Map
       end
     end
     #dbg
-    @items=[]
+    @items=#[]
     # Array.new(500){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
     # }
     
-    # Array.new(70){|n|
-      # item=Database.get_consum(10).drop
-      # item.position.x=200+rand(100)
-      # item.position.z=rand(400)
-      # item
-    # }    # @items+=Array.new(7){|n|
+    Array.new(70){|n|
+      item=Database.get_consum(10).drop
+      item.position.x=200+rand(100)
+      item.position.z=rand(400)
+      item
+    }    # @items+=Array.new(7){|n|
       # item=Database.get_consum(20+n).drop
       # item.position.x=100+rand(100)
       # item.position.z=rand(400)
@@ -55,9 +55,7 @@ class Map
     @@current_map=self
     
     enemy=Enemy.new("slime","none",
-                       [500,0,200],{},
-                       #{exp:100000,maxhp:3000,atkspd:400,atk:-20,wlkspd:500},
-                       "mon_001")
+                       [500,0,200],{},"mon_001")
     @enemy<<enemy
   end
   def which_side(player_x)
