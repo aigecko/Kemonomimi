@@ -1,5 +1,6 @@
 #coding: utf-8
 class GameWindow < BaseWindow
+  include Gl
   def initialize
     @map=Map.new
     @map_up_margin=@map.h+30
@@ -264,13 +265,22 @@ class GameWindow < BaseWindow
     @map.draw(@surface)
     draw_circle
     draw_actor
-    Attack.draw(@surface)
-    Heal.draw(@surface)
-    Effect.draw(@surface)
     SDL::Surface.blit(
       @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
       Screen.render,0,0)
     Screen.flip
+    
+    glPushMatrix
+    glTranslatef(-@offset_x/320.0,0,0)
+    glEnable GL_DEPTH_TEST
+    
+    Attack.draw
+    Heal.draw
+    Effect.draw
+    
+    glDisable GL_DEPTH_TEST
+    glPopMatrix
+    
     draw_sub_window
     @player.draw_state(200,400)
   end

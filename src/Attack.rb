@@ -173,13 +173,13 @@ class Attack
         return :miss
       end
       attack-=target.attrib[:mag_decatk]
-      attack>=0 and attack=1
+      attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
     when :umag
       attack-=target.attrib[:mag_decatk]
-      attack>=0 and attack=1
+      attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
@@ -249,10 +249,8 @@ class Attack
       skill.cast(@caster,target,position.x,position.y,position.z)
     end
   end
-  def self.draw(dst)
-    @@buffer.reject!{|dmg|
-      dmg.draw(dst)
-    }
+  def self.draw
+    @@buffer.reject!{|dmg| dmg.draw}
   end
   def marshal_dump
     return [{

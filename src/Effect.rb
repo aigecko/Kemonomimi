@@ -31,9 +31,7 @@ class Effect
       @@buffer<<ParaString.new("暈眩",target,[70,70,70],@@FontSize)
     end
   end
-  def self.draw(dst)
-    @@buffer.each{|pic|
-      pic.draw(dst)
-    }    
+  def self.draw
+    @@buffer.reject!{|pic| pic.draw}
   end
 end

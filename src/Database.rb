@@ -40,7 +40,7 @@ class Database
     begin
       pic=SDL::Surface.load_bmp_from_io(str)
       pics={}
-      pics[:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)      
+      pics[:right]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
       pic=pic.reverse
       pics[:left]=pic.transform_surface(pic[0,0],0,2,2,SDL::TRANSFORM_SAFE)
     rescue NoMethodError,ArgumentError=>e

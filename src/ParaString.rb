@@ -8,7 +8,7 @@ class ParaString
       @draw_x=target.position.x-(@string.size*@font_size>>2)
       @draw_y=430-target.position.y-target.position.z/2-target.pic_h
       @direct=rand(5)-2
-    when 5	  
+    when 5
       @string,target,@direct,@color,@font_size= *ary
       
       @draw_x=target.position.x-(@string.size*@font_size>>2)
@@ -18,7 +18,7 @@ class ParaString
     end
     @count=0
   end
-  def draw(dst=Screen.render)
+  def draw
     @draw_x+=@direct
     if @count<5
       @draw_y-=4
@@ -31,9 +31,9 @@ class ParaString
     elsif @count<25
       return true
     end
-    Font.draw_solid(@string,@font_size,
+    Font.draw_texture(@string,@font_size,
                     @draw_x,@draw_y,
-                    *@color,dst)
+                    *@color)
     @count+=1
     return false
   end

@@ -28,9 +28,7 @@ class Heal
   str+="end"
   eval str
   
-  def self.draw(dst)
-    @@buffer.reject!{|heal|
-      heal.draw(dst)
-    }
+  def self.draw
+    @@buffer.reject!{|heal| heal.draw}
   end
 end

@@ -55,7 +55,7 @@ class Map
     @@current_map=self
     
     enemy=Enemy.new("slime","none",
-                       [1000,0,200],{},
+                       [500,0,200],{},
                        #{exp:100000,maxhp:3000,atkspd:400,atk:-20,wlkspd:500},
                        "mon_001")
     @enemy<<enemy
