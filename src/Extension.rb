@@ -1,6 +1,6 @@
 #coding: utf-8
 class SDL::Surface  
-  def save_cmp(filename)    
+  def save_cmp(filename)
     Zlib::GzipWriter.open(filename){|file|
       file.print (
         Marshal.dump([self.pixels,self.w,self.h,

@@ -1,15 +1,8 @@
 #coding: utf-8
 class Bullet
   require_relative 'HorizonBullet'
+  require_relative 'BulletSingleton'
   attr_reader :shape,:position,:caster
-  @@draw_proc={
-    box: ->(ani,position,shape){
-      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h,position.z/401.0)
-    },
-    col: ->(ani,position,shape){
-      ani.draw(position.x-ani.w/2,431-position.y-position.z/2-ani.h/2,position.z/401.0)
-    }
-  }
   def initialize(effect,ani,shape,info)
     @type=shape
     @shape=Shape.new(shape,info)

@@ -5,6 +5,7 @@ class<<Game
   def init
     @Width=640
     @Height=480
+    @Depth=400
     Conf.init
     Conf.load
     sdl_initialize
@@ -90,11 +91,6 @@ class<<Game
     glTexParameteri(GL_TEXTURE_2D,
       GL_TEXTURE_MIN_FILTER,
       GL_NEAREST);
-      # glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-# glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ); 
-      
-# glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-# glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
     glEnable GL_BLEND
     glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
@@ -103,60 +99,56 @@ class<<Game
     
     glShadeModel(GL_SMOOTH);
   end
-  def load_lib
-    done=false
-    # t=Thread.new{
-      require 'openssl'
-      require 'digest'
-      require 'zlib'
-      require 'stringio'
-      
-      library_list=%w(
-        Database Position 
-        Item Equipment Consumable ItemArray OnGroundItem
-        Event Key HotKey
-        Actor Player Enemy Friend Attribute
-        Statement SkillTree
-        ColorString ParaString DynamicString
-        Shape Bullet Shadow
-        Attack FixAttack Effect Heal)
-      library_list.each{|lib|
-        require_relative(lib)
-      }
-      Actor.init
-      Equipment.init
-      HotKey.init
-      window_list=%w(BaseWindow SelectWindow DragWindow
-                     MenuWindow 
-                     RaceWindow ClassWindow LoadWindow GameWindow
-                     SettingWindow LevelWindow BarsWindow
-                     ButtonWindow StatusWindow ItemWindow
-                     EquipWindow SkillWindow)
-      window_list.each{|window|
-        require_relative (window)
-      }
-      
-      require_relative('Map')
-      done=true
-    # }
-    
-    text=Font.render_texture('Loading',30,*Color[:loading_font])
-    dot=Font.render_texture('.',30,*Color[:loading_font])
-    num=0
-    until done
-      draw_back
-      text.draw(230,240)
-      num=(num<3) ? num+1 : 0
-      num.times{|i|
-        dot.draw(370+i*30,240)
-      }
-      SDL::GL.swap_buffers
-      SDL.delay(40)
+  $require_count=0
+  module ::Kernel
+    alias origin_require require
+    def require(lib)
+      origin_require(lib)
+      $require_count+=1
+      Game.draw_loading
     end
+    alias origin_require_relative require_relative
+    def require_relative(lib)
+      origin_require_relative(lib)
+      $require_count+=1
+      Game.draw_loading
+    end
+  end
+  def load_lib
+    %w(openssl digest zlib stringio).each{|lib|
+      require(lib)
+    }
+    
+    library_list=%w(
+      Database Position 
+      Item Equipment Consumable ItemArray OnGroundItem
+      Event Key HotKey
+      Actor Player Enemy Friend Attribute
+      Statement SkillTree
+      ColorString ParaString DynamicString
+      Shape Shadow Bullet
+      Attack FixAttack Effect Heal)
+    library_list.each{|lib|
+      require_relative(lib)
+    }
+    Actor.init
+    Equipment.init
+    HotKey.init
+    window_list=%w(BaseWindow SelectWindow DragWindow
+                   MenuWindow 
+                   RaceWindow ClassWindow LoadWindow GameWindow
+                   SettingWindow LevelWindow BarsWindow
+                   ButtonWindow StatusWindow ItemWindow
+                   EquipWindow SkillWindow)
+    window_list.each{|window|
+      require_relative (window)
+    }
+    
+    require_relative('Map')
+    
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)
   end
-
   def update
     Event.poll
     @window.each{|name,window|
@@ -181,6 +173,24 @@ class<<Game
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
   end
   public
+  def draw_loading
+    draw_back
+    Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
+    x,y,z=-320/@Width.to_f,-0.2,0
+    w,h=1.0/89*$require_count,0.2
+    glDisable GL_TEXTURE_2D
+    
+    glBegin(GL_QUADS)
+    glColor4d 1-$require_count*0.01,$require_count*0.01,0,1
+    glVertex3f x,y,z
+    glVertex3f x+w,y,z
+    glVertex3f x+w,y-h,z
+    glVertex3f x,y-h,z
+    glEnd
+
+    glEnable GL_TEXTURE_2D
+    SDL::GL.swap_buffers
+  end
   def save
     @window[:GameWindow].close_all_subwindows
     @time=SDL.get_ticks
@@ -211,6 +221,9 @@ class<<Game
   end
   def Height
     return @Height
+  end
+  def Depth
+    return 400
   end
   def player
     return @window[:GameWindow].get_player
