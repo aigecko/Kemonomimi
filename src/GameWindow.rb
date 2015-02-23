@@ -147,7 +147,6 @@ class GameWindow < BaseWindow
     @player.update
     @map.update
     offset_change
-    set_draw_actor
   end
   def get_player
     return @player
@@ -225,25 +224,11 @@ class GameWindow < BaseWindow
       window.visible and window.draw
     }
   end
-  def set_draw_actor
-    # @shadow_buffer=@map.render_shadow
-  end
-  def draw_circle
-    # @shadow_buffer.sort_by!{|shadow|
-      # -shadow.position.z
-    # }.each{|shadow|
-      # shadow.draw_shadow(@surface)
-    # }
-    # @map.render_friend_circle.sort_by!{|circle|
-      # -circle.position.z
-    # }.
-  end
   def draw
     @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
     @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
     @map.draw(@surface)
 
-    draw_circle
     SDL::Surface.blit(
       @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
       Screen.render,0,0)

@@ -35,13 +35,13 @@ class Texture
   def colorkey;return @surface.colorkey;end
   def w;return @origin_w;end
   def h;return @origin_h;end
-  def draw(dst_x,dst_y,z=0)
+  def draw(dst_x,dst_y,z=0,alpha=1.0)
     x,y=-1+dst_x/320.0,1-dst_y/240.0
     w,h=@draw_w,@draw_h
     vx,vy=@text_w,@text_h
     glEnable GL_BLEND
     glBindTexture(GL_TEXTURE_2D,@id[0])
-    glColor4d 1.0,1.0,1.0,1.0
+    glColor4d 1.0,1.0,1.0,alpha
     glBegin(GL_QUADS)
     glTexCoord2d(0,0)
     glVertex3f x,y,z
