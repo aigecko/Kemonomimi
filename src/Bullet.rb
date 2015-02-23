@@ -1,5 +1,6 @@
 #coding: utf-8
 class Bullet
+  require_relative 'HorizonBullet'
   attr_reader :shape,:position,:caster
   @@draw_proc={
     box: ->(ani,position,shape){

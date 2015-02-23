@@ -516,7 +516,7 @@ class Skill
         
         Map.add_friend_circle(
           info[:caster].ally,
-          Bullet.new(
+          HorizonBullet.new(
             [Attack.new(info[:caster],type: :mag,cast_type: :skill,attack: attack),
              Effect.new(info[:caster],
                name:'燃燒',sym: :circle_burn,effect_type: :slow,

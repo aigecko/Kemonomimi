@@ -12,8 +12,8 @@ class Texture
     @h=@surface.h
     @draw_w=@origin_w/(Game.Width.to_f/2)
     @draw_h=@origin_h/(Game.Height.to_f/2)
-    @text_w=@origin_w/@w.to_f
-    @text_h=@origin_h/@h.to_f
+    @text_w=(@origin_w)/@w.to_f
+    @text_h=(@origin_h)/@h.to_f
   end
   def gen_texture
     @id=glGenTextures(1)
@@ -36,17 +36,11 @@ class Texture
   def w;return @origin_w;end
   def h;return @origin_h;end
   def draw(dst_x,dst_y,z=0)
-    @data=[@id[0],
-      -1+dst_x/320.0,1-dst_y/240.0,
-      @draw_w,@draw_h,
-      @text_w,@text_h,
-      z]
-    display
-  end
-  def display
-    id,x,y,w,h,vx,vy,z=*@data
+    x,y=-1+dst_x/320.0,1-dst_y/240.0
+    w,h=@draw_w,@draw_h
+    vx,vy=@text_w,@text_h
     glEnable GL_BLEND
-    glBindTexture(GL_TEXTURE_2D,id)
+    glBindTexture(GL_TEXTURE_2D,@id[0])
     glColor4d 1.0,1.0,1.0,1.0
     glBegin(GL_QUADS)
     glTexCoord2d(0,0)

@@ -234,16 +234,15 @@ class GameWindow < BaseWindow
     # }.each{|shadow|
       # shadow.draw_shadow(@surface)
     # }
-    @map.render_friend_circle.sort_by!{|circle|
-      -circle.position.z
-    }.each{|circle|
-      circle.draw(@surface)
-    }
+    # @map.render_friend_circle.sort_by!{|circle|
+      # -circle.position.z
+    # }.
   end
   def draw
     @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
     @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
     @map.draw(@surface)
+
     draw_circle
     SDL::Surface.blit(
       @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
@@ -253,9 +252,13 @@ class GameWindow < BaseWindow
     glPushMatrix
     glEnable GL_DEPTH_TEST
     glDepthFunc GL_LESS
-
     glTranslatef(-@offset_x/320.0,0,0)
+    
     @map.render_shadow.each{|item| item.draw_shadow}
+    @map.render_friend_circle.each{|circle|
+      circle.draw
+    }
+    
     @player.draw
     @map.render_friend.each{|friend| friend.draw}
     @map.render_enemy.each{|enemy| enemy.draw}
