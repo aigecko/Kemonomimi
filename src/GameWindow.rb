@@ -5,7 +5,6 @@ class GameWindow < BaseWindow
     @map=Map.new
     @map_up_margin=@map.h+30
     
-    @surface=Surface.new(Surface.flag,@map.w,Game.Height,Screen.format)
     @offset_x=0
     @offset_y=0
     
@@ -225,20 +224,12 @@ class GameWindow < BaseWindow
     }
   end
   def draw
-    @surface.draw_rect(@offset_x,230,Game.Width,200,Color[:clear],true)
-    @surface.draw_rect(@offset_x,0,Game.Width,230,Color[:clear],true)
-    @map.draw(@surface)
-
-    SDL::Surface.blit(
-      @surface,@offset_x,@offset_y,Game.Width,Game.Height-50,
-      Screen.render,0,0)
-    Screen.flip
-    #OpenGL
     glPushMatrix
     glEnable GL_DEPTH_TEST
     glDepthFunc GL_LESS
     glTranslatef(-@offset_x/320.0,0,0)
     
+    @map.draw
     @map.render_shadow.each{|item| item.draw_shadow}
     @map.render_friend_circle.each{|circle|
       circle.draw
@@ -253,7 +244,6 @@ class GameWindow < BaseWindow
     
     @map.render_onground_item.each{|item| item.draw}
     
-
     Attack.draw
     Heal.draw
     Effect.draw

@@ -11,15 +11,17 @@ class Map
     @chip_w=40
     @chip_h=20
     @chips=Array.new(@h/@chip_h/2){Array.new(@w/@chip_w){rand(2)}}
-    @map_pic=Surface.new(Surface.flag,@w,400,Screen.format)
-    
+    @map_pic=Surface.new(Surface.flag,@w,@h/2,Screen.format)
     for column in 0..@chips.size-1
       for row in 0..@w/@chip_w-1
         Chipset[@chips[column][row]].draw(row*@chip_w,column*@chip_h,@map_pic)
       end
     end
+    @map_pic=BigTexture.new(@map_pic)
+    
+    @sky_pic=Rectangle.new(0,0,Game.Width,Game.Height-@map_pic.h-50,Color[:clear])
     #dbg
-    @items=#[]
+    @items=[]
     # Array.new(500){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
@@ -245,7 +247,7 @@ class Map
       bullet.update
     }
   end
-  def draw(dst)
+  def draw#(dst)
     player_x=Game.player.position.x
     side=which_side(player_x)
     case side
@@ -258,7 +260,8 @@ class Map
     end
     y=230
     
-    SDL::Surface.blit(@map_pic,x,0,Game.Width,@h/2,dst,x,y)
+    @sky_pic.draw_at(x,0,0.999999)
+    @map_pic.draw_part(x,y,0.999999,x,0,Game.Width,@map_pic.h)
   end
   meta=class<<Map
     def method_missing(method,*arg)

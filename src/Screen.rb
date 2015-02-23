@@ -1,7 +1,7 @@
 #coding: utf-8
 class Screen
   def self.init
-    screen_surface=SDL::OPENGLBLIT
+    screen_surface=SDL::OPENGL
     full_screen=Conf['FULL_SCREEN']? SDL::FULLSCREEN : 0
     begin
       @screen=SDL::Screen.open(Game.Width,Game.Height,24,screen_surface|full_screen)
