@@ -1,5 +1,6 @@
 #coding: utf-8
 require 'pp'
+require_relative 'FontTextureSet'
 class Font;end
 class<<Font
   def init
@@ -30,7 +31,18 @@ class<<Font
       exit
     end
     return @font[size]
-  end  
+  end
+  def render_character(char,size,r,g,b)
+    color=(r<<20)+(g<<10)+b
+
+    @cache[size]||=Hash.new
+    @cache[size][color]||=Hash.new
+    
+    unless surface=@cache[size][color][text]
+      surface=@cache[size][color][text]=self[size].render_blended_utf8(text,r,g,b)
+    end
+    return surface
+  end
   def render_solid(text,size,r,g,b)
     color=(r<<20)+(g<<10)+b
 
@@ -42,13 +54,19 @@ class<<Font
     end
     return surface
   end
+  def draw_solid(text,size,x,y,r,g,b)
+    pic=render_solid(text,size,r,g,b)
+    pic.draw(x,y)
+    return pic.w,pic.h
+  end
   def render_texture(text,size,r,g,b)
     color=(r<<20)+(g<<10)+b
     @texture[size]||=Hash.new
     @texture[size][color]||=Hash.new
     
     unless texture=@texture[size][color][text]
-      texture=@texture[size][color][text]=FontTexture.new(render_solid(text,size,r,g,b))
+      texture=@texture[size][color][text]=FontTextureSet(text,size,r,g,b)
+#FontTexture.new(render_solid(text,size,r,g,b))
     end
     return texture
   end
@@ -56,10 +74,5 @@ class<<Font
     texture=render_texture(text,size,r,g,b)
     texture.draw(x,y)
     return texture.w,texture.h
-  end
-  def draw_solid(text,size,x,y,r,g,b)
-    pic=render_solid(text,size,r,g,b)
-    pic.draw(x,y)
-    return pic.w,pic.h
   end
 end
