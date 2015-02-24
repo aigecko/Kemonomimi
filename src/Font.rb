@@ -19,7 +19,7 @@ class<<Font
     @demo.render_blended_utf8(text,r,g,b)
   end
   def [](size)
-     unless @font[size]
+    unless @font[size]
       p text
       begin
         raise "FontNotExisted"
@@ -43,23 +43,23 @@ class<<Font
     return surface
   end
   def render_texture(text,size,r,g,b)
-    return FontTexture.new(render_solid(text,size,r,g,b))
-  end
-  def draw_texture(text,size,x,y,r,g,b)
     color=(r<<20)+(g<<10)+b
-    
     @texture[size]||=Hash.new
     @texture[size][color]||=Hash.new
     
     unless texture=@texture[size][color][text]
-      texture=@texture[size][color][text]=self.render_texture(text,size,r,g,b)
+      texture=@texture[size][color][text]=FontTexture.new(render_solid(text,size,r,g,b))
     end
+    return texture
+  end
+  def draw_texture(text,size,x,y,r,g,b)
+    texture=render_texture(text,size,r,g,b)
     texture.draw(x,y)
     return texture.w,texture.h
   end
-  def draw_solid(text,size,x,y,r,g,b,dst=Screen.render)
+  def draw_solid(text,size,x,y,r,g,b)
     pic=render_solid(text,size,r,g,b)
-    pic.draw(x,y,dst)
+    pic.draw(x,y)
     return pic.w,pic.h
   end
 end

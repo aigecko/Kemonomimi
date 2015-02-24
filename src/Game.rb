@@ -26,7 +26,6 @@ class<<Game
     
     load_lib
     Event.init
-    Screen.flip
     win_initialize
     
     puts "start #{Time.now-$t}"
@@ -223,7 +222,7 @@ class<<Game
     return @Height
   end
   def Depth
-    return 400
+    return 401.0
   end
   def player
     return @window[:GameWindow].get_player
@@ -232,7 +231,6 @@ class<<Game
     Font.release
   end
   def quit
-    Screen.destroy
     SDL.quit
     exit
   end

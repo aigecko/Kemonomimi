@@ -48,7 +48,7 @@ class Actor::ActorAni
   def draw(pos)
     @draw_x=pos.x-@pic[@idx][@face].w/2
     @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
-    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z/401.0)
+    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z/Game.Depth)
   end
   def draw_hpbar(pos,percent)
     draw_x=pos.x-20
@@ -56,8 +56,8 @@ class Actor::ActorAni
     
     @@hpbar_bar.w=40*percent
     @@hpbar_bar.color=@hpbar_color
-    @@hpbar_bar.draw_at(draw_x,draw_y+1,pos.z/401.0)
-    @@hpbar_ske.draw_at(draw_x-1,draw_y,pos.z/401.0)
+    @@hpbar_bar.draw_at(draw_x,draw_y+1,pos.z/Game.Depth)
+    @@hpbar_ske.draw_at(draw_x-1,draw_y,pos.z/Game.Depth)
   end
   def marshal_dump
     return [{

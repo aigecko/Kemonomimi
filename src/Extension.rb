@@ -22,9 +22,6 @@ class SDL::Surface
     pic=transform_surface(get_pixel(0,0),0,-1,1,SDL::TRANSFORM_SAFE)
     return pic
   end
-  def render_blend(mode,color)
-    
-  end
   [:add,:sub].each{|func| eval "
   def #{func}_blend(color)
     rm=self.format.Rmask
@@ -56,15 +53,8 @@ class SDL::Surface
       x+=1
     end
   end"}
-  def draw(dst_x,dst_y,dst=Screen.render)
+  def draw(dst_x,dst_y,dst)
     SDL::Surface.blit(self,0,0,0,0,dst,dst_x,dst_y)
-  end
-  def draw_rotate(angle,pivot_x,pivot_y,dst_x,dst_y)
-    SDL::Surface.transform_blit(self,Screen.render,angle,1,1,
-                                pivot_x,pivot_y,dst_x,dst_y,0)
-  end
-  def draw_scale(dst_x,dst_y,scale_x,scale_y,dst=Screen.render)
-    SDL::Surface.transform_blit(self,dst,0,scale_x,scale_y,0,0,dst_x,dst_y,0)
   end
   def to_texture
     return SurfaceTexture.new(self)

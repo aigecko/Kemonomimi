@@ -2,6 +2,7 @@
 class BaseWindow
   attr_accessor :enable,:visible
   attr_reader :alone
+private
   def initialize(x,y,w,h)
     @ske_w=@ske_h=32
     @ske_mv=5
@@ -12,59 +13,72 @@ class BaseWindow
     
     stat_init
   end
-private
   def self.init
     @ske_w=@ske_h=32
     base=Input.load_ui_pic
-    @@skeleton=Hash.new
-    @@skeleton[:loca7]=base.copy_rect(0, 0, @ske_w,@ske_h)
-    @@skeleton[:loca8]=base.copy_rect(32,0,@ske_w,@ske_h)
-    @@skeleton[:loca9]=base.copy_rect(64,0,@ske_w,@ske_h)
-    @@skeleton[:loca4]=base.copy_rect(0,32,@ske_w,@ske_h)
-    @@skeleton[:loca5]=base.copy_rect(32,32,@ske_w,@ske_h)
-    @@skeleton[:loca6]=base.copy_rect(64,32,@ske_w,@ske_h)
-    @@skeleton[:loca1]=base.copy_rect(0,64,@ske_w,@ske_h)
-    @@skeleton[:loca2]=base.copy_rect(32,64,@ske_w,@ske_h)
-    @@skeleton[:loca3]=base.copy_rect(64,64,@ske_w,@ske_h)
-    @@colorkey=@@skeleton[:loca7][0,0]
+    @@skeleton=Array.new
+    @@skeleton[7]=base.copy_rect(0, 0, @ske_w,@ske_h)
+    @@skeleton[8]=base.copy_rect(32,0,@ske_w,@ske_h)
+    @@skeleton[9]=base.copy_rect(64,0,@ske_w,@ske_h)
+    @@skeleton[4]=base.copy_rect(0,32,@ske_w,@ske_h)
+    @@skeleton[5]=base.copy_rect(32,32,@ske_w,@ske_h)
+    @@skeleton[6]=base.copy_rect(64,32,@ske_w,@ske_h)
+    @@skeleton[1]=base.copy_rect(0,64,@ske_w,@ske_h)
+    @@skeleton[2]=base.copy_rect(32,64,@ske_w,@ske_h)
+    @@skeleton[3]=base.copy_rect(64,64,@ske_w,@ske_h)
+    @@colorkey=@@skeleton[7][0,0]
   end
   self.init
+  def skeleton_draw_row(dst)
+    for row in 1..@row_draw_times-1
+      x=@win_x+(row<<@ske_mv)
+      @@skeleton[8].draw(x,@win_y,dst)
+      @@skeleton[2].draw(x,@down_margin,dst)
+    end
+    @@skeleton[8].draw(@right_margin-@ske_w,@win_y,dst)
+    @@skeleton[2].draw(@right_margin-@ske_w,@down_margin,dst)
+  end
+  def skeleton_draw_col(dst)
+    for column in 1..@column_draw_times-1
+      y=@win_y+(column<<@ske_mv)
+      @@skeleton[4].draw(@win_x,y,dst)
+      @@skeleton[6].draw(@right_margin,y,dst)
+    end
+    if @win_y<@down_margin-@ske_h
+      @@skeleton[4].draw(@win_x,@down_margin-@ske_h,dst)
+      @@skeleton[6].draw(@right_margin,@down_margin-@ske_h,dst)
+    end
+  end
+  def skeleton_draw_center(dst)
+    r=(@@skeleton[5][0,0]&0xff0000)>>16
+    g=(@@skeleton[5][0,0]&0xff00)>>8
+    b=@@skeleton[5][0,0]&0xff
+    dst.fill_rect(@win_x+@ske_w,@win_y+@ske_h,
+                  @row_draw_times<<@ske_mv,
+                  @column_draw_times<<@ske_mv,
+                  [r,g,b])
+  end
+  def skeleton_draw_corner(dst)
+    @@skeleton[7].draw(@win_x,@win_y,dst)
+    @@skeleton[1].draw(@win_x,@down_margin,dst)
+    @@skeleton[9].draw(@right_margin,@win_y,dst)
+    @@skeleton[3].draw(@right_margin,@down_margin,dst)
+    @skeleton.set_color_key(SDL::SRCCOLORKEY,@skeleton[0,0])
+  end
+  def skeleton_draw
+    dst=@skeleton
+    skeleton_draw_row(dst)
+    skeleton_draw_col(dst)
+    skeleton_draw_center(dst)
+    skeleton_draw_corner(dst)
+  end
   def skeleton_initialize
     @skeleton=SDL::Surface.new_32bpp(@win_w,@win_h)
     @skeleton.fill_rect(0,0,@win_w,@win_h,@@colorkey)
     tmp_x,tmp_y=@win_x,@win_y
     @win_x=@win_y=0
     stat_init
-    dst=@skeleton
-    for row in 1..@row_draw_times-1
-      x=@win_x+(row<<@ske_mv)
-      @@skeleton[:loca8].draw(x,@win_y,dst)
-      @@skeleton[:loca2].draw(x,@down_margin,dst)
-    end
-    for column in 1..@column_draw_times-1
-      y=@win_y+(column<<@ske_mv)
-      @@skeleton[:loca4].draw(@win_x,y,dst)
-      @@skeleton[:loca6].draw(@right_margin,y,dst)
-    end
-    r=(@@skeleton[:loca5][0,0]&0xff0000)>>16
-    g=(@@skeleton[:loca5][0,0]&0xff00)>>8
-    b=@@skeleton[:loca5][0,0]&0xff
-    dst.fill_rect(@win_x+@ske_w,@win_y+@ske_h,
-                  @row_draw_times<<@ske_mv,
-                  @column_draw_times<<@ske_mv,
-                  [r,g,b])
-    @@skeleton[:loca8].draw(@right_margin-@ske_w,@win_y,dst)
-    @@skeleton[:loca2].draw(@right_margin-@ske_w,@down_margin,dst)
-    if @win_y<@down_margin-@ske_h
-      @@skeleton[:loca4].draw(@win_x,@down_margin-@ske_h,dst)
-      @@skeleton[:loca6].draw(@right_margin,@down_margin-@ske_h,dst)
-    end
-    @@skeleton[:loca7].draw(@win_x,@win_y,dst)
-    @@skeleton[:loca1].draw(@win_x,@down_margin,dst)
-    @@skeleton[:loca9].draw(@right_margin,@win_y,dst)
-    @@skeleton[:loca3].draw(@right_margin,@down_margin,dst)
-    @skeleton.set_color_key(SDL::SRCCOLORKEY,@skeleton[0,0])
-    
+    skeleton_draw
     @win_x,@win_y=tmp_x,tmp_y
   end
   def gen_skeleton_texture
@@ -99,7 +113,7 @@ public
   def open?
     return @visible&&@enable
   end
-  def draw(dst=Screen.render)
+  def draw
     @skeleton.draw(@win_x,@win_y)
   end
   def draw_corner(color)
