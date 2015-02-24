@@ -1,7 +1,7 @@
 #coding: utf-8
 require_relative 'Skill_Base'
 class Skill
-  @@SwitchTypeList=[:switch,:switch_auto,:switch_append,:switch_attack_defense]
+  require_relative 'SkillSingleton'
   attr_reader :switch,:invisible,:type
   attr_writer :cd
   def initialize(info,sym=nil)
@@ -139,11 +139,5 @@ class Skill
   end
   def draw_comment(x,y)
     @comment.draw(x,y)
-  end
-  def self.all_type_list
-    [:none,:auto,:switch,:active,:append,:before,:attach,
-     :attack,:shoot,
-     :pre_attack_defense,:attack_defense,:skill_defense,
-     :switch_auto,:switch_append,:switch_attack_defense]
   end
 end

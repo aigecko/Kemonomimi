@@ -1,7 +1,7 @@
 #coding: utf-8
 class Conf
   @@filename=''
-  def self.init  
+  def self.init
     @config=Hash.new
     @config['FULL_SCREEN']=false
     @config['SDL_VIDEO_CENTERED']=true

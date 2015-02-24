@@ -42,15 +42,9 @@ private
 public
   def interact
     player=Game.player
-    if player.attrib[:level]!=@level
-      level_initialize(player)
-    end
-    if player.race!=@race
-      race_initialize(player)
-    end
-    if player.class!=@class
-      class_initialize(player)
-    end
+    player.attrib[:level]!=@level and level_initialize(player)
+    player.race!=@race and race_initialize(player)
+    player.class!=@class and class_initialize(player)
   end
   def draw
     draw_corner(:clear)

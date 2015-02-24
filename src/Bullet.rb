@@ -65,10 +65,10 @@ class Bullet
     when :count
       @hit_target<<target
       @live_count-=1
-      return @live_count<0 ? true : false 
+      return @live_count<0
     when :frame,:time_only
       @hit_target<<target
-      return false    
+      return false
     else
       return true
     end

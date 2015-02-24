@@ -30,9 +30,6 @@ class EquipWindow < DragWindow
     gen_skeleton_texture
     def start_init;end
   end
-  def update_coord
-    super
-  end
   def interact
     Event.each{|event|
       case event

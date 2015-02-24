@@ -59,7 +59,7 @@ class Actor
       icon: nil,
       base: :attack,table:[0,0],
       comment: nil)
-	  add_base_skill(:arrow,
+    add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
       base: :arrow,table:[0,[50,25]],
@@ -97,7 +97,7 @@ class Actor
     when :darkknight
       add_skill(:smash_wave,
       name:'粉碎波',type: :append,
-      icon:'./rc/icon/skill/2011-12-23_3-037.gif',
+      icon:'./rc/icon/skill/2011-12-23_3-037.gif:[0,0]B[255,0,0]',
       base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
       comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}範圍魔法傷害')
     when :fighter
@@ -159,7 +159,7 @@ class Actor
     when :cleric
       add_skill(:enegy_arrow,
         name:'碎石杖擊',type: :switch_append,
-        icon:'./rc/icon/skill/2011-12-23_3-125.gif',
+        icon:'./rc/icon/skill/2011-12-23_3-125.gif:[0,0]B[255,0,0]',
         base: :enegy_arrow,consum: 5,level: 1,table:[0,[40,10]],
         comment:'開啟後普攻帶#{@table[@level][0]}+#{@table[@level][1]}%現有法力之無視魔免魔傷')
     end    
@@ -448,15 +448,15 @@ class Actor
   def can_cast?(end_time,consum)
     (has_state?(:stun)) and return false
     (SDL.get_ticks>end_time) or return false
-    (@attrib[:sp]>=consum) ? true : false
+    return @attrib[:sp]>=consum
   end
   def can_cast_auto?(end_time,consum)
     SDL.get_ticks>end_time or return false
-    @attrib[:sp]>=consum ? true : false
+    return @attrib[:sp]>=consum
   end
   def cast(name,target,x,y,z)
     unless @skill[name]
-      #Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
+      Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
       return
     end
     if (skill=@skill[name]).type==:attack||

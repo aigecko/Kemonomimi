@@ -23,6 +23,5 @@ class ItemWindow::MoneyBar
     money_draw_y=@y+2
     Font.draw_texture(Game.player.attrib[:money].to_s,@font_size,
       money_draw_x,money_draw_y,*Color[:item_money_font])
-    
   end
 end

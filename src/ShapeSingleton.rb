@@ -17,41 +17,29 @@ class<<Shape
     if shape1.col?
       if shape2.col?
         #shape1:col shape2:col
-        if Shape.inside_rect?(position1,position2,
+        return Shape.inside_rect?(position1,position2,
                               shape1[:r]+shape2[:r],shape1[:r]+shape2[:r])&&
            Shape.inside_height?(position1,position2,shape1[:h],shape2[:h])&&
            Shape.inside_circle?(position1.x,position1.z,position2.x,position2.z,shape1[:r]+shape2[:r])
-          return true          
-        end
-        return false
       elsif shape2.box?
         #shape1:col shape2:box
         half_w,half_h=shape2[:w]/2,shape2[:h]/2
-        if Shape.inside_height?(position1,position2,shape1[:h],shape2[:t])&&
+        return Shape.inside_height?(position1,position2,shape1[:h],shape2[:t])&&
            Shape.inside_rect?(position1,position2,shape1[:r]+half_w,half_h)&&
            Shape.inside_rect?(position1,position2,half_w,shape1[:r]+half_h)&&
            Shape.inside_circle?(position1.x,position1.z,position2.x-half_w,position2.z-half_h,shape1[:r])||
            Shape.inside_circle?(position1.x,position1.z,position2.x+half_w,position2.z+half_h,shape1[:r])||
            Shape.inside_circle?(position1.x,position1.z,position2.x-half_w,position2.z-half_h,shape1[:r])||
            Shape.inside_circle?(position1.x,position1.z,position2.x+half_w,position2.z+half_h,shape1[:r])
-          return true 
-        end   
-        return false
       end
     elsif shape1.box?
       if shape2.box?
         #shape1:box shape2:box
-        if Shape.inside_height?(position1,position2,shape1[:t],shape2[:t])&&
+        return Shape.inside_height?(position1,position2,shape1[:t],shape2[:t])&&
            Shape.inside_rect?(position1,position2,(shape1[:w]+shape2[:w])/2,(shape1[:h]+shape2[:h])/2)
-          return true
-        end
-        return false
       elsif shape2.col?
         #shape1:box shape2:col
-        if Shape.collision?(shape2,shape1)
-          return true
-        end
-        return false
+        return Shape.collision?(shape2,shape1)
       end
     end
   end

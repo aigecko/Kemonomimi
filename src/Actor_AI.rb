@@ -11,7 +11,7 @@ class Actor
           dst_x=dst_x.confine(0,Map.w)
           dst_z=Game.player.position.z+Math.sin(actor.var[:degree])*200
           dst_z=dst_z.confine(0,Map.h)
-          actor.set_move_dst(dst_x,nil,dst_z)                           
+          actor.set_move_dst(dst_x,nil,dst_z)
         }
         @proc[:sidemove]=->(actor){
           actor.target and return
@@ -22,7 +22,7 @@ class Actor
             dst_x=dst_x.confine(0,Map.w)
             dst_z=actor.position.z+rand(actor.var[:h])-actor.var[:h]/2
             dst_z=dst_z.confine(0,Map.h)
-            actor.set_move_dst(dst_x,nil,dst_z)                             
+            actor.set_move_dst(dst_x,nil,dst_z)
           else          
             dst_x=dst_z=nil
             if actor.position.x.to_i==0

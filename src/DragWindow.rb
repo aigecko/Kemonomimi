@@ -54,18 +54,15 @@ class DragWindow < BaseWindow
     end_drag
   end
   def keep_drag(x,y)
-    if @drag
-      window_move(x,y)
-      update_coord
-    end
+    @drag or return
+    window_move(x,y)
+    update_coord
   end
   def end_drag
-    if @drag
-      Game.window(:GameWindow).open_contral
-      update_coord
-      @drag=false
-      @drag_start=false
-    end
+    @drag or return
+    Game.window(:GameWindow).open_contral
+    update_coord
+    @drag=@drag_start=false
   end
   def window_move(x,y)
     @win_x=x-@delta_x

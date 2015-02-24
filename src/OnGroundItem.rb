@@ -10,13 +10,9 @@ class OnGroundItem
     draw_x,draw_y,* =Mouse.state
     x=draw_x-@draw_x+offset_x
     y=draw_y-@draw_y
-    if x.between?(0,@pic.w)&&
+    return x.between?(0,@pic.w)&&
        y.between?(0,@pic.h)&&
        @pic[x,y]!=@pic.colorkey
-      return true
-    else
-      return false
-    end
   end
   def pickup
     return @origin

@@ -2,4 +2,4 @@
 FULL_SCREEN: false
 SDL_VIDEO_CENTERED: false
 MUSIC: true
-SOUND: true
+SOUND: false

@@ -144,7 +144,6 @@ class<<Game
     }
     
     require_relative('Map')
-    
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)
   end

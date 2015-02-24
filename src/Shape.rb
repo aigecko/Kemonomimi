@@ -19,10 +19,10 @@ class Shape
     @info[sym]
   end
   def box?
-    @shape==:box ? true : false
+    return @shape==:box
   end
   def col?
-    @shape==:col ? true : false
+    return @shape==:col
   end
   def marshal_dump
     [@shape,@info]

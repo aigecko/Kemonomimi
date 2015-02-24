@@ -136,11 +136,6 @@ private
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
     }
-
-    # if @total[:dodge]>@@Coef[:dodge_max]
-      # @total[:block]+=(@total[:dodge]-@@Coef[:dodge_max])*@@Coef[:dtob]
-      # @total[:dodge]=@@Coef[:dodge_max]
-    # end
   end
   def compute_amp_attrib
     @@Base.each{|base|

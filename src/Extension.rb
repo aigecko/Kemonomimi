@@ -1,92 +1,8 @@
 #coding: utf-8
-class SDL::Surface  
-  def save_cmp(filename)
-    Zlib::GzipWriter.open(filename){|file|
-      file.print (
-        Marshal.dump([self.pixels,self.w,self.h,
-                      self.bpp,self.pitch,
-                      self.format.Rmask,
-                      self.format.Gmask,
-                      self.format.Bmask,
-                      self.format.Amask]))
-    }
-  end
-  def self.load_cmp(filename)
-    Zlib::GzipReader.open(filename){|file|
-      data=file.read
-      ary=Marshal.load(data)
-      return SDL::Surface.new_from(*ary)
-    }
-  end
-  def reverse
-    pic=transform_surface(get_pixel(0,0),0,-1,1,SDL::TRANSFORM_SAFE)
-    return pic
-  end
-  [:add,:sub].each{|func| eval "
-  def #{func}_blend(color)
-    rm=self.format.Rmask
-    gm=self.format.Gmask
-    bm=self.format.Bmask
-    am=self.format.Amask
-
-    roffset=goffset=boffset=0
-    while(rm&1==0&&rm>0);rm>>=1;roffset+=1;end
-    while(gm&1==0&&gm>0);gm>>=1;goffset+=1;end
-    while(bm&1==0&&bm>0);bm>>=1;boffset+=1;end
-
-    rm=self.format.Rmask
-    gm=self.format.Gmask
-    bm=self.format.Bmask
-    
-    color=(color[0]<<roffset)+(color[1]<<goffset)+(color[2]<<boffset)
-    x=0
-    while(x<self.w)
-      y=0
-      while(y<self.h)
-        pxl=self[x,y]
-        (r=(pxl&rm)"+((func==:add)? '+':'-')+"(color&rm))"+((func==:add)? '>rm and r=rm':'<=0 and r=0')+ "
-        (g=(pxl&gm)"+((func==:add)? '+':'-')+"(color&gm))"+((func==:add)? '>gm and g=gm':'<=0 and g=0')+ "
-        (b=(pxl&bm)"+((func==:add)? '+':'-')+"(color&bm))"+((func==:add)? '>bm and b=bm':'<=0 and b=0')+ "
-        self[x,y]=r|g|b|am
-        y+=1
-      end
-      x+=1
-    end
-  end"}
-  def draw(dst_x,dst_y,dst)
-    SDL::Surface.blit(self,0,0,0,0,dst,dst_x,dst_y)
-  end
-  def to_texture
-    return SurfaceTexture.new(self)
-  end
-  def self.new_32bpp(w,h)
-    return SDL::Surface.new(SDL::SRCCOLORKEY|SDL::OPENGLBLIT,
-      w,h,32,
-      0xff,0xff00,0xff0000,0xff000000)
-  end
-  def self.new_2N_length(w,h)
-    w=2**(Math.log2(w).ceil.to_i)
-    h=2**(Math.log2(h).ceil.to_i)
-    return SDL::Surface.new_32bpp(w,h)
-  end
-end
-
-class Surface < SDL::Surface
-  def initialize(w,h,format)
-    super(SDL::SWSURFACE,w,h,format)
-  end
-  def set_color_key(color)
-    super(SDL::SRCCOLORKEY,color)
-  end
-  def self.load_with_colorkey(path)
-    pic=Surface.load(path)
-    pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-    pic.display_format_alpha
-    return pic
-  end
-  def self.flag
-    SDL::OPENGLBLIT|SDL::SWSURFACE|SDL::SRCCOLORKEY
-  end
+class SDL::Surface
+  require_relative 'SDL_Surface'
+  require_relative 'SDL_SurfaceSingleton'
+  require_relative 'Surface'
 end
 
 module Math
@@ -110,7 +26,7 @@ module Math
   end
   module_function :sin, :cos, :cosine,:sine  
 end
-class Numeric  
+class Numeric
   def confine(min,max)
     self<min and return min
     self>max and return max

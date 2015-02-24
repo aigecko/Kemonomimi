@@ -47,7 +47,7 @@ class<<(class HotKey;self;end)
       case trigger
       when :once
         @active.delete(key)
-      when :repeat        
+      when :repeat
       end
     }
   end

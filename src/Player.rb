@@ -39,9 +39,6 @@ class Player < Actor
     end
     add_base_skill(@race,Database.get_skill(@race))
   end
-  def inspect
-    return "#<Player: 0x%X>"%self.object_id
-  end
   def gain_exp(exp)
     @attrib.gain_exp(exp)
   end

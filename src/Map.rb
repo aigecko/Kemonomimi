@@ -247,16 +247,13 @@ class Map
       bullet.update
     }
   end
-  def draw#(dst)
+  def draw
     player_x=Game.player.position.x
     side=which_side(player_x)
     case side
-    when :left
-      x=0
-    when :mid
-      x=player_x-Game.Width/2
-    when :right
-      x=@w-Game.Width
+    when :left then x=0
+    when :mid then x=player_x-Game.Width/2
+    when :right then x=@w-Game.Width
     end
     y=230
     

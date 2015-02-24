@@ -106,11 +106,7 @@ class SettingWindow < SelectWindow
     @select_draw_x,@value_draw_x=@value_draw_x,@select_draw_x
   end
   def other_change
-    if Conf[@table[@select]]
-      Conf[@table[@select]]=false
-    else
-      Conf[@table[@select]]=true
-    end
+    Conf[@table[@select]]=!Conf[@table[@select]]
   end
   def refresh_pic
     key=@table[@select]

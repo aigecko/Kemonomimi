@@ -107,7 +107,7 @@ class Input
   def self.load_actor_pic
     self.load_actor_pack('./rc/pic/mon_com.pic')
   end
-  def self.load_actor_pack(path)    
+  def self.load_actor_pack(path)
     unless FileTest.exist?(path)
       Message.show(:actor_pic_lost)
       Message.show(:please_check_files)

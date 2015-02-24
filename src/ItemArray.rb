@@ -17,7 +17,7 @@ class ItemArray <Array
       return @@limit
     end
   end
-  def initialize(size,superposed=false)    
+  def initialize(size,superposed=false)
     if superposed
       super(size){Pack.new(nil,0)}
     else
@@ -69,7 +69,7 @@ class ItemArray <Array
   def add(a,b)
     a==b and return
     box_a=self[a]
-    box_b=self[b]    
+    box_b=self[b]
     if box_a.item.id==box_b.item.id
       num=box_a.num+box_b.num
       if num>Pack.limit

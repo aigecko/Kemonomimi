@@ -1,5 +1,4 @@
 #coding: utf-8
-require 'pp'
 require_relative 'FontTextureSet'
 class Font;end
 class<<Font

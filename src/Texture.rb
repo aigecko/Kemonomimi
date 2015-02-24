@@ -21,9 +21,10 @@ class Texture
     mask=@surface.format.Rmask|
       @surface.format.Gmask|
       @surface.format.Bmask
+    colorkey=@surface.colorkey
     for x in 0...@origin_w
       for y in 0...@origin_h
-        @surface[x,y]==@surface.colorkey and @surface[x,y]&=mask
+        @surface[x,y]==colorkey and @surface[x,y]&=mask
       end
     end
     Glu::gluBuild2DMipmaps(GL_TEXTURE_2D,

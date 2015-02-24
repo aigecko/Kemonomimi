@@ -28,7 +28,6 @@ class Event
     end while event
   end
   def self.each
-    #@event.each_value{|ary| ary.each{|event| yield event}}
     @event.each{|e| yield e}
   end
   def self.[](sym)
