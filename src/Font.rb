@@ -32,17 +32,6 @@ class<<Font
     end
     return @font[size]
   end
-  def render_character(char,size,r,g,b)
-    color=(r<<20)+(g<<10)+b
-
-    @cache[size]||=Hash.new
-    @cache[size][color]||=Hash.new
-    
-    unless surface=@cache[size][color][text]
-      surface=@cache[size][color][text]=self[size].render_blended_utf8(text,r,g,b)
-    end
-    return surface
-  end
   def render_solid(text,size,r,g,b)
     color=(r<<20)+(g<<10)+b
 
@@ -50,7 +39,7 @@ class<<Font
     @cache[size][color]||=Hash.new
     
     unless surface=@cache[size][color][text]
-      surface=@cache[size][color][text]=self[size].render_blended_utf8(text,r,g,b)
+      surface=@cache[size][color][text]=@font[size].render_blended_utf8(text,r,g,b)
     end
     return surface
   end
@@ -64,15 +53,18 @@ class<<Font
     @texture[size]||=Hash.new
     @texture[size][color]||=Hash.new
     
-    unless texture=@texture[size][color][text]
-      texture=@texture[size][color][text]=FontTextureSet(text,size,r,g,b)
-#FontTexture.new(render_solid(text,size,r,g,b))
-    end
-    return texture
+    return @texture[size][color][text]=FontTextureSet.new(text,size,r,g,b)
   end
   def draw_texture(text,size,x,y,r,g,b)
     texture=render_texture(text,size,r,g,b)
     texture.draw(x,y)
     return texture.w,texture.h
+  end
+  def render_character(char,size,r,g,b)
+    color=(r<<20)+(g<<10)+b
+    @texture[size]||=Hash.new
+    @texture[size][color]||=Hash.new
+    
+    @texture[size][color][char]||=FontTexture.new(render_solid(char,size,r,g,b))
   end
 end

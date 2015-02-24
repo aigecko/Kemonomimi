@@ -175,18 +175,16 @@ class<<Game
   def draw_loading
     draw_back
     Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
-    x,y,z=-320/@Width.to_f,-0.2,0
-    w,h=1.0/89*$require_count,0.2
+    x,y,z=-0.5,-0.2,0
+    w,h=1.0/90*$require_count,0.2
     glDisable GL_TEXTURE_2D
-    
     glBegin(GL_QUADS)
-    glColor4d 1-$require_count*0.01,$require_count*0.01,0,1
+    glColor4d 1-$require_count*0.011,$require_count*0.011,0,1
     glVertex3f x,y,z
     glVertex3f x+w,y,z
     glVertex3f x+w,y-h,z
     glVertex3f x,y-h,z
     glEnd
-
     glEnable GL_TEXTURE_2D
     SDL::GL.swap_buffers
   end
