@@ -13,7 +13,6 @@ class<<Game
     sdl_putenv
     
     Color.init
-    Skill.init 
     Icon.init
     
     check_multi_window
@@ -25,6 +24,7 @@ class<<Game
     gl_parameters
     
     load_lib
+    Skill.init 
     Event.init
     win_initialize
     
@@ -114,12 +114,13 @@ class<<Game
     end
   end
   def load_lib
+    @time=SDL.get_ticks
     %w(openssl digest zlib stringio).each{|lib|
       require(lib)
     }
     
     library_list=%w(
-      Database Position 
+      Database Position Skill 
       Item Equipment Consumable ItemArray OnGroundItem
       Event Key HotKey
       Actor Player Enemy Friend Attribute
@@ -172,6 +173,8 @@ class<<Game
   end
   public
   def draw_loading
+    @time>SDL.get_ticks and return
+    @time=SDL.get_ticks+10
     draw_back
     Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
     x,y,z=-0.5,-0.2,0

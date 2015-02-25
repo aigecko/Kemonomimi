@@ -3,7 +3,7 @@
 $t=Time.now
 std_lib=%w(sdl gl glu yaml pp)
 std_lib.each{|lib|
-  require "#{lib}"
+  require lib
 }
 begin
   require "win32api"
@@ -15,7 +15,7 @@ else
   require_relative "src/win32/Surface_Blend"
 end
 my_lib=%w(Color Screen Config Message Icon
-          Font Input Extension Skill Mouse
+          Font Input Extension Mouse
           Texture Drawable Game)
 my_lib.each{|lib|
   require_relative "src/#{lib}"

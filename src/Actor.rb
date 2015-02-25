@@ -20,7 +20,7 @@ class Actor
       
     @attrib=Attrib.new(attrib,@race,@class)
     
-    @animation=ActorAni.new(pics,(@ally==:player)? :player : :actor)
+    @animation=ActorAni.new(pics)
     
     @state=State.new(self)
     @equip=Equip.new

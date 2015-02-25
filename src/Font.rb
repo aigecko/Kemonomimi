@@ -37,10 +37,7 @@ class<<Font
     @cache[size]||=Hash.new
     @cache[size][color]||=Hash.new
     
-    unless surface=@cache[size][color][text]
-      surface=@cache[size][color][text]=@font[size].render_blended_utf8(text,r,g,b)
-    end
-    return surface
+    return @cache[size][color][text]||=@font[size].render_blended_utf8(text,r,g,b)
   end
   def draw_solid(text,size,x,y,r,g,b)
     pic=render_solid(text,size,r,g,b)
@@ -52,7 +49,7 @@ class<<Font
     @texture[size]||=Hash.new
     @texture[size][color]||=Hash.new
     
-    return @texture[size][color][text]=FontTextureSet.new(text,size,r,g,b)
+    return @texture[size][color][text]||=FontTextureSet.new(text,size,r,g,b)
   end
   def draw_texture(text,size,x,y,r,g,b)
     texture=render_texture(text,size,r,g,b)

@@ -77,7 +77,7 @@ class GameWindow < BaseWindow
         when Key::S
           #dbg
           @player.add_state(@player,name:'祝福',sym: :recover,
-                            icon:'./rc/icon/food/2011-12-23_2-003.gif',
+                            icon:'./rc/icon/food/2011-12-23_2-003.gif:[0,0]B[255,0,0]',
                             attrib:{def:1000,agi:1000,healhp:10,atkspd:200},#}
                             multi: :add,
                             last:4999)
