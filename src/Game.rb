@@ -6,6 +6,8 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
+    @NumOfRequire=93
+    
     Conf.init
     Conf.load
     sdl_initialize
@@ -144,6 +146,7 @@ class<<Game
       require_relative (window)
     }
     
+    # p $require_count
     require_relative('Map')
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)
@@ -178,7 +181,7 @@ class<<Game
     draw_back
     Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
     x,y,z=-0.5,-0.2,0
-    w,h=1.0/90*$require_count,0.2
+    w,h=1.0/@NumOfRequire*$require_count,0.2
     glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
     glColor4d 1-$require_count*0.011,$require_count*0.011,0,1
