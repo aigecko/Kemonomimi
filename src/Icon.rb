@@ -47,8 +47,7 @@ class Icon
         @cache[path]=(img=Surface.load(path))
       end
     end
-    base=SDL::Surface.new SDL::SRCCOLORKEY|SDL::OPENGLBLIT,@base_w,@base_h,32,
-      0xff,0xff00,0xff0000,0xff000000
+    base=SDL::Surface.new_32bpp(@base_w,@base_h)
     if info[:base]
       base.fill_rect(0,0,@base_w,@base_h,[
         info[:baseR].to_i,

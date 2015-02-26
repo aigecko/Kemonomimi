@@ -152,8 +152,7 @@ class Input
     
     [:status,:item,:equip,:save,:tool,:skill].each{|name|
       icons[name]=Icon.load(
-        "#{path}/MI_#{name}.png:[0,0]B[255,255,0]",false
-      ).to_texture
+        "#{path}/MI_#{name}.png:[0,0]B[255,255,0]")
     }
 
     return icons

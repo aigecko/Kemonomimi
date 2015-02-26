@@ -11,6 +11,63 @@ class SDL::Surface
                       self.format.Amask]))
     }
   end
+private
+  def plus_hue(color,
+    rm,gm,bm,am,
+    roffset,goffset,boffset,
+    x,y,
+    hue)
+    r,g,b=(color&rm)>>roffset,(color&gm)>>goffset,(color&bm)>>boffset
+    m_max=
+    if r>=g&&r>=b then r
+    elsif g>=r&&g>=b then g
+    else b
+    end
+    m_min=
+    if r<=g&&r<=b then r
+    elsif g<=r&&g<=b then g
+    else b
+    end
+    m_delta=m_max-m_min
+    
+    h=(hue*m_delta).to_i
+    if m_delta>0
+      if r==m_max
+        h+=g-b
+      elsif g==m_max
+        h+=(m_delta<<1)+b-r
+      else
+        h+=(m_delta<<2)+r-g
+      end
+      h_i=h/m_delta-6
+      del=h%m_delta
+      q=m_max-del
+      t=m_min+del
+    else
+      h_i=h-6
+      q=m_max
+      t=m_min
+    end
+    h_i<0 and h_i+=6
+    p=m_min
+    
+    case h_i
+    when 0
+      r,g,b=m_max,t,p
+    when 1
+      r,g,b=q,m_max,p
+    when 2
+      r,g,b=p,m_max,t
+    when 3
+      r,g,b=p,q,m_max
+    when 4
+      r,g,b=t,p,m_max
+    when 5
+      r,g,b=m_max,p,q
+    end
+    self[x,y]=(r<<roffset)|(g<<goffset)|(b<<boffset)|am
+  end
+public
   def change_hue(hue)
     rm=self.format.Rmask
     gm=self.format.Gmask
@@ -25,58 +82,16 @@ class SDL::Surface
     rm=self.format.Rmask
     gm=self.format.Gmask
     bm=self.format.Bmask
+    
+    colorkey=self.colorkey
     for x in 0...self.w
       for y in 0...self.h
-        color=self[x,y]
-        r,g,b=(color&rm)>>roffset,(color&gm)>>goffset,(color&bm)>>boffset
-        m_max=
-        if r>=g&&r>=b then r
-        elsif g>=r&&g>=b then g
-        else b
-        end
-        m_min=
-        if r<=g&&r<=b then r
-        elsif g<=r&&g<=b then g
-        else b
-        end
-        m_delta=m_max-m_min
-        
-        h=(hue*m_delta).to_i
-        if m_delta>0
-          if r==m_max
-            h+=g-b
-          elsif g==m_max
-            h+=(m_delta<<1)+b-r
-          else
-            h+=(m_delta<<2)+r-g
-          end
-          h_i=h/m_delta-6
-          del=h%m_delta
-          q=m_max-del
-          t=m_min+del
-        else
-          h_i=h-6
-          q=m_max
-          t=m_min
-        end
-        h_i<0 and h_i+=6
-        p=m_min
-        
-        case h_i
-        when 0
-          r,g,b=m_max,t,p
-        when 1
-          r,g,b=q,m_max,p
-        when 2
-          r,g,b=p,m_max,t
-        when 3
-          r,g,b=p,q,m_max
-        when 4
-          r,g,b=t,p,m_max
-        when 5
-          r,g,b=m_max,p,q
-        end
-        self[x,y]=(r<<roffset)|(g<<goffset)|(b<<boffset)|am
+        (color=self[x,y])==colorkey and next
+        plus_hue(color,
+          rm,gm,bm,am,
+          roffset,goffset,boffset,
+          x,y,
+          hue)
       end
     end
   end
@@ -121,5 +136,5 @@ class SDL::Surface
   def to_texture
     return SurfaceTexture.new(self)
   end
-  
+
 end

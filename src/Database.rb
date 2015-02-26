@@ -53,6 +53,7 @@ class Database
       pics[:right]=pics[:right].to_texture
       pics[:left]=pics[:left].to_texture
     rescue NoMethodError,ArgumentError=>e
+      p e
       Message.show_backtrace(e)
       exit
     rescue SDL::Error=>e

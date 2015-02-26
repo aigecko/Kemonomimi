@@ -56,8 +56,7 @@ class Map
     
     @@current_map=self
     
-    enemy=Enemy.new("slime","none",
-                       [500,0,200],{},"mon_001")
+    enemy=Enemy.new("slime","none",[500,0,200],{},"mon_001")
     @enemy<<enemy
   end
   def which_side(player_x)
