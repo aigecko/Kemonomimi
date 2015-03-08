@@ -54,12 +54,13 @@ class Skill
         caster=info[:caster]
         data=info[:data]
         args=info[:args]
-        add=args[:add]        
+        add=args[:add]
         attrib={}
         args[:base].each{|key,value|
           attrib[key]=value
         }
         attrib.each_key{|sym|
+          add[sym] or next
           add_value=caster.attrib[add[sym][0]]*add[sym][1]
           attrib[sym]+=(add_value<1)? add_value : add_value.to_i
         }

@@ -473,8 +473,7 @@ class Actor
     @attrib.lose_base_attrib(attrib)
   end
   def draw_hpbar
-    percent=@attrib[:hp]/@attrib[:maxhp].to_f
-    @animation.draw_hpbar(@position,percent)
+    @animation.draw_hpbar(@position,@attrib)
   end
   def draw_state(x,y)
     mx,my,* =Mouse.state

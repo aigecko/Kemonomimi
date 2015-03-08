@@ -51,7 +51,8 @@ class Actor::Attrib
           :healhp,:healsp,
           :atk_vamp,:skl_vamp,
           :critical,:bash].include?(sym)||value.integer?
-        #{(name==:state&&act==:lose)? "(sym==:hp||sym==:sp) or ":''}@#{name}[sym]#{act==:gain ? '+':'-'}=value
+        #{(name==:state&&act==:lose)? "(sym==:hp||sym==:sp||sym==:mag_shield||sym==:atk_shield) or ":''}
+        @#{name}[sym]#{act==:gain ? '+':'-'}=value
       else
         @amped[sym]#{act==:gain ? '+':'-'}=(value*100).to_i
       end
@@ -100,6 +101,7 @@ private
      :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
      :consum_amp,:heal_amp,:tough,
+     :max_mag_shield,:max_atk_shield,
      :atk_vamp,:skl_vamp].each{|sym|
       @total[sym]=0
     }
@@ -117,12 +119,15 @@ private
      :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
      :consum_amp,:heal_amp,:tough,
+     :mag_shield,:max_mag_shield,
+     :atk_shield,:max_atk_shield,
      :atk_vamp,:skl_vamp,
      :critical,:bash].each{|sym|
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
     }
     @state[:hp]=@state[:sp]=0
+    @state[:mag_shield]=@state[:atk_shield]=0
   end
   def compute_block_dodge
     agi=@total[:agi]
@@ -130,7 +135,7 @@ private
     value=(agi/@@Coef[:agi_div])**@@Coef[:agi_exp]*@@Coef[:agi_mul]
 
     @total[:dodge]=value*(agi**@@Coef[:dodge_exp])/((str+agi)**@@Coef[:dodge_exp])
-    @total[:block]=value-@total[:dodge]      
+    @total[:block]=value-@total[:dodge]
     @total[:ignore]=0
 
     [:dodge,:block,:ignore].each{|sym|
@@ -151,6 +156,8 @@ private
 
     @total[:hp]>@total[:maxhp] and @total[:hp]=@total[:maxhp]
     @total[:sp]>@total[:maxsp] and @total[:sp]=@total[:maxsp]
+    @total[:mag_shield]=@total[:mag_shield].confine(0,@total[:max_mag_shield])
+    @total[:atk_shield]=@total[:atk_shield].confine(0,@total[:max_atk_shield])
 
     @total[:wlkspd]+=@total[:wlkspd]*@amped[:wlkspd]/@@Coef[:amped]
     @total[:wlkstep]=@total[:wlkspd].confine(0,@total[:wlkspd])

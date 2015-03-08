@@ -52,7 +52,8 @@ class Attribute
     :mo=>:mag_outamp,:po=>:phy_outamp,
     :mr=>:mag_resist,:pr=>:phy_resist,:ar=>:atk_resist,
     :mc=>:mag_decatk,:pc=>:phy_decatk,
-    :msh=>:mag_shield,:psh=>:atk_shield,
+    :msh=>:mag_shield,:ash=>:atk_shield,
+    :mms=>:max_mag_shield,:mas=>:max_atk_shield,
 
     :ca=>:consum_amp,:ha=>:heal_amp,:aa=>:attack_amp,
 
