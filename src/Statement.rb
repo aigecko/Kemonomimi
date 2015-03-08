@@ -3,6 +3,7 @@ class Statement
   attr_reader :attrib,:sym,:multi,:num_limit,:negative
   @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
   @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
+  @@name_back_box=Rectangle.new(0,0,0,15,Color[:statement_name_back])
   @@marshal_table={
     :n=>:@name,:s=>:@sym,
     :i=>:@icon_string,:a=>:@attrib,
@@ -14,7 +15,7 @@ class Statement
   def initialize(caster,info)
     @caster=caster
     
-    @name=info[:name]||""
+    @name=info[:name]
     @sym=info[:sym]
     
     info[:icon] and @icon=Icon.load(info[:icon])
@@ -52,13 +53,19 @@ class Statement
   def end?
     return @last_time&&@end_time<SDL.get_ticks
   end
-  def draw_icon(x,y)
+  def draw_icon(x,y,mx,my)
     @icon or return false
     @@border_box.draw_at(x-1,y-1)
     @@back_box.draw_at(x,y)
     @icon.draw(x,y)
+    draw_name(x,y,mx,my)
   end
-  def draw_name
+  def draw_name(x,y,mx,my)
+    @name and (mx.between?(x,x+24)&&my.between?(y,y+24)) or return 
+    font=Font.render_texture(@name,15,*Color[:statement_name_font])
+    @@name_back_box.w=font.w
+    @@name_back_box.draw_at(x,y-15)
+    font.draw(x,y-15)
   end
   def marshal_dump
     data={}

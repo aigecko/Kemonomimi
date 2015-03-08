@@ -20,7 +20,6 @@ class<<Font
   end
   def [](size)
     unless @font[size]
-      p text
       begin
         raise "FontNotExisted"
       rescue => e
@@ -37,7 +36,7 @@ class<<Font
     @cache[size]||=Hash.new
     @cache[size][color]||=Hash.new
     
-    return @cache[size][color][text]||=@font[size].render_blended_utf8(text,r,g,b)
+    return @cache[size][color][text]||=self[size].render_blended_utf8(text,r,g,b)
   end
   def draw_solid(text,size,x,y,r,g,b)
     pic=render_solid(text,size,r,g,b)

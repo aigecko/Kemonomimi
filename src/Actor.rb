@@ -477,7 +477,8 @@ class Actor
     @animation.draw_hpbar(@position,percent)
   end
   def draw_state(x,y)
-    @state.draw(x,y)
+    mx,my,* =Mouse.state
+    @state.draw(x,y,mx,my)
   end
   def draw
     @animation.draw(@position)

@@ -70,14 +70,14 @@ class Actor::State
       end
     }
   end
-  def draw(x,y)
+  def draw(x,y,mx,my)
     n=0
     @state.each_value{|state|
       if state.respond_to? :empty?
         state.empty? and next
         state=state[-1]
       end
-      state.draw_icon(x+n*30,y)
+      state.draw_icon(x+n*30,y,mx,my)
       n+=1
     }
   end

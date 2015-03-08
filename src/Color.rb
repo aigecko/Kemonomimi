@@ -76,6 +76,8 @@ class Color
       
       statement_back:[0,217,255],
       statement_border:[47,57,128],
+      statement_name_back:[255,255,255,128],
+      statement_name_font:[0,0,0],
       
       actor_hpbar_back:[0,0,0],
       actor_hpbar:[255,0,0],
