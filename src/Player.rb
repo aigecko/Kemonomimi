@@ -20,7 +20,6 @@ class Player < Actor
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
-    
   end
   def race_initialize
     case @race

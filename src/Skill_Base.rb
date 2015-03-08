@@ -381,13 +381,14 @@ class Skill
       }
       
       @proc[:magic_immunity]=->(info){
-        caster=info[:caster]        
+        caster=info[:caster]
         add=info[:args][:add]
         attrib={}
         info[:args][:base].each{|key,value|
           attrib[key]=value
         }
         attrib.each_key{|sym|
+          add[sym] and
           attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
         }
         last=info[:args][:last].to_sec

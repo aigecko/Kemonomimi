@@ -25,6 +25,7 @@ class SkillWindow < DragWindow
   end
   def start_init
     @skill=Game.player.skill
+    click_box=@click_skill=nil
   end
   def interact
     Event.each{|event|
@@ -48,8 +49,7 @@ class SkillWindow < DragWindow
              (event.y-@win_y-24).between?(0,@box_h-1)
             @click_box=(event.x-@win_x-@border)/@box_border_w
           else
-            @click_box=nil
-            @click_skill=nil
+            @click_box=@click_skill=nil
           end
         when Mouse::BUTTON_RIGHT
         end
@@ -66,8 +66,7 @@ class SkillWindow < DragWindow
   end
   def close
     super
-    @click_box=nil
-    @click_skill=nil
+    @click_box=@click_skill=nil
   end
   def draw
     super

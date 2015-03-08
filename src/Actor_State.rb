@@ -77,7 +77,8 @@ class Actor::State
         state.empty? and next
         state=state[-1]
       end
-      state.draw_icon(x+n*30,y) and n+=1
+      state.draw_icon(x+n*30,y)
+      n+=1
     }
   end
   def marshal_dump

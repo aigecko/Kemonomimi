@@ -51,7 +51,7 @@ class Actor::Attrib
           :healhp,:healsp,
           :atk_vamp,:skl_vamp,
           :critical,:bash].include?(sym)||value.integer?
-        @#{name}[sym]#{act==:gain ? '+':'-'}=value
+        #{(name==:state&&act==:lose)? "(sym==:hp||sym==:sp) or ":''}@#{name}[sym]#{act==:gain ? '+':'-'}=value
       else
         @amped[sym]#{act==:gain ? '+':'-'}=(value*100).to_i
       end
@@ -112,7 +112,7 @@ private
 
     [:atk,:def,:matk,:mdef,:ratk,
      :wlkspd,:atkspd,
-     :maxhp,:maxsp,:healhp,:healsp,
+     :maxhp,:maxsp,:healhp,:healsp,:hp,:sp,
      :mag_outamp,:phy_outamp,
      :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
@@ -122,6 +122,7 @@ private
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
     }
+    @state[:hp]=@state[:sp]=0
   end
   def compute_block_dodge
     agi=@total[:agi]
