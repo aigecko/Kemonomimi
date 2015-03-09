@@ -15,9 +15,9 @@ class Bullet
     @ani=ani
     @vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]
     if @vector[0]<0
-      @ani=@ani.reverse
+      @ani.reverse
     end
-    ani_initialize
+    # ani_initialize
     
     @live_cycle=info[:live_cycle]
     @live_count=info[:live_count]

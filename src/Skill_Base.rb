@@ -274,7 +274,7 @@ class Skill
               attack: attack,
               attack_defense: data[:attack_defense],
               append: data[:append]),
-            (pic=Surface.load_with_colorkey(data[:pic])),
+            (pic=data[:pic]),
             :box,
             caster: caster,
             live_cycle: data[:live_cycle],
@@ -288,9 +288,9 @@ class Skill
               0
             end,
             z: caster.position.z,
-            w: pic.w,
-            h: pic.w/4,
-            t: pic.h,
+            w: data[:shape_w],
+            h: data[:shape_h],
+            t: data[:shape_t],
             vx: caster.face_side==:right ? data[:velocity] : -data[:velocity])
         )
       }

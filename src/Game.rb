@@ -124,7 +124,7 @@ class<<Game
     library_list=%w(
       Database Position Skill 
       Item Equipment Consumable ItemArray OnGroundItem
-      Event Key HotKey
+      Event Key HotKey Animation
       Actor Player Enemy Friend Attribute
       Statement SkillTree
       ColorString ParaString DynamicString
