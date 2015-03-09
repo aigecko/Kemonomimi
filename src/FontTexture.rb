@@ -16,5 +16,6 @@ class FontTexture < Texture
       end
     end
     gen_texture
+    @surface.destroy
   end
 end

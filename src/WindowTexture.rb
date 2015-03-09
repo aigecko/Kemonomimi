@@ -6,6 +6,7 @@ class WindowTexture < Texture
     @surface.fill_rect(0,0,@surface.w,@surface.h,surface[0,0])
     SDL::Surface.blit(surface,0,0,@origin_w,@origin_h,@surface,0,0)
     gen_texture
+    @surface.destroy
   end
   def gen_texture
     @id=glGenTextures(1)

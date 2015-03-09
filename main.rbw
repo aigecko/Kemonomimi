@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #coding: utf-8
 $t=Time.now
-std_lib=%w(sdl gl glu yaml pp)
+std_lib=%w(sdl gl glu yaml singleton)
 std_lib.each{|lib|
   require lib
 }
