@@ -97,3 +97,25 @@ class Circle < Drawable
     @texture.draw_float(@x,@y,@z||0,@a)
   end
 end
+class Ellipse < Drawable
+  def initialize(x,y,rx,ry,color,alpha=nil)
+    @rx,@ry=rx,ry
+    super(x,y,color)
+    surface=SDL::Surface.new_32bpp((rx<<1)+1,(ry<<1)+1)
+    background=color.collect{|c| (c+1)%255}
+    surface.fill_rect(0,0,surface.w,surface.h,background)
+    surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
+    surface.draw_ellipse(rx,ry,rx,ry,color,true,false)
+    @a=(alpha||255)/255.0
+    @texture=surface.to_texture
+  end
+  def x=(x)
+    @x=-1+(x-@rx)/(Game.Width.to_f/2)
+  end
+  def y=(y)
+    @y=1-(y-@ry)/(Game.Height.to_f/2)
+  end
+  def display
+    @texture.draw_float(@x,@y,@z||0,@a)
+  end
+end
