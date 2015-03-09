@@ -248,6 +248,7 @@ class GameWindow < BaseWindow
     Heal.draw
     Effect.draw
     
+    
     glDisable GL_DEPTH_TEST
     glPopMatrix
     

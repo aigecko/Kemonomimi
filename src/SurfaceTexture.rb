@@ -37,8 +37,7 @@ class SurfaceTexture < Texture
       GL_RGBA,GL_UNSIGNED_BYTE,
       @surface.pixels)
   end
-  def draw(dst_x,dst_y,z=0,alpha=1.0)
-    x,y=-1+dst_x/320.0,1-dst_y/240.0
+  def draw_float(x,y,z=0,alpha=1.0)
     w,h=@draw_w,@draw_h
     
     glEnable GL_BLEND

@@ -38,6 +38,9 @@ class Texture
   def h;return @origin_h;end
   def draw(dst_x,dst_y,z=0,alpha=1.0)
     x,y=-1+dst_x/320.0,1-dst_y/240.0
+    draw_float(x,y,z,alpha)
+  end
+  def draw_float(x,y,z=0,alpha=1.0)
     w,h=@draw_w,@draw_h
     vx,vy=@text_w,@text_h
     glEnable GL_BLEND
