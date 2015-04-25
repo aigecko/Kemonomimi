@@ -68,7 +68,7 @@ class Actor
         append:[:enegy_arrow,:fire_burn,:break_armor],
         launch_y: :center,
         live_cycle: :time,
-        pic: Animation.new(:follow,{img:['./rc/pic/battle/arrow.png'],w: 50,h: 11},[[[:blit,0]]]),
+        pic: [:follow,{img:['./rc/pic/battle/arrow.png'],w: 50,h: 11},[[[:blit,0]]]],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
       common_cd: :normal_attack,

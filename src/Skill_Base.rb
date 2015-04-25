@@ -274,7 +274,7 @@ class Skill
               attack: attack,
               attack_defense: data[:attack_defense],
               append: data[:append]),
-            (pic=data[:pic]),
+            (pic=Animation.new(*data[:pic])),
             :box,
             caster: caster,
             live_cycle: data[:live_cycle],

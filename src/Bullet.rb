@@ -17,15 +17,11 @@ class Bullet
     if @vector[0]<0
       @ani.reverse
     end
-    # ani_initialize
     
     @live_cycle=info[:live_cycle]
     @live_count=info[:live_count]
     
     @hit_target=[info[:exclude]]
-  end
-  def ani_initialize
-    @ani and @ani=@ani.to_texture
   end
   def mark_live_frame
     @trigger=true
