@@ -1,7 +1,7 @@
 #coding: utf-8
 class Game;end
 class<<Game
-  include Gl
+  include Gl,Glu
   def init
     @Width=640
     @Height=480
@@ -62,6 +62,12 @@ class<<Game
     SDL::GL.set_attr SDL::GL_BLUE_SIZE,8
     SDL::GL.set_attr SDL::GL_DEPTH_SIZE,24
     SDL::GL.set_attr SDL::GL_DOUBLEBUFFER,1
+    
+    @Camera=[0,0,1]
+    @Center=[0,0,0]
+    @Vertical=[0,1,0]
+    @OrthoRect=[-1,1,-1,1]
+    @OrthoWall=[2,-2]
   end
   def font_initialize
     SDL::TTF.init
@@ -85,25 +91,22 @@ class<<Game
     end
   end  
   def gl_parameters
-    glMatrixMode(GL_MODELVIEW)
-    glViewport 0, 0, Game.Width, Game.Height
-    glMatrixMode(GL_PROJECTION)
-    glOrtho(-1,1,1,-1,-1,1)
-    gluLookAt(0,1,1,0,0,0,0,1/Math.sqrt(2),1/Math.sqrt(2))
-    glEnable GL_TEXTURE_2D
-    glTexParameteri GL_TEXTURE_2D,
-      GL_TEXTURE_MAG_FILTER, GL_NEAREST
-    glTexParameteri GL_TEXTURE_2D,
+    glViewport(0, 0, Game.Width, Game.Height)
+    gluLookAt(*@Camera,*@Center,*@Vertical)
+    glOrtho(*@OrthoRect,*@OrthoWall)
+    glEnable(GL_TEXTURE_2D)
+    glTexParameteri(GL_TEXTURE_2D,
+      GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameteri(GL_TEXTURE_2D,
       GL_TEXTURE_MIN_FILTER,
-      GL_NEAREST
+      GL_NEAREST)
     
-    glEnable GL_BLEND
-    glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
-    glEnable GL_ALPHA_TEST
-    glAlphaFunc GL_GREATER,0
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA)
+    glEnable(GL_ALPHA_TEST)
+    glAlphaFunc(GL_GREATER,0)
     
-    glShadeModel GL_SMOOTH    
-    glMatrixMode(GL_MODELVIEW)
+    glShadeModel(GL_SMOOTH)
   end
   $require_count=0
   module ::Kernel
