@@ -85,20 +85,25 @@ class<<Game
     end
   end  
   def gl_parameters
-    glViewport( 0, 0, Game.Width, Game.Height );
+    glMatrixMode(GL_MODELVIEW)
+    glViewport 0, 0, Game.Width, Game.Height
+    glMatrixMode(GL_PROJECTION)
+    glOrtho(-1,1,1,-1,-1,1)
+    gluLookAt(0,1,1,0,0,0,0,1/Math.sqrt(2),1/Math.sqrt(2))
     glEnable GL_TEXTURE_2D
-    glTexParameteri(GL_TEXTURE_2D,
-      GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,
+    glTexParameteri GL_TEXTURE_2D,
+      GL_TEXTURE_MAG_FILTER, GL_NEAREST
+    glTexParameteri GL_TEXTURE_2D,
       GL_TEXTURE_MIN_FILTER,
-      GL_NEAREST);
+      GL_NEAREST
     
     glEnable GL_BLEND
     glBlendFunc GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA
     glEnable GL_ALPHA_TEST
     glAlphaFunc GL_GREATER,0
     
-    glShadeModel(GL_SMOOTH);
+    glShadeModel GL_SMOOTH    
+    glMatrixMode(GL_MODELVIEW)
   end
   $require_count=0
   module ::Kernel
