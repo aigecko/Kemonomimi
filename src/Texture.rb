@@ -10,8 +10,8 @@ class Texture
     @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
     @w=@surface.w
     @h=@surface.h
-    @draw_w=@origin_w#/(Game.Width.to_f/2)
-    @draw_h=@origin_h#/(Game.Height.to_f/2)
+    @draw_w=@origin_w
+    @draw_h=@origin_h
     @text_w=(@origin_w)/@w.to_f
     @text_h=(@origin_h)/@h.to_f
   end

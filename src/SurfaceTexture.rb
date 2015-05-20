@@ -7,8 +7,8 @@ class SurfaceTexture < Texture
     
     @w=@surface.w
     @h=@surface.h
-    @draw_w=@origin_w#/(Game.Width.to_f/2)
-    @draw_h=@origin_h#/(Game.Height.to_f/2)
+    @draw_w=@origin_w
+    @draw_h=@origin_h
     @text_w=(@origin_w+1)/@w.to_f
     @text_h=(@origin_h+1)/@h.to_f
     @slide_x=1.0/@w

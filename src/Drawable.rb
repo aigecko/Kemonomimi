@@ -84,7 +84,7 @@ class Circle < Drawable
     surface.fill_rect(0,0,surface.w,surface.h,background)
     surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
     surface.draw_circle(r,r,r,color,true,true)
-    @a=(alpha||255)/255.0
+    @a=(alpha||@@max)/@@max
     @texture=surface.to_texture
   end
   def x=(x)
