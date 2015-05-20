@@ -227,7 +227,7 @@ class GameWindow < BaseWindow
     glPushMatrix
     glEnable GL_DEPTH_TEST
     glDepthFunc GL_LESS
-    glTranslatef(-@offset_x/320.0,0,0)
+    glTranslatef(-@offset_x,0,0)
     
     @map.draw
     @map.render_shadow.each{|item| item.draw_shadow}

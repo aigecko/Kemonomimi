@@ -128,7 +128,6 @@ class Input
   def self.load_chipset_pic
     path='./rc/pic/chipset/chipset.bmp'
     base=Input.load_pic(path)
-    base.display_format
     chip_w=40
     chip_h=20
     idx_w=base.w/chip_w

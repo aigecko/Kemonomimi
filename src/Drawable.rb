@@ -8,10 +8,10 @@ class Drawable
     self.color=color
   end
   def x=(x)
-    @x=-1+x/(Game.Width.to_f/2)
+    @x=x
   end
   def y=(y)
-    @y=1-y/(Game.Height.to_f/2)
+    @y=y
   end
   def color=(color)
     @r,@g,@b=*color
@@ -39,10 +39,10 @@ class Rectangle < Drawable
     self.h=h
   end
   def w=(w)
-    @w=w/(Game.Width.to_f/2)
+    @w=w
   end
   def h=(h)
-    @h=h/(Game.Height.to_f/2)
+    @h=h
   end
   def display
     glDisable GL_TEXTURE_2D
@@ -50,8 +50,8 @@ class Rectangle < Drawable
     glColor4d @r,@g,@b,@a
     glVertex3f @x,@y,@z
     glVertex3f @x+@w,@y,@z
-    glVertex3f @x+@w,@y-@h,@z
-    glVertex3f @x,@y-@h,@z
+    glVertex3f @x+@w,@y+@h,@z
+    glVertex3f @x,@y+@h,@z
     glEnd
     glEnable GL_TEXTURE_2D
   end
@@ -60,8 +60,8 @@ class Line < Drawable
   def initialize(x1,y1,x2,y2,color=[0,0,0],width=1)
     super(x1,y1,color)
     @x1,@y1=@x,@y
-    @x2=-1+x2/(Game.Width.to_f/2)
-    @y2=1-y2/(Game.Height.to_f/2)
+    @x2=x2
+    @y2=y2
     @width=width
   end
   def display
@@ -88,10 +88,10 @@ class Circle < Drawable
     @texture=surface.to_texture
   end
   def x=(x)
-    @x=-1+(x-@r)/(Game.Width.to_f/2)
+    @x=x-@r
   end
   def y=(y)
-    @y=1-(y-@r)/(Game.Height.to_f/2)
+    @y=y-@r
   end
   def display
     @texture.draw_float(@x,@y,@z||0,@a)
@@ -106,14 +106,14 @@ class Ellipse < Drawable
     surface.fill_rect(0,0,surface.w,surface.h,background)
     surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
     surface.draw_ellipse(rx,ry,rx,ry,color,true,false)
-    @a=(alpha||255)/255.0
+    @a=(alpha||@@max)/@@max
     @texture=surface.to_texture
   end
   def x=(x)
-    @x=-1+(x-@rx)/(Game.Width.to_f/2)
+    @x=x-@rx
   end
   def y=(y)
-    @y=1-(y-@ry)/(Game.Height.to_f/2)
+    @y=y-@ry
   end
   def display
     @texture.draw_float(@x,@y,@z||0,@a)

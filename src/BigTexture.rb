@@ -21,8 +21,7 @@ class BigTexture < Texture
   def draw_part(dst_x,dst_y,z,x,y,w,h)
     vx,vy=x/@w.to_f,y/@h.to_f
     vu,vv=vx+w/@w.to_f,vy+h/@h.to_f
-    x,y=-1+dst_x/320.0,1-dst_y/240.0
-    w,h=w/(Game.Width.to_f/2),h/(Game.Height.to_f/2)
+    x,y=dst_x,dst_y
     
     glEnable GL_BLEND
     glBindTexture(GL_TEXTURE_2D,@id[0])
@@ -33,9 +32,9 @@ class BigTexture < Texture
     glTexCoord2d(vu,vy)
     glVertex3f x+w,y,z
     glTexCoord2d(vu,vv)
-    glVertex3f x+w,y-h,z
+    glVertex3f x+w,y+h,z
     glTexCoord2d(vx,vv)
-    glVertex3f x,y-h,z
+    glVertex3f x,y+h,z
     glEnd
   end
 end

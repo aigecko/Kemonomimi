@@ -9,7 +9,6 @@ class Surface < SDL::Surface
   def self.load_with_colorkey(path)
     pic=Surface.load(path)
     pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
-    pic.display_format_alpha
     return pic
   end
   def self.flag

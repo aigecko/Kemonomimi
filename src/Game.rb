@@ -66,7 +66,7 @@ class<<Game
     @Camera=[0,0,1]
     @Center=[0,0,0]
     @Vertical=[0,1,0]
-    @OrthoRect=[-1,1,-1,1]
+    @OrthoRect=[0,640,480,0]
     @OrthoWall=[2,-2]
   end
   def font_initialize
@@ -188,15 +188,15 @@ class<<Game
     @time=SDL.get_ticks+10
     draw_back
     Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
-    x,y,z=-0.5,-0.2,0
-    w,h=1.0/@NumOfRequire*$require_count,0.2
+    x,y,z=160,288,0
+    w,h=320.0/@NumOfRequire*$require_count,48
     glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
     glColor4d 1-$require_count*0.011,$require_count*0.011,0,1
     glVertex3f x,y,z
     glVertex3f x+w,y,z
-    glVertex3f x+w,y-h,z
-    glVertex3f x,y-h,z
+    glVertex3f x+w,y+h,z
+    glVertex3f x,y+h,z
     glEnd
     glEnable GL_TEXTURE_2D
     SDL::GL.swap_buffers
@@ -253,7 +253,7 @@ class<<Game
       draw_back
       draw
       delta_time=SDL.get_ticks-time
-      # p delta_time
+      #p delta_time
       delta_time<40 and SDL.delay(40-delta_time)
     }
   end

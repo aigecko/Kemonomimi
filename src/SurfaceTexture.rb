@@ -7,8 +7,8 @@ class SurfaceTexture < Texture
     
     @w=@surface.w
     @h=@surface.h
-    @draw_w=@origin_w/(Game.Width.to_f/2)
-    @draw_h=@origin_h/(Game.Height.to_f/2)
+    @draw_w=@origin_w#/(Game.Width.to_f/2)
+    @draw_h=@origin_h#/(Game.Height.to_f/2)
     @text_w=(@origin_w+1)/@w.to_f
     @text_h=(@origin_h+1)/@h.to_f
     @slide_x=1.0/@w
@@ -49,9 +49,9 @@ class SurfaceTexture < Texture
     glTexCoord2d(@text_w,@slide_y)
     glVertex3f x+w,y,z
     glTexCoord2d(@text_w,@text_h)
-    glVertex3f x+w,y-h,z
+    glVertex3f x+w,y+h,z
     glTexCoord2d(@slide_x,@text_h)
-    glVertex3f x,y-h,z
+    glVertex3f x,y+h,z
     glEnd
   end
 end

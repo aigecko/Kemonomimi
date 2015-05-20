@@ -1,7 +1,7 @@
 #coding: utf-8
 class HorizonSurfaceTexture < SurfaceTexture
    def draw(dst_x,dst_y,z=0,alpha=1.0)
-    x,y=-1+dst_x/320.0,1-dst_y/240.0
+    x,y=dst_x,dst_y
     w,h=@draw_w,@draw_h
     zf,zb=z,z+@draw_h
     

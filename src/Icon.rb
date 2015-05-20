@@ -76,7 +76,6 @@ class Icon
     end
     
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
-    img.display_format
     @cache[str]=img
     gen and img=img.to_texture
     return img

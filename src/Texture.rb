@@ -10,8 +10,8 @@ class Texture
     @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)
     @w=@surface.w
     @h=@surface.h
-    @draw_w=@origin_w/(Game.Width.to_f/2)
-    @draw_h=@origin_h/(Game.Height.to_f/2)
+    @draw_w=@origin_w#/(Game.Width.to_f/2)
+    @draw_h=@origin_h#/(Game.Height.to_f/2)
     @text_w=(@origin_w)/@w.to_f
     @text_h=(@origin_h)/@h.to_f
   end
@@ -37,7 +37,7 @@ class Texture
   def w;return @origin_w;end
   def h;return @origin_h;end
   def draw(dst_x,dst_y,z=0,alpha=1.0)
-    x,y=-1+dst_x/320.0,1-dst_y/240.0
+    x,y=dst_x,dst_y
     draw_float(x,y,z,alpha)
   end
   def draw_float(x,y,z=0,alpha=1.0)
@@ -52,9 +52,9 @@ class Texture
     glTexCoord2d(vx,0)
     glVertex3f x+w,y,z
     glTexCoord2d(vx,vy)
-    glVertex3f x+w,y-h,z
+    glVertex3f x+w,y+h,z
     glTexCoord2d(0,vy)
-    glVertex3f x,y-h,z
+    glVertex3f x,y+h,z
     glEnd
   end
 end
