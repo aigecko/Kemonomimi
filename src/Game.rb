@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=93
+    @NumOfRequire=94
     
     Conf.init
     Conf.load
@@ -154,7 +154,6 @@ class<<Game
       require_relative (window)
     }
     
-    # p $require_count
     require_relative('Map')
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)

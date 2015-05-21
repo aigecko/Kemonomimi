@@ -44,6 +44,7 @@ class Message
     actor_index_wrong:['Actor實體索引值錯誤','錯誤', :OK,:ERROR],
     #提示訊息
     unvalid_equip:['裝備不存在','錯誤', :OK, :ASTERISK],
+    attrib_get_on_array:['對多重實體之狀態取用屬性值','錯誤',:OK,:ASTERISK],
 
     #謎樣訊息
     debugger_present: ['偵測到核心崩潰前兆','警告', :OK, :WARNING]
