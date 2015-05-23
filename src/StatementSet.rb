@@ -28,7 +28,16 @@ class StatementSet
     return @arr.size
   end
   def attrib
-    @arr.size>1 and Message.show(:attrib_get_on_array)
+    begin 
+      @arr.size>1 and
+      raise "attrib_get_on_array"
+    rescue =>e
+      Message.show(:attrib_get_on_array)
+      Message.show_backtrace(e)
+    end
     return @arr[0].attrib
+  end
+  def replace(statement)
+    @arr[0]=statement
   end
 end

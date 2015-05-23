@@ -23,7 +23,7 @@ class Actor::State
       @state[state.sym].empty? or
       @actor.attrib.lose_state_attrib(@state[state.sym].attrib)
     
-      @state[state.sym]<<state
+      @state[state.sym].replace(state)
     end
     @actor.attrib.gain_state_attrib(state.attrib)
   end

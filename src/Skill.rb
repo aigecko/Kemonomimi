@@ -114,10 +114,10 @@ class Skill
     @end_time=0
   end
   def cd_start
-    @end_time=SDL.get_ticks+@cd.to_sec.to_i
+    @end_time=Game.get_ticks+@cd.to_sec.to_i
   end
   def cding?
-    return @end_time&&@end_time>SDL.get_ticks
+    return @end_time&&@end_time>Game.get_ticks
   end
   def draw_icon(x,y)
     @icon.draw(x,y)

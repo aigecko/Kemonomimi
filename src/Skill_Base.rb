@@ -233,8 +233,8 @@ class Skill
         unless rand(100)<possibility
           return info[:attack]
         end        
-        if SDL.get_ticks>caster.var[:counter_beam_endtime]
-          caster.var[:counter_beam_endtime]=SDL.get_ticks+info[:data][:cd].to_sec
+        if Game.get_ticks>caster.var[:counter_beam_endtime]
+          caster.var[:counter_beam_endtime]=Game.get_ticks+info[:data][:cd].to_sec
         else
           return info[:attack]
         end
@@ -510,8 +510,8 @@ class Skill
       
       @proc[:fire_circle]=->(info){
         attack=info[:args][0]+info[:caster].attrib[:matk]
-        if SDL.get_ticks>info[:caster].var[:fire_circle_triger]
-          info[:caster].var[:fire_circle_triger]=SDL.get_ticks+1.to_sec
+        if Game.get_ticks>info[:caster].var[:fire_circle_triger]
+          info[:caster].var[:fire_circle_triger]=Game.get_ticks+1.to_sec
         else
           return
         end

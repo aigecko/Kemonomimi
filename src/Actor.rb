@@ -447,11 +447,11 @@ class Actor
   end
   def can_cast?(end_time,consum)
     (has_state?(:stun)) and return false
-    (SDL.get_ticks>end_time) or return false
+    (Game.get_ticks>end_time) or return false
     return @attrib[:sp]>=consum
   end
   def can_cast_auto?(end_time,consum)
-    SDL.get_ticks>end_time or return false
+    Game.get_ticks>end_time or return false
     return @attrib[:sp]>=consum
   end
   def cast(name,target,x,y,z)

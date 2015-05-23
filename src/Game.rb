@@ -159,6 +159,7 @@ class<<Game
     Mouse.set_cursor(:select)
   end
   def update
+    @cur_frame_ticks=SDL.get_ticks
     Event.poll
     @window.each{|name,window|
       window.enable or next
@@ -262,5 +263,8 @@ class<<Game
       realpath.chop!
     end
     realpath
+  end
+  def get_ticks
+    return @cur_frame_ticks
   end
 end

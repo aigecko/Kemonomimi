@@ -29,7 +29,7 @@ class Statement
     @multi=info[:multi]
     @num_limit=info[:num_limit]
     
-    @start_time=SDL.get_ticks
+    @start_time=Game.get_ticks
     @last_time=info[:last]
     @last_time and @end_time=@start_time+@last_time
     
@@ -37,7 +37,7 @@ class Statement
     @negative=info[:negative]
   end
   def refresh
-    @end_time=SDL.get_ticks+@last_time
+    @end_time=Game.get_ticks+@last_time
   end
   def update(actor)
     @effect or return
@@ -51,7 +51,7 @@ class Statement
     @last_time<0 and @last_time=0
   end
   def end?
-    return @last_time&&@end_time<SDL.get_ticks
+    return @last_time&&@end_time<Game.get_ticks
   end
   def draw_icon(x,y,mx,my)
     @icon or return false
