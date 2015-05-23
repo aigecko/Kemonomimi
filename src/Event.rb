@@ -32,7 +32,7 @@ class Event
   end
   def self.[](sym)
     @event.each{|e|
-      eval("e.instance_of?(SDL::Event::#{sym}) and return true")
+      e.instance_of?(SDL::Event.const_get(sym)) and return true
     }
     return false
   end

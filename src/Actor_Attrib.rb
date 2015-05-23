@@ -165,9 +165,9 @@ private
     @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
   end
   def compute_step
-    @total[:wlkstep]=@total[:wlkspd]/@@Coef[:step].to_f
-    @total[:hlhpstep]=@total[:healhp]/25.to_f
-    @total[:hlspstep]=@total[:healsp]/25.to_f
+    @total[:wlkstep]=@total[:wlkspd]/Game.FPS
+    @total[:hlhpstep]=@total[:healhp]/Game.FPS
+    @total[:hlspstep]=@total[:healsp]/Game.FPS
   end
 public
   def compute_total

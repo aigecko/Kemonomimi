@@ -4,6 +4,13 @@ class Statement
   @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
   @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
   @@name_back_box=Rectangle.new(0,0,0,15,Color[:statement_name_back])
+
+  @@DefaultEffectAmp=1
+  @@EffectInterval=500
+
+  @@FontSize=15
+  @@IconSize=24
+  
   @@marshal_table={
     :n=>:@name,:s=>:@sym,
     :i=>:@icon_string,:a=>:@attrib,
@@ -23,7 +30,7 @@ class Statement
     
     @attrib=info[:attrib]
     @effect=info[:effect]
-    @effect_amp=info[:effect_amp]||1
+    @effect_amp=info[:effect_amp]||@@DefaultEffectAmp
     @interval=info[:interval]
     
     @multi=info[:multi]
@@ -32,6 +39,12 @@ class Statement
     @start_time=Game.get_ticks
     @last_time=info[:last]
     @last_time and @end_time=@start_time+@last_time
+    @cur_effect_count=0
+    if @effect
+      @next_affect_time=@start_time
+      @total_effect_count=@last_time/@@EffectInterval
+      @cur_effect_count=@total_effect_count
+    end
     
     @magicimu_keep=info[:magicimu_keep]
     @negative=info[:negative]
@@ -41,17 +54,20 @@ class Statement
   end
   def update(actor)
     @effect or return
+    @next_affect_time<Game.get_ticks or return
     @effect.affect(actor,actor.position,@effect_amp)
+    @next_affect_time+=@@EffectInterval
+    @cur_effect_count-=1
   end
   def keep_when_magicimmunity?
-    @magicimu_keep
+    return @magicimu_keep
   end
   def tough_compute(tough)
     @last_time-=@last_time*tough/100
     @last_time<0 and @last_time=0
   end
   def end?
-    return @last_time&&@end_time<Game.get_ticks
+    return @last_time&&@end_time<Game.get_ticks&&@cur_effect_count==0
   end
   def draw_icon(x,y,mx,my)
     @icon or return false
@@ -61,11 +77,11 @@ class Statement
     draw_name(x,y,mx,my)
   end
   def draw_name(x,y,mx,my)
-    @name and (mx.between?(x,x+24)&&my.between?(y,y+24)) or return 
-    font=Font.render_texture(@name,15,*Color[:statement_name_font])
+    @name and (mx.between?(x,x+@@IconSize)&&my.between?(y,y+@@IconSize)) or return 
+    font=Font.render_texture(@name,@@FontSize,*Color[:statement_name_font])
     @@name_back_box.w=font.w
-    @@name_back_box.draw_at(x,y-15)
-    font.draw(x,y-15)
+    @@name_back_box.draw_at(x,y-@@FontSize)
+    font.draw(x,y-@@FontSize)
   end
   def marshal_dump
     data={}

@@ -23,7 +23,7 @@ class Actor::Attrib
     
     growth: 10,
     amped: 100,
-    step: 40,
+    step: 40.0,
     
     agi_div: 50.0,
     agi_exp: 1.06,

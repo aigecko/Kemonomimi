@@ -7,6 +7,8 @@ class<<Game
     @Height=480
     @Depth=400
     @NumOfRequire=94
+    @FPS=25
+    @TFP=40
     
     Conf.init
     Conf.load
@@ -235,6 +237,9 @@ class<<Game
   def Depth
     return 401.0
   end
+  def FPS
+    return @FPS
+  end
   def player
     return @window[:GameWindow].get_player
   end
@@ -254,7 +259,7 @@ class<<Game
       draw
       delta_time=SDL.get_ticks-time
       #p delta_time
-      delta_time<40 and SDL.delay(40-delta_time)
+      delta_time<@TFP and SDL.delay(@TFP-delta_time)
     }
   end
   def get_real_path
