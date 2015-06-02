@@ -4,11 +4,6 @@ class Animation
   def initialize(target,data,tracks)
     @target=target
     @data=data.dup
-    @data[:img_rev]=data[:img].collect{|filename|
-      surface=Surface.load(filename).reverse
-      surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
-      surface.to_texture
-    }
     @data[:img]=data[:img].collect{|filename|
       Surface.load_with_colorkey(filename).to_texture
     }
@@ -18,7 +13,7 @@ class Animation
     @w,@h=@data[:w],@data[:h]
   end
   def reverse
-    @data[:img]=@data[:img_rev]
+    @reverse=true
   end
   def draw(x,y,z)
     @tracks.each{|track|
@@ -28,7 +23,7 @@ class Animation
       when :blit
         case @target
         when :follow
-          @data[:img][arg[0]].draw(x,y,z)
+          @data[:img][arg[0]].draw_direct(x,y,z,@reverse)
         end
       end
     }

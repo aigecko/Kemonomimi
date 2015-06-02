@@ -37,6 +37,33 @@ class SurfaceTexture < Texture
       GL_RGBA,GL_UNSIGNED_BYTE,
       @surface.pixels)
   end
+  def draw_direct(x,y,z,reverse)
+    w,h=@draw_w,@draw_h
+    glEnable GL_BLEND
+    glBindTexture(GL_TEXTURE_2D,@id[0])
+    glColor4d 1.0,1.0,1.0,1.0
+    glBegin(GL_QUADS)
+    unless reverse
+      glTexCoord2d(@slide_x,@slide_y)
+      glVertex3f x,y,z
+      glTexCoord2d(@text_w,@slide_y)
+      glVertex3f x+w,y,z
+      glTexCoord2d(@text_w,@text_h)
+      glVertex3f x+w,y+h,z
+      glTexCoord2d(@slide_x,@text_h)
+      glVertex3f x,y+h,z
+    else
+      glTexCoord2d(@text_w,@slide_y)
+      glVertex3f x,y,z
+      glTexCoord2d(@slide_x,@slide_y)
+      glVertex3f x+w,y,z
+      glTexCoord2d(@slide_x,@text_h)
+      glVertex3f x+w,y+h,z
+      glTexCoord2d(@text_w,@text_h)
+      glVertex3f x,y+h,z
+    end
+    glEnd
+  end
   def draw_float(x,y,z=0,alpha=1.0)
     w,h=@draw_w,@draw_h
     

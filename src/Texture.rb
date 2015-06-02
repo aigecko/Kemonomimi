@@ -36,10 +36,9 @@ class Texture
   def colorkey;return @surface.colorkey;end
   def w;return @origin_w;end
   def h;return @origin_h;end
-  def draw(dst_x,dst_y,z=0,alpha=1.0)
-    x,y=dst_x,dst_y
-    draw_float(x,y,z,alpha)
-  end
+  def draw(dst_x,dst_y,dst_z=0,alpha=1.0)
+    draw_float(dst_x,dst_y,dst_z,alpha)
+  end  
   def draw_float(x,y,z=0,alpha=1.0)
     w,h=@draw_w,@draw_h
     vx,vy=@text_w,@text_h
