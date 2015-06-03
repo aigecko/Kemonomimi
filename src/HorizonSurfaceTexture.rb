@@ -3,8 +3,7 @@ class HorizonSurfaceTexture < SurfaceTexture
    def draw(dst_x,dst_y,z=0,alpha=1.0)
     x,y=dst_x,dst_y
     w,h=@draw_w,@draw_h
-    zf,zb=z,z+@draw_h
-    
+    zf,zb=z,z+@draw_h/Game.Depth
     glEnable GL_BLEND
     glBindTexture(GL_TEXTURE_2D,@id[0])
     glColor4d 1.0,1.0,1.0,alpha
