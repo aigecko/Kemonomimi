@@ -11,7 +11,7 @@ class GameWindow < BaseWindow
     @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow]
        
     @windows={}
-    @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow]
+    @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow,:DialogWindow]
     @drag_list.each{|window|
       @windows[window]=Object.const_get(window).new
     }
@@ -23,6 +23,8 @@ class GameWindow < BaseWindow
     HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
     HotKey.bind(Key::F3,:proc,:once,->{switch_window(:SkillWindow)})
     HotKey.bind(Key::F4,:proc,:once,->{switch_window(:EquipWindow)})
+    HotKey.bind(Key::Q,:proc,:once,->{friend_window_close;switch_window(:DialogWindow)})
+    HotKey.bind(Key::W,:proc,:once,->{friend_window_open;switch_window(:DialogWindow)})
     HotKey.bind(Key::F5,:proc,:once,->{Game.save})
     HotKey.bind(Key::F6,:proc,:once,->{Game.load})
     HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
@@ -44,6 +46,12 @@ class GameWindow < BaseWindow
   end
   def friend_window_close
     @friend_windows.each{|window| Game.set_window(window,:close)}
+  end
+  def friend_window_open
+    @friend_windows.each{|window| Game.set_window(window,:open)}
+  end
+  def switch_friend_window
+    @friend_windows.each{|window| switch_window(window)}
   end
   def sub_window_init
     @windows.each_value{|window| window.start_init}

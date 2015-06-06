@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=101
+    @NumOfRequire=102
     @FPS=25
     @TFP=40
     
@@ -151,7 +151,8 @@ class<<Game
                    RaceWindow ClassWindow LoadWindow GameWindow
                    SettingWindow LevelWindow BarsWindow
                    ButtonWindow StatusWindow ItemWindow
-                   EquipWindow SkillWindow)
+                   EquipWindow SkillWindow
+                   DialogWindow)
     window_list.each{|window|
       require_relative (window)
     }
