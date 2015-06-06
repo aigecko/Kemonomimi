@@ -4,13 +4,13 @@ class Bullet
     box: ->(ani,position,shape){
       ani.draw(position.x-ani.w/2,
       431-position.y-position.z/2-ani.h,
-      position.z/Game.Depth)
+      position.z)
     },
     col: ->(ani,position,shape){
-      ani.draw(position.x-ani.w/2,431-position.y-(position.z+ani.h)/2,position.z/Game.Depth)
+      ani.draw(position.x-ani.w/2,431-position.y-(position.z+ani.h)/2,position.z)
     },
     hoz: ->(ani,position,shape){
-      ani.draw(position.x-ani.w/2,431-position.y+(ani.h-position.z)/2,position.z/Game.Depth)
+      ani.draw(position.x-ani.w/2,431-position.y+(ani.h-position.z)/2,position.z)
     }
   }
 end

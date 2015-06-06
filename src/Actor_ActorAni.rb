@@ -44,12 +44,12 @@ class Actor::ActorAni
   def draw(pos)
     @draw_x=pos.x-@pic[@idx][@face].w/2
     @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
-    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z/Game.Depth)
+    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z)
   end
   def draw_hpbar(pos,attrib)
     draw_x=pos.x-20
     draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+15
-    draw_z=pos.z/Game.Depth
+    draw_z=pos.z
     
     ash_percent=attrib[:atk_shield]/attrib[:maxhp].to_f
     msh_percent=attrib[:mag_shield]/attrib[:maxhp].to_f

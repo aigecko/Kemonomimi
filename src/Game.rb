@@ -69,7 +69,7 @@ class<<Game
     @Center=[0,0,0]
     @Vertical=[0,1,0]
     @OrthoRect=[0,@Width,@Height,0]
-    @OrthoWall=[2,-2]
+    @OrthoWall=[802,-2]
   end
   def font_initialize
     SDL::TTF.init
@@ -235,9 +235,9 @@ class<<Game
   def Height
     return @Height
   end
-  def Depth
-    return 401.0
-  end
+  # def Depth
+    # return 401.0
+  # end
   def FPS
     return @FPS
   end

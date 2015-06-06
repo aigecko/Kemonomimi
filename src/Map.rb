@@ -256,8 +256,8 @@ class Map
     end
     y=230
     
-    @sky_pic.draw_at(x,0,0.999999)
-    @map_pic.draw_part(x,y,0.999999,x,0,Game.Width,@map_pic.h)
+    @sky_pic.draw_at(x,0,401)
+    @map_pic.draw_part(x,y,401,x,0,Game.Width,@map_pic.h)
   end
   meta=class<<Map
     def method_missing(method,*arg)
