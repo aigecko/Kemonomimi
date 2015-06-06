@@ -8,10 +8,10 @@ class Skill
         caster=info[:caster]
         x,z=caster.position.x,caster.position.z
         dis=Math.distance(x,z,info[:x],info[:z])
-        if dis>limit          
+        if dis>limit
           delta_x=(info[:x]-x)*limit/dis
           delta_z=(info[:z]-z)*limit/dis
-          
+
           dst_x=x+delta_x
           dst_z=z+delta_z
           caster.set_move_dst(info[:x],0,info[:z])
@@ -23,7 +23,7 @@ class Skill
           caster.position.z=info[:z]
         end
       }
-      
+
       @proc[:counter_attack]=->(info){
         attack=info[:args][0]+(info[:caster].attrib[:def]*info[:args][1]).to_i
         Attack.new(info[:caster],
@@ -31,7 +31,7 @@ class Skill
           attack: attack).affect(info[:target],info[:target].position)
         return info[:attack]
       }
-      
+
       @proc[:amplify]=->(info){
         caster=info[:caster]
         if caster.has_state?(info[:data][:sym])
@@ -65,21 +65,21 @@ class Skill
           attrib[sym]+=(add_value<1)? add_value : add_value.to_i
         }
         last=data[:last].to_sec
-        
+
         caster.add_state(caster,
           name: data[:name],sym: data[:sym],
           icon: data[:icon],
           magicimu_keep: true,
           attrib: attrib,
           last: last)
-      }      
+      }
       @proc[:boost_circle]=->(info){
         caster=info[:caster]
         args=info[:args]
         data=info[:data]
-        
+
         healhp=args[0]+(caster.attrib[:matk]*0.3).to_i
-        
+
         atkspd=args[1]+(caster.attrib[:int]*0.1).to_i
         Map.add_enemy_circle(
           caster.ally,
@@ -101,13 +101,13 @@ class Skill
             live_cycle: :frame)
         )
       }
-      
+
       @proc[:attack_increase]=->(info){
         caster=info[:caster]
         target=info[:target]
 
         data=info[:data]
-        
+
         if target==caster.var[:attack_increase_target]
           if caster.var[:attack_increase_count]<info[:args]
             caster.var[:attack_increase_count]+=1
@@ -152,7 +152,7 @@ class Skill
             z: caster.position.z,
             r: 80,h:50,
             live_cycle: :frame))
-      }      
+      }
       @proc[:dual_weapon_atkspd_acc]=->(info){
         caster=info[:caster]
         right_hand=caster.equip[:right]
@@ -226,13 +226,13 @@ class Skill
           caster.del_state(:single_weapon)
         end
       }
-      
+
       @proc[:counter_beam]=->(info){
         caster=info[:caster]
-        possibility=info[:data][:possibility]        
+        possibility=info[:data][:possibility]
         unless rand(100)<possibility
           return info[:attack]
-        end        
+        end
         if Game.get_ticks>caster.var[:counter_beam_endtime]
           caster.var[:counter_beam_endtime]=Game.get_ticks+info[:data][:cd].to_sec
         else
@@ -240,7 +240,7 @@ class Skill
         end
         attack=info[:args][0]+caster.attrib[:def]
         last=info[:args][1].to_sec
-        
+
         Map.add_friend_circle(
           caster.ally,
           Bullet.new(
@@ -260,7 +260,7 @@ class Skill
         )
         return info[:attack]
       }
-           
+
       @proc[:arrow]=->(info){
         caster=info[:caster]
         data=info[:data]
@@ -300,7 +300,7 @@ class Skill
         info[:data][:coef].each{|sym,val|
           attack+=(caster.attrib[sym]*val).to_i
         }
-        
+
         pic=Surface.load_with_colorkey(info[:data][:pic])
         distance=Math.distance(info[:x],info[:z],caster.position.x,caster.position.z).to_i
         delta_x=info[:x]-caster.position.x
@@ -332,7 +332,7 @@ class Skill
         caster=info[:caster]
         data=info[:data]
         attack=info[:args]+(caster.attrib[data[:sym]]*data[:coef]).to_i
-        
+
         Map.add_friend_circle(
           caster.ally,
           Bullet.new(
@@ -352,7 +352,32 @@ class Skill
           )
         )
       }
-     
+      @proc[:aura]=->(info){
+        caster=info[:caster]
+        args=info[:args]
+        data=info[:data]
+        aura=Bullet.new(
+          Effect.new(caster,args[:effect]),
+          data[:ani],
+          :col,
+          caster: caster,
+          live_cycle: :frame,
+          r: args[:r],
+          h: args[:h],
+          x: caster.position.x,
+          y: caster.position.y,
+          z: caster.position.z
+        )
+        case data[:target]
+        when :enemy
+          Map.add_friend_circle(caster.ally,aura)
+        when :friend
+          Map.add_enemy_circle(caster.ally,aura)
+        else
+          raise "UnkownAuraTarget"
+        end
+      }
+      
       @proc[:contribute]=->(info){
         caster=info[:caster]
         Map.add_enemy_circle(
@@ -370,7 +395,7 @@ class Skill
           )
         )
       }
-     
+
       @proc[:fire_arrow]=->(info){
         attack=info[:args]
         Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target],info[:target].position)
@@ -380,7 +405,7 @@ class Skill
         attack=const+info[:caster].attrib[:sp]*percent/100
         Attack.new(info[:caster],type: :umag,attack: attack).affect(info[:target],info[:target].position)
       }
-      
+
       @proc[:magic_immunity]=->(info){
         caster=info[:caster]
         add=info[:args][:add]
@@ -393,14 +418,14 @@ class Skill
           attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
         }
         last=info[:args][:last].to_sec
-        
+
         caster.add_state(caster,
           name:'魔法免疫',sym: :magic_immunity,
           icon:'./rc/icon/icon/tklre04/skill_053.png',
           attrib: attrib,
           last: last)
       }
-      
+
       @proc[:burn]=->(info){
         args=info[:args]
         data=info[:data]
@@ -428,7 +453,7 @@ class Skill
 
         attack=info[:args][0]+(caster.attrib[info[:data][:sym]]*info[:data][:coef]).to_i
         probability=info[:args][1]
-        
+
         rand(100)<probability and
         Map.add_friend_bullet(
           caster.ally,
@@ -472,7 +497,7 @@ class Skill
           icon: './rc/icon/skill/2011-12-23_3-045.gif',
           base: :dst_dec_dmg,consum: 0,level: 1,table:[0,info[:args]],
           commit:'技能用')
-        
+
         Map.add_friend_bullet(
           caster.ally,
           Bullet.new(
@@ -488,7 +513,7 @@ class Skill
             exclude: info[:target])
         )
       }
-      
+
       @proc[:attack]=->(info){
         attack=info[:caster].attrib[:atk]
         Attack.new(info[:caster],
@@ -507,7 +532,7 @@ class Skill
           before: :attack_increase,
           append: :attack).affect(info[:target],info[:target].position)
       }
-      
+
       @proc[:fire_circle]=->(info){
         attack=info[:args][0]+info[:caster].attrib[:matk]
         if Game.get_ticks>info[:caster].var[:fire_circle_triger]
@@ -515,7 +540,7 @@ class Skill
         else
           return
         end
-        
+
         Map.add_friend_circle(
           info[:caster].ally,
           Bullet.new(
@@ -537,25 +562,25 @@ class Skill
             surface: :horizon)
         )
       }
-      
+
       @proc[:wolfear]=->(info){
         caster=info[:caster]
         attrib=caster.attrib
-    
+
         healhp=(attrib[:maxhp]-attrib[:hp])*0.02
         healsp=healhp*attrib[:maxsp]/attrib[:maxhp]
-      
+
         caster.add_state(caster,
           name:'狼耳之血',sym: :wolfear,
           icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,0,0]',
-          attrib: {healhp: healhp,healsp: healsp},          
+          attrib: {healhp: healhp,healsp: healsp},
           magicimu_keep: true,
           last: nil)
       }
       @proc[:dogear]=->(info){
         maxhp,hp=info[:target].attrib[:maxhp],info[:target].attrib[:hp]
         percent=hp*100/maxhp
-        
+
         if percent<10
           attack_amp=50
           elsif percent<20
@@ -572,15 +597,15 @@ class Skill
         #10%:1.6 15%:1.5 25%:1.4 40%:1.3 60%:1.15
           info[:caster].attrib[:attack_amp]=attack_amp
       }
-            
+
       @proc[:snow_shield]=->(info){
         reduce_percent=info[:args][0]
         convert_coeff=info[:args][1]
         caster=info[:caster]
-      
+
         damage=info[:attack]-info[:attack]*reduce_percent/100
         consum=damage/convert_coeff.to_i
-        
+
         if consum>caster.attrib[:sp]
           consum=caster.attrib[:sp]
           damage=info[:attack]-consum*convert_coeff
@@ -636,8 +661,8 @@ class Skill
       }
       @proc[:ice_wave]=->(info){
         caster=info[:caster]
-        attack=info[:args]        
-        info[:data][:coef].each{|sym,val|        
+        attack=info[:args]
+        info[:data][:coef].each{|sym,val|
           attack+=(caster.attrib[sym]*val).to_i
         }
         Map.add_friend_circle(
@@ -653,7 +678,7 @@ class Skill
           )
         )
       }
-      
+
       @proc[:heal]=->(info){
         hp,sp=info[:args][:hp],info[:args][:sp]
         data=info[:data]||{}
@@ -666,7 +691,7 @@ class Skill
       @proc[:recover]=->(info){
         caster=info[:caster]
         target=caster
-        
+
         case info[:data][:type]
         when :max
           hp=target.attrib[:maxhp]*info[:args][:coef]/100
@@ -680,7 +705,7 @@ class Skill
         end
         attrib=info[:args][:attrib]
         attrib[:healhp]=hp
-        
+
         target.add_state(caster,
           name: info[:data][:name],sym: info[:data][:sym],
           icon: info[:data][:icon],
@@ -697,8 +722,8 @@ class Skill
     end
   end
   def self.init
-    Base.init   
-    
+    Base.init
+
     @@types=[:active,:auto,:attrib,:state,:switch,:attach]
   end
 end

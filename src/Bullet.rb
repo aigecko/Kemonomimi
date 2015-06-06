@@ -31,24 +31,14 @@ class Bullet
     @trigger=true
   end
   def to_delete?
-    # case @live_cycle
-    # when :frame
-      # @trigger and return true
-      # @trigger=true
-      # return false
-    # when :time,:time_only
-      # @live_count-=1
-      # return @live_count<0
-    # else
-      return false
-    # end 
+    return false
   end  
   def update
     @position.x+=@vector[0]
     @position.y+=@vector[1]
     @position.z+=@vector[2]
   end
-  def affect(target)  
+  def affect(target)
     @go_forward=false
     @effect or return true
     
@@ -60,20 +50,6 @@ class Bullet
       @effect.affect(target,@position)
     end
     @go_forward=true
-
-    # case @live_cycle
-    # when :once,:time
-      # return true
-    # when :count
-      # @hit_target<<target
-      # @live_count-=1
-      # return @live_count<0
-    # when :frame,:time_only
-      # @hit_target<<target
-      # return false
-    # else
-      # return true
-    # end
   end
   def draw
     @ani and

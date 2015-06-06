@@ -22,7 +22,9 @@ class Heal
     end
     target.gain_#{type}(#{type})
     color=Color[:heal_#{type}_font]
-    @@buffer<<ParaString.new(\"%+d\"%#{type},target,color,@@FontSize)
+    if #{type}>0
+      @@buffer<<ParaString.new(\"%+d\"%#{type},target,color,@@FontSize)
+    end
   end\n"    
   }
   str+="end"
