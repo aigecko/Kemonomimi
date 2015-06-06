@@ -15,10 +15,9 @@ class Effect
     # f    f   t  t
     # f    nil f  t
     if target.has_state?(:magic_immunity)&&!(@info[:magimu_enable]==false)
-      #@@buffer<<ParaString.new("魔免",target,[170,170,170],@@FontSize)      
+      #@@buffer<<ParaString.new("魔免",target,[170,170,170],@@FontSize)
       return true
     end
-    
     target.add_state(@caster,@info)
     add_extra_effect(target)
     return true
