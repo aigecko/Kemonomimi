@@ -30,6 +30,12 @@ class Actor::State
   def include?(name)
     @state[name]
   end
+  def has_flag(name)
+    @state.each_value{|state|
+      state.flag.include?(name) and return true
+    }
+    return false
+  end
   def keep_if
     @state.keep_if{|sym,state| yield state}
   end

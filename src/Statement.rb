@@ -1,6 +1,6 @@
 #coding: utf-8
 class Statement
-  attr_reader :attrib,:sym,:multi,:num_limit,:negative
+  attr_reader :attrib,:sym,:multi,:num_limit,:negative,:flag
   @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
   @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
   @@name_back_box=Rectangle.new(0,0,0,15,Color[:statement_name_back])
@@ -17,7 +17,7 @@ class Statement
     :ea=>:@effect_amp,:e=>:@effect,
     :iv=>:@interval,:mu=>:@multi,
     :nl=>:@num_limit,:mk=>:@magicimu_keep,
-    :ne=>:@negative
+    :ne=>:@negative,:f=>@flag
   }
   def initialize(caster,info)
     @caster=caster
@@ -48,6 +48,7 @@ class Statement
     
     @magicimu_keep=info[:magicimu_keep]
     @negative=info[:negative]
+    @flag=info[:flag]
   end
   def refresh
     @end_time=Game.get_ticks+@last_time
