@@ -83,6 +83,28 @@ race={
   :wolfear=>'自身每秒回復n%損失生命並回復m倍等量法力'
   :leopardcatear=>'受到攻擊有n%機率減傷m%持續r秒'
 }
+common={
+  :attack=>%w{
+    屹立不搖:普通攻擊回復HP,SP#heal
+    力拔山河:增加n%力量#amplify
+    足智多謀:增加n%智力#amplify
+    百步穿楊:增加n%敏捷#amplify
+    賭性堅強:n%m倍爆擊#amplify
+  }
+  :defense=>%w{
+    忍辱負重:增加n%體質#amplify
+    識途老馬:增加n%智慧#amplify
+    疾風勁草:增加n韌性#amplify
+  }
+  :other=>%w{
+    趁火打劫:增加掉落n%金錢#amplify
+    精打細算:降低消費n%金錢#amplify
+    貪生怕死:增加n跑速#amplify
+    速戰速決:增加n攻速#amplify
+    自我治癒:增加n的healhp#amplify
+    心平氣和:增加n的healsp#amplify
+  }
+}
 klass={
   :cleric=>%w[
     能量吸收:減少n%受到傷害並轉成m倍法力#attack_dendese->soul_of_Leyasu
@@ -187,7 +209,7 @@ klass={
     天雷怒擊:指定範圍n+m*matk魔法傷害緩m跑速#explode
     暴怒雷擊:射出讓敵方受到n+m*matk魔法傷害暈眩r秒的弓箭#magic_arrow
 
-    #魔法之弩:增加弩n倍ratk魔攻#auto->magic_bow
+    魔法之弩:增加弩n倍ratk魔攻#auto->magic_bow
 
     閃電之力:開啟後魔攻遠攻提升n%帶高壓放電並增加m雙防持續r秒#metamorphosis
     高壓放電:隨機造成n+m*matk魔法傷害
@@ -205,7 +227,7 @@ klass={
     望風披靡:射出可以造成n+m*matk魔法傷害並沉默r秒的弓箭#magic_arrow
     狂風之襲:直線造成n+m*matk魔法傷害並降低閃避r%持續s秒#explode
 
-    #暴風之弓:弓的攻速強化n倍#magic_bow
+    暴風之弓:弓的攻速強化n倍#magic_bow
 
     烈風之力:增加n跑速且基礎攻速變為s持續r秒#metamorphosis
   ]
