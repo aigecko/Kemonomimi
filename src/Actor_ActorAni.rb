@@ -6,7 +6,15 @@ class Actor::ActorAni
   @@hpbar_bar=Rectangle.new(0,0,40,4,@@hpbar_color_back)
   @@mag_shield_bar=Rectangle.new(0,0,40,2,[128,0,128])
   @@atk_shield_bar=Rectangle.new(0,0,40,2,[255,255,255])
-  def initialize(pics)
+  
+  @@ActionToIndex={
+    standby: 0,
+    raise_hand: 0,
+    attack: 0,
+    complete_attack: 0,
+  }
+  def initialize(actor,pics)
+    @actor=actor
     @pics=pics
     pic_initialize
     
@@ -26,6 +34,10 @@ class Actor::ActorAni
   def rotate(side)
     @face=side
   end
+  def update
+    @idx=@@ActionToIndex[@actor.action.yield_frame]
+    @pos=@actor.position
+  end
   def w
     return @pic[@idx][@face].w
   end
@@ -41,15 +53,17 @@ class Actor::ActorAni
        y.between?(0,pic.h)&&
        pic[x,y]!=pic.colorkey
   end
-  def draw(pos)
-    @draw_x=pos.x-@pic[@idx][@face].w/2
-    @draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+30+1
-    @pic[@idx][@face].draw(@draw_x,@draw_y,pos.z)
+  def draw
+    @draw_x=@pos.x-@pic[@idx][@face].w/2
+    @draw_y=@@map_h-@pos.y-@pos.z/2-@pic[@idx][@face].h+30+1
+    @pic[@idx][@face].draw(@draw_x,@draw_y,@pos.z)
   end
-  def draw_hpbar(pos,attrib)
-    draw_x=pos.x-20
-    draw_y=@@map_h-pos.y-pos.z/2-@pic[@idx][@face].h+15
-    draw_z=pos.z
+  def draw_hpbar
+    attrib=@actor.attrib
+    
+    draw_x=@pos.x-20
+    draw_y=@@map_h-@pos.y-@pos.z/2-@pic[@idx][@face].h+15
+    draw_z=@pos.z
     
     ash_percent=attrib[:atk_shield]/attrib[:maxhp].to_f
     msh_percent=attrib[:mag_shield]/attrib[:maxhp].to_f
@@ -73,14 +87,13 @@ class Actor::ActorAni
   end
   def marshal_dump
     return [{
-      :p=>@pics,:i=>@idx,:f=>@face
+      :p=>@pics,:f=>@face
     }]
   end
   def marshal_load(array)
     data=array[0]
     @pics=data[:p]
     pic_initialize
-    @idx=data[:i]
     @face=data[:f]
   end
 end

@@ -1,12 +1,12 @@
 #coding: utf-8
 class Actor
     %w{Actor_Attrib Actor_ActorAni Actor_Equip 
-     Actor_State Actor_AI ActorSingleton}.each{|actor_lib|
+     Actor_State Actor_AI Actor_Action ActorSingleton}.each{|actor_lib|
     require_relative actor_lib
   }
   attr_reader :position,:attrib,:ally,:race,:class
   attr_reader :equip_list,:item_list,:comsumable_list,:pledge_list
-  attr_reader :equip,:skill,:target
+  attr_reader :equip,:skill,:target,:action
   attr_accessor :shape,:var
   def initialize(comment,pos,attrib,pics)
     str=comment.split
@@ -20,7 +20,8 @@ class Actor
       
     @attrib=Attrib.new(attrib,@race,@class)
     
-    @animation=ActorAni.new(pics)
+    @animation=ActorAni.new(self,pics)
+    @action=Action.new(self)
     
     @state=State.new(self)
     @equip=Equip.new
@@ -182,9 +183,9 @@ class Actor
   def get_equip_list
     @equip_list
   end
-  def set_target(target,action=nil)
+  def set_target(target,action=:standby)
     @target=target
-    @action=action
+    @action.set_action(action)
   end
   def set_move_dst(x,y,z)
     x||=@position.x
@@ -235,8 +236,8 @@ class Actor
     [@dst_x,@dst_y,@dst_z]
   end
   def reach_target?
-    case @action
-    when :attack
+    case @action.current_action
+    when :chase
       return (@position.x-@target.position.x).abs<=(pic_w+@target.pic_w)/2&&
              (@position.z-@target.position.z).abs<=20
     when :pickup
@@ -246,8 +247,9 @@ class Actor
   end
   def interact_target
     @target and reach_target? and
-    case @action
-    when :attack
+    case @action.current_action
+    when :chase
+      @action.set_action(:attack)
       if !@target.died?
         @position.x>@target.position.x ? rotate(:left) : rotate(:right)
         @skill[:normal_attack].cast_attack(self,@target,@attrib[:atkspd])
@@ -279,8 +281,8 @@ class Actor
   end
   def chase_target
     @target and not reach_target? and
-    case @action
-    when :attack
+    case @action.current_action
+    when :chase
       if @target.position.x>@position.x
         rotate(:right)
         dst_x=@target.position.x-(@target.pic_w+pic_w)/2+1
@@ -411,16 +413,16 @@ class Actor
     @accum_hp||=0
     @accum_sp||=0
     
-    if @attrib[:hp]<@attrib[:maxhp]        
+    if @attrib[:hp]<@attrib[:maxhp]
       @accum_hp+=@attrib[:hlhpstep]
       hp=@accum_hp.to_i
       gain_hp(hp)
       @accum_hp-=hp
     end
     if @attrib[:sp]<@attrib[:maxsp]
-      @accum_sp+=@attrib[:hlspstep]      
+      @accum_sp+=@attrib[:hlspstep]
       sp=@accum_sp.to_i
-      gain_sp(sp)      
+      gain_sp(sp)
       @accum_sp-=sp
     end
   end
@@ -472,16 +474,14 @@ class Actor
   def lose_attrib(attrib)
     @attrib.lose_base_attrib(attrib)
   end
-  def draw_hpbar
-    @animation.draw_hpbar(@position,@attrib)
-  end
   def draw_state(x,y)
     mx,my,* =Mouse.state
     @state.draw(x,y,mx,my)
   end
   def draw
-    @animation.draw(@position)
-    draw_hpbar
+    @animation.update
+    @animation.draw
+    @animation.draw_hpbar
   end
   def marshal_dump
     data={}

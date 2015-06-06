@@ -161,7 +161,7 @@ class GameWindow < BaseWindow
     if convert_position
       target=@map.find_under_cursor_enemy(@offset_x)
       if target
-        @player.set_target(target,:attack)
+        @player.set_target(target,:chase)
         @player.chase_target
       else
         @player.set_move_dst(*convert_position)

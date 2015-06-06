@@ -48,11 +48,11 @@ class Actor
       def self.init
         @proc=Hash.new
         @proc[:agreesive]=->(actor){
-          actor.set_target(Game.player,:attack)
+          actor.set_target(Game.player,:chase)
         }
         @proc[:peaceful]=->(actor){
           if actor.attrib[:maxhp]>actor.attrib[:hp]
-            actor.set_target(Game.player,:attack)
+            actor.set_target(Game.player,:chase)
           end
         }
       end
