@@ -174,9 +174,7 @@ class<<Game
     end
   end
   def draw
-    @window[:GameWindow].visible and @window[:GameWindow].draw
     @window.each{|name,window|
-      name==:GameWindow and next
       window.visible and window.draw
     }
     SDL::GL.swap_buffers
@@ -235,9 +233,6 @@ class<<Game
   def Height
     return @Height
   end
-  # def Depth
-    # return 401.0
-  # end
   def FPS
     return @FPS
   end

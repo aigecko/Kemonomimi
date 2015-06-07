@@ -4,6 +4,7 @@ class Actor::Action
   def initialize(actor)
     @actor=actor
     @action=:standby
+    @frame=:standby
     @counter=0
   end
   def current_action
@@ -90,6 +91,32 @@ class Actor::Action
       set_target(nil)
     end
   end
+  def action_progress
+    case @action
+    when :standby
+      @frame=:standby
+    when :chase
+      @frame=:standby
+    when :attack
+      if @counter==0
+        @counter+=1
+        @frame=:raise_hand
+      elsif @counter<2
+        @counter+=1
+        @frame=:attack
+      elsif @counter<5
+        @counter+=1
+        @frame=:complete_attack
+      else
+        @counter=0
+        @action=@frame=:standby
+      end
+    when :pickup
+      @frame=:standby
+    when :cast
+      @frame=:standby
+    end
+  end
   def update
     @position=@actor.position
     unless @actor.has_state?(:stun)
@@ -97,32 +124,9 @@ class Actor::Action
       @actor.move2dst
       interact_target
     end
+    action_progress
   end
   def yield_frame
-    case @action
-    when :standby
-      return :standby
-    when :chase
-      return :standby
-    when :attack
-      if @counter==0
-        @counter+=1
-        return :raise_hand
-      elsif @counter<2
-        @counter+=1
-        return :attack
-      elsif @counter<5
-        @counter+=1
-        return :complete_attack
-      else
-        @counter=0
-        @action=:standby
-        return :standby
-      end
-    when :pickup
-      return :standby
-    when :cast
-      return :standby
-    end
+    return @frame
   end
 end
