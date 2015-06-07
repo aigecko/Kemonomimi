@@ -162,7 +162,6 @@ class GameWindow < BaseWindow
       target=@map.find_under_cursor_enemy(@offset_x)
       if target
         @player.set_target(target,:chase)
-        @player.chase_target
       else
         @player.set_move_dst(*convert_position)
         @player.set_target(nil)
@@ -174,7 +173,6 @@ class GameWindow < BaseWindow
       item=@map.find_under_cursor_item(@offset_x)
       if item
         @player.set_target(item,:pickup)
-        @player.chase_target
       else
         @player.set_move_dst(*convert_position)
         @player.set_target(nil)

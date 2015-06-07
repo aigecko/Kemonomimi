@@ -184,8 +184,8 @@ class Actor
     @equip_list
   end
   def set_target(target,action=:standby)
-    @target=target
     @action.set_action(action)
+    @action.set_target(target)
   end
   def set_move_dst(x,y,z)
     x||=@position.x
@@ -235,76 +235,8 @@ class Actor
   def get_dst
     [@dst_x,@dst_y,@dst_z]
   end
-  def reach_target?
-    case @action.current_action
-    when :chase
-      return (@position.x-@target.position.x).abs<=(pic_w+@target.pic_w)/2&&
-             (@position.z-@target.position.z).abs<=20
-    when :pickup
-      return Math.distance(@position.x,@position.z,
-                           @target.position.x,@target.position.z)<=51
-    end
-  end
-  def interact_target
-    @target and reach_target? and
-    case @action.current_action
-    when :chase
-      @action.set_action(:attack)
-      if !@target.died?
-        @position.x>@target.position.x ? rotate(:left) : rotate(:right)
-        @skill[:normal_attack].cast_attack(self,@target,@attrib[:atkspd])
-      end
-    when :pickup
-      case @target
-      when Equipment
-        func=:gain_equip
-      when Consumable
-        func=:gain_consumable
-      when OnGroundItem
-        func=:gain_consumable
-      when Item
-        func=:gain_item
-      else
-        begin
-          raise "UnknownItemOnGround"
-        rescue => e
-          p e
-          Message.show_format("拾起的物件型別未知","錯誤",:ERROR)
-          exit
-        end
-      end
-      Map.render_onground_item.delete(@target)
-      @target=@target.pickup
-      send(func,@target)
-      set_target(nil)
-    end
-  end
-  def chase_target
-    @target and not reach_target? and
-    case @action.current_action
-    when :chase
-      if @target.position.x>@position.x
-        rotate(:right)
-        dst_x=@target.position.x-(@target.pic_w+pic_w)/2+1
-      else
-        rotate(:left)
-        dst_x=@target.position.x+(@target.pic_w+pic_w)/2-1
-      end      
-      dst_x=dst_x.confine(0,Map.w)
-      dst_z=@target.position.z
-      set_move_dst(dst_x,0,dst_z)
-    when :pickup
-      item_x=@target.position.x
-      item_z=@target.position.z
-      dis=Math.distance(item_x,item_z,
-                        @position.x,@position.z)
-      delta_x=item_x-@position.x
-      delta_z=item_z-@position.z
-      dst_x=@position.x+delta_x*(dis-50)/dis
-      dst_z=@position.z+delta_z*(dis-50)/dis
-      set_move_dst(dst_x,nil,dst_z)
-    end
-  end
+  
+  
   def moving?
     @act_affect ? true : false
   end
@@ -312,11 +244,7 @@ class Actor
     @state.update
     recover
     @skill.update
-    unless has_state?(:stun)
-      chase_target
-      move2dst
-      interact_target
-    end
+    @action.update
   end
   def wear_equip(index)
     hp=@attrib[:hp]
