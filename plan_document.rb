@@ -56,17 +56,17 @@ base={
   counter_beam:{table:['I_base','F_coef'],data:{possibility:'I_pos',cd:'F_second'}},
   pressure_erupt:{data:'I_last'},
   contribute:{table:['I_base','F_coef','I_second'],data:{sym:'S_symbol'}},
-  smash_wave:{table:['I_base','F_coef','H_attrib'],data:{last:'F_second'}}
+  smash_wave:{table:['I_base','F_coef','H_attrib'],data:{last:'F_second'}},
   soul_of_Mototada:{table:'I_percent'},
   soul_of_Nagayoshi:{table:['I_base','F_coef'],data:{base:'F_min_base',coef:'F_max_coef'}},
-  soul_of_Nobufusa:{table:['I_hp_unit',{'S_symbol'=>'FI_attrib'}]},,
+  soul_of_Nobufusa:{table:['I_hp_unit',{'S_symbol'=>'FI_attrib'}]},
   soul_of_Kiyomasa:{table:['I_base','F_coef'],data:{last:'I_second'}},
   soul_of_Yasumasa:{table:['I_base','F_coef','I_atkspd'],data:{last:'I_second'}},
   piezoelectric_effect:{table:{'S_dst_attrib'=>['I_base','F_coef']},data:{conv:{'S_dst_symbol'=>'S_src_symbol'},last:'I_second'}},
   soul_of_Yoshimoto:{table:['I_base','F_coef'],data:{conv:'S_symbol'}},
-  soul_of_Muneshige:{table:['I_base','F_coef'],data:{conv:'S_symbol'}}
+  soul_of_Muneshige:{table:['I_base','F_coef'],data:{conv:'S_symbol'}},
   flash:{table:'I_limit_length'},
-  soul_of_Ittetsu:{table:['I_base','F_coef','I_cd_second'],data:{sym:'S_symbol',last:'I_last_second'}}
+  soul_of_Ittetsu:{table:['I_base','F_coef','I_cd_second'],data:{sym:'S_symbol',last:'I_last_second'}},
 
   ward_power:{table:['S_dst_attrib','S_src_symbol','F_coef']},
   dual_weapon_atkspd_acc:{},
@@ -80,7 +80,7 @@ race={
   :catear=>'減傷n%並且物理輸出增加m%',
   :foxear=>'最大法力及消耗法力增加n%但魔法輸出增加m%',
   :dogear=>'目標血量<90+5%,<70+10%,<50+20%,<30+30%,<20+40%,<10+50%,<5%60%',
-  :wolfear=>'自身每秒回復n%損失生命並回復m倍等量法力'
+  :wolfear=>'自身每秒回復n%損失生命並回復m倍等量法力',
   :leopardcatear=>'受到攻擊有n%機率減傷m%持續r秒'
 }
 common={
@@ -90,12 +90,12 @@ common={
     足智多謀:增加n%智力#amplify
     百步穿楊:增加n%敏捷#amplify
     賭性堅強:n%m倍爆擊#amplify
-  }
+  },
   :defense=>%w{
     忍辱負重:增加n%體質#amplify
     識途老馬:增加n%智慧#amplify
     疾風勁草:增加n韌性#amplify
-  }
+  },
   :other=>%w{
     趁火打劫:增加掉落n%金錢#amplify
     精打細算:降低消費n%金錢#amplify
@@ -127,10 +127,10 @@ klass={
   :mage=>%w[
     吹雪護盾:開啟後n%傷害交由m法力承受#switch_attack_defnese->soul_of_Masayuki
     凍雨凝結:造成攻擊者降低n+m*int近攻遠攻持續r秒#freezing_rain
-    寒冰之軀:開啟後提升n雙防及m%魔攻持續r秒#boost
+    寒冰之軀:開啟後提升n雙防及降低m%sp消耗持續r秒#boost
 
-    水流衝擊:普攻附加n+m*wis魔傷#append->energy_arrow
-    凍雲爆發:開啟後普攻n%機率範圍強緩m跑速n秒可觸發寒冰凍破#switch_append->itegumo_erupt
+    霜刺:普攻附加n+m*wis無視魔免魔傷以及強緩m跑速r攻速n秒#append->energy_arrow
+    法力汲取:普攻吸取目標n+m*wis法力為己用
 
     寒冰爆彈:指定敵人受到範圍n+m*matk魔法傷害#missile
     冰柱戳刺:指定敵人受到範圍n+m*matk魔傷暈r秒#missile
@@ -139,7 +139,7 @@ klass={
 
     法杖聚焦:增加法杖魔攻n倍的int#ward_power
 
-    寒冰之力:開啟後增加n%技吸及m最大hp並降低m%sp消耗持續r秒#metamorphosis
+    寒冰之力:開啟後增加n%技吸及m最大生命s最大法力並持續r秒#metamorphosis
   ],
   :fighter=>%w[
     反擊之火:受到普攻反彈n+m*def絕對傷害#attack_defnese->counter_attack
@@ -147,9 +147,9 @@ klass={
     無畏衝鋒:魔法免疫n秒並增加m近攻r秒#magic_immunity
 
     破甲斬擊:普攻造成目標降低n*log(matk)雙防#break_armor
-    猛攻之火:增加n+m*matk攻速m跑速持續r秒#boost
+    猛攻之火:增加n+m*matk攻速s跑速持續r秒#boost
     烈火戳刺:對同目標攻擊增加n近攻最多m層#append->solid_defense
-    火圈迸裂:第三下普攻造成範圍n*matk魔傷#switch_append->explode
+    火圈迸裂:第三下普攻造成範圍n*matk魔傷並暈眩r秒#switch_append->explode
 
     熾焰焚身:每秒造成n+m*matk魔法傷害並降低r%跑速#switch_auto->fire_circle
 
@@ -194,7 +194,7 @@ klass={
     長槍:paladin
     劍盾:paladin
     
-    黑暗之力:開啟後增加n%輸出傷害及m最大生命帶負面靈氣且基礎攻速變為r持續s秒#metamorphosis
+    黑暗之力:開啟後增加n韌性及m最大生命帶負面靈氣且基礎攻速變為r持續s秒#metamorphosis
     負面靈氣:降低n物防以及m回復效果
   ],
   :crossbowman=>%w[
@@ -205,17 +205,17 @@ klass={
     積蓄能量:n%機率m倍爆擊並提升r%攻擊速度#auto->amplify
     負電位差:弓箭命中後消減敵方n+m*int法力並造成等量魔法傷害#append->soul_of_Muneshige
     閃電噴發:開啟後弓箭命中後產生範圍n+m*agi物理傷害#switch_append->explode
-
+    
+    雷神之箭:開啟後增加n%物穿m%魔穿且箭矢增加r生命值
     天雷怒擊:指定範圍n+m*matk魔法傷害緩m跑速#explode
     暴怒雷擊:射出讓敵方受到n+m*matk魔法傷害暈眩r秒的弓箭#magic_arrow
 
     魔法之弩:增加弩n倍ratk魔攻#auto->magic_bow
 
-    閃電之力:開啟後魔攻遠攻提升n%帶高壓放電並增加m雙防持續r秒#metamorphosis
-    高壓放電:隨機造成n+m*matk魔法傷害
+    閃電之力:開啟後遠攻提升n%攻速提升s%並增加m雙防持續r秒#metamorphosis
   ],
   :archer=>%w[
-    迅捷之風:降低受到n魔傷並增幅閃躲m%#auto->amplify
+    迅捷之風:增幅閃躲m%格檔n%#auto->amplify
     身輕如燕:瞬間移動到指定的地點#flash
     旋風護盾:每n秒自動產生m+r*mdef魔法護盾持續s秒#soul_of_Ittetsu
 
@@ -229,6 +229,51 @@ klass={
 
     暴風之弓:弓的攻速強化n倍#magic_bow
 
-    烈風之力:增加n跑速且基礎攻速變為s持續r秒#metamorphosis
+    烈風之力:命中判定縮小且增加n跑速且基礎攻速變為s持續r秒#metamorphosis
+  ]
+}
+monster={
+  :迷你始萊姆=>%w[ 普通攻擊 ],
+  :火焰始萊姆=>%w[ 普通攻擊,
+    灼傷:普攻帶r物傷降低n攻速持續m秒 ],
+  :寒冰始萊姆=>%w[ 普通攻擊
+    凍傷:普攻帶r魔傷降低n跑速持續m秒 ],
+  :中型始萊姆=>%w[ 普通攻擊
+    痛擊:n%m倍爆擊],
+  :大型始萊姆=>%w[ 普通攻擊
+    重擊:n%造成m額外傷害並暈眩r秒],
+
+  :屏風級靈石=>%w[
+    緩速靈氣:範圍降低敵人n%跑速m攻速
+    魔力砲擊:射出砲彈n物理傷害
+    魔方陣近迫系統:對來襲物體每秒發射n顆子彈攔截
+  ],
+  :次高級靈石=>%w[
+    治癒靈氣:範圍增加n回血
+    魔力砲擊:射出砲彈造成n物理傷害
+    聚焦光束:射出光束造成直線n物理傷害
+
+    魔彈近迫系統:鎖定來襲物體並發射導向飛彈攔截
+  ],
+  :能高級靈石=>%w[
+    防禦靈氣:範圍增加n物防m魔防
+    多重魔力砲擊:射出m顆砲彈造成n物理傷害
+
+    魔方陣近迫系統:對來襲物體每秒發射n顆子彈攔截
+    魔彈近迫系統:鎖定來襲物體並發射導向飛彈攔截
+  ],
+  :新高級靈石=>%w[
+    指揮靈氣:範圍增加n遠攻m格檔
+    魔方陣近迫系統:對來襲物體每秒發射n顆子彈攔截
+
+    多重魔力砲擊:射出m顆砲彈造成n物理傷害
+    魔力風暴:砲彈爆炸造成範圍n魔法傷害
+    魔力振盪:砲彈爆炸範圍暈眩n秒
+  ],
+  :奇萊級靈石=>%w[ 
+    干擾靈氣:範圍降低敵人n%物攻遠攻
+    
+    魔力導彈:發射飛彈自動導向並垂直落下造成n物理傷害
+    魔力震波:遭飛彈命中沈默n秒
   ]
 }
