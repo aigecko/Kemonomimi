@@ -78,7 +78,8 @@ class<<Game
   def win_initialize
     windows=%w(RaceWindow ClassWindow LoadWindow
                MenuWindow GameWindow SettingWindow
-               LevelWindow BarsWindow ButtonWindow)
+               LevelWindow BarsWindow ButtonWindow
+               HintWindow)
     @window=Hash.new
     windows.each{|window|
       symbol=window.to_sym
@@ -152,7 +153,7 @@ class<<Game
                    SettingWindow LevelWindow BarsWindow
                    ButtonWindow StatusWindow ItemWindow
                    EquipWindow SkillWindow
-                   DialogWindow)
+                   DialogWindow HintWindow)
     window_list.each{|window|
       require_relative (window)
     }

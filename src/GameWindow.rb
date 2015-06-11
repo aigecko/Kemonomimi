@@ -8,7 +8,7 @@ class GameWindow < BaseWindow
     @offset_x=0
     @offset_y=0
     
-    @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow]
+    @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow,:HintWindow]
        
     @windows={}
     @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow,:DialogWindow]
@@ -23,12 +23,17 @@ class GameWindow < BaseWindow
     HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
     HotKey.bind(Key::F3,:proc,:once,->{switch_window(:SkillWindow)})
     HotKey.bind(Key::F4,:proc,:once,->{switch_window(:EquipWindow)})
-    HotKey.bind(Key::Q,:proc,:once,->{friend_window_close;switch_window(:DialogWindow)})
-    HotKey.bind(Key::W,:proc,:once,->{friend_window_open;switch_window(:DialogWindow)})
     HotKey.bind(Key::F5,:proc,:once,->{Game.save})
     HotKey.bind(Key::F6,:proc,:once,->{Game.load})
     HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
-    
+    #dbg
+    HotKey.bind(Key::A,:proc,:once,->{
+      Game.window(:HintWindow).add(Game.window(:HintWindow).get_test_message)
+    })
+    HotKey.bind(Key::Q,:proc,:once,->{
+      friend_window_close;switch_window(:DialogWindow)})
+    HotKey.bind(Key::W,:proc,:once,->{
+      friend_window_open;switch_window(:DialogWindow)})
   end
   def start_init
     player_init
