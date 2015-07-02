@@ -109,7 +109,8 @@ class Actor::Action
         @frame=:complete_attack
       else
         @counter=0
-        @action=@frame=:standby
+        @action=:chase
+        @frame=:standby
       end
     when :pickup
       @frame=:standby
