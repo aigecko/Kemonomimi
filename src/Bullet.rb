@@ -1,6 +1,6 @@
 #coding: utf-8
 class Bullet
-  require_relative 'BulletSingleton'
+  require_relative 'Bullet/Singleton'
   attr_reader :shape,:position,:caster
   def initialize(effect,ani,shape,info)
     @type=shape
@@ -79,9 +79,9 @@ class<<Bullet
     end
   end
 end
-require_relative 'HorizonBullet'
-require_relative 'NormalBullet'
-require_relative 'TimerBullet'
-require_relative 'CounterBullet'
-require_relative 'FlashBullet'
-require_relative 'TimerOnlyBullet'
+require_relative 'Bullet/HorizonBullet'
+require_relative 'Bullet/NormalBullet'
+require_relative 'Bullet/TimerBullet'
+require_relative 'Bullet/CounterBullet'
+require_relative 'Bullet/FlashBullet'
+require_relative 'Bullet/TimerOnlyBullet'

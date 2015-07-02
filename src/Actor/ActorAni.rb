@@ -1,6 +1,6 @@
 #coding: utf-8
 class Actor::ActorAni
-  require_relative 'Actor_ActorAniSingleton'
+  require_relative 'Actor/ActorAniSingleton'
   @@hpbar_color_back=Color[:actor_hpbar_back]
   @@hpbar_ske=Rectangle.new(0,0,42,6,@@hpbar_color_back)
   @@hpbar_bar=Rectangle.new(0,0,40,4,@@hpbar_color_back)

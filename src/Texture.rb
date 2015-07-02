@@ -1,10 +1,10 @@
 #coding: utf-8
 class Texture
   include Gl
-  require_relative 'FontTexture'
-  require_relative 'SurfaceTexture'
-  require_relative 'BigTexture'
-  require_relative 'WindowTexture'
+  require_relative 'Texture/BigTexture'
+  require_relative 'Texture/FontTexture'
+  require_relative 'Texture/SurfaceTexture'
+  require_relative 'Texture/WindowTexture'
   def initialize(surface)
     @origin_w,@origin_h=surface.w,surface.h
     @surface=SDL::Surface.new_2N_length(@origin_w,@origin_h)

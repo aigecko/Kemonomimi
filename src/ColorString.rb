@@ -38,5 +38,5 @@ class<<ColorString
     return NoCutColorString.new(str,size,default_color)
   end
 end
-require_relative 'NoCutColorString'
-require_relative 'CutColorString'
+require_relative 'ColorString/NoCutColorString'
+require_relative 'ColorString/CutColorString'

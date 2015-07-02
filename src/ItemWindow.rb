@@ -1,8 +1,8 @@
 #coding: utf-8
 class ItemWindow < DragWindow
-  require_relative 'ItemWindow_MoneyBar'
-  require_relative 'ItemWindow_DragBar'
-  require_relative 'ItemWindow_Page'
+  require_relative 'ItemWindow/MoneyBar'
+  require_relative 'ItemWindow/DragBar'
+  require_relative 'ItemWindow/Page'
   def initialize
     win_w,win_h=167,340
     win_x,win_y=200,50

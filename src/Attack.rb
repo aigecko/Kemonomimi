@@ -265,5 +265,6 @@ class Attack
     @attrib=data[:a]
     @caster=Map.load_actor(data[:c])
   end
-  require_relative 'AttackSingleton' #must at last line
+  require_relative 'Attack/Singleton' #must at last line
+  require_relative 'Attack/FixAttack'
 end

@@ -2,11 +2,11 @@
 class StatusWindow::Bar
   @@attrib_table=Actor.attrib_table
   attr_reader :name
-  require_relative 'StatusWindow_PlusBar'
-  require_relative 'StatusWindow_ShortBar'
-  require_relative 'StatusWindow_MidBar'
-  require_relative 'StatusWindow_LongBar'
-  require_relative 'StatusWindow_ExtraBar'
+  require_relative 'StatusWindow/PlusBar'
+  require_relative 'StatusWindow/ShortBar'
+  require_relative 'StatusWindow/MidBar'
+  require_relative 'StatusWindow/LongBar'
+  require_relative 'StatusWindow/ExtraBar'
   def initialize(name,win_x,win_y,x,y,skeleton)
     @name=name
     @str=@@attrib_table[name]

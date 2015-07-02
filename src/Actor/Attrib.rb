@@ -1,6 +1,6 @@
 #coding: utf-8
 class Actor::Attrib
-  require_relative 'Actor_AttribSingleton'
+  require_relative 'Actor/AttribSingleton'
   attr_accessor :equip
   def initialize(attrib,race,klass)
     base=Database.get_base(race)

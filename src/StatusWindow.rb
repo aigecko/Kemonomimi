@@ -1,7 +1,7 @@
 #coding: utf-8
 class StatusWindow < DragWindow
-  require_relative 'StatusWindow_Bar'
-  require_relative 'StatusWindow_Button'
+  require_relative 'StatusWindow/Bar'
+  require_relative 'StatusWindow/Button'
   def initialize
     win_w,win_h=180,270
     win_x,win_y=10,50

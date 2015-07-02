@@ -139,7 +139,7 @@ private
       Statement SkillTree
       ColorString ParaString DynamicString
       Shape Shadow Bullet
-      Attack FixAttack Effect Heal
+      Attack Effect Heal
       Consumption
       )
     library_list.each{|lib|

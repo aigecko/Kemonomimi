@@ -1,7 +1,7 @@
 #coding: utf-8
 class Actor
-    %w{Actor_Attrib Actor_ActorAni Actor_Equip 
-     Actor_State Actor_AI Actor_Action ActorSingleton}.each{|actor_lib|
+    %w{Actor/Attrib Actor/ActorAni Actor/Equip 
+     Actor/State Actor/AI Actor/Action Actor/Singleton}.each{|actor_lib|
     require_relative actor_lib
   }
   attr_reader :position,:attrib,:ally,:race,:class
