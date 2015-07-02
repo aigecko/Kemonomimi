@@ -34,7 +34,7 @@ class<<Game
     
     puts "start #{Time.now-$t}"
   end
-  private
+private
   def sdl_putenv
     SDL.putenv("SDL_VIDEODRIVER=directx")
     SDL.putenv("SDL_VIDEO_CENTERED=#{Conf['SDL_VIDEO_CENTERED']}")
@@ -78,8 +78,7 @@ class<<Game
   def win_initialize
     windows=%w(RaceWindow ClassWindow LoadWindow
                MenuWindow GameWindow SettingWindow
-               LevelWindow BarsWindow ButtonWindow
-               HintWindow)
+               LevelWindow BarsWindow ButtonWindow)
     @window=Hash.new
     windows.each{|window|
       symbol=window.to_sym
@@ -184,7 +183,7 @@ class<<Game
     glClearColor(0,0,0,1.0)
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
   end
-  public
+public
   def draw_loading
     @time>SDL.get_ticks and return
     @time=SDL.get_ticks+10

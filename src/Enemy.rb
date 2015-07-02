@@ -12,6 +12,6 @@ class Enemy < Actor
   def die
     super
     Game.player.gain_exp(@attrib[:exp])
-    Game.window(:HintWindow).add("%s遭到擊敗，獲得#FF0000|%d#FFFFFF|經驗值"% [@name,@attrib[:exp]])
+    Game.window(:GameWindow).add_hint("%s遭到擊敗，獲得#FF0000|%d#FFFFFF|經驗值"% [@name,@attrib[:exp]])
   end
 end

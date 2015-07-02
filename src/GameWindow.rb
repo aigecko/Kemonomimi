@@ -8,9 +8,9 @@ class GameWindow < BaseWindow
     @offset_x=0
     @offset_y=0
     
-    @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow,:HintWindow]
+    @friend_windows=[:LevelWindow,:BarsWindow,:ButtonWindow]
        
-    @windows={}
+    @windows={ HintWindow: HintWindow.new }
     @drag_list=[:StatusWindow,:ItemWindow,:SkillWindow,:EquipWindow,:DialogWindow]
     @drag_list.each{|window|
       @windows[window]=Object.const_get(window).new
@@ -35,6 +35,7 @@ class GameWindow < BaseWindow
   def player_init
     @player=Player.new
   end
+private
   def friend_window_init
     @friend_windows.each{|window|
       Game.window(window).start_init
@@ -52,12 +53,6 @@ class GameWindow < BaseWindow
   end
   def sub_window_init
     @windows.each_value{|window| window.start_init}
-  end
-  def close_contral
-    Game.window(:ButtonWindow).enable=false
-  end
-  def open_contral
-    Game.window(:ButtonWindow).enable=true
   end
   def sub_window_interact
     @drag_list.each{|name| 
@@ -143,6 +138,30 @@ class GameWindow < BaseWindow
       end
     }        
   end
+  def switch_window(name)
+    if @windows[name].close?
+      set_first_window(name)
+      @windows[name].open
+    else
+      @windows[name].close
+    end
+  end
+  def set_first_window(name)
+    first=name
+    @drag_list.delete_at(@drag_list.rindex(name))
+    @drag_list.unshift(first)
+  end
+  def draw_sub_window
+    @windows[:HintWindow].draw
+    @drag_list.reverse.each{|name|
+      window=@windows[name]
+      window.visible and window.draw
+    }
+  end
+  def close_all_subwindows
+    @drag_list.each{|name| @windows[name].close}
+  end
+public
   def interact
     sub_window_interact
     game_window_interact
@@ -176,9 +195,18 @@ class GameWindow < BaseWindow
       end
     end
   end
+  def add_hint(string)
+    @windows[:HintWindow].add(string)
+  end
   def open
     super
     Mouse.set_cursor(:move)
+  end
+  def close_contral
+    Game.window(:ButtonWindow).enable=false
+  end
+  def open_contral
+    Game.window(:ButtonWindow).enable=true
   end
   def convert_position
     x,y,* =SDL::Mouse.state
@@ -188,11 +216,6 @@ class GameWindow < BaseWindow
     dst_z<0 and dst_z=0
     dst_z>@map.h and dst_z=@map.h
     return [dst_x,0,dst_z]
-  end
-  def set_first_window(name)
-    first=name
-    @drag_list.delete_at(@drag_list.rindex(name))
-    @drag_list.unshift(first)
   end
   def offset_change
     side=@map.which_side(@player.position.x)
@@ -207,23 +230,6 @@ class GameWindow < BaseWindow
   end
   def render_offset
     return [@offset_x,0]
-  end
-  def switch_window(name)
-    if @windows[name].close?
-      set_first_window(name)
-      @windows[name].open
-    else
-      @windows[name].close
-    end
-  end
-  def close_all_subwindows
-    @drag_list.each{|name| @windows[name].close}
-  end
-  def draw_sub_window
-    @drag_list.reverse.each{|name|
-      window=@windows[name]
-      window.visible and window.draw
-    }
   end
   def draw
     glPushMatrix
