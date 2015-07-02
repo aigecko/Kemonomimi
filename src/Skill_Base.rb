@@ -435,8 +435,8 @@ class Skill
           name: data[:name],sym: data[:sym],
           icon: data[:icon],
           attrib: {},
-          effect: Attack.new(info[:caster],type: :acid,attack: attack,visible: false),
-          effect_amp: 0.04,
+          effect: Attack.new(info[:caster],type: :acid,attack: attack),
+          effect_amp: 0.5,
           last: 2.to_sec)
       }
       @proc[:break_armor]=->(info){

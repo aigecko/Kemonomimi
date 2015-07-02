@@ -55,6 +55,7 @@ private
     @windows.each_value{|window| window.start_init}
   end
   def sub_window_interact
+    @windows[:HintWindow].enable and @windows[:HintWindow].interact
     @drag_list.each{|name| 
       window=@windows[name]
       if window.enable
@@ -152,7 +153,7 @@ private
     @drag_list.unshift(first)
   end
   def draw_sub_window
-    @windows[:HintWindow].draw
+    @windows[:HintWindow].visible and @windows[:HintWindow].draw
     @drag_list.reverse.each{|name|
       window=@windows[name]
       window.visible and window.draw
