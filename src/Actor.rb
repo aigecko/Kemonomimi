@@ -235,8 +235,6 @@ class Actor
   def get_dst
     [@dst_x,@dst_y,@dst_z]
   end
-  
-  
   def moving?
     @act_affect ? true : false
   end

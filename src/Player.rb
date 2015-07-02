@@ -42,4 +42,10 @@ class Player < Actor
   def gain_exp(exp)
     @attrib.gain_exp(exp)
   end
+  def die
+    super
+    lost_exp=(@attrib[:exp]*0.01).to_i
+    @attrib[:exp]-=lost_exp
+    Game.window(:GameWindow).add_hint("玩家遭到擊殺，失去了#0000FF|%d#FFFFFF|經驗值"%lost_exp)
+  end
 end
