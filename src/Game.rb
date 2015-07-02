@@ -132,11 +132,9 @@ private
     }
     
     library_list=%w(
-      Database Position Skill 
-      Item Equipment Consumable ItemArray OnGroundItem
+      Database Position Skill  Item
       Event Key HotKey Animation
-      Actor Player Enemy Friend Attribute
-      Statement SkillTree
+      Actor Attribute Statement
       ColorString ParaString DynamicString
       Shape Shadow Bullet
       Attack Effect Heal

@@ -2,7 +2,7 @@
 class Equipment < Item  
   attr_reader :sym,:skill
   @@name_size=15
-  require_relative 'Equipment_Attrib'
+  require_relative 'Item/Equipment_Attrib'
   def initialize(name,pic,part,attrib,price,comment)
     super(name,pic,price,comment)
     

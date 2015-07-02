@@ -1,7 +1,8 @@
 #coding: utf-8
-require_relative 'Skill_Base'
+require_relative 'Skill/Base'
+require_relative 'Skill/SkillTree'
 class Skill
-  require_relative 'SkillSingleton'
+  require_relative 'Skill/Singleton'
   attr_reader :switch,:invisible,:type
   attr_writer :cd
   def initialize(info,sym=nil)

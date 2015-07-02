@@ -58,3 +58,7 @@ class Item
   def marshal_load(array)
   end
 end
+require_relative 'Item/Consumable'
+require_relative 'Item/Equipment'
+require_relative 'Item/OnGroundItem'
+require_relative 'Item/ItemArray'

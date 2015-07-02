@@ -444,3 +444,6 @@ class Actor
     #data[:state].bind_actor(self)
   end
 end
+require_relative 'Actor/Player'
+require_relative 'Actor/Friend'
+require_relative 'Actor/Enemy'
