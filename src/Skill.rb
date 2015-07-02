@@ -30,7 +30,14 @@ class Skill
     @type=info[:type]
     @equip_need=info[:equip_need]
     
-    @consum=info[:consum]||0
+    case consum=info[:consum]
+    when Numeric
+      @consum=Consumption.new({sp: consum})
+    when Consumption
+      @consum=consum
+    else
+      @consum=Consumption.new({})
+    end
     
     @switch=!@@SwitchTypeList.include?(@type)
     
@@ -43,7 +50,7 @@ class Skill
     
     @attach=info[:attach]
     
-    @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)    
+    @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)
     @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',:skill_comment_font,binding)
   end
   def toggle(x,y,z)
@@ -57,9 +64,12 @@ class Skill
     toggle(x,y,z) and return
     @switch or return
     
-    consum=@consum*(100+caster.attrib[:consum_amp])/100
-    caster.can_cast?(@end_time,consum) or return
-    caster.lose_sp(consum)
+    # consum=@consum*(100+caster.attrib[:consum_amp])/100
+    # caster.can_cast?(@end_time,consum) or return
+    # caster.lose_sp(consum)
+    caster.can_cast?(@end_time,@consum) or return
+    caster.consume(@consum)
+    
     cd_start
     common_cd(caster)
     
@@ -67,9 +77,11 @@ class Skill
     call_skill_base(caster,target,x,y,z)
   end
   def cast_auto(caster)
-    consum=@consum*(100+caster.attrib[:consum_amp])/100
-    caster.can_cast_auto?(@end_time,consum) or return
-    caster.lose_sp(consum)
+    # consum=@consum*(100+caster.attrib[:consum_amp])/100
+    # caster.can_cast_auto?(@end_time,consum) or return
+    # caster.lose_sp(consum)
+    caster.can_cast_auto?(@end_time,@consum) or return
+    caster.consume(@consum)
     
     cd_start
     common_cd(caster)
@@ -91,9 +103,11 @@ class Skill
   end
   def cast_attack(caster,target,atkspd)
     @equip_need and (caster.equip[@equip_need] or return)
-    consum=@consum*(100+caster.attrib[:consum_amp])/100
+    # consum=@consum*(100+caster.attrib[:consum_amp])/100
+    # caster.can_cast?(@end_time,@consum) or return
+    # caster.lose_sp(consum)
     caster.can_cast?(@end_time,@consum) or return
-    caster.lose_sp(consum)
+    caster.consume(@consum)
     
     reset_cd    
     @cd=@cd*100/(atkspd)

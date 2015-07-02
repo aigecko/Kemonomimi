@@ -139,14 +139,6 @@ private
       end
     }        
   end
-  def switch_window(name)
-    if @windows[name].close?
-      set_first_window(name)
-      @windows[name].open
-    else
-      @windows[name].close
-    end
-  end
   def set_first_window(name)
     first=name
     @drag_list.delete_at(@drag_list.rindex(name))
@@ -217,6 +209,14 @@ public
     dst_z<0 and dst_z=0
     dst_z>@map.h and dst_z=@map.h
     return [dst_x,0,dst_z]
+  end
+  def switch_window(name)
+    if @windows[name].close?
+      set_first_window(name)
+      @windows[name].open
+    else
+      @windows[name].close
+    end
   end
   def offset_change
     side=@map.which_side(@player.position.x)
