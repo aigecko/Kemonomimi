@@ -75,7 +75,7 @@ class Actor
             './rc/pic/battle/arrow2.png',
             './rc/pic/battle/arrow3.png'],
             w: 50,h: 11},
-          [[[:blit,0],[:blit,1],[:blit,2],[:blit,1]]] ],
+          [[[:blit,0,5],[:blit,1,5],[:blit,2,5],[:blit,1,5]]] ],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
       common_cd: :normal_attack,

@@ -8,6 +8,20 @@ class Animation
       Surface.load_with_colorkey(filename).to_texture
     }
     @tracks=tracks
+    @tracks.collect!{|track|
+      new_track=[]
+      track.each{|frame|
+        act,img,last,*arg=frame
+        if last
+          last.times{
+            new_track<<[act,img,*arg]
+          }
+        else
+          new_track<<frame
+        end
+      }
+      new_track
+    }
     @frame=0
     
     @w,@h=@data[:w],@data[:h]
