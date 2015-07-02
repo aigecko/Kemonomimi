@@ -1,6 +1,6 @@
 #coding: utf-8
 class BarsWindow < BaseWindow
-  require_relative 'BarsWindow_Bar'
+  require_relative 'Window/BarsWindow_Bar'
   def initialize
     win_w,win_h=350,50
     win_x=94

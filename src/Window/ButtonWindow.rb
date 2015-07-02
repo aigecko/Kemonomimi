@@ -1,6 +1,6 @@
 #coding: utf-8
 class ButtonWindow < BaseWindow
-  require_relative 'ButtonWindow_Button'
+  require_relative 'Window/ButtonWindow_Button'
   def initialize
     win_w,win_h=197,50
     win_x=Game.Width-win_w

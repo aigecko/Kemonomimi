@@ -156,7 +156,7 @@ private
                    EquipWindow SkillWindow
                    DialogWindow HintWindow)
     window_list.each{|window|
-      require_relative (window)
+      require_relative ('Window/'+window)
     }
     
     require_relative('Map')
