@@ -26,14 +26,6 @@ class GameWindow < BaseWindow
     HotKey.bind(Key::F5,:proc,:once,->{Game.save})
     HotKey.bind(Key::F6,:proc,:once,->{Game.load})
     HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
-    #dbg
-    HotKey.bind(Key::A,:proc,:once,->{
-      Game.window(:HintWindow).add(Game.window(:HintWindow).get_test_message)
-    })
-    HotKey.bind(Key::Q,:proc,:once,->{
-      friend_window_close;switch_window(:DialogWindow)})
-    HotKey.bind(Key::W,:proc,:once,->{
-      friend_window_open;switch_window(:DialogWindow)})
   end
   def start_init
     player_init
