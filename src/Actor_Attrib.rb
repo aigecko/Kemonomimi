@@ -52,6 +52,7 @@ class Actor::Attrib
       if [:dodge,:block,
           :healhp,:healsp,
           :atk_vamp,:skl_vamp,
+          :atkcd,:shtcd,
           :critical,:bash].include?(sym)||value.integer?
         #{(name==:state&&act==:lose)? "(sym==:hp||sym==:sp||sym==:mag_shield||sym==:atk_shield) or ":''}
         @#{name}[sym]#{act==:gain ? '+':'-'}=value
@@ -127,7 +128,7 @@ private
     @total[:tough]=@base[:level]
 
     [:atk,:def,:matk,:mdef,:ratk,
-     :wlkspd,:atkspd,
+     :wlkspd,:atkspd,:atkcd,:shtcd,
      :maxhp,:maxsp,:healhp,:healsp,:hp,:sp,
      :mag_outamp,:phy_outamp,
      :mag_resist,:phy_resist,:atk_resist,

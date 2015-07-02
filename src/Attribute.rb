@@ -15,6 +15,7 @@ class Attribute
 
     block:'格檔',dodge:'閃避',ignore:'忽略傷害',
     wlkspd:'跑速',atkspd:'攻速',
+    atkcd:'基礎攻速',shtcd:'基礎射速',
     jump:'跳躍',tough:'韌性',
     extra:'剩餘點數',
 

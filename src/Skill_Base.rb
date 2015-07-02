@@ -713,6 +713,8 @@ class Skill
           magicimu_keep: true,
           last: info[:data][:last].to_sec)
       }
+      
+      
     end
     def self.[](skill)
       @proc[skill]
