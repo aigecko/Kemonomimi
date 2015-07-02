@@ -5,7 +5,7 @@ class Animation
     @target=target
     @data=data.dup
     @data[:img]=data[:img].collect{|filename|
-      Surface.load_with_colorkey(filename).to_texture
+      Texture.load_with_colorkey(filename)
     }
     @tracks=tracks
     @tracks.collect!{|track|

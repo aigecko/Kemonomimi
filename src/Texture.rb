@@ -56,4 +56,7 @@ class Texture
     glVertex3f x,y+h,z
     glEnd
   end
+  def self.load_with_colorkey(filename)
+    return Surface.load_with_colorkey(filename).to_texture
+  end
 end

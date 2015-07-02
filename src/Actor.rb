@@ -71,7 +71,7 @@ class Actor
         live_cycle: :time,
         pic: [:follow,
           {img:[
-            './rc/pic/battle/arrow.png',
+            './rc/pic/battle/arrow1.png',
             './rc/pic/battle/arrow2.png',
             './rc/pic/battle/arrow3.png'],
             w: 50,h: 11},
