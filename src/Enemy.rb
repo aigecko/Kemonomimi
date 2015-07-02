@@ -1,8 +1,9 @@
 #coding: utf-8
 class Enemy < Actor
-  def initialize(race,klass,pos,attrib,pics)
-    super("enemy #{race} #{klass}",pos,attrib,pics)
+  def initialize(name,race,klass,pos,attrib,pics)
+    super("enemy %s %s"%[race,klass],pos,attrib,pics)
     @ai=AI.new({move: :cycle,action: :peaceful})
+    @name=name
   end
   def update
     super
@@ -11,5 +12,6 @@ class Enemy < Actor
   def die
     super
     Game.player.gain_exp(@attrib[:exp])
+    Game.window(:HintWindow).add("%s遭到擊敗，獲得#FF0000|%d#FFFFFF|經驗值"% [@name,@attrib[:exp]])
   end
 end

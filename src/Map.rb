@@ -56,7 +56,7 @@ class Map
     
     @@current_map=self
     
-    enemy=Enemy.new("slime","none",[500,0,200],{},"mon_001")
+    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 100},"mon_001")
     @enemy<<enemy
   end
   def which_side(player_x)
@@ -181,7 +181,7 @@ class Map
   end
   def delete_live_frame
     @friend_bullet.reject!{|bullet| bullet.to_delete?}
-    @friend_circle.reject!{|circle| circle.to_delete?}    
+    @friend_circle.reject!{|circle| circle.to_delete?}
     @enemy_bullet.reject!{|bullet| bullet.to_delete?}
     @enemy_circle.reject!{|circle| circle.to_delete?}
   end
@@ -193,7 +193,7 @@ class Map
   end
   def update
     delete_live_frame
-    [@friend_bullet,@friend_circle].each{|bullet_list|      
+    [@friend_bullet,@friend_circle].each{|bullet_list|
       @enemy.reject!{|actor|
         bullet_list.reject!{|bullet|
           Shape.collision?(actor,bullet)&&
@@ -223,12 +223,9 @@ class Map
     update_bullet
   end
   def update_actor
-    false and
+    true and
     if rand(1000)>990
-      enemy=Enemy.new("slime","none",
-                       [rand(1000),0,rand(400)],
-                       {exp:100000},
-                       "mon_004r")
+      enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:100},"mon_001")
       @enemy<<enemy
     end
     @friend.each{|friend|

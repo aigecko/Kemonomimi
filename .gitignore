@@ -233,6 +233,5 @@ rc/
 *.rar
 *.dat
 *.data
-*.so
 *.odt#
 test.sav
