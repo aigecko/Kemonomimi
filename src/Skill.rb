@@ -88,19 +88,6 @@ class Skill
     
     call_skill_base(caster,nil,nil,nil,nil)
   end
-  def common_cd(caster)
-    @common_cd and
-    if @common_cd.respond_to? :each
-      @common_cd.each{|name|
-        caster.skill[name] and caster.skill[name].cd_start
-      }
-    else
-      caster.skill[@common_cd] and caster.skill[@common_cd].cd_start
-    end
-  end
-  def call_skill_base(caster,target,x,y,z)
-    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@data)
-  end
   def cast_attack(caster,target,atkspd)
     @equip_need and (caster.equip[@equip_need] or return)
     # consum=@consum*(100+caster.attrib[:consum_amp])/100
@@ -120,6 +107,20 @@ class Skill
   def cast_defense(caster,target,attack)
     @switch and
     @proc.call(caster:caster,target:target,attack:attack,args:@table[@level],data:@data)
+  end
+  
+  def common_cd(caster)
+    @common_cd and
+    if @common_cd.respond_to? :each
+      @common_cd.each{|name|
+        caster.skill[name] and caster.skill[name].cd_start
+      }
+    else
+      caster.skill[@common_cd] and caster.skill[@common_cd].cd_start
+    end
+  end
+  def call_skill_base(caster,target,x,y,z)
+    @proc.call(caster:caster,target:target,x:x,y:y,z:z,args:@table[@level],data:@data)
   end
   def reset_cd
     @cd=@org_cd
