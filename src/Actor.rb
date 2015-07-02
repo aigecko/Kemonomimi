@@ -397,10 +397,12 @@ class Actor
       Message.show_format("使用不存在的技能#{name}",'錯誤',:ASTERISK)
       return
     end
-    if (skill=@skill[name]).type==:attack||
-       skill.type==:shoot
-      skill.cast_attack(self,target,@attrib[:atkspd])
-    else      
+    skill=@skill[name]
+    if skill.type==:attack
+      skill.cast_attack(self,target,@attrib[:atkcd])
+    elsif skill.type==:shoot
+      skill.cast_attack(self,target,@attrib[:shtcd])
+    else
       skill.cast(self,target,x,y,z)
     end
   end

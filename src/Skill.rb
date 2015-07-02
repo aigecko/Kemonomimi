@@ -63,10 +63,6 @@ class Skill
   def cast(caster,target,x,y,z)
     toggle(x,y,z) and return
     @switch or return
-    
-    # consum=@consum*(100+caster.attrib[:consum_amp])/100
-    # caster.can_cast?(@end_time,consum) or return
-    # caster.lose_sp(consum)
     caster.can_cast?(@end_time,@consum) or return
     caster.consume(@consum)
     
@@ -77,9 +73,6 @@ class Skill
     call_skill_base(caster,target,x,y,z)
   end
   def cast_auto(caster)
-    # consum=@consum*(100+caster.attrib[:consum_amp])/100
-    # caster.can_cast_auto?(@end_time,consum) or return
-    # caster.lose_sp(consum)
     caster.can_cast_auto?(@end_time,@consum) or return
     caster.consume(@consum)
     
@@ -88,17 +81,12 @@ class Skill
     
     call_skill_base(caster,nil,nil,nil,nil)
   end
-  def cast_attack(caster,target,atkspd)
+  def cast_attack(caster,target,base_cd)
     @equip_need and (caster.equip[@equip_need] or return)
-    # consum=@consum*(100+caster.attrib[:consum_amp])/100
-    # caster.can_cast?(@end_time,@consum) or return
-    # caster.lose_sp(consum)
     caster.can_cast?(@end_time,@consum) or return
     caster.consume(@consum)
     
-    reset_cd    
-    @cd=@cd*100/(atkspd)
-    
+    @cd=base_cd*100/caster.attrib[:atkspd]
     cd_start
     common_cd(caster)
     

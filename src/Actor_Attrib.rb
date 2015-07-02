@@ -2,7 +2,6 @@
 class Actor::Attrib
   require_relative 'Actor_AttribSingleton'
   attr_accessor :equip
-  attr_reader :total
   def initialize(attrib,race,klass)
     base=Database.get_base(race)
     growth_base=Database.get_class(klass)
@@ -14,9 +13,12 @@ class Actor::Attrib
      :atk,:def,:matk,:mdef,:ratk,
      :maxhp,:maxsp,
      :wlkspd,:jump,:atkspd,
-     :level,:money].each{|sym|
+     :level,:money
+     ].each{|sym|
       @base[sym]=base[sym]+attrib[sym]
     }
+    @base[:atkcd]=growth_base[:attack_cd]
+    @base[:shtcd]=growth_base[:arrow_cd]
 
     [:atk,:matk,:ratk].each{|sym| @base[sym]+=growth_base[sym]}
 
@@ -105,9 +107,9 @@ private
     }
   end
   def compute_state_equip
-    [:wlkspd,:atkspd,:jump,:level].each{|sym|
+    [:wlkspd,:atkspd,:jump,:level,:atkcd,:shtcd].each{|sym|
       @total[sym]=@base[sym]
-    }      
+    }
 
     [:mag_outamp,:phy_outamp,
      :mag_resist,:phy_resist,:atk_resist,
@@ -188,6 +190,12 @@ public
     compute_block_dodge
     compute_amp_attrib
     compute_step
+  end
+  def set_attack_cd(cd)
+    @base[:atkcd]=cd
+  end
+  def set_shoot_cd(cd)
+    @base[:shtcd]=cd
   end
   def marshal_dump
     data={}
