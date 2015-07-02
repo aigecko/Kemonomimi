@@ -73,7 +73,7 @@ class<<Bullet
     when :frame
       return FlashBullet.new(effect,ani,shape,info)
     when :time_only
-      return TimerOnlyBullet(effect,ani,shape,info)
+      return TimerOnlyBullet.new(effect,ani,shape,info)
     else
       return NormalBullet.new(effect,ani,shape,info)
     end

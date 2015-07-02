@@ -136,9 +136,9 @@ $skill[:paladin_chop]={
   base: :arrow,cd: 3,consum: 5,table:[0,[100,18]],
   data: {sym: :matk,coef: 0.8,type: :mag,cast_type: :skill,
     launch_y: :ground,
-    pic:'./rc/pic/battle/paladin_chop.png',
+    pic:[:follow,{img:['./rc/pic/battle/paladin_chop.png'],w: 50,h: 30},[[[:blit,0]]]],
     live_cycle: :time_only,
-    velocity: 18},
+    velocity: 18,shape_w: 50,shape_h: 30,shape_t: 30},
   comment:'對直線上敵人造成#{@table[@level][0]}+#{@data[:coef]}matk魔法傷害'}
 $skill[:paladin_beam]={
   name:'光束打擊',type: :active,
