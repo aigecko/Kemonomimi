@@ -239,19 +239,6 @@ public
     glTranslatef(-@offset_x,0,0)
     
     @map.draw
-    @map.render_shadow.each{|item| item.draw_shadow}
-    @map.render_friend_circle.each{|circle|
-      circle.draw
-    }
-    
-    @player.draw
-    @map.render_friend.each{|friend| friend.draw}
-    @map.render_enemy.each{|enemy| enemy.draw}
-    
-    @map.render_friend_bullet.each{|bullet| bullet.draw}
-    @map.render_enemy_bullet.each{|bullet| bullet.draw}
-    
-    @map.render_onground_item.each{|item| item.draw}
     
     Attack.draw
     Heal.draw

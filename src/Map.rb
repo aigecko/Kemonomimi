@@ -257,6 +257,17 @@ class Map
     
     @sky_pic.draw_at(x,0,401)
     @map_pic.draw_part(x,y,401,x,0,Game.Width,@map_pic.h)
+    
+    @items.each{|item| draw_shadow}
+    @friend_circle.each{|circle| circle.draw}
+    
+    @friend.each{|friend| friend.draw}
+    @enemy.each{|enemy| enemy.draw}
+    
+    @friend_bullet.each{|bullet| bullet.draw}
+    @enemy_bullet.each{|bullet| bullet.draw}
+    
+    @items.each{|item| item.draw}
   end
   meta=class<<Map
     def method_missing(method,*arg)
