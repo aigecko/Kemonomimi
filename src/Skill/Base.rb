@@ -674,7 +674,8 @@ class Skill
             caster: caster,
             x: info[:x],y: 0,z: info[:z],
             r: 60,h: 1000,
-            live_cycle: :frame
+            live_cycle: :frame,
+            surface: :horizon
           )
         )
       }
