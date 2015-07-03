@@ -313,13 +313,15 @@ class Skill
               cast_type: :skill,
               attack: attack,
               append: info[:data][:append]),
-            pic,
+            Animation.new(:follow,
+              {img:[info[:data][:pic]],w: pic.w,h: pic.h},
+              [[[:blit,0]]]),
             :col,
             caster: caster,
             live_cycle: info[:data][:live_cycle],
             live_count: info[:data][:live_count],
             x: caster.position.x,
-            y: caster.position.y+caster.pic_h/2-pic.h/2,
+            y: caster.position.y+caster.pic_h/4-pic.h/2,
             z: caster.position.z,
             r: pic.w/2,
             h: pic.h,
@@ -348,7 +350,8 @@ class Skill
             h: pic.h,
             x: info[:x],
             y: info[:y],
-            z: info[:z]
+            z: info[:z],
+            surface: :horizon
           )
         )
       }
