@@ -1,12 +1,12 @@
 #coding: utf-8
 class Animation
-  attr_reader :w,:h
+  attr_reader :w,:h,:length
   def initialize(target,data,tracks)
     @target=target
-    @data=data.dup
     @data[:img]=data[:img].collect{|filename|
       Texture.load_with_colorkey(filename)
     }
+    
     @tracks=tracks
     @tracks.collect!{|track|
       new_track=[]
@@ -24,24 +24,37 @@ class Animation
     }
     @frame=0
     
-    @w,@h=@data[:w],@data[:h]
+    @w,@h=data[:w],data[:h]
+    @limit=data[:limit]
+    @limit_count=0
+    @length=@tracks.max_by{|track| track.size}
+    @round=0
   end
   def reverse
     @reverse=true
   end
+  def end?
+    return @end
+  end
   def draw(x,y,z)
     @tracks.each{|track|
       frame=track[@frame]
-      act,*arg=frame
+      act,img,*arg=frame
       case act
       when :blit
         case @target
         when :follow
-          @data[:img][arg[0]].draw_direct(x,y,z,@reverse)
+          @data[:img][img].draw_direct(x,y,z,@reverse)
         end
       end
     }
     @frame+=1
-    @frame=@frame% @tracks[0].size
+    if @frame>=@length
+      if @limit
+        @limit_count>@limit and @end=true
+        @limit_count+=1
+      end
+      @frame=0
+    end
   end
 end
