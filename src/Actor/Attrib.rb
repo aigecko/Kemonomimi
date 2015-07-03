@@ -70,6 +70,7 @@ class Actor::Attrib
     @total[sym]=value
   end
   def gain_exp(exp)
+    origin_level=@base[:level]
     @total[:exp]+=exp
     while @total[:exp]>=@total[:maxexp]
       if @base[:level]<@@Max[:level]
@@ -83,6 +84,10 @@ class Actor::Attrib
         return
       end
     end
+    delta_level=@base[:level]-origin_level
+    delta_level>0 and
+    Game.window(:GameWindow).add_hint('玩家提升了#FF0000|%d#FFFFFF|等級'% delta_level)
+    
     compute_total
   end
   def consume(consumption)

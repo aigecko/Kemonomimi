@@ -227,7 +227,7 @@ class Map
   def update_actor
     true and
     if rand(1000)>990
-      enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:100},"mon_001")
+      enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
       @enemy<<enemy
     end
     @friend.each{|friend|
