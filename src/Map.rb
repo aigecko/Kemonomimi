@@ -61,6 +61,9 @@ class Map
     enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 100},"mon_001")
     @enemy<<enemy
   end
+  def bind_player
+    @friend=[Game.player]
+  end
   def which_side(player_x)
     if player_x<Game.Width/2
       return :left
@@ -207,12 +210,6 @@ class Map
       }
     }
     [@enemy_bullet,@enemy_circle].each{|bullet_list|
-      bullet_list.reject!{|bullet|
-        result=Shape.collision?(Game.player,bullet)&&
-        bullet.affect(Game.player)||
-        !bullet.position.x.between?(0,@w)
-        result and @cemetery<<[bullet]
-      }
       @friend.reject!{|actor|
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
@@ -222,7 +219,7 @@ class Map
         }
         actor.died?
       }
-    }    
+    }
     mark_live_frame
     update_actor
     update_bullet

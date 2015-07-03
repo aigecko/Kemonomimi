@@ -31,6 +31,7 @@ class GameWindow < BaseWindow
     player_init
     friend_window_init
     sub_window_init
+    @map.bind_player
   end
   def player_init
     @player=Player.new
@@ -159,7 +160,6 @@ public
     sub_window_interact
     game_window_interact
     HotKey.update
-    @player.update
     @map.update
     offset_change
   end

@@ -254,7 +254,7 @@ public
       draw_back
       draw
       delta_time=SDL.get_ticks-time
-      #p delta_time
+      # p delta_time
       delta_time<@TFP and SDL.delay(@TFP-delta_time)
     }
   end
