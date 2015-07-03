@@ -54,6 +54,8 @@ class Map
     @friend_circle=[]
     @enemy_circle=[]
     
+    @cemetery=[]
+    
     @@current_map=self
     
     enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 100},"mon_001")
@@ -180,10 +182,10 @@ class Map
   def find_bullet(bullet)
   end
   def delete_live_frame
-    @friend_bullet.reject!{|bullet| bullet.to_delete?}
-    @friend_circle.reject!{|circle| circle.to_delete?}
-    @enemy_bullet.reject!{|bullet| bullet.to_delete?}
-    @enemy_circle.reject!{|circle| circle.to_delete?}
+    @friend_bullet.reject!{|bullet| bullet.to_delete? and @cemetery<<[bullet]}
+    @friend_circle.reject!{|circle| circle.to_delete? and @cemetery<<[circle]}
+    @enemy_bullet.reject!{|bullet| bullet.to_delete? and @cemetery<<[bullet]}
+    @enemy_circle.reject!{|circle| circle.to_delete? and @cemetery<<[circle]}
   end
   def mark_live_frame
     @friend_bullet.each{|bullet| bullet.mark_live_frame}
@@ -196,24 +198,27 @@ class Map
     [@friend_bullet,@friend_circle].each{|bullet_list|
       @enemy.reject!{|actor|
         bullet_list.reject!{|bullet|
-          Shape.collision?(actor,bullet)&&
+          result=Shape.collision?(actor,bullet)&&
           bullet.affect(actor)||
           !bullet.position.x.between?(0,@w)
+          result and @cemetery<<[bullet]
         }
         actor.died?
       }
     }
     [@enemy_bullet,@enemy_circle].each{|bullet_list|
       bullet_list.reject!{|bullet|
-        Shape.collision?(Game.player,bullet)&&
+        result=Shape.collision?(Game.player,bullet)&&
         bullet.affect(Game.player)||
         !bullet.position.x.between?(0,@w)
+        result and @cemetery<<[bullet]
       }
       @friend.reject!{|actor|
         bullet_list.reject!{|bullet|
-          Shape.collision?(actor,bullet)&&
+          result=Shape.collision?(actor,bullet)&&
           bullet.affect(actor)||
           !bullet.position.x.between?(0,@w)
+          result and @cemetery<<[bullet]
         }
         actor.died?
       }

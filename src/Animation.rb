@@ -3,6 +3,7 @@ class Animation
   attr_reader :w,:h,:length
   def initialize(target,data,tracks)
     @target=target
+    @data={}
     @data[:img]=data[:img].collect{|filename|
       Texture.load_with_colorkey(filename)
     }
@@ -27,7 +28,7 @@ class Animation
     @w,@h=data[:w],data[:h]
     @limit=data[:limit]
     @limit_count=0
-    @length=@tracks.max_by{|track| track.size}
+    @length=@tracks.max_by{|track| track.size}.size
     @round=0
   end
   def reverse
