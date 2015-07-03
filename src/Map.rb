@@ -27,12 +27,12 @@ class Map
         # {onground:true,x:rand(1000),z:rand(400)})
     # }
     
-    Array.new(700){|n|
-      item=Database.get_consum(10).drop
-      item.position.x=200+rand(300)
-      item.position.z=rand(400)
-      item
-    }    # @items+=Array.new(7){|n|
+    # Array.new(70){|n|
+      # item=Database.get_consum(10).drop
+      # item.position.x=200+rand(300)
+      # item.position.z=rand(400)
+      # item
+    # }    # @items+=Array.new(7){|n|
       # item=Database.get_consum(20+n).drop
       # item.position.x=100+rand(100)
       # item.position.z=rand(400)
@@ -258,7 +258,7 @@ class Map
     @sky_pic.draw_at(x,0,401)
     @map_pic.draw_part(x,y,401,x,0,Game.Width,@map_pic.h)
     
-    @items.each{|item| draw_shadow}
+    @items.each{|item| item.draw_shadow}
     @friend_circle.each{|circle| circle.draw}
     
     @friend.each{|friend| friend.draw}
