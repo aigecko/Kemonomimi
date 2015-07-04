@@ -122,16 +122,31 @@ class Skill
   def cding?
     return @end_time&&@end_time>Game.get_ticks
   end
+  def can_bind?
+    return @@BindableList.include?(@type)
+  end
+  def draw_click_back(x,y)
+    @@SkillBacks[:skill_clicked].draw_at(x,y)
+  end
+  def draw_back(x,y)
+    case @type
+    when *@@ActiveTypeList
+      color=(cding?)?(:skill_active_cding_back):(:skill_active_back)
+    when *@@SwitchTypeList
+      color=(@switch)?(:skill_switch_on_back):(:skill_switch_off_back)
+    else
+      color=:skill_passive_back
+    end
+    @@SkillBacks[color].draw_at(x,y)
+  end
   def draw_icon(x,y)
     @icon.draw(x,y)
-    
     @sym and 
     if key=HotKey.get_key(@sym)
       key!=@hotkey_str and
       @hotkey_str=Font.render_texture(Key.get_key_name(key).upcase,15,*Color[:hotkey_font])
-      
       @hotkey_str and @hotkey_str.draw(x+22-@hotkey_str.w,y+24-@hotkey_str.h)
-    end    
+    end
   end
   def draw_name(x,y)
     Font.draw_texture(@name,15,x,y,*Color[:skill_name])

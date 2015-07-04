@@ -1,5 +1,7 @@
 #coding: utf-8
-class Skill  
+class Skill
+  @@ActiveTypeList=
+    [:active,:shoot]
   @@SwitchTypeList=
     [:switch,:switch_auto,:switch_append,:switch_attack_defense]
   @@TypeList=
@@ -7,7 +9,18 @@ class Skill
      :attack,:shoot,
      :pre_attack_defense,:attack_defense,:skill_defense,:skill_append,
      :switch_auto,:switch_append,:switch_attack_defense]
+  @@SkillBacks={}
+  @@BindableList=
+    [:active,:shoot,:switch_auto,:switch_append,:switch_attack_defense]
   def self.all_type_list
     return @@TypeList
+  end
+  def self.init
+    Base.init
+    [:skill_active_cding_back,:skill_active_back,
+     :skill_switch_on_back,:skill_switch_off_back,
+     :skill_passive_back,:skill_clicked].each{|name|
+      @@SkillBacks[name]=Rectangle.new(0,0,24,24,Color[name])
+    }
   end
 end

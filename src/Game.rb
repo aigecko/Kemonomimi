@@ -28,8 +28,9 @@ class<<Game
     gl_parameters
     
     load_lib
-    Skill.init 
+    Skill.init
     Event.init
+    Skill.init
     win_initialize
     
     puts "start #{Time.now-$t}"

@@ -718,9 +718,4 @@ class Skill
       attack*attack/(attack+defense)
     end
   end
-  def self.init
-    Base.init
-
-    @@types=[:active,:auto,:attrib,:state,:switch,:attach]
-  end
 end
