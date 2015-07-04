@@ -64,6 +64,13 @@ class SkillTree
       yield sym,skill
     }
   end
+  def each_attack_defense
+    @skill_list[:attack_defense].each{|skill| yield skill}
+    @skill_list[:switch_attack_defense].each{|skill| yield skill}
+  end
+  def each_pre_attack_defense
+    @skill_list[:pre_attack_defense].each{|skill| yield skill}
+  end
   def size
     return @skill.size+1
   end

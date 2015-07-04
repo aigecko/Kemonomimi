@@ -71,31 +71,15 @@ class Attack
     end
   end
   def pre_attack_defense(target,attack)
-    skill_list=@info[:pre_attack_defense] and
-    if skill_list.respond_to? :each
-      skill_list.each{|name|
-        skill=target.skill[name] and
-        attack=skill.cast_defense(target,@caster,attack)
-      }
-    else
-      skill=target.skill[skill_list] and
-      attack=skill.cast_defense(target,@caster,attack)
-    end
+    target.skill.each_pre_attack_defense{|skill|
+      attack=skill.cast_defense(target,@caster,attack)||attack
+    }
     return attack
   end
   def attack_defense(target,damage)
-    skill_list=@info[:attack_defense] and
-    if skill_list.respond_to? :each
-      skill_list.each{|name|
-        skill=target.skill[name] and
-        skill.switch and
-        damage=skill.cast_defense(target,@caster,damage)
-      }
-    else
-      skill=target.skill[skill_list] and 
-      skill.switch and
-      damage=skill.cast_defense(target,@caster,damage)
-    end
+    target.skill.each_attack_defense{|skill|
+      damage=skill.cast_defense(target,@caster,damage)||damage
+    }
     return damage
   end
   def show_damage(damage,target)

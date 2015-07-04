@@ -306,12 +306,6 @@ class Actor
   def del_skill(skill,info)
     @skill.delete(skill,info)
   end
-  def attack_defense_skill
-    return @skill_list[:attack_defense]
-  end
-  def pre_attack_defense_skill
-    return @skill_list[:pre_attack_defense]
-  end
   def gain_equip(equip)
     return @equip_list<<equip
   end

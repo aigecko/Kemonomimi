@@ -523,8 +523,6 @@ class Skill
           type: :phy,
           cast_type: :attack,
           attack: attack,
-          attack_defense: :snow_shield,
-          pre_attack_defense: [:counter_attack,:counter_beam,:freezing_rain],
           append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst,:water_smash,:itegumo_erupt]
         ).affect(info[:target],info[:target].position)
       }
