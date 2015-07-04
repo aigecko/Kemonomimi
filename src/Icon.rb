@@ -9,7 +9,8 @@ class Icon
       '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
       '(((?<firstMode>(\-|\+))\[(?<R1st>(\d+)),(?<G1st>(\d+)),(?<B1st>(\d+))\])'+
       '((?<secondMode>(\+|\-))\[(?<R2nd>(\d+)),(?<G2nd>(\d+)),(?<B2nd>(\d+))\])?)|'+
-      '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])'+
+      '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])|'+
+      '(#\[(?<changeHue>(\d+\.?\d*))\])'+
       ')*')
     @icon_set={}
     @cache={}
@@ -67,6 +68,10 @@ class Icon
     if info[:secondMode]
       img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
         [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
+    end
+    
+    if info[:changeHue]
+      img.change_hue(info[:changeHue].to_i)
     end
     
     colorkey_x=colorkey_y=0
