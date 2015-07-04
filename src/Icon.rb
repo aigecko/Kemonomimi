@@ -23,7 +23,7 @@ class Icon
     Dir.chdir(currentDir)
     @base_w=@base_h=24
   end
-  def self.load(str,gen=true)
+  def self.load(str)
     info=str.match(@pattern)
     img=nil
     if info[:imgAtX]&&info[:imgAtY]
@@ -41,8 +41,7 @@ class Icon
     else
       path=info[:rc]+info[:path]
       if img=@cache[str]
-        gen and img=img.to_texture
-        return img
+        return img.to_texture
       end
       unless img=@cache[path]
         @cache[path]=(img=Surface.load(path))
@@ -82,7 +81,6 @@ class Icon
     
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
     @cache[str]=img
-    gen and img=img.to_texture
-    return img
+    return img.to_texture
   end
 end

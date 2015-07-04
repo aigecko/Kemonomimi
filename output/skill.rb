@@ -67,7 +67,7 @@ $skill[:fire_burn]={
   icon:'./rc/icon/skill/2011-12-23_3-051.gif:[0,0]B[0,255,0]',
   base: :burn,table:[0,[25,0.55]],
   data:{name:'燃燒',sym: :burn,icon:'./rc/icon/skill/2011-12-23_3-051.gif'},
-  comment:'普攻造成目標燃燒2秒造成#{@table[@level][0]}+#{@table[@level][1]}matk絕對傷害}'}
+  comment:'普攻造成目標燃燒2秒造成#{@table[@level][0]}+#{@table[@level][1]}matk絕對傷害'}
 $skill[:fire_circle]={
   name:'熾焰焚身',type: :switch_auto,cd: 1,
   icon:'./rc/icon/skill/2011-12-23_3-072.gif:[0,0]B[0,255,0]',

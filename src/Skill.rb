@@ -15,7 +15,7 @@ class Skill
     
     begin
       if info[:icon]
-        @icon=Icon.load(info[:icon])
+        @icon=Input.load_icon(info[:icon])
       else
         @invisible=true
       end

@@ -18,8 +18,8 @@ class OnGroundItem
     return @origin
   end
   def draw
-    draw_y=431-@position.y-@position.z/2-@pic.h
-    @pic.draw(@draw_x,draw_y,@position.z)
+    @draw_y=431-@position.y-@position.z/2-@pic.h
+    @pic.draw(@draw_x,@draw_y,@position.z)
   end
   def draw_shadow
     @draw_x=@position.x-@pic.w/2

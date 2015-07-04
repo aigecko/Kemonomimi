@@ -10,7 +10,7 @@ class Item
     
     @price=price
     begin
-      @pic=Icon.load("./rc/icon/#{pic}")
+      @pic=Input.load_icon("./rc/icon/#{pic}")
     rescue SDL::Error=> e
       p e
       Message.show(:equip_pic_load_failure)

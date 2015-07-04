@@ -25,7 +25,7 @@ class Statement
     @name=info[:name]
     @sym=info[:sym]
     
-    info[:icon] and @icon=Icon.load(info[:icon])
+    info[:icon] and @icon=Input.load_icon(info[:icon])
     @icon_string=info[:icon]
     
     @attrib=info[:attrib]
@@ -104,7 +104,7 @@ class Statement
       var=data[abbrev] and
       instance_variable_set(sym,var)
     }
-    data[:i] and @icon=Icon.load(data[:i])
+    data[:i] and @icon=Input.load_icon(data[:i])
     #dbg
     @start_time
     @end_time

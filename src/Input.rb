@@ -148,12 +148,12 @@ class Input
     path='./rc/icon/window_icon'
     w=h=24
     icons={}
-    
     [:status,:item,:equip,:save,:tool,:skill].each{|name|
-      icons[name]=Icon.load(
-        "#{path}/MI_#{name}.png:[0,0]B[255,255,0]")
+      icons[name]=self.load_icon("#{path}/MI_#{name}.png:[0,0]B[255,255,0]")
     }
-
     return icons
+  end
+  def self.load_icon(str)
+    Icon.load(str)
   end
 end
