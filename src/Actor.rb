@@ -60,8 +60,6 @@ class Actor
       icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
       base: :arrow,table:[0,[50,25]],
       data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
-        attack_defense:[:counter_beam,:counter_attack,:freezing_rain],
-        append:[:enegy_arrow,:fire_burn,:break_armor],
         launch_y: :center,
         live_cycle: :time,
         pic: [:follow,
