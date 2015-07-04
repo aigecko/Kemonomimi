@@ -87,7 +87,7 @@ class Actor::Action
       end
       Map.render_onground_item.delete(@target)
       @target=@target.pickup
-      send(func,@target)
+      @actor.send(func,@target)
       set_target(nil)
     end
   end
