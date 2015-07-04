@@ -27,16 +27,22 @@ class SurfaceTexture < Texture
       @surface.format.Gmask|
       @surface.format.Bmask
     colorkey=@surface.colorkey
+    @map=Array.new(@origin_w+2){Array.new(@origin_h+2){true}}
     for x in 0...@origin_w+2
       for y in 0...@origin_h+2
-        @surface[x,y]==colorkey and @surface[x,y]&=mask
+        if @surface[x,y]==colorkey
+          @surface[x,y]&=mask
+          @map[x][y]=false
+        end
       end
     end
     Glu::gluBuild2DMipmaps(GL_TEXTURE_2D,
       GL_RGBA,@surface.w,@surface.h,
       GL_RGBA,GL_UNSIGNED_BYTE,
       @surface.pixels)
+    @surface.destroy
   end
+  def [](x,y);return map[x][y+1];end
   def draw_direct(x,y,z,reverse)
     w,h=@draw_w,@draw_h
     glEnable GL_BLEND

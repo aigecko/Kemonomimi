@@ -4,8 +4,20 @@ class Animation
   def initialize(target,data,tracks)
     @target=target
     @data={}
-    @data[:img]=data[:img].collect{|filename|
-      Texture.load_with_colorkey(filename)
+    @data[:img]=[]
+    data[:img].each_with_index{|filename,idx|
+      img=Surface.load_with_colorkey(filename)
+      if data[:cut]
+        cut_w=data[:cut][idx][0]
+        cut_h=data[:cut][idx][1]
+        for x in 0..img.w/cut_w
+          for y in 0..img.h/cut_h
+            @data[:img]<<img.copy_rect(x*cut_w,y*cut_h,cut_w,cut_h).to_texture
+          end
+        end
+      else
+        @data[:img]<<img.to_texture
+      end
     }
     
     @tracks=tracks

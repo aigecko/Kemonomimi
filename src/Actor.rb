@@ -63,11 +63,7 @@ class Actor
         launch_y: :center,
         live_cycle: :time,
         pic: [:follow,
-          {img:[
-            './rc/pic/battle/arrow1.png',
-            './rc/pic/battle/arrow2.png',
-            './rc/pic/battle/arrow3.png'],
-            w: 50,h: 11},
+          {img:['./rc/pic/battle/arrow.png'],cut:[[50,11]],w: 50,h: 11},
           [[[:blit,0,5],[:blit,1,5],[:blit,2,5],[:blit,1,5]]] ],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
@@ -374,7 +370,6 @@ class Actor
     (Game.get_ticks>end_time) or return false
     return @attrib>=consum
   end
-  
   def can_cast_auto?(end_time,consum)
     Game.get_ticks>end_time or return false
     return @attrib>=consum

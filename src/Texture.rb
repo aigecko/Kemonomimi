@@ -21,7 +21,7 @@ class Texture
     mask=@surface.format.Rmask|
       @surface.format.Gmask|
       @surface.format.Bmask
-    colorkey=@surface.colorkey
+    @colorkey=@surface.colorkey
     for x in 0...@origin_w
       for y in 0...@origin_h
         @surface[x,y]==colorkey and @surface[x,y]&=mask
@@ -32,8 +32,7 @@ class Texture
       GL_RGBA,GL_UNSIGNED_BYTE,
       @surface.pixels)
   end
-  def [](x,y);return @surface[x,y];end
-  def colorkey;return @surface.colorkey;end
+  def colorkey;return @colorkey;end
   def w;return @origin_w;end
   def h;return @origin_h;end
   def draw(dst_x,dst_y,dst_z=0,alpha=1.0)

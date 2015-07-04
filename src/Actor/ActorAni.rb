@@ -51,7 +51,7 @@ class Actor::ActorAni
     pic=@pic[@idx][@face]
     return x.between?(0,pic.w)&&
        y.between?(0,pic.h)&&
-       pic[x,y]!=pic.colorkey
+       pic[x,y]
   end
   def draw
     @draw_x=@pos.x-@pic[@idx][@face].w/2
