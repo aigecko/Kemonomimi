@@ -55,11 +55,11 @@ class Actor
       base: :normal_attack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
-    add_base_skill(:attack,
-      name:'',type: :attack,
-      icon: nil,
-      base: :attack,table:[0,0],
-      comment: nil)
+    # add_base_skill(:attack,
+      # name:'',type: :attack,
+      # icon: nil,
+      # base: :attack,table:[0,0],
+      # comment: nil)
     add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
@@ -158,7 +158,7 @@ class Actor
           live_cycle: :time,live_count: 20,velocity: 15},
         comment:'對指定地點發射冰塊造成#{@table[@level][0]}+#{@data[:coef][:matk]}matk魔法傷害')
       add_skill(:ice_wave,
-        name:'寒霜結界',type: :append,
+        name:'寒霜結界',type: :skill_append,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
         base: :ice_wave,consum: 0,table:[0,20],
         data:{coef:{int: 0.8}},

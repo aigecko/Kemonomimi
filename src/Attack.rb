@@ -49,8 +49,11 @@ class Attack
       
       show_damage(damage,target)
     end
-    append(target,position)
-    
+    if @info[:cast_type]==:attack
+      append(target,position)
+    else
+      skill_append(target,position)
+    end
     return true
   end
   def before(target)
@@ -215,20 +218,34 @@ class Attack
     end 
   end
   def append(target,position)
-    append=@info[:append]
-    append and
-    if append.respond_to? :each
-      append.each{|skill|
-        if skill.respond_to? :cast
-          skill.cast(@caster,target,position.x,position.y,position.z)
-        else
+    if append=@info[:append]
+      if append.respond_to? :each
+        append.each{|skill|
+          skill.respond_to?(:cast) or 
           skill=@caster.skill[skill] and
           skill.cast(@caster,target,position.x,position.y,position.z)
-        end
-      }
-    elsif append.respond_to? :cast
-      append.cast(@caster,target,position.x,position.y,position.z)
+        }
+      else
+        append.respond_to?(:cast) or 
+        skill=@caster.skill[append] and
+        skill.cast(@caster,target,position.x,position.y,position.z)
+      end
     else
+      @caster.skill.each_append{|skill|
+        skill.cast(@caster,target,position.x,position.y,position.z)
+      }
+    end
+  end
+  def skill_append(target,position)
+    append=@info[:append] and
+    if append.respond_to? :each
+      append.each{|skill|
+        skill.respond_to?(:cast) or 
+        skill=@caster.skill[skill] and
+        skill.cast(@caster,target,position.x,position.y,position.z)
+      }
+    else
+      append.respond_to?(:cast) or 
       skill=@caster.skill[append] and
       skill.cast(@caster,target,position.x,position.y,position.z)
     end

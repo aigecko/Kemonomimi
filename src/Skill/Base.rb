@@ -273,7 +273,7 @@ class Skill
               cast_type: data[:cast_type],
               attack: attack,
               attack_defense: data[:attack_defense],
-              append: data[:append]),
+              append: data[:append]||[]),
             (pic=Animation.new(*data[:pic])),
             :box,
             caster: caster,
@@ -312,7 +312,7 @@ class Skill
               type: info[:data][:type],
               cast_type: :skill,
               attack: attack,
-              append: info[:data][:append]),
+              append: info[:data][:append]||[]),
             Animation.new(:follow,
               {img:[info[:data][:pic]],w: pic.w,h: pic.h},
               [[[:blit,0]]]),
@@ -517,22 +517,22 @@ class Skill
         )
       }
 
-      @proc[:attack]=->(info){
+      @proc[:normal_attack]=->(info){
         attack=info[:caster].attrib[:atk]
         Attack.new(info[:caster],
           type: :phy,
           cast_type: :attack,
           attack: attack,
-          append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst,:water_smash,:itegumo_erupt]
+          # append: [:paladin_smash_wave,:enegy_arrow,:break_armor,:fire_burn,:fire_burst,:water_smash,:itegumo_erupt]
         ).affect(info[:target],info[:target].position)
       }
-      @proc[:normal_attack]=->(info){
-        Attack.new(info[:caster],
-          type: :phy,
-          attack: 0,
-          before: :attack_increase,
-          append: :attack).affect(info[:target],info[:target].position)
-      }
+      # @proc[:normal_attack]=->(info){
+        # Attack.new(info[:caster],
+          # type: :phy,
+          # attack: 0,
+          # before: :attack_increase,
+          # append: :attack).affect(info[:target],info[:target].position)
+      # }
 
       @proc[:fire_circle]=->(info){
         attack=info[:args][0]+info[:caster].attrib[:matk]

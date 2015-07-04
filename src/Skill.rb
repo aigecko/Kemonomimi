@@ -97,7 +97,6 @@ class Skill
     @switch and
     @proc.call(caster:caster,target:target,attack:attack,args:@table[@level],data:@data)
   end
-  
   def common_cd(caster)
     @common_cd and
     if @common_cd.respond_to? :each
