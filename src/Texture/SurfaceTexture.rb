@@ -42,7 +42,7 @@ class SurfaceTexture < Texture
       @surface.pixels)
     @surface.destroy
   end
-  def [](x,y);return map[x][y+1];end
+  def [](x,y);return @map[x][y+1];end
   def draw_direct(x,y,z,reverse)
     w,h=@draw_w,@draw_h
     glEnable GL_BLEND
