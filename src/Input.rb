@@ -154,50 +154,24 @@ class Input
     return icons
   end
   def self.load_icon(str)
+    img=@icon_cache[str] and return img
+
     info=str.match(@icon_load_pattern)
-    img=nil
-    if img=@icon_cache[str]
-      return img#.to_texture
-    end
     if info[:imgAtX]&&info[:imgAtY]
-      x=info[:imgAtX].to_i
-      y=info[:imgAtY].to_i
-      unless @icon_set[info[:path]]
-        begin
-          raise "IconNotInSet"
-        rescue => e
-          Message.show_format("圖示:#{info[:path]}不在圖組中","錯誤",:ASTERISK)
-          exit
-        end
-      end
-      img=@icon_set[info[:path]].copy_rect(x*@icon_base_w,y*@icon_base_h,@icon_base_w,@icon_base_h)
+      img=extract_from_icon_set(info)
     else
-      path=info[:rc]+info[:path]
-      img=Surface.load(path)
+      img=Surface.load(info[:rc]+info[:path])
     end
     
     img=fill_base(info,img)
     
-    if info[:firstMode]
-      img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
-        [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
-    end
-    if info[:secondMode]
-      img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
-        [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
-    end
+    info[:firstMode] and proc_first_mode(info,img)
+    info[:secondMode] and proc_second_mode(info,img)
     
-    if info[:changeHue]
-      img.change_hue(info[:changeHue].to_i)
-    end
+    info[:changeHue] and img.change_hue(info[:changeHue].to_f)
     
-    colorkey_x=colorkey_y=0
-    if info[:colorKeyAtX]&&info[:colorKeyAtY]
-      colorkey_x=info[:colorKeyAtX].to_i
-      colorkey_y=info[:colorKeyAtY].to_i
-    end
-    
-    img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
+    set_color_key(info,img)
+
     @icon_cache[str]=img.to_texture
     return @icon_cache[str]
   end
@@ -205,38 +179,18 @@ class Input
     img=@surface_texture_cache[str] and return img
     
     info=str.match(@surface_texture_load_pattern)
-    path=info[:path]
-    img=Surface.load(path)
+    img=Surface.load(info[:path])
     
-    if info[:cut]&&info[:imgAtX]&&info[:imgAtY]
-      w=info[:cutW].to_i
-      h=info[:cutH].to_i
-      x=info[:imgAtX].to_i*w
-      y=info[:imgAtY].to_i*h
-      img=img.copy_rect(x,y,w,h)
-    end
+    info[:cut]&&info[:imgAtX]&&info[:imgAtY] and img=cut_image(info,img)
     
     img=fill_base(info,img)
     
-    if info[:firstMode]
-      img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
-        [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
-    end
-    if info[:secondMode]
-      img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
-        [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
-    end
+    info[:firstMode] and proc_first_mode(info,img)
+    info[:secondMode] and proc_second_mode(info,img)
     
-    if info[:changeHue]
-      img.change_hue(info[:changeHue].to_i)
-    end
+    info[:changeHue] and img.change_hue(info[:changeHue].to_f)
     
-    colorkey_x=colorkey_y=0
-    if info[:colorKeyAtX]&&info[:colorKeyAtY]
-      colorkey_x=info[:colorKeyAtX].to_i
-      colorkey_y=info[:colorKeyAtY].to_i
-    end
-    img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
+    set_color_key(info,img)
    
     img_array=[]
     if info[:cut]&&!(info[:imgAtX]||info[:imgAtY])
@@ -254,7 +208,28 @@ class Input
     
     return @surface_texture_cache[str]
   end
-private
+  def self.cut_image(info,img)
+    w=info[:cutW].to_i
+    h=info[:cutH].to_i
+    x=info[:imgAtX].to_i*w
+    y=info[:imgAtY].to_i*h
+    new_img=img.copy_rect(x,y,w,h)
+    img.destroy
+    return new_img
+  end
+  def self.extract_from_icon_set(info)
+    x=info[:imgAtX].to_i
+    y=info[:imgAtY].to_i
+    unless @icon_set[info[:path]]
+      begin
+        raise "IconNotInSet"
+      rescue => e
+        Message.show_format("圖示:#{info[:path]}不在圖組中","錯誤",:ASTERISK)
+        exit
+      end
+    end
+    return @icon_set[info[:path]].copy_rect(x*@icon_base_w,y*@icon_base_h,@icon_base_w,@icon_base_h)
+  end
   def self.fill_base(info,img)
     base=SDL::Surface.new_32bpp(img.w,img.h)
     if info[:base]
@@ -268,6 +243,22 @@ private
     img.draw(0,0,base)
     img.destroy
     return base
+  end
+  def self.proc_first_mode(info,img)
+    img.send(info[:firstMode]=='+'? :add_blend : :sub_blend,
+      [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
+  end
+  def self.proc_second_mode(info,img)
+    img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
+      [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
+  end
+  def self.set_color_key(info,img)
+    colorkey_x=colorkey_y=0
+    if info[:colorKeyAtX]&&info[:colorKeyAtY]
+      colorkey_x=info[:colorKeyAtX].to_i
+      colorkey_y=info[:colorKeyAtY].to_i
+    end
+    img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
   end
   def self.init
     @surface_texture_load_pattern=Regexp.new(
