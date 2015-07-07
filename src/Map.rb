@@ -27,9 +27,9 @@ class Map
         # {onground:true,x:rand(1000),z:rand(400)})
     # }+
     
-    Array.new(70){|n|
-      item=Database.get_item(10).drop
-      item.position.x=200+rand(300)
+    Array.new(100){|n|
+      item=Database.get_item(rand(20)+10).drop
+      item.position.x=rand(2000)
       item.position.z=rand(400)
       item
     }    # @items+=Array.new(7){|n|
