@@ -28,7 +28,7 @@ class DragWindow < BaseWindow
       @delta_x=x-@win_x
       @delta_y=y-@win_y
       @drag=true
-      @drag_start=false
+      Mouse.set_cursor(:drag)
       return :drag
     elsif x.between?(@win_x,@win_x+@win_w)&&
           y.between?(@win_y,@win_y+@win_h)
@@ -62,7 +62,8 @@ class DragWindow < BaseWindow
     @drag or return
     Game.window(:GameWindow).open_contral
     update_coord
-    @drag=@drag_start=false
+    @drag=false
+    Mouse.set_cursor(:move)
   end
   def window_move(x,y)
     @win_x=x-@delta_x

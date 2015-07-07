@@ -14,7 +14,7 @@ module Mouse
   end
   def set_cursor(type)
     cursor=@cursors[type]
-    SDL::Mouse.set_cursor(cursor,cursor[1,1],cursor[0,0],cursor[5,0],0)
+    SDL::Mouse.set_cursor(cursor,0xffffff,0x141414,0,0)
   end  
   module_function :init,:state,:set_cursor
 end

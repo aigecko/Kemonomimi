@@ -138,7 +138,7 @@ private
       when Event::Quit
         Game.quit
       end
-    }        
+    }
   end
   def set_first_window(name)
     first=name
