@@ -1,7 +1,7 @@
 #coding: utf-8
 class Drawable
   include Gl
-  @@max=255.0
+  @@Max=255.0
   def initialize(x,y,color)
     self.x=x
     self.y=y
@@ -15,10 +15,10 @@ class Drawable
   end
   def color=(color)
     @r,@g,@b=*color
-    @r/=@@max
-    @g/=@@max
-    @b/=@@max
-    @a=(color[3]||@@max)/@@max
+    @r/=@@Max
+    @g/=@@Max
+    @b/=@@Max
+    @a=(color[3]||@@Max)/@@Max
   end
   def draw_at(x,y,z=0)
     self.x=x
@@ -84,7 +84,7 @@ class Circle < Drawable
     surface.fill_rect(0,0,surface.w,surface.h,background)
     surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
     surface.draw_circle(r,r,r,color,true,true)
-    @a=(alpha||@@max)/@@max
+    @a=(alpha||@@Max)/@@Max
     @texture=surface.to_texture
   end
   def x=(x)
@@ -106,7 +106,7 @@ class Ellipse < Drawable
     surface.fill_rect(0,0,surface.w,surface.h,background)
     surface.set_color_key(SDL::SRCCOLORKEY,surface[0,0])
     surface.draw_ellipse(rx,ry,rx,ry,color,true,false)
-    @a=(alpha||@@max)/@@max
+    @a=(alpha||@@Max)/@@Max
     @texture=surface.to_texture
   end
   def x=(x)

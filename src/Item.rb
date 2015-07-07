@@ -1,9 +1,9 @@
 #coding: utf-8
 class Item
   attr_reader :position,:superposed,:name,:id,:pic
-  @@low_bound=350
-  @@font_size=12
-  @@rect_w=135
+  @@LowBound=350
+  @@FontSize=12
+  @@RectW=135
   def initialize(name,pic,price,comment,args={})
     @name=name
     @id=args[:id]
@@ -23,10 +23,10 @@ class Item
     end
     
     @superposed=true
-    @comment=ColorString.new(comment,@@font_size,Color[:item_comment_font],11)
+    @comment=ColorString.new(comment,@@FontSize,Color[:item_comment_font],11)
     
     @rect_h=28+@comment.h
-    @rect_back=Rectangle.new(0,0,@@rect_w,@rect_h,Color[:item_rect_back])
+    @rect_back=Rectangle.new(0,0,@@RectW,@rect_h,Color[:item_rect_back])
   end
   def drop
     return OnGroundItem.new(self)
@@ -35,7 +35,7 @@ class Item
     @pic.draw(*args)
   end
   def draw_detail(x,y,direct)
-    y>@@low_bound and y=@@low_bound
+    y>@@LowBound and y=@@LowBound
     case direct
     when :above
       y-=@rect_h+1
@@ -45,9 +45,9 @@ class Item
     @rect_back.x=x
     @rect_back.y=y
     @rect_back.draw
-    y+=Font.draw_texture(@name,@@font_size,x,y,*Color[:item_name_font])[1]
-    x+=Font.draw_texture("價格：",@@font_size,x,y,*[198,192,0])[0]
-    y+=Font.draw_texture(@price.to_s,@@font_size,x,y,*[189,133,0])[1]
+    y+=Font.draw_texture(@name,@@FontSize,x,y,*Color[:item_name_font])[1]
+    x+=Font.draw_texture("價格：",@@FontSize,x,y,*[198,192,0])[0]
+    y+=Font.draw_texture(@price.to_s,@@FontSize,x,y,*[189,133,0])[1]
     return y
   end
   def draw_comment(x,y)

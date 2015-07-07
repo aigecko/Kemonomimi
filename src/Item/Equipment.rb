@@ -1,7 +1,7 @@
 #coding: utf-8
 class Equipment < Item  
   attr_reader :sym,:skill
-  @@name_size=15
+  @@NameSize=15
   require_relative 'Item/Equipment_Attrib'
   def initialize(name,pic,part,attrib,price,comment)
     super(name,pic,price,comment)
@@ -33,7 +33,7 @@ class Equipment < Item
         end        
       end
     }
-    @rect_h+=@attrib.size*@@font_size
+    @rect_h+=@attrib.size*@@FontSize
     @rect_back.h=@rect_h
     @superposed=false
   end  
@@ -55,16 +55,16 @@ class Equipment < Item
   def draw_detail(x,y,direct)
     str_y=super
     @attrib.each{|sym,value|
-      Font.draw_texture(@@Attrib_table[sym],@@font_size,x,str_y,*Color[:equip_attrib_sym_font])
-      Font.draw_texture(@attrib_str[sym],@@font_size,
-                      x+@@Attrib_table[sym].size*@@font_size,
+      Font.draw_texture(@@Attrib_table[sym],@@FontSize,x,str_y,*Color[:equip_attrib_sym_font])
+      Font.draw_texture(@attrib_str[sym],@@FontSize,
+                      x+@@Attrib_table[sym].size*@@FontSize,
                       str_y,*Color[:equip_attrib_val_font])
-      str_y+=@@font_size
+      str_y+=@@FontSize
     }
     str_y+=2
   end
   def draw_name(x,y)
-    Font.draw_texture(@name,@@name_size,x,y,*Color[:equip_str_font])
+    Font.draw_texture(@name,@@NameSize,x,y,*Color[:equip_str_font])
   end
   def self.init
     @@Part_table=Actor.part_table

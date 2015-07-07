@@ -1,17 +1,16 @@
 #coding: utf-8
 class Conf
-  @@filename=''
   def self.init
     @config=Hash.new
     @config['FULL_SCREEN']=false
     @config['SDL_VIDEO_CENTERED']=true
     @config['MUSIC']=true
     @config['SOUND']=true
-    @@filename="./config.yaml"
+    @@FileName="./config.yaml"
   end
   def self.load
-    if FileTest.exist?(@@filename)
-      File.open(@@filename,'rb'){|file|
+    if FileTest.exist?(@@FileName)
+      File.open(@@FileName,'rb'){|file|
         begin
           new_config=YAML.load(file)
           @config.merge!(new_config)
@@ -28,7 +27,7 @@ class Conf
     end
   end
   def self.save
-    File.open(@@filename,'wb'){|file|
+    File.open(@@FileName,'wb'){|file|
       file.print YAML.dump(@config)
     }
   end

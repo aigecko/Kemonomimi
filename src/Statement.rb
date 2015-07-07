@@ -1,9 +1,9 @@
 #coding: utf-8
 class Statement
   attr_reader :attrib,:sym,:multi,:num_limit,:negative,:flag
-  @@border_box=Rectangle.new(0,0,26,26,Color[:statement_border])
-  @@back_box=Rectangle.new(0,0,24,24,Color[:statement_back])
-  @@name_back_box=Rectangle.new(0,0,0,15,Color[:statement_name_back])
+  @@BorderBox=Rectangle.new(0,0,26,26,Color[:statement_border])
+  @@BackBox=Rectangle.new(0,0,24,24,Color[:statement_back])
+  @@NameBackBox=Rectangle.new(0,0,0,15,Color[:statement_name_back])
 
   @@DefaultEffectAmp=1
   @@EffectInterval=500
@@ -11,7 +11,7 @@ class Statement
   @@FontSize=15
   @@IconSize=24
   
-  @@marshal_table={
+  @@Marshal_table={
     :n=>:@name,:s=>:@sym,
     :i=>:@icon_string,:a=>:@attrib,
     :ea=>:@effect_amp,:e=>:@effect,
@@ -72,16 +72,16 @@ class Statement
   end
   def draw_icon(x,y,mx,my)
     @icon or return false
-    @@border_box.draw_at(x-1,y-1)
-    @@back_box.draw_at(x,y)
+    @@BorderBox.draw_at(x-1,y-1)
+    @@BackBox.draw_at(x,y)
     @icon.draw(x,y)
     draw_name(x,y,mx,my)
   end
   def draw_name(x,y,mx,my)
     @name and (mx.between?(x,x+@@IconSize)&&my.between?(y,y+@@IconSize)) or return 
     font=Font.render_texture(@name,@@FontSize,*Color[:statement_name_font])
-    @@name_back_box.w=font.w
-    @@name_back_box.draw_at(x,y-@@FontSize)
+    @@NameBackBox.w=font.w
+    @@NameBackBox.draw_at(x,y-@@FontSize)
     font.draw(x,y-@@FontSize)
   end
   def marshal_dump
@@ -91,7 +91,7 @@ class Statement
     @end_time and data[:et]=@end_time-Game.saving_time
     @last_time and data[:lt]=@last_time-Game.saving_time
 
-    @@marshal_table.each{|abbrev,sym|
+    @@MarshalTable.each{|abbrev,sym|
       var=instance_variable_get(sym) and
       data[abbrev]=var
     }
@@ -100,7 +100,7 @@ class Statement
   def marshal_load(array)
     data=array[0]
     @caster=Map.load_actor(data[:c])
-    @@marshal_table.each{|abbrev,sym|
+    @@MarshalTable.each{|abbrev,sym|
       var=data[abbrev] and
       instance_variable_set(sym,var)
     }

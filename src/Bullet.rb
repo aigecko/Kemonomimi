@@ -54,9 +54,9 @@ class Bullet
   def draw
     @ani and
     if @surface==:horizon
-      @@draw_proc[:hoz].call(@ani,@position,@shape)
+      @@DrawProc[:hoz].call(@ani,@position,@shape)
     else
-      @@draw_proc[@type].call(@ani,@position,@shape)
+      @@DrawProc[@type].call(@ani,@position,@shape)
     end
   end
 end

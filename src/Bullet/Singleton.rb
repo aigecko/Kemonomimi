@@ -1,6 +1,6 @@
 #coding: utf-8
 class Bullet
-  @@draw_proc={
+  @@DrawProc={
     box: ->(ani,position,shape){
       draw_x=position.x-ani.w/2
       draw_y=431-position.y-position.z/2-ani.h

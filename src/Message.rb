@@ -1,6 +1,6 @@
 #coding: utf-8
 class Message
-  @@table={
+  @@Table={
     #設定檔相關訊息
     config_data_lost: ['設定檔遺失', '錯誤', :OK, :ERROR],
     config_data_error:['設定檔錯誤', '錯誤', :OK, :ERROR],
@@ -51,7 +51,7 @@ class Message
 
   }
   def self.show(function)
-    message=@@table[function]
+    message=@@Table[function]
     WIN32API.ShowMessage(message[0],message[1],message[2],message[3])
   end
   def self.show_format(format,title,type)

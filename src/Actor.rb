@@ -405,7 +405,7 @@ class Actor
   end
   def marshal_dump
     data={}
-    @@marshal_table.each{|abbrev,sym|
+    @@MarshalTable.each{|abbrev,sym|
       data[abbrev]=instance_variable_get(sym)
     }
     #, :@equip
@@ -419,7 +419,7 @@ class Actor
   end
   def marshal_load(array)
     data=array[0]
-    @@marshal_table.each{|abbrev,sym|
+    @@MarshalTable.each{|abbrev,sym|
       instance_variable_set(sym,data[abbrev])
     }
     # pp data
