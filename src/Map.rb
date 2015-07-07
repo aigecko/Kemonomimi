@@ -21,24 +21,25 @@ class Map
     
     @sky_pic=Rectangle.new(0,0,Game.Width,Game.Height-@map_pic.h-50,Color[:clear])
     #dbg
-    @items=#[]
+    @items=[]
     # Array.new(500){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
-    # }
+    # }+
     
-    Array.new(70){|n|
-      item=Database.get_consum(10).drop
-      item.position.x=200+rand(300)
-      item.position.z=rand(400)
-      item
-    }    # @items+=Array.new(7){|n|
+    # Array.new(70){|n|
+      # item=Database.get_consum(10).drop
+      # item.position.x=200+rand(300)
+      # item.position.z=rand(400)
+      # item
+    # }    # @items+=Array.new(7){|n|
       # item=Database.get_consum(20+n).drop
       # item.position.x=100+rand(100)
       # item.position.z=rand(400)
       # item
     # }
-    # @items+=Array.new(10){
+    # @items+=
+    # Array.new(10){
       # equip=Database.get_equip(:left,1).drop      
       # equip.position.x=rand(100)
       # equip.position.z=rand(400)

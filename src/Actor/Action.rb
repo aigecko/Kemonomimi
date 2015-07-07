@@ -67,12 +67,10 @@ class Actor::Action
         @actor.cast(:normal_attack,@target,nil,nil,nil)
       end
     when :pickup
-      case @target
+      case @target.item
       when Equipment
         func=:gain_equip
       when Consumable
-        func=:gain_consumable
-      when OnGroundItem
         func=:gain_consumable
       when Item
         func=:gain_item

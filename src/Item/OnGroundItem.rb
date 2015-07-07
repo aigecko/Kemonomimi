@@ -17,6 +17,9 @@ class OnGroundItem
   def pickup
     return @origin
   end
+  def item
+    return @origin
+  end
   def draw
     @draw_y=431-@position.y-@position.z/2-@pic.h
     @pic.draw(@draw_x,@draw_y,@position.z)
