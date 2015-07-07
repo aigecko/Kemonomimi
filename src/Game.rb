@@ -17,7 +17,6 @@ class<<Game
     sdl_putenv
     
     Color.init
-    Icon.init
     Input.init
     
     check_multi_window

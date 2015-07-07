@@ -154,7 +154,52 @@ class Input
     return icons
   end
   def self.load_icon(str)
-    Icon.load(str)
+    info=str.match(@icon_load_pattern)
+    img=nil
+    if img=@icon_cache[str]
+      return img#.to_texture
+    end
+    if info[:imgAtX]&&info[:imgAtY]
+      x=info[:imgAtX].to_i
+      y=info[:imgAtY].to_i
+      unless @icon_set[info[:path]]
+        begin
+          raise "IconNotInSet"
+        rescue => e
+          Message.show_format("圖示:#{info[:path]}不在圖組中","錯誤",:ASTERISK)
+          exit
+        end
+      end
+      img=@icon_set[info[:path]].copy_rect(x*@icon_base_w,y*@icon_base_h,@icon_base_w,@icon_base_h)
+    else
+      path=info[:rc]+info[:path]
+      img=Surface.load(path)
+    end
+    
+    img=fill_base(info,img)
+    
+    if info[:firstMode]
+      img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
+        [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
+    end
+    if info[:secondMode]
+      img.send(info[:secondMode]=='+'?:add_blend: :sub_blend,
+        [info[:R2nd].to_i,info[:G2nd].to_i,info[:B2nd].to_i])
+    end
+    
+    if info[:changeHue]
+      img.change_hue(info[:changeHue].to_i)
+    end
+    
+    colorkey_x=colorkey_y=0
+    if info[:colorKeyAtX]&&info[:colorKeyAtY]
+      colorkey_x=info[:colorKeyAtX].to_i
+      colorkey_y=info[:colorKeyAtY].to_i
+    end
+    
+    img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
+    @icon_cache[str]=img.to_texture
+    return @icon_cache[str]
   end
   def self.load_texture(str)
     img=@surface_texture_cache[str] and return img
@@ -171,19 +216,8 @@ class Input
       img=img.copy_rect(x,y,w,h)
     end
     
-    base=SDL::Surface.new_32bpp(img.w,img.h)
-    if info[:base]
-      base.fill_rect(0,0,img.w,img.h,[
-        info[:baseR].to_i,
-        info[:baseG].to_i,
-        info[:baseB].to_i])
-    else
-      base.fill_rect(0,0,img.w,img.h,img[0,0])
-    end
-
-    img.draw(0,0,base)
-    img=base
-
+    img=fill_base(info,img)
+    
     if info[:firstMode]
       img.send(info[:firstMode]=='+'?:add_blend: :sub_blend,
         [info[:R1st].to_i,info[:G1st].to_i,info[:B1st].to_i])
@@ -220,6 +254,21 @@ class Input
     
     return @surface_texture_cache[str]
   end
+private
+  def self.fill_base(info,img)
+    base=SDL::Surface.new_32bpp(img.w,img.h)
+    if info[:base]
+      base.fill_rect(0,0,img.w,img.h,[
+        info[:baseR].to_i,
+        info[:baseG].to_i,
+        info[:baseB].to_i])
+    else
+      base.fill_rect(0,0,img.w,img.h,img[0,0])
+    end
+    img.draw(0,0,base)
+    img.destroy
+    return base
+  end
   def self.init
     @surface_texture_load_pattern=Regexp.new(
       '(?<path>([0-9a-zA-Z_\/\.\-\/]*[a-zA-Z]))'+
@@ -233,5 +282,27 @@ class Input
       '(#\[(?<changeHue>(\d+\.?\d*))\])'+
       ')*')
     @surface_texture_cache={}
+    
+    @icon_load_pattern=Regexp.new(
+      '(?<rc>(\.\/rc\/icon\/))?'+
+      '(?<path>([0-9a-zA-Z_\/\.\-\/]*[a-zA-Z]))'+
+      '('+
+      '(:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
+      '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
+      '(((?<firstMode>(\-|\+))\[(?<R1st>(\d+)),(?<G1st>(\d+)),(?<B1st>(\d+))\])'+
+      '((?<secondMode>(\+|\-))\[(?<R2nd>(\d+)),(?<G2nd>(\d+)),(?<B2nd>(\d+))\])?)|'+
+      '((?<base>(B|b))\[(?<baseR>(\d+)),(?<baseG>(\d+)),(?<baseB>(\d+))\])|'+
+      '(#\[(?<changeHue>(\d+\.?\d*))\])'+
+      ')*')
+    @icon_set={}
+    @icon_cache={}
+    currentDir=Dir.pwd
+    Dir.chdir './rc/icon/merge'
+    Dir.foreach('.'){|name|
+      name=~/.png/ or next
+      @icon_set[name]=Surface.load(name)
+    }
+    Dir.chdir(currentDir)
+    @icon_base_w=@icon_base_h=24
   end
 end
