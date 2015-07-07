@@ -157,22 +157,20 @@ class Input
     Icon.load(str)
   end
   def self.load_texture(str)
+    img=@surface_texture_cache[str] and return img
+    
     info=str.match(@surface_texture_load_pattern)
-    img=nil
-    
-    path=info[:rc]+info[:path]
-    img=@surface_texture_cache[str]  and return img
+    path=info[:path]
     img=Surface.load(path)
-
     
-    base=SDL::Surface.new_32bpp(img.w+2,img.h+2)
+    base=SDL::Surface.new_32bpp(img.w,img.h)
     if info[:base]
-      base.fill_rect(1,1,img.w+1,img.h+1,[
+      base.fill_rect(0,0,img.w,img.h,[
         info[:baseR].to_i,
         info[:baseG].to_i,
         info[:baseB].to_i])
     else
-      base.fill_rect(1,1,img.w+1,img.h+1,img[0,0])
+      base.fill_rect(0,0,img.w,img.h,img[0,0])
     end
 
     img.draw(0,0,base)
@@ -203,10 +201,10 @@ class Input
   end
   def self.init
     @surface_texture_load_pattern=Regexp.new(
-      '(?<rc>(\.\/rc\/icon\/))?'+
       '(?<path>([0-9a-zA-Z_\/\.\-\/]*[a-zA-Z]))'+
       '('+
       '(:\[(?<colorKeyAtX>(\d+)),(?<colorKeyAtY>(\d+))\])|'+
+      '((?<cut>(C|c))\[(?<cutW>(\d+)),(?<cutH>(\d+))\])|'+
       '(@\[(?<imgAtX>(\d+)),(?<imgAtY>(\d+))\])|'+
       '(((?<firstMode>(\-|\+))\[(?<R1st>(\d+)),(?<G1st>(\d+)),(?<B1st>(\d+))\])'+
       '((?<secondMode>(\+|\-))\[(?<R2nd>(\d+)),(?<G2nd>(\d+)),(?<B2nd>(\d+))\])?)|'+

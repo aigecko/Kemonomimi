@@ -6,8 +6,8 @@ class Animation
     @data={}
     @data[:img]=[]
     data[:img].each_with_index{|filename,idx|
-      img=Surface.load_with_colorkey(filename)
       if data[:cut]
+        img=Surface.load_with_colorkey(filename)
         cut_w=data[:cut][idx][0]
         cut_h=data[:cut][idx][1]
         for x in 0..img.w/cut_w
@@ -16,7 +16,7 @@ class Animation
           end
         end
       else
-        @data[:img]<<img.to_texture
+        @data[:img]<<Input.load_texture(filename)
       end
     }
     
