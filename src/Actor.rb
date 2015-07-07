@@ -63,7 +63,7 @@ class Actor
         launch_y: :center,
         live_cycle: :time,
         pic: [:follow,
-          {img:['./rc/pic/battle/arrow.png'],cut:[[50,11]],w: 50,h: 11},
+          {img:['./rc/pic/battle/arrow.png:[0,0]C[50,11]'],cut:[[50,11]],w: 50,h: 11},
           [[[:blit,0,5],[:blit,1,5],[:blit,2,5],[:blit,1,5]]] ],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,

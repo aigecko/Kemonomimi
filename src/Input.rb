@@ -163,6 +163,14 @@ class Input
     path=info[:path]
     img=Surface.load(path)
     
+    if info[:cut]&&info[:imgAtX]&&info[:imgAtY]
+      w=info[:cutW].to_i
+      h=info[:cutH].to_i
+      x=info[:imgAtX].to_i*w
+      y=info[:imgAtY].to_i*h
+      img=img.copy_rect(x,y,w,h)
+    end
+    
     base=SDL::Surface.new_32bpp(img.w,img.h)
     if info[:base]
       base.fill_rect(0,0,img.w,img.h,[
@@ -194,9 +202,22 @@ class Input
       colorkey_x=info[:colorKeyAtX].to_i
       colorkey_y=info[:colorKeyAtY].to_i
     end
-    
     img.set_color_key(SDL::SRCCOLORKEY,img[colorkey_x,colorkey_y])
-    @surface_texture_cache[str]=img.to_texture
+   
+    img_array=[]
+    if info[:cut]&&!(info[:imgAtX]||info[:imgAtY])
+      w=info[:cutW].to_i
+      h=info[:cutH].to_i
+      for x in 0..img.w/w
+        for y in 0..img.h/h
+          img_array<<img.copy_rect(x*w,y*h,w,h).to_texture
+        end
+      end
+      @surface_texture_cache[str]=img_array
+    else
+      @surface_texture_cache[str]=img.to_texture
+    end
+    
     return @surface_texture_cache[str]
   end
   def self.init

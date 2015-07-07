@@ -7,14 +7,7 @@ class Animation
     @data[:img]=[]
     data[:img].each_with_index{|filename,idx|
       if data[:cut]
-        img=Surface.load_with_colorkey(filename)
-        cut_w=data[:cut][idx][0]
-        cut_h=data[:cut][idx][1]
-        for x in 0..img.w/cut_w
-          for y in 0..img.h/cut_h
-            @data[:img]<<img.copy_rect(x*cut_w,y*cut_h,cut_w,cut_h).to_texture
-          end
-        end
+        @data[:img]=Input.load_texture(filename)
       else
         @data[:img]<<Input.load_texture(filename)
       end
