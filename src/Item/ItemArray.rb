@@ -1,34 +1,25 @@
 #coding: utf-8
-class ItemArray <Array
-  class Pack
-    @@limit=99
-    attr_accessor :item,:num
-    def initialize(item,num)
-      @item=item
-      @num=num
-    end
-    def empty?
-      return @num==0||(@item==nil)
-    end
-    def draw(x,y)
-      @item.draw(x,y)
-    end
-    def self.limit
-      return @@limit
-    end
-  end
+class ItemArray
+  require_relative 'Item/ItemArray_Pack'
   def initialize(size,superposed=false)
     if superposed
-      super(size){Pack.new(nil,0)}
+      @arr=Array.new(size){Pack.new(nil,0)}
     else
-      super(size)
-    end    
+      @arr=Array.new(size)
+    end
     @vac=Array.new(size){|i| i}
+  end
+  def [](idx,limit=1)
+    limit>1 and return @arr[idx,limit]
+    return @arr[idx]
+  end
+  def size
+    return @arr.size
   end
   def <<(obj)
     if obj.superposed #可疊
       @vac.each{|idx|
-        pack=self[idx]
+        pack=@arr[idx]
         if pack.empty?
           pack.item=obj
           pack.num=1
@@ -42,34 +33,32 @@ class ItemArray <Array
       return false
     else
       (vac=@vac.sort!.first) or return false
-      self[vac]=obj
+      @arr[vac]=obj
       @vac.delete(vac)
       return true
     end
   end
   def swap(a,b)
     a==b and return
-    box_a=self[a]
-    box_b=self[b]
+    box_a=@arr[a]
     if !box_a||box_a.empty?
       @vac.delete(a)
       @vac<<b
-      @vac.sort!
     else
       @vac.delete(b)
       @vac<<a
-      @vac.sort!
     end
+    @vac.sort!
     exchange(a,b)
   end
   def exchange(a,b)
     a==b and return
-    self[a],self[b]=self[b],self[a]
+    @arr[a],@arr[b]=@arr[b],@arr[a]
   end
   def add(a,b)
     a==b and return
-    box_a=self[a]
-    box_b=self[b]
+    box_a=@arr[a]
+    box_b=@arr[b]
     if box_a.item.id==box_b.item.id
       num=box_a.num+box_b.num
       if num>Pack.limit
@@ -87,6 +76,6 @@ class ItemArray <Array
   end
   def delete_at(idx)
     @vac<<idx
-    self[idx]=nil
+    @arr[idx]=nil
   end
 end
