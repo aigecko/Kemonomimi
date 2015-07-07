@@ -28,7 +28,7 @@ class Map
     # }+
     
     Array.new(70){|n|
-      item=Database.get_consum(10).drop
+      item=Database.get_item(10).drop
       item.position.x=200+rand(300)
       item.position.z=rand(400)
       item

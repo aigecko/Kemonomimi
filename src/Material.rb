@@ -10,8 +10,8 @@ class Material < Item
     phy_outamp: 67,mag_outamp: 71,
     block: 73,dodge: 79,
     tough: 83,consum_amp: 89,
-    phy_decatk: 101,mag_decatk: 103,
-    omamori: 107
+    phy_decatk: 101,mag_decatk: 103,omamori: 107,
+    water: 109,slime: 113
   }
   @@CodeTable={}
   for sym,val in @@MaterialTable

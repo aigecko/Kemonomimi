@@ -2,10 +2,11 @@
 class Database
   @Class=Input.load_database(:class,true)
   @Equip=Input.load_database(:equip,true)
-  @Actor_pic=Input.load_actor_pic  
+  @Actor_pic=Input.load_actor_pic
   @Actor_pic_cache={}
   @Race= Input.load_database(:race,true)
   @Consum=Input.load_database(:consum,true)
+  @Item=Input.load_database(:item,true)
   @Skill=Input.load_database(:skill,true)
   def self.get_class(key)
     return @Class[key]
@@ -34,6 +35,14 @@ class Database
       @Consum[index]=Consumable.new(name,pic,attrib,price,comment,{id: index})
     end
     return @Consum[index]
+  end
+  def self.get_item(index)
+    item=@Item[index]
+    unless item.respond_to? :draw
+      name,pic,price,comment,arg=item
+      @Item[index]=Item.new(name,pic,price,comment,{id: arg[:id]})
+    end
+    return @Item[index]
   end
   def self.get_actor_pic(name)
     str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))
