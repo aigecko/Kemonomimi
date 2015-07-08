@@ -27,24 +27,24 @@ class Map
         # {onground:true,x:rand(1000),z:rand(400)})
     # }+
     
-    Array.new(100){|n|
-      item=Database.get_item(rand(20)+10).drop
-      item.position.x=rand(2000)
-      item.position.z=rand(400)
-      item
-    }    # @items+=Array.new(7){|n|
+    # Array.new(100){|n|
+      # item=Database.get_item(19.1).drop
+      # item.position.x=rand(2000)
+      # item.position.z=rand(400)
+      # item
+    # }    # @items+=Array.new(7){|n|
       # item=Database.get_consum(20+n).drop
       # item.position.x=100+rand(100)
       # item.position.z=rand(400)
       # item
     # }
     # @items+=
-    # Array.new(10){
-      # equip=Database.get_equip(:left,1).drop      
-      # equip.position.x=rand(100)
-      # equip.position.z=rand(400)
-      # equip
-    # }
+    Array.new(10){
+      equip=Database.get_equip(:deco,17).drop
+      equip.position.x=rand(100)
+      equip.position.z=rand(400)
+      equip
+    }
     
     @friend=[]
     @enemy=[]

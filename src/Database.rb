@@ -6,7 +6,7 @@ class Database
   @Actor_pic_cache={}
   @Race= Input.load_database(:race,true)
   @Consum=Input.load_database(:consum,true)
-  @Item=Input.load_database(:item,true)
+  @Item=Input.load_database(:material,true)
   @Skill=Input.load_database(:skill,true)
   def self.get_class(key)
     return @Class[key]

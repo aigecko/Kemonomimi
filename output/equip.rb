@@ -499,8 +499,17 @@ $equip[:deco][15]=['完美平蜘蛛釜','icon-2_1.png@[9,9]',
 '禦魔護符'
 '鬼面'
 '能面'
-'短甲'
-'抗魔短甲'
-'御守'
+$equip[:deco][21]=['初級短甲','icon/mat_tkl003/armor_006.png',{phy_decatk: 5},400,'']
+$equip[:deco][22]=['普通短甲','icon/mat_tkl003/armor_006.png',{phy_decatk: 10},800,'']
+$equip[:deco][23]=['高級短甲','icon/mat_tkl003/armor_006.png',{phy_decatk: 20},1600,'']
+$equip[:deco][24]=['進階短甲','icon/mat_tkl003/armor_006.png',{phy_decatk: 35},3200,'']
+$equip[:deco][25]=['完美短甲','icon/mat_tkl003/armor_006.png',{phy_decatk: 55},6400,'']
+
+$equip[:deco][26]=['初級抗魔短甲','icon/mat_tkl003/armor_006c.png',{mag_decatk: 10},400,'']
+$equip[:deco][27]=['普通抗魔短甲','icon/mat_tkl003/armor_006c.png',{mag_decatk: 20},800,'']
+$equip[:deco][28]=['高級抗魔短甲','icon/mat_tkl003/armor_006c.png',{mag_decatk: 35},1600,'']
+$equip[:deco][29]=['進階抗魔短甲','icon/mat_tkl003/armor_006c.png',{mag_decatk: 55},3200,'']
+$equip[:deco][30]=['完美抗魔短甲','icon/mat_tkl003/armor_006c.png',{mag_decatk: 80},6400,'']
+$equip[:deco][31]=['御守','icon/mat_tklre002/other_003.png',{},650,'']
 
 Output('equip')
