@@ -94,7 +94,13 @@ class Skill
     call_skill_base(caster,target,nil,nil,nil)
   end
   def cast_defense(caster,target,attack)
-    @switch and
+    @switch or return
+    caster.can_cast?(@end_time,@consum) or return
+    caster.consume(@consum)
+    
+    cd_start
+    common_cd(caster)
+    
     @proc.call(caster:caster,target:target,attack:attack,args:@table[@level],data:@data)
   end
   def common_cd(caster)

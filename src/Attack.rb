@@ -84,6 +84,7 @@ class Attack
       attack=skill.cast_defense(target,@caster,attack)||attack
       attack==:miss and return :miss
     }
+    return attack
   end
   def attack_defense(target,damage)
     target.skill.each_attack_defense{|skill|
@@ -179,7 +180,6 @@ class Attack
         attack=pre_skill_defense(target,attack)
         attack==:miss and return :miss
       end
-        
       attack-=target.attrib[:mag_decatk]
       attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
