@@ -79,6 +79,12 @@ class Attack
     }
     return attack
   end
+  def pre_skill_defense(target,attack)
+    target.skill.each_pre_skill_defense{|skill|
+      attack=skill.cast_defense(target,@caster,attack)||attack
+      attack==:miss and return :miss
+    }
+  end
   def attack_defense(target,damage)
     target.skill.each_attack_defense{|skill|
       damage=skill.cast_defense(target,@caster,damage)||damage
@@ -139,6 +145,11 @@ class Attack
         
         damage-=damage*target.attrib[:phy_resist]/100
       when :skill
+        if @info[:assign]
+          attack=pre_skill_defense(target,attack)
+          attack==:miss and return :miss
+        end
+        
         attack-=target.attrib[:phy_decatk]
         attack<=0 and attack=1
         attack+=attack*@caster.attrib[:phy_outamp]/100
@@ -147,6 +158,11 @@ class Attack
         
         damage-=damage*target.attrib[:phy_resist]/100
       else
+        if @info[:assign]
+          attack=pre_skill_defense(target,attack)
+          attack==:miss and return :miss
+        end
+        
         attack-=target.attrib[:phy_decatk]
         attack<=0 and attack=1
         attack+=attack*@caster.attrib[:phy_outamp]/100
@@ -159,18 +175,33 @@ class Attack
       if target.has_state?(:magic_immunity)
         return :miss
       end
+      if @info[:assign]
+        attack=pre_skill_defense(target,attack)
+        attack==:miss and return :miss
+      end
+        
       attack-=target.attrib[:mag_decatk]
       attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
     when :umag
+      if @info[:assign]
+        attack=pre_skill_defense(target,attack)
+        attack==:miss and return :miss
+      end
+      
       attack-=target.attrib[:mag_decatk]
       attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
     when :acid
+      if @info[:assign]
+        attack=pre_skill_defense(target,attack)
+        attack==:miss and return :miss
+      end
+      
       damage=attack
     end
     damage-=damage*target.attrib[:atk_resist]/100

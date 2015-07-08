@@ -31,6 +31,9 @@ class Skill
           attack: attack).affect(info[:target],info[:target].position)
         return info[:attack]
       }
+      @proc[:omamori]=->(info){
+        return :miss
+      }
 
       @proc[:amplify]=->(info){
         caster=info[:caster]

@@ -71,6 +71,9 @@ class SkillTree
   def each_pre_attack_defense
     @skill_list[:pre_attack_defense].each{|skill| yield skill}
   end
+  def each_pre_skill_defense
+    @skill_list[:pre_skill_defense].each{|skill| yield skill}
+  end
   def each_append
     @skill_list[:append].each{|skill| yield skill}
     @skill_list[:switch_append].each{|skill| yield skill}

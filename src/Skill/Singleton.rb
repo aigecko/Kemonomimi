@@ -7,7 +7,8 @@ class Skill
   @@TypeList=
     [:none,:auto,:switch,:active,:append,:before,:attach,
      :attack,:shoot,
-     :pre_attack_defense,:attack_defense,:skill_defense,:skill_append,
+     :pre_attack_defense,:pre_skill_defense,:attack_defense,
+     :skill_defense,:skill_append,
      :switch_auto,:switch_append,:switch_attack_defense]
   @@SkillBacks={}
   @@BindableList=
