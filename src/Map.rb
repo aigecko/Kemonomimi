@@ -59,7 +59,8 @@ class Map
     
     @@current_map=self
     
-    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 100},"mon_001")
+    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_001")
+    enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
     @enemy<<enemy
   end
   def bind_player
@@ -149,6 +150,9 @@ class Map
   def add_enemy_circle(ally,circle)
     ((ally==:enemy)? @friend_circle : @enemy_circle)<<circle
   end
+  def add_onground_item(item)
+    @items<<item
+  end
   def find_actor(actor)
     if idx=@enemy.find_index(actor)
       return [:e,idx]
@@ -229,6 +233,7 @@ class Map
     true and
     if rand(1000)>990
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
+      enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
       @enemy<<enemy
     end
     @friend.each{|friend|

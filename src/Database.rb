@@ -17,14 +17,14 @@ class Database
   def self.get_equip(part,index)
     begin
       data=@Equip[part][index] or raise "EquipDatabaseOutOfIndex"
-      name,pic,attrib,price,comment=data
-      return Equipment.new(name,pic,part,attrib,price,comment)
+      name,pic,attrib,price,comment,arg=data
+      return Equipment.new(name,pic,part,attrib,price,comment,arg)
     rescue NoMethodError
-      print "part: #{part} index: #{index}"
+      Message.show_format("裝備:#{part}編號:#{index}不存在","錯誤",:ASTERISK)
       Message.show(:unvalid_equip)
       exit
     rescue => e
-      Message.show_format("裝備:#{part}編號:#{index}不存在","錯誤",:ASTERISK)
+      p e
       exit
     end
   end
@@ -37,12 +37,17 @@ class Database
     return @Consum[index]
   end
   def self.get_item(index)
-    item=@Item[index]
-    unless item.respond_to? :draw
-      name,pic,price,comment,arg=item
-      @Item[index]=Item.new(name,pic,price,comment,{id: arg[:id]})
+    begin
+      item=@Item[index]
+      unless item.respond_to? :draw
+        name,pic,price,comment,arg=item
+        @Item[index]=Item.new(name,pic,price,comment,{id: arg[:id]})
+      end
+      return @Item[index]
+    rescue NoMethodError
+      Message.show_format("編號:#{index}的物品不存在","錯誤",:ASTERISK)
+      exit
     end
-    return @Item[index]
   end
   def self.get_actor_pic(name)
     str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))

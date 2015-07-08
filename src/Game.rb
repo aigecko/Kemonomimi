@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=106
+    @NumOfRequire=107
     @FPS=25
     @TFP=40
     
@@ -139,7 +139,7 @@ private
       ColorString ParaString DynamicString
       Shape Shadow Bullet
       Attack Effect Heal
-      Consumption
+      Consumption DropList
       )
     library_list.each{|lib|
       require_relative(lib)

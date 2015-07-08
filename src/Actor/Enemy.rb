@@ -13,5 +13,9 @@ class Enemy < Actor
     super
     Game.player.gain_exp(@attrib[:exp])
     Game.window(:GameWindow).add_hint("%s遭到擊敗，獲得#FF0000|%d#FFFFFF|經驗值"% [@name,@attrib[:exp]])
+    @drop_list and @drop_list.drop(@position,1.0)
+  end
+  def add_drop_list(list)
+    @drop_list=DropList.new(list)
   end
 end
