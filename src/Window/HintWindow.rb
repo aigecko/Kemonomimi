@@ -2,7 +2,7 @@
 class HintWindow < BaseWindow
   def initialize
     win_w,win_h=100,300
-    win_x,win_y=10,150
+    win_x,win_y=10,80
     super(win_x,win_y,win_w,win_h)
     
     @font_size=12

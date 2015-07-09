@@ -81,6 +81,7 @@ class Actor::Action
         func=:gain_item
       when Money
         func=:gain_money
+        Game.window(:GameWindow).add_hint("玩家獲得#FFFF00|%d#FFFFFF|金錢"%target.item.value)
       else
         begin
           raise "UnknownItemOnGround"
