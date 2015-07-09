@@ -38,13 +38,19 @@ class Map
       # item.position.z=rand(400)
       # item
     # }
-    # @items+=
     Array.new(10){
-      equip=Database.get_equip(:deco,17).drop
-      equip.position.x=rand(100)
-      equip.position.z=rand(400)
-      equip
+      money=Money.new(rand(1000)+1000).drop
+      money.position.x=rand(100)
+      money.position.z=rand(400)
+      money
     }
+    # @items+=
+    # Array.new(10){
+      # equip=Database.get_equip(:deco,17).drop
+      # equip.position.x=rand(100)
+      # equip.position.z=rand(400)
+      # equip
+    # }
     
     @friend=[]
     @enemy=[]

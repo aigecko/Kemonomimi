@@ -19,6 +19,8 @@ class DropList::DropItem
         item=Database.get_consum(@index).drop
       when :Equipment
         item=Database.get_equip(*@index).drop
+      when :Money
+        item=Money.new(@index).drop
       else
         item=Database.get_item(@index).drop
       end

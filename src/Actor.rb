@@ -324,6 +324,14 @@ class Actor
   def gain_exp(exp)
     @attrib.gain_exp(exp)
   end
+  def gain_money(money)
+    case money
+    when Money
+      @attrib[:money]+=money.value
+    when Integer
+      @attrib[:money]+=money
+    end
+  end
   def recover
     @accum_hp||=0
     @accum_sp||=0

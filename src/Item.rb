@@ -1,6 +1,6 @@
 #coding: utf-8
 class Item
-  attr_reader :position,:superposed,:name,:id,:pic
+  attr_reader :superposed,:name,:id,:pic
   @@LowBound=350
   @@FontSize=12
   @@RectW=135
@@ -62,3 +62,4 @@ require_relative 'Item/Consumable'
 require_relative 'Item/Equipment'
 require_relative 'Item/OnGroundItem'
 require_relative 'Item/ItemArray'
+require_relative 'Money'

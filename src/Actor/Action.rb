@@ -74,6 +74,8 @@ class Actor::Action
         func=:gain_consumable
       when Item
         func=:gain_item
+      when Money
+        func=:gain_money
       else
         begin
           raise "UnknownItemOnGround"
