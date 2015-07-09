@@ -239,7 +239,7 @@ class Map
     true and
     if rand(1000)>990
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
-      enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,100]])
+      enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,rand(200)]])
       @enemy<<enemy
     end
     @friend.each{|friend|

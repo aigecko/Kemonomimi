@@ -26,7 +26,7 @@ class DropList::DropItem
       end
       angle=rand(@@AngleLimit)
       x=position.x+@@SpreadRadius*Math.cos(angle)
-      z=position.z+@@SpreadRadius*Math.cos(angle)
+      z=position.z+@@SpreadRadius*Math.sin(angle)
       item.position.x=x.confine(0,Map.w)
       item.position.z=z.confine(0,Map.h)
       item.position.y=0
