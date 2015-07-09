@@ -67,7 +67,12 @@ class Actor::Action
         @actor.cast(:normal_attack,@target,nil,nil,nil)
       end
     when :pickup
-      case @target.item
+      pickup_item(@target)
+      set_target(nil)
+    end
+  end
+  def pickup_item(target,delete=true)
+    case target.item
       when Equipment
         func=:gain_equip
       when Consumable
@@ -85,11 +90,9 @@ class Actor::Action
           exit
         end
       end
-      Map.render_onground_item.delete(@target)
-      @target=@target.pickup
-      @actor.send(func,@target)
-      set_target(nil)
-    end
+      delete and Map.render_onground_item.delete(target)
+      target=target.pickup
+      @actor.send(func,target)
   end
   def action_progress
     case @action

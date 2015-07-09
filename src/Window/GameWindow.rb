@@ -18,11 +18,11 @@ class GameWindow < BaseWindow
     @contral=true
     
     @shadow_buffer=[]
-    #dbg
     HotKey.bind(Key::F1,:proc,:once,->{switch_window(:StatusWindow)})
     HotKey.bind(Key::F2,:proc,:once,->{switch_window(:ItemWindow)})
     HotKey.bind(Key::F3,:proc,:once,->{switch_window(:SkillWindow)})
     HotKey.bind(Key::F4,:proc,:once,->{switch_window(:EquipWindow)})
+    #dbg
     HotKey.bind(Key::F5,:proc,:once,->{Game.save})
     HotKey.bind(Key::F6,:proc,:once,->{Game.load})
     HotKey.bind(Key::ESCAPE,:proc,:once,->{Game.quit})
@@ -93,6 +93,8 @@ private
           last: 2000)
         when Key::LCTRL
           HotKey.bind_mode=true
+        when Key::SPACE
+          Map.pickup_onground_items
         else
           HotKey.turn_on(event.sym)
         end

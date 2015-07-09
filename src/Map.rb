@@ -21,7 +21,7 @@ class Map
     
     @sky_pic=Rectangle.new(0,0,Game.Width,Game.Height-@map_pic.h-50,Color[:clear])
     #dbg
-    @items=[]
+    @items=#[]
     # Array.new(500){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
@@ -38,12 +38,12 @@ class Map
       # item.position.z=rand(400)
       # item
     # }
-    # Array.new(1000){
-      # money=Money.new(100_000_000*(rand(5)+1)).drop
-      # money.position.x=rand(1000)
-      # money.position.z=rand(400)
-      # money
-    # }
+    Array.new(1000){
+      money=Money.new(100_000_000*(rand(5)+1)).drop
+      money.position.x=rand(1000)
+      money.position.z=rand(400)
+      money
+    }
     # @items+=
     # Array.new(10){
       # equip=Database.get_equip(:deco,17).drop
@@ -158,6 +158,20 @@ class Map
   end
   def add_onground_item(item)
     @items<<item
+  end
+  def pickup_onground_items
+    player_x=Game.player.position.x
+    player_z=Game.player.position.z
+    @items.reject!{|item|
+      item_x=item.position.x
+      item_z=item.position.z
+      if Math.distance(item_x,item_z,player_x,player_z)<70
+        Game.player.action.pickup_item(item,false)
+        true
+      else
+        false
+      end
+    }
   end
   def find_actor(actor)
     if idx=@enemy.find_index(actor)
