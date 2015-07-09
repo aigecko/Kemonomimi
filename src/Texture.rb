@@ -2,6 +2,7 @@
 class Texture
   include Gl
   require_relative 'Texture/BigTexture'
+  require_relative 'Texture/MapTexture'
   require_relative 'Texture/FontTexture'
   require_relative 'Texture/SurfaceTexture'
   require_relative 'Texture/WindowTexture'

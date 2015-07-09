@@ -17,7 +17,7 @@ class Map
         Chipset[@chips[column][row]].draw(row*@chip_w,column*@chip_h,@map_pic)
       end
     end
-    @map_pic=BigTexture.new(@map_pic)
+    @map_pic=MapTexture.new(@map_pic)
     
     @sky_pic=Rectangle.new(0,0,Game.Width,Game.Height-@map_pic.h-50,Color[:clear])
     #dbg
@@ -40,7 +40,7 @@ class Map
     # }
     Array.new(1000){
       money=Money.new(100_000_000*(rand(5)+1)).drop
-      money.position.x=rand(1000)
+      money.position.x=rand(2000)
       money.position.z=rand(400)
       money
     }
@@ -282,10 +282,12 @@ class Map
     y=230
     
     @sky_pic.draw_at(x,0,401)
-    @map_pic.draw_part(x,y,401,x,0,Game.Width,@map_pic.h)
+    @map_pic.draw_part(x,y,x,0,Game.Width,@map_pic.h)
     
+    Gl.glDisable(Gl::GL_DEPTH_TEST)
     @items.each{|item| item.draw_shadow}
     @friend_circle.each{|circle| circle.draw}
+    Gl.glEnable(Gl::GL_DEPTH_TEST)
     
     @friend.each{|friend| friend.draw}
     @enemy.each{|enemy| enemy.draw}
