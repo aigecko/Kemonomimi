@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=108
+    @NumOfRequire=109
     @FPS=25
     @TFP=40
     
@@ -191,7 +191,7 @@ public
     draw_back
     Font.draw_texture('Loading',30,270,240,*Color[:loading_font])
     x,y,z=160,288,0
-    w,h=@Width/@NumOfRequire*$require_count/2,48
+    w,h=@Width*$require_count/2/@NumOfRequire,48
     glDisable GL_TEXTURE_2D
     glBegin(GL_QUADS)
     glColor4d 1-$require_count*0.011,$require_count*0.011,0,1

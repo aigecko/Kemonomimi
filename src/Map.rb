@@ -21,7 +21,7 @@ class Map
     
     @sky_pic=Rectangle.new(0,0,Game.Width,Game.Height-@map_pic.h-50,Color[:clear])
     #dbg
-    @items=#[]
+    @items=[]
     # Array.new(500){
       # Item.new('鑽石','item/2011-12-23_1-228.gif:[0,0]-[50,50,50]+[50,0,80]B[255,255,255]',100,'1|lI',
         # {onground:true,x:rand(1000),z:rand(400)})
@@ -38,12 +38,12 @@ class Map
       # item.position.z=rand(400)
       # item
     # }
-    Array.new(10){
-      money=Money.new(rand(1000)+1000).drop
-      money.position.x=rand(100)
-      money.position.z=rand(400)
-      money
-    }
+    # Array.new(1000){
+      # money=Money.new(100_000_000*(rand(5)+1)).drop
+      # money.position.x=rand(1000)
+      # money.position.z=rand(400)
+      # money
+    # }
     # @items+=
     # Array.new(10){
       # equip=Database.get_equip(:deco,17).drop
@@ -239,7 +239,7 @@ class Map
     true and
     if rand(1000)>990
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
-      enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
+      enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,100]])
       @enemy<<enemy
     end
     @friend.each{|friend|

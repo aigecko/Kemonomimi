@@ -20,8 +20,26 @@ class ItemWindow::MoneyBar
   end
   def draw
     money_draw_x=@x+2+@text_pic_w
-    money_draw_y=@y+2
-    Font.draw_texture(Game.player.attrib[:money].to_s,@font_size,
+    money=Game.player.attrib[:money]
+    if money>=10_000_000_000
+      @font_size=12
+      money="%.4E"%money
+      money_draw_y=@y+3
+    elsif money>=100_000_000
+      @font_size=12
+      money=money.to_s
+      money_draw_y=@y+3
+    elsif money>=10_000_000
+      @font_size=15
+      money=money.to_s
+      money_draw_x=@x+@text_pic_w
+      money_draw_y=@y+2
+    else
+      @font_size=15
+      money=money.to_s
+      money_draw_y=@y+2
+    end
+    Font.draw_texture(money,@font_size,
       money_draw_x,money_draw_y,*Color[:item_money_font])
   end
 end
