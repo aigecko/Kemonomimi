@@ -41,6 +41,8 @@ class Color
       
       drag_bar:[0,0,255,100],
       drag_title:[147,190,255,],
+      drag_close_border:[0,0,125],
+      drag_close_back:[153,204,255],
       
       item_tag_font:[22,66,148],
       item_tag_focus:[122,162,235],

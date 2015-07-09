@@ -6,8 +6,11 @@ class DragWindow < BaseWindow
     @drag_y=@win_y
     @drag_w=@win_w-@border*2
     @drag_h=20
+    
     @close_x=@drag_x+@drag_w
     @close_y=@win_y
+    @close_w=9
+    @close_h=10
   end
   def title_initialize(title)
     @title=title
@@ -18,13 +21,13 @@ class DragWindow < BaseWindow
     @skeleton.draw_rect(@border,0,@drag_w,@drag_h,Color[:drag_bar],true,Color[:drag_bar][3])
     close_x=@border+@drag_w
     close_y=0
-    @skeleton.draw_rect(close_x,close_y,10,10,[153,204,255],true)
-    @skeleton.draw_rect(close_x,close_y,9,10,[0,0,125])
+    @skeleton.draw_rect(close_x,close_y,@close_w,@close_h,Color[:drag_close_back],true)
+    @skeleton.draw_rect(close_x,close_y,@close_w,@close_h,Color[:drag_close_border])
     cross_x=close_x+2
     cross_y=2
     cross_h=cross_w=@border-4
-    @skeleton.draw_line(cross_x,cross_y,cross_x+cross_w,cross_y+cross_h,[0,0,125])
-    @skeleton.draw_line(cross_x,cross_y+cross_h,cross_x+cross_w,cross_y,[0,0,125])
+    @skeleton.draw_line(cross_x,cross_y,cross_x+cross_w,cross_y+cross_h,Color[:drag_close_border])
+    @skeleton.draw_line(cross_x,cross_y+cross_h,cross_x+cross_w,cross_y,Color[:drag_close_border])
     @title_pic.draw(title_x,title_y,@skeleton)
   end
   def detect_click_window(event)
@@ -41,8 +44,8 @@ class DragWindow < BaseWindow
       @drag=true
       Mouse.set_cursor(:drag)
       return :drag
-    elsif x.between?(@close_x,@close_x+@border)&&
-          y.between?(@close_y,@close_y+@border)
+    elsif x.between?(@close_x,@close_x+@close_w)&&
+          y.between?(@close_y,@close_y+@close_h)
       close
       return :click
     elsif x.between?(@win_x,@win_x+@win_w)&&
