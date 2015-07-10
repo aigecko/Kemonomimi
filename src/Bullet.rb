@@ -26,13 +26,22 @@ class Bullet
     @live_count=info[:live_count]
     
     @hit_target=[info[:exclude]]
+    
+    @collidable=info[:collidable]
+    @collide_count=info[:collide_count]
   end
   def mark_live_frame
     @trigger=true
   end
   def to_delete?
     return false
-  end  
+  end
+  def collision
+    @collide_count-=1
+  end
+  def crashed?
+    return @collide_count<=0
+  end
   def update
     @position.x+=@vector[0]
     @position.y+=@vector[1]
@@ -79,7 +88,6 @@ class<<Bullet
     end
   end
 end
-require_relative 'Bullet/HorizonBullet'
 require_relative 'Bullet/NormalBullet'
 require_relative 'Bullet/TimerBullet'
 require_relative 'Bullet/CounterBullet'

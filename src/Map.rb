@@ -56,7 +56,9 @@ class Map
     @enemy=[]
     
     @friend_bullet=[]
+    @friend_collidable_bullet=[]
     @enemy_bullet=[]
+    @enemy_collidable_bullet=[]
 
     @friend_circle=[]
     @enemy_circle=[]
@@ -223,31 +225,70 @@ class Map
   end
   def update
     delete_live_frame
+    update_collidable_bullet
+    update_friend_bullet_circle
+    update_enemy_bullet_circle
+    mark_live_frame
+    update_actor
+    update_bullet
+  end
+  def update_collidable_bullet
+    @friend_collidable_bullet.reject!{|bullet|
+      !bullet.position.x.between?(0,@w)&&
+      @friend_bullet.delete(bullet)
+    }
+    @enemy_collidable_bullet.reject!{|bullet|
+      !bullet.position.x.between?(0,@w)&&
+      @enemy_bullet.delete(bullet)
+    }
+    @friend_collidable_bullet.reject!{|f_bullet|
+      @enemy_collidable_bullet.reject!{|e_bullet|
+        f_bullet.crashd? and break
+        Shape.collision?(f_bullet,e_bullet)&&
+        e_bullet.collision&&
+        f_bullet.collision&&
+        e_bullet.crashd?&&
+        @enemy_bullet.delete(e_bullet)
+      }
+      f_bullet.crashd?&&
+      @friend_bullet.delete(f_bullet)
+    }
+  end
+  def update_friend_bullet_circle
+    @friend_bullet.reject!{|bullet|
+      !bullet.position.x.between?(0,@w)
+    }
+    @friend_circle.reject!{|circle|
+      !circle.position.x.between?(0,@w)
+    }
     [@friend_bullet,@friend_circle].each{|bullet_list|
       @enemy.reject!{|actor|
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
-          bullet.affect(actor)||
-          !bullet.position.x.between?(0,@w)
+          bullet.affect(actor)
           result and @cemetery<<[bullet]
         }
         actor.died?
       }
+    }
+  end
+  def update_enemy_bullet_circle
+    @enemy_bullet.reject!{|bullet|
+      !bullet.position.x.between?(0,@w)
+    }
+    @enemy_circle.reject!{|circle|
+      !circle.position.x.between?(0,@w)
     }
     [@enemy_bullet,@enemy_circle].each{|bullet_list|
       @friend.reject!{|actor|
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
-          bullet.affect(actor)||
-          !bullet.position.x.between?(0,@w)
+          bullet.affect(actor)
           result and @cemetery<<[bullet]
         }
         actor.died?
       }
     }
-    mark_live_frame
-    update_actor
-    update_bullet
   end
   def update_actor
     true and
