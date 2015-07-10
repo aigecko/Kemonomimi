@@ -231,6 +231,9 @@ public
   def Width
     return @Width
   end
+  def HalfWidth
+    return @Width/2
+  end
   def Height
     return @Height
   end

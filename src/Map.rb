@@ -73,9 +73,9 @@ class Map
     @friend=[Game.player]
   end
   def which_side(player_x)
-    if player_x<Game.Width/2
+    if player_x<Game.HalfWidth
       return :left
-    elsif player_x>@w-Game.Width/2
+    elsif player_x>@w-Game.HalfWidth
       return :right
     else
       return :mid
@@ -276,7 +276,7 @@ class Map
     side=which_side(player_x)
     case side
     when :left then x=0
-    when :mid then x=player_x-Game.Width/2
+    when :mid then x=player_x-Game.HalfWidth
     when :right then x=@w-Game.Width
     end
     y=230
