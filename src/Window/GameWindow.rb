@@ -226,7 +226,7 @@ public
     when :left
       @offset_x=0
     when :mid
-      @offset_x=@player.position.x-Game.Width/2
+      @offset_x=@player.position.x.to_i-Game.Width/2
     when :right
       @offset_x=@map.w-Game.Width
     end
