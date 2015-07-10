@@ -148,15 +148,27 @@ class Map
   def add_friend_bullet(ally,bullet)
     if ally==:enemy
       @enemy_bullet<<bullet
+      bullet.collidable and @enemy_collidable_bullet<<bullet
     else
       @friend_bullet<<bullet
+      bullet.collidable and @friend_collidable_bullet<<bullet
     end
   end
   def add_enemy_bullet(ally,bullet)
-    ((ally==:enemy)? @friend_bullet : @enemy_bullet)<<bullet
+    if ally==:enemy
+      @friend_bullet<<bullet
+      bullet.collidable and @friend_collidable_bullet<<bullet
+    else
+      @enemy_bullet<<bullet
+      bullet.collidable and @enemy_collidable_bullet<<bullet
+    end
   end
   def add_enemy_circle(ally,circle)
-    ((ally==:enemy)? @friend_circle : @enemy_circle)<<circle
+    if ally==:enemy
+      @friend_circle<<circle
+    else
+      @enemy_circle<<circle
+    end
   end
   def add_onground_item(item)
     @items<<item
@@ -243,14 +255,14 @@ class Map
     }
     @friend_collidable_bullet.reject!{|f_bullet|
       @enemy_collidable_bullet.reject!{|e_bullet|
-        f_bullet.crashd? and break
+        f_bullet.crashed? and break
         Shape.collision?(f_bullet,e_bullet)&&
         e_bullet.collision&&
         f_bullet.collision&&
-        e_bullet.crashd?&&
+        e_bullet.crashed?&&
         @enemy_bullet.delete(e_bullet)
       }
-      f_bullet.crashd?&&
+      f_bullet.crashed?&&
       @friend_bullet.delete(f_bullet)
     }
   end
@@ -265,7 +277,8 @@ class Map
       @enemy.reject!{|actor|
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
-          bullet.affect(actor)
+          bullet.affect(actor)&&
+          @friend_collidable_bullet.delete(bullet)
           result and @cemetery<<[bullet]
         }
         actor.died?
@@ -283,7 +296,8 @@ class Map
       @friend.reject!{|actor|
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
-          bullet.affect(actor)
+          bullet.affect(actor)&&
+          @enemy_collidable_bullet.delete(bullet)
           result and @cemetery<<[bullet]
         }
         actor.died?

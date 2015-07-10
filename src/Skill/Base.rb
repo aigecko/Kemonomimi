@@ -295,7 +295,10 @@ class Skill
             w: data[:shape_w],
             h: data[:shape_h],
             t: data[:shape_t],
-            vx: caster.face_side==:right ? data[:velocity] : -data[:velocity])
+            vx: caster.face_side==:right ? data[:velocity] : -data[:velocity],
+            collidable: data[:collidable],
+            collide_count: info[:args][2]||caster.var[data[:collide_count_var]]
+            )
         )
       }
       @proc[:missile]=->(info){

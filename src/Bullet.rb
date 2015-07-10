@@ -1,7 +1,7 @@
 #coding: utf-8
 class Bullet
   require_relative 'Bullet/Singleton'
-  attr_reader :shape,:position,:caster
+  attr_reader :shape,:position,:caster,:collidable
   def initialize(effect,ani,shape,info)
     @type=shape
     @shape=Shape.new(shape,info)
