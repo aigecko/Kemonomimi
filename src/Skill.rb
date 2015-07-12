@@ -51,8 +51,8 @@ class Skill
     
     @attach=info[:attach]
     
-    @comment=DynamicString.new(info[:comment]||'nil',:skill_comment_font,binding)
-    @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',:skill_comment_font,binding)
+    @comment=DynamicString.new(info[:comment]||'nil',Color[:skill_comment_font],binding)
+    @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',Color[:skill_comment_font],binding)
   end
   def toggle(x,y,z)
     if @@SwitchTypeList.include?(@type)&&!x&&!y&&!z
