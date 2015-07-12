@@ -2,7 +2,7 @@
 class SkillWindow < DragWindow
   def initialize
     win_x,win_y=100,100
-    win_w,win_h=300,200
+    win_w,win_h=300,250
     super(win_x,win_y,win_w,win_h)
     
     skeleton_initialize
@@ -33,11 +33,7 @@ class SkillWindow < DragWindow
       when Event::MouseButtonDown
         case event.button
         when Mouse::BUTTON_LEFT
-          if click_on_skill?(event.x,event.y)
-            @click_box=(event.x-@win_x-@border)/@box_border_w
-          else
-            @click_box=@click_skill=nil
-          end
+          @click_skill=@skill.check_click(event.x-@win_x-@border,event.y-@win_y-@drag_h)
         when Mouse::BUTTON_RIGHT
         end
       when Event::MouseMotion
@@ -59,38 +55,19 @@ private
     HotKey.can_bind?(sym) and
     HotKey.bind(sym,@skill[@click_skill].type,:repeat,@click_skill)
   end
-  def click_on_skill?(x,y)
-    (x-@win_x-@border)/@box_border_w<@skill.size&&
-    (y-@win_y-24).between?(0,@box_h-1)
-  end
   def draw_comment
     @comment_pic.draw(@win_x+@border,@win_y+@win_h-25)
-  end
-  def draw_box
-    i=0
-    draw_x,draw_y=@win_x+@border,@win_y+24
-    @skill.each{|sym,skill|
-      skill.invisible and next
-      if i==@click_box
-        draw_x=draw_click_box(skill,draw_x,draw_y)
-        @click_skill=sym
-      else
-        draw_x=draw_unclick_box(skill,draw_x,draw_y)
-      end
-      skill.draw_icon(@win_x+@border+@box_border_w*i,@win_y+24)
-      i+=1
-    }
   end
   def draw_click_skill
     skill=@skill[@click_skill]
     skill.invisible and return
-    x=skill.draw_name(@win_x+@border,@win_y+85)[0]
-    skill.draw_cd(@win_x+@border+x,@win_y+85)
-    skill.draw_comment(@win_x+@border,@win_y+100)
+    Font.draw_texture("技能說明:",15,@win_x+@border,@win_y+@drag_h+135,0,0,0)
+    x=skill.draw_name(@win_x+@border,@win_y+@drag_h+151)[0]
+    skill.draw_cd(@win_x+@border+x,@win_y+@drag_h+151)
+    skill.draw_comment(@win_x+@border,@win_y+@drag_h+165)
   end
   def draw_click_box(skill,draw_x,draw_y)
     skill.draw_click_back(draw_x,draw_y)
-    # @hotkey_set=
     return draw_x+@box_border_w
   end
   def draw_unclick_box(skill,draw_x,draw_y)
@@ -104,8 +81,9 @@ public
   end
   def draw
     super
+    draw_x,draw_y=@win_x+@border,@win_y+24
+    @skill.draw(draw_x,draw_y)
     draw_comment
-    draw_box
     @click_skill and draw_click_skill
   end
 end

@@ -11,7 +11,7 @@ class<<(class HotKey;self;end)
     @hotkey.delete(key)
     
     @hotkey[key]=[type,trigger,value]
-    @object[value]=key    
+    @object[value]=key
   end
   def get_key(object)
     return @object[object]

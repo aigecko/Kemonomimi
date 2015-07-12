@@ -138,7 +138,7 @@ class Actor
         base: :itegumo_erupt,table:[0,[20,20,6]],
         comment:'普攻#{@table[@level][0]}%爆發範圍強緩#{@table[@level][1]}%跑速攻速#{@table[@level][2]}秒')
       
-      add_skill(:ice_arrow,
+      add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
         base: :missile,consum: 5,cd: 3,table:[0,[100]],
@@ -146,7 +146,7 @@ class Actor
           pic:'./rc/pic/battle/ice_ball.bmp',
           live_cycle: :time,live_count: 20,velocity: 15},
         comment:'對指定地點發射冰塊造成#{@table[@level][0]}+#{@data[:coef][:matk]}matk魔法傷害')
-      add_skill(:ice_wave,
+      add_class_skill(:magic,:ice_wave,
         name:'寒霜結界',type: :skill_append,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
         base: :ice_wave,consum: 0,table:[0,20],
