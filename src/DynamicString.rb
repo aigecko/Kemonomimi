@@ -1,10 +1,13 @@
 #coding: utf-8
 class DynamicString
   class Variable
+    @@GetContentRegExp=/\#\{(?<content>(.*))\}/
     attr_reader :w,:h
     def initialize(str,color,binding)
-      /\#\{(.*)\}/=~str
-      @value=$1
+      @value=str.match(@@GetContentRegExp)[:content]
+      @value.gsub!(/#[P|p]/,"Game.player.attrib")
+      @value.gsub!(/#[T|t]/,"@table[@level]")
+      @value.gsub!(/#[D|d]/,"@data")
       @color=color
       @binding=binding
     end
@@ -13,7 +16,7 @@ class DynamicString
       Font.draw_texture(eval(@value,@binding).to_s,12,x,y,*@color)
     end
   end
-  @@VariableRegExp=/(\#\{[a-zA-Z0-9\[\]\:\@_\.\*\+\-\"\%]*\})/
+  @@VariableRegExp=/(\#\{[a-zA-Z0-9\[\]#\:\@_\.\*\+\-\"\%]*\})/
   @@ColorRegExp=/(#[\da-fA-F]{6,6}\|)|(#default\|)/
   @@GetColorRegExp=/#(..)(..)(..)\|/
   @@DefaultColorRegExp=/#default\|/
