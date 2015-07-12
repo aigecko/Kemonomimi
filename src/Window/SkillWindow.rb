@@ -81,8 +81,7 @@ public
   end
   def draw
     super
-    draw_x,draw_y=@win_x+@border,@win_y+24
-    @skill.draw(draw_x,draw_y)
+    @skill.draw(@win_x+@border,@win_y+@box_h)
     draw_comment
     @click_skill and draw_click_skill
   end

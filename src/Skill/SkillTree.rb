@@ -1,5 +1,8 @@
 #coding: utf-8
 class SkillTree
+  @@IconBorder=26
+  @@FontSize=15
+  @@SectionHeight=@@IconBorder+@@FontSize+2
   def initialize(caster)
     @caster=caster
     @skill={}
@@ -90,9 +93,9 @@ class SkillTree
     }
   end
   def check_click(x,y)
-    row=y/43
-    col=x/26
-    y%43<20 and return nil
+    row=y/@@SectionHeight
+    col=x/@@IconBorder
+    y% @@SectionHeight<20 and return nil
     case @click_y=row
     when 0
       @click_x=0
@@ -131,8 +134,8 @@ class SkillTree
     draw_other(x,y)
   end
   def draw_base(draw_x,draw_y)
-    Font.draw_texture("基本技能:",15,draw_x,draw_y,0,0,0)
-    draw_y+=17
+    Font.draw_texture("基本技能:",@@FontSize,draw_x,draw_y,0,0,0)
+    draw_y+=@@FontSize+2
     @base.each_value{|skill|
       skill.invisible and next
       if skill==@click_skill
@@ -141,13 +144,13 @@ class SkillTree
         skill.draw_back(draw_x,draw_y)
       end
       skill.draw_icon(draw_x,draw_y)
-      draw_x+=26
+      draw_x+=@@IconBorder
     }
-    return draw_y+26
+    return draw_y+@@IconBorder
   end
   def draw_class(draw_x,draw_y)
-    Font.draw_texture("職業技能:",15,draw_x,draw_y,0,0,0)
-    draw_y+=17
+    Font.draw_texture("職業技能:",@@FontSize,draw_x,draw_y,0,0,0)
+    draw_y+=@@FontSize+2
     @class.each_value{|skill_ary|
       skill_ary.each{|skill|
         if skill==@click_skill
@@ -156,14 +159,14 @@ class SkillTree
           skill.draw_back(draw_x,draw_y)
         end
         skill.draw_icon(draw_x,draw_y)
-        draw_x+=26
+        draw_x+=@@IconBorder
       }
     }
-    return draw_y+26
+    return draw_y+@@IconBorder
   end
   def draw_other(draw_x,draw_y)
-    Font.draw_texture("其他技能:",15,draw_x,draw_y,0,0,0)
-    draw_y+=17
+    Font.draw_texture("其他技能:",@@FontSize,draw_x,draw_y,0,0,0)
+    draw_y+=@@FontSize+2
     @other.each_value{|skill|
       skill.invisible and next
       if skill==@click_skill
@@ -172,7 +175,7 @@ class SkillTree
         skill.draw_back(draw_x,draw_y)
       end
       skill.draw_icon(draw_x,draw_y)
-      draw_x+=26
+      draw_x+=@@IconBorder
     }
   end
   def marshal_dump
