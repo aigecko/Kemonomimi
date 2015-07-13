@@ -1,7 +1,7 @@
 #coding: utf-8
 class DropList::DropItem
   @@AngleLimit=360
-  @@SpreadRadius=30
+  @@SpreadRadius=50
   def initialize(rate,type,index)
     @rate=rate
     @type=type
@@ -25,10 +25,10 @@ class DropList::DropItem
         item=Database.get_item(@index).drop
       end
       angle=rand(@@AngleLimit)
-      x=position.x+@@SpreadRadius*Math.cos(angle)
-      z=position.z+@@SpreadRadius*Math.sin(angle)
-      item.position.x=x.confine(0,Map.w)
-      item.position.z=z.confine(0,Map.h)
+      x=position.x+@@SpreadRadius*rand()*Math.cos(angle)
+      z=position.z+@@SpreadRadius*rand()*Math.sin(angle)
+      item.position.x=x.to_i.confine(0,Map.w)
+      item.position.z=z.to_i.confine(0,Map.h)
       item.position.y=0
       Map.add_onground_item(item)
     }
