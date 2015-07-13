@@ -150,12 +150,8 @@ private
     @state[:mag_shield]=@state[:atk_shield]=0
   end
   def compute_block_dodge
-    agi=@total[:agi]
-    str=@total[:str]
-    value=(agi/@@Coef[:agi_div])**@@Coef[:agi_exp]*@@Coef[:agi_mul]
-
-    @total[:dodge]=value*(agi**@@Coef[:dodge_exp])/((str+agi)**@@Coef[:dodge_exp])
-    @total[:block]=value-@total[:dodge]
+    @total[:dodge]=@total[:agi]*@@Coef[:dodge]
+    @total[:block]=@total[:str]*@@Coef[:block]
     @total[:ignore]=0
 
     [:dodge,:block,:ignore].each{|sym|
@@ -182,7 +178,10 @@ private
     @total[:wlkspd]+=@total[:wlkspd]*@amped[:wlkspd]/@@Coef[:amped]
     @total[:wlkstep]=@total[:wlkspd].confine(0,@total[:wlkspd])
 
-    @total[:atkspd]>@@Coef[:atkspd_max] and @total[:atkspd]=@@Coef[:atkspd_max]
+    @total[:atkspd]=@total[:atkspd].confine(@@Coef[:atkspd_min],@@Coef[:atkspd_max])
+    @total[:wlkspd]=@total[:wlkspd].confine(@@Coef[:wlkspd_min],@@Coef[:wlkspd_max])
+    @total[:atkcd]<@@Coef[:atkcd_min] and @total[:atkcd]=@@Coef[:atkcd_min]
+    @total[:shtcd]<@@Coef[:shtcd_min] and @total[:shtcd]=@@Coef[:shtcd_min]
   end
   def compute_step
     @total[:wlkstep]=@total[:wlkspd]/Game.FPS

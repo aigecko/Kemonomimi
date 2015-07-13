@@ -25,13 +25,15 @@ class Actor::Attrib
     amped: 100,
     step: 40.0,
     
-    agi_div: 50.0,
-    agi_exp: 1.06,
-    agi_mul: 2,
-    dodge_exp: 1.3,
-    dodge_max: 30,
-    dtob: 0.8,
-    atkspd_max: 500
+    dodge: 0.03,
+    block: 0.03,
+    
+    atkcd_min: 0.7,
+    shtcd_min: 0.7,
+    atkspd_min: 10,
+    atkspd_max: 500,
+    wlkspd_min: 10,
+    wlkspd_max: 522
   }
   @@MarshalTable={:b=>:@base,:s=>:@state,:e=>:@equip,:a=>:@amped,:t=>:@total}
 end

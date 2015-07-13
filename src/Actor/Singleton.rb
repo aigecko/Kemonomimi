@@ -34,11 +34,7 @@ class<<Actor
       leopardcatear:'石虎'
     }
 
-    @exp=Array.new(201){|n|
-      #lv=n-1
-      #200+lv*100+lv**2*100
-      600+200*n*(n-1)
-    }
+    @exp=Array.new(201){|n| 300+n*300 }
 
     @part_table={
       head:'頭部',neck:'頸部',body:'軀幹',back:'背部',right:'主手',
