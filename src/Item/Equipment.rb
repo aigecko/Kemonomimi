@@ -8,7 +8,7 @@ class Equipment < Item
     
     if attrib[:skill]
       @skill=attrib[:skill]
-      if @skill.respond_to? :each
+      if !@skill.respond_to?(:each_value)
         @sym=@skill.collect{|skill| skill[:sym]}
       else
         @sym=@skill[:sym]

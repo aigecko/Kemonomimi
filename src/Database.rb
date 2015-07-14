@@ -25,6 +25,7 @@ class Database
       exit
     rescue => e
       p e
+      Message.show_backtrace(e)
       exit
     end
   end

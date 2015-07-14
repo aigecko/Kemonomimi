@@ -199,6 +199,18 @@ $equip[:right][0.7]=['野太刀','item/2011-12-23_1-011.gif',
 $equip[:right][0.8]=['長曾彌虎撤','icon/mat_tkl002/we_sword018c.png:[0,0]',
   {atk: 50,str: 25,con: 25,bash:[[30,0.4,20]]},
   8600,'普通攻擊以及弓箭射擊會有30%機率擊暈0.4秒並增加該下普攻20傷害']
+$equip[:right][0.9]=['喵喵核心魔法杖','icon/mat_tkl002/we_staff016.png',
+  {skill:{
+    sym: :boost,name:'成長',type: :auto,cd: 1,base: :boost,
+    icon: './rc/icon/icon/mat_tkl002/we_staff016.png',
+    table:[0,{base:{matk: 0},add:{matk:[:level,1]}}],
+    data:{
+      name:'成長',sym: :growth,
+      icon:'./rc/icon/icon/mat_tkl002/we_staff016.png',
+      last: 2
+    },
+    comment:'test'}
+    },100,'活的武器 會喵喵叫']
 $equip[:right][1.01]=['紙製單手斧','icon/mat_tkl002/we_axe002.png:[0,0]',
   {atk: 10},400,'強調攻擊的紙製斧頭']
 
