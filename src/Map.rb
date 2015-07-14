@@ -1,11 +1,13 @@
 #coding: utf-8
 class Map
   require_relative 'Map_Chipset'
+  require_relative 'Map_TeleportPoint'
   attr_reader :w,:h
   @@current_map=nil
-  def initialize
+  def initialize(id)
     @w=1000
     @h=400
+    @id=id
     Actor.set_map_size(@w,@h)
     
     @chip_w=40
@@ -67,12 +69,17 @@ class Map
     
     @@current_map=self
     
-    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_001")
+    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
     enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
     @enemy<<enemy
+    
+    @points=[TeleportPoint.new(Position.new(200,0,200),1-@id,Position.new(500,0,200))]
   end
   def bind_player
-    @friend=[Game.player]
+    @friend<<Game.player
+  end
+  def unbind_player
+    @friend.delete(Game.player)
   end
   def which_side(player_x)
     if player_x<Game.HalfWidth
@@ -236,6 +243,9 @@ class Map
     @enemy_circle.each{|circle| circle.mark_live_frame} 
   end
   def update
+    @points.each{|point|
+      point.interact and Game.window(:GameWindow).change_map(point.teleport)
+    }
     delete_live_frame
     update_collidable_bullet
     update_friend_bullet_circle
@@ -342,6 +352,7 @@ class Map
     Gl.glDisable(Gl::GL_DEPTH_TEST)
     @items.each{|item| item.draw_shadow}
     @friend_circle.each{|circle| circle.draw}
+    @points.each{|point| point.draw}
     Gl.glEnable(Gl::GL_DEPTH_TEST)
     
     @friend.each{|friend| friend.draw}

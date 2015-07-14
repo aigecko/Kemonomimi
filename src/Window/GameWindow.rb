@@ -2,7 +2,8 @@
 class GameWindow < BaseWindow
   include Gl
   def initialize
-    @map=Map.new
+    @map=Map.new(0)
+    @maps=[@map,Map.new(1)]
     @map_up_margin=@map.h+30
     
     @offset_x=0
@@ -197,6 +198,10 @@ public
     super
     Mouse.set_cursor(:move)
   end
+  def close
+    super
+    @map.unbind_player
+  end
   def close_contral
     Game.window(:ButtonWindow).enable=false
   end
@@ -219,6 +224,11 @@ public
     else
       @windows[name].close
     end
+  end
+  def change_map(index)
+    @map.unbind_player
+    @map=@maps[index]
+    @map.bind_player
   end
   def offset_change
     side=@map.which_side(@player.position.x)
