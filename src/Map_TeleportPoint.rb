@@ -14,6 +14,7 @@ class Map::TeleportPoint
   def teleport
     Game.player.position.x=@dest_pos.x
     Game.player.position.z=@dest_pos.z
+    Game.player.set_move_dst(@dest_pos.x,nil,@dest_pos.z)
     return @dest_id
   end
   def draw

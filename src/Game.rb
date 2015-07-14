@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=109
+    @NumOfRequire=110
     @FPS=25
     @TFP=40
     
@@ -79,7 +79,8 @@ private
   def win_initialize
     windows=%w(RaceWindow ClassWindow LoadWindow
                MenuWindow GameWindow SettingWindow
-               LevelWindow BarsWindow ButtonWindow)
+               LevelWindow BarsWindow ButtonWindow
+               TransitionWindow)
     @window=Hash.new
     windows.each{|window|
       symbol=window.to_sym
@@ -148,7 +149,7 @@ private
     Equipment.init
     HotKey.init
     window_list=%w(BaseWindow SelectWindow DragWindow
-                   MenuWindow 
+                   MenuWindow TransitionWindow
                    RaceWindow ClassWindow LoadWindow GameWindow
                    SettingWindow LevelWindow BarsWindow
                    ButtonWindow StatusWindow ItemWindow

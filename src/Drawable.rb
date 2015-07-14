@@ -13,6 +13,9 @@ class Drawable
   def y=(y)
     @y=y
   end
+  def a=(a)
+    @a=a
+  end
   def color=(color)
     @r,@g,@b=*color
     @r/=@@Max

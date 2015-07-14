@@ -69,11 +69,11 @@ class Map
     
     @@current_map=self
     
-    enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
-    enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
-    @enemy<<enemy
+    # enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
+    # enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
+    # @enemy<<enemy
     
-    @points=[TeleportPoint.new(Position.new(200,0,200),1-@id,Position.new(500,0,200))]
+    @points=[TeleportPoint.new(Position.new(200,0,200),1-@id,Position.new(400,0,200))]
   end
   def bind_player
     @friend<<Game.player
@@ -244,7 +244,11 @@ class Map
   end
   def update
     @points.each{|point|
-      point.interact and Game.window(:GameWindow).change_map(point.teleport)
+      if point.interact
+        index=point.teleport
+        Game.window(:GameWindow).change_map(index)
+        return
+      end
     }
     delete_live_frame
     update_collidable_bullet
@@ -315,7 +319,7 @@ class Map
     }
   end
   def update_actor
-    true and
+    false and
     if rand(1000)>950
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
       enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,rand(200)]])

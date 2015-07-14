@@ -204,6 +204,8 @@ class Actor
       @animation.rotate(@face)
       
       @act_affect=true
+    else
+      @act_affect=false
     end
   end
   def move2dst

@@ -200,13 +200,12 @@ public
   end
   def close
     super
-    @map.unbind_player
   end
   def close_contral
-    Game.window(:ButtonWindow).enable=false
+    @enable=false
   end
   def open_contral
-    Game.window(:ButtonWindow).enable=true
+    @enable=true
   end
   def convert_position
     x,y,* =SDL::Mouse.state
@@ -226,6 +225,8 @@ public
     end
   end
   def change_map(index)
+    close_contral
+    Game.window(:TransitionWindow).open
     @map.unbind_player
     @map=@maps[index]
     @map.bind_player
