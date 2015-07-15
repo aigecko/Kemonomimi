@@ -350,7 +350,7 @@ class Skill
               type: data[:type],
               cast_type: :skill,
               attack: attack),
-            (pic=Surface.load_with_colorkey(data[:pic])),
+            pic=Animation.new(*data[:pic]),
             :col,
             caster: caster,
             live_cycle: :frame,
@@ -555,7 +555,7 @@ class Skill
             Animation.new(:follow,
               {img:['./rc/pic/battle/fire_circle.png'],
                 w: 120,h: 60,horizon: true,
-                limit: 1,
+                limit: 1
               },
               [[[:blit,0,24]]]),
             :col,
@@ -677,7 +677,12 @@ class Skill
           caster.ally,
           Bullet.new(
             Attack.new(caster,type: :acid,attack: attack),
-            Surface.load_with_colorkey('./rc/pic/battle/ice_wave.png'),
+            Animation.new(:follow,
+              {img:['./rc/pic/battle/ice_wave.png'],
+                w: 120,h: 60,horizon: true,
+                limit: 1
+              },
+              [[[:blit,0,24]]]),
             :col,
             caster: caster,
             x: info[:x],y: 0,z: info[:z],

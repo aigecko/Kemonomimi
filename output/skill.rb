@@ -145,7 +145,12 @@ $skill[:paladin_beam]={
   icon:'./rc/icon/icon/mat_tkl001/skill_003c.png:[0,0]',
   attach: :contribute,
   base: :explode,cd: 8,consum: 10,table:[0,200],
-  data:{sym: :matk,coef: 0.7,type: :mag,pic:'./rc/pic/battle/paladin_beam.png'},
+  data:{sym: :matk,coef: 0.7,type: :mag,
+    pic:[:follow,
+    {img:['./rc/pic/battle/paladin_beam.png'],
+      w: 120,h: 60,horizon: true,
+      limit: 1},[[[:blit,0,24]]]]
+  },
   comment:'對指定地點造成#{@table[@level]}+#{@data[:coef]}matk範圍魔法傷害'}
 $skill[:contribute]={
   name:'自我奉獻',type: :attach,
