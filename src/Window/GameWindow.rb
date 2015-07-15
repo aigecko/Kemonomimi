@@ -4,6 +4,7 @@ class GameWindow < BaseWindow
   def initialize
     @map=Map.new(0)
     @maps=[@map,Map.new(1)]
+    Map.set_current_map(@map)
     @map_up_margin=@map.h+30
     
     @offset_x=0
@@ -230,6 +231,7 @@ public
     @map.unbind_player
     @map=@maps[index]
     @map.bind_player
+    return @map
   end
   def offset_change
     side=@map.which_side(@player.position.x)

@@ -65,10 +65,6 @@ class Map
     @friend_circle=[]
     @enemy_circle=[]
     
-    @cemetery=[]
-    
-    @@current_map=self
-    
     # enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
     # enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
     # @enemy<<enemy
@@ -231,10 +227,10 @@ class Map
   def find_bullet(bullet)
   end
   def delete_live_frame
-    @friend_bullet.reject!{|bullet| bullet.to_delete? and @cemetery<<[bullet]}
-    @friend_circle.reject!{|circle| circle.to_delete? and @cemetery<<[circle]}
-    @enemy_bullet.reject!{|bullet| bullet.to_delete? and @cemetery<<[bullet]}
-    @enemy_circle.reject!{|circle| circle.to_delete? and @cemetery<<[circle]}
+    @friend_bullet.reject!{|bullet| bullet.to_delete?}
+    @friend_circle.reject!{|circle| circle.to_delete?}
+    @enemy_bullet.reject!{|bullet| bullet.to_delete?}
+    @enemy_circle.reject!{|circle| circle.to_delete?}
   end
   def mark_live_frame
     @friend_bullet.each{|bullet| bullet.mark_live_frame}
@@ -246,7 +242,7 @@ class Map
     @points.each{|point|
       if point.interact
         index=point.teleport
-        Game.window(:GameWindow).change_map(index)
+        @@current_map=Game.window(:GameWindow).change_map(index)
         return
       end
     }
@@ -292,8 +288,7 @@ class Map
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
           bullet.affect(actor)&&
-          @friend_collidable_bullet.delete(bullet)
-          result and @cemetery<<[bullet]
+          (@friend_collidable_bullet.delete(bullet)||true)
         }
         actor.died?
       }
@@ -311,15 +306,14 @@ class Map
         bullet_list.reject!{|bullet|
           result=Shape.collision?(actor,bullet)&&
           bullet.affect(actor)&&
-          @enemy_collidable_bullet.delete(bullet)
-          result and @cemetery<<[bullet]
+          (@enemy_collidable_bullet.delete(bullet)||true)
         }
         actor.died?
       }
     }
   end
   def update_actor
-    false and
+    true and
     if rand(1000)>950
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
       enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,rand(200)]])
@@ -368,6 +362,9 @@ class Map
     @items.each{|item| item.draw}
   end
   meta=class<<Map
+    def set_current_map(map)
+      @@current_map=map
+    end
     def method_missing(method,*arg)
       Map.respond_to?(method) and return
       eval %Q{
