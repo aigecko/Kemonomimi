@@ -13,7 +13,7 @@ class Bullet
     },
     hoz: ->(ani,position,shape){
       draw_x=position.x-ani.w/2
-      draw_y=431-position.y+(ani.h-position.z)/2
+      draw_y=431-position.y-(position.z+ani.h)/2
       ani.draw(draw_x,draw_y,position.z)
     }
   }

@@ -13,11 +13,7 @@ class Bullet
     
     @vector=[info[:vx]||0,info[:vy]||0,info[:vz]||0]
     @surface=info[:surface]
-    if @surface==:horizon
-      @ani=HorizonSurfaceTexture.new(ani)
-    else
-      @ani=ani
-    end
+    @ani=ani
     if @vector[0]<0
       @ani.reverse
     end
@@ -29,6 +25,8 @@ class Bullet
     
     @collidable=info[:collidable]
     @collide_count=info[:collide_count]
+    
+    @zombie=info[:broken_draw]
   end
   def mark_live_frame
     @trigger=true
@@ -46,6 +44,9 @@ class Bullet
     @position.x+=@vector[0]
     @position.y+=@vector[1]
     @position.z+=@vector[2]
+  end
+  def broken
+    @broken=true
   end
   def affect(target)
     @go_forward=false
@@ -66,6 +67,11 @@ class Bullet
       @@DrawProc[:hoz].call(@ani,@position,@shape)
     else
       @@DrawProc[@type].call(@ani,@position,@shape)
+    end
+    if @zombie
+      return @ani.end?
+    else
+      return !@zombie
     end
   end
 end

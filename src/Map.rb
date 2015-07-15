@@ -65,6 +65,8 @@ class Map
     @friend_circle=[]
     @enemy_circle=[]
     
+    @bullet_cemetery=[]
+    @circle_cemetery=[]
     # enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
     # enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
     # @enemy<<enemy
@@ -227,10 +229,10 @@ class Map
   def find_bullet(bullet)
   end
   def delete_live_frame
-    @friend_bullet.reject!{|bullet| bullet.to_delete?}
-    @friend_circle.reject!{|circle| circle.to_delete?}
-    @enemy_bullet.reject!{|bullet| bullet.to_delete?}
-    @enemy_circle.reject!{|circle| circle.to_delete?}
+    @friend_bullet.reject!{|bullet| bullet.to_delete?&&@bullet_cemetery<<bullet}
+    @friend_circle.reject!{|circle| circle.to_delete?&&@circle_cemetery<<circle}
+    @enemy_bullet.reject!{|bullet| bullet.to_delete?&&@bullet_cemetery<<bullet}
+    @enemy_circle.reject!{|circle| circle.to_delete?&&@circle_cemetery<<circle}
   end
   def mark_live_frame
     @friend_bullet.each{|bullet| bullet.mark_live_frame}
@@ -349,6 +351,8 @@ class Map
     
     Gl.glDisable(Gl::GL_DEPTH_TEST)
     @items.each{|item| item.draw_shadow}
+    @circle_cemetery.reject!{|circle| circle.draw}
+    @enemy_circle.each{|circle| circle.draw}
     @friend_circle.each{|circle| circle.draw}
     @points.each{|point| point.draw}
     Gl.glEnable(Gl::GL_DEPTH_TEST)
@@ -356,6 +360,7 @@ class Map
     @friend.each{|friend| friend.draw}
     @enemy.each{|enemy| enemy.draw}
     
+    @bullet_cemetery.reject!{|bullet| bullet.draw}
     @friend_bullet.each{|bullet| bullet.draw}
     @enemy_bullet.each{|bullet| bullet.draw}
     

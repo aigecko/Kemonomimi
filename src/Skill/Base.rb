@@ -552,7 +552,12 @@ class Skill
                icon:'./rc/icon/skill/2011-12-23_3-049.gif',
                attrib:{wlkspd: info[:args][1]},
                last: 5.to_sec)],
-            (pic=Surface.load_with_colorkey('./rc/pic/battle/fire_circle.png')),
+            Animation.new(:follow,
+              {img:['./rc/pic/battle/fire_circle.png'],
+                w: 120,h: 60,horizon: true,
+                limit: 1,
+              },
+              [[[:blit,0,24]]]),
             :col,
             caster: info[:caster],
             x: info[:caster].position.x,
@@ -561,7 +566,8 @@ class Skill
             r: 75,
             h: 50,
             live_cycle: :frame,
-            surface: :horizon)
+            surface: :horizon,
+            broken_draw: true)
         )
       }
 

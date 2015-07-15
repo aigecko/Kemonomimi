@@ -6,10 +6,15 @@ class Animation
     @data={}
     @data[:img]=[]
     data[:img].each_with_index{|filename,idx|
-      if data[:cut]
-        @data[:img]=Input.load_texture(filename)
+      if data[:horizon]
+        img=HorizonSurfaceTexture.new(Surface.load_with_colorkey(filename))
       else
-        @data[:img]<<Input.load_texture(filename)
+        img=Input.load_texture(filename)
+      end
+      if data[:cut]
+        @data[:img]=img
+      else
+        @data[:img]<<img
       end
     }
     
@@ -32,7 +37,7 @@ class Animation
     
     @w,@h=data[:w],data[:h]
     @limit=data[:limit]
-    @limit_count=0
+    @limit_count=1
     @length=@tracks.max_by{|track| track.size}.size
     @round=0
   end
@@ -57,7 +62,7 @@ class Animation
     @frame+=1
     if @frame>=@length
       if @limit
-        @limit_count>@limit and @end=true
+        @limit_count>=@limit and @end=true
         @limit_count+=1
       end
       @frame=0
