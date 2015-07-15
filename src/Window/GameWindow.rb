@@ -201,6 +201,7 @@ public
   end
   def close
     super
+    @map.unbind_player
   end
   def close_contral
     @enable=false
