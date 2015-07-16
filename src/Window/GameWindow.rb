@@ -2,8 +2,8 @@
 class GameWindow < BaseWindow
   include Gl
   def initialize
-    @map=Map.new(0)
-    @maps=[@map,Map.new(1)]
+    @map=Map.new(1)
+    @maps=[nil,@map,Map.new(2)]
     Map.set_current_map(@map)
     @map_up_margin=@map.h+30
     

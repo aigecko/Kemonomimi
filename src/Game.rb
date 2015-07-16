@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=110
+    @NumOfRequire=111
     @FPS=25
     @TFP=40
     
@@ -160,6 +160,7 @@ private
     }
     
     require_relative('Map')
+    require_relative('SVM')
     Screen.set_caption("遊戲視窗")
     Mouse.set_cursor(:select)
   end

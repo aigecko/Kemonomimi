@@ -70,8 +70,9 @@ class Map
     # enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
     # enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
     # @enemy<<enemy
-    
-    @points=[TeleportPoint.new(Position.new(200,0,200),1-@id,Position.new(400,0,200))]
+    s=SVM.new(self)
+    s.load_file("./rc/data/map_%03d.mdt"% @id)
+    s.run
   end
   def bind_player
     @friend<<Game.player
