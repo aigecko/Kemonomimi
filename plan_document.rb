@@ -108,21 +108,19 @@ common={
 klass={
   :cleric=>%w[
     能量吸收:減少n%受到傷害並轉成m倍法力#attack_dendese->soul_of_Leyasu
-    土岩之牆:開啟後獲得物理免疫n秒#physical_immunity
     岩石護盾:開啟後產生n+m*maxsp盾持續r秒#rock_shield
-
-    能量補充:開啟後有n%機率回m%總法力持續r秒#auto->soul_of_Yoshitsugu
+    
+    回復靈氣:範圍r友軍增加n+s*con回血m+t*wis回魔
+    加速靈氣:範圍r友軍增加n%攻速m%跑速#aura
+    降傷靈氣:範圍r友軍增加n+s*con物防m+t*wis魔防#aura
+    
     大地杖擊:開啟後普攻帶n+m*sp無視魔免魔傷#append->energy_arrow
-    堅守陣地:普攻後內增加m回血和雙防可疊r層持續n秒#append->solid_defense
-
-    土壤液化:可持續造成指定範圍n+r*matk魔法傷害並強緩m+s*wis%跑速#explode
-    震地重擊:周圍敵人受到範圍n+r*matk魔法傷害暈m+s*wis秒#explode
+    震地重擊:開啟後周圍敵人範圍n+r*matk魔法傷害暈m+s*int秒#explode
     銳利飛石:前方敵人受到範圍n+r*matk魔法傷害#magic_arrow
 
-    法杖儲能:增加法杖魔攻n倍的wis#ward_power
+    法杖儲能:增加法杖魔攻n倍的最大法力#ward_power
 
-    大地之力:開啟後增加n%攻速及m%減傷附帶沙塵暴持續r秒#metamorphosis
-    沙塵暴:周圍受到範圍n+m*wis傷害並降低r+s*int攻速
+    大地之力:開啟後增加n%攻速及普攻奪取m*matk生命持續r秒#metamorphosis
   ],
   :mage=>%w[
     吹雪護盾:開啟後n%傷害交由m法力承受#switch_attack_defnese->soul_of_Masayuki
@@ -147,26 +145,25 @@ klass={
     無畏衝鋒:魔法免疫n秒並增加m近攻r秒#magic_immunity
 
     破甲斬擊:普攻造成目標降低n*log(matk)雙防#break_armor
-    猛攻之火:增加n+m*matk攻速s跑速持續r秒#boost
-    烈火戳刺:對同目標攻擊增加n近攻最多m層#append->solid_defense
-    火圈迸裂:第三下普攻造成範圍n*matk魔傷並暈眩r秒#switch_append->explode
+    流動之火:普攻造成目標每秒n+m*matk絕對傷害持續s秒#burn
+    烈火猛攻:在m秒內有100%機率普攻暈r秒並帶n傷害#boost
+    火圈迸裂:普攻造成範圍n*maxhp物傷#switch_append->explode
 
     熾焰焚身:每秒造成n+m*matk魔法傷害並降低r%跑速#switch_auto->fire_circle
 
     輕巧雙刀:雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速#auto->dual_weapon_atkspd_acc
     再生之盾:增加盾n物防的回復生命以及m魔防的回復法力#auto->rl_weapon
 
-    火焰之力:開啟後增加n跑速m%魔法減傷攻擊帶熔火且基礎攻速變為r持續s秒#metamorphosis
-    熔火:範圍n+m*matk無視魔免魔法傷害持續r秒
+    火焰之力:開啟後增加n跑速m%魔法減傷且基礎攻速變為r持續s秒#metamorphosis
   ],
   :paladin=>%w[
     神聖庇護:n%機率無視攻擊並增加m%雙防#auto->amplify
-    聖光反射:受攻擊n%造成範圍m+r*def魔傷及暈眩s秒#attack_defense->counter_beam
+    聖光反射:受攻擊n%造成範圍m+r*mdef魔傷及暈眩s秒#attack_defense->counter_beam
     聖光庇佑:魔法免疫n秒並增加m物防魔防r秒#magic_immunuty
     
-    輝煌聖光:範圍產生n+m*matk護盾並增加r+s*int攻速
+    輝煌聖光:範圍產生n+m*mdef護盾並增加r+s*int攻速
     聖光波動:普攻帶範圍n+m*atk物理傷害#smash_wave
-    神聖祝福:自身每秒回複n+m*matk生命並增加r+s*atk攻擊持續t秒#recover
+    神聖祝福:自身每秒回複n+m*mdef生命並增加r+s*def攻擊持續t秒#recover
 
     一瞬閃光:前方直線n+m*matk魔法傷害#magic_arrow
     光束打擊:指定範圍n+m*matk魔法傷害#explode
@@ -189,7 +186,7 @@ klass={
 
     黑暗爆發:範圍n+m*matk絕對傷害並緩r%跑速攻速持續s秒(skl_vamp)#explode
     黑暗侵蝕:開啟後範圍n+m*maxhp絕對傷害持續r秒(skl_vamp)#soul_of_Kiyomasa
-    虛空重擊:造成n+m*matk絕對傷害暈s秒並提升t%攻速持續r秒(skl_vamp)#soul_of_Yasumasa
+    虛空重擊:造成n+m*matk絕對傷害暈s秒並持續r秒(skl_vamp)#soul_of_Yasumasa
 
     長槍:paladin
     劍盾:paladin
