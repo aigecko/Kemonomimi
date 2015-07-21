@@ -12,7 +12,7 @@ class TransitionWindow < BaseWindow
     @frame+=1
     if @frame>48
       close
-      Game.window(:GameWindow).open_contral
+      Game.window(:GameWindow).open
     end
   end
   def draw

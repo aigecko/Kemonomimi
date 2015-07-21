@@ -108,7 +108,6 @@ private
           HotKey.turn_off(event.sym)
         end
       when Event::MouseButtonDown
-        window=false
         @drag_list.each_with_index{|window,i|
           case @windows[window].detect_click_window(event)
           when :drag
@@ -204,10 +203,10 @@ public
     @map.unbind_player
   end
   def close_contral
-    @enable=false
+    Game.window(:ButtonWindow).enable=false
   end
   def open_contral
-    @enable=true
+    Game.window(:ButtonWindow).enable=true
   end
   def convert_position
     x,y,* =SDL::Mouse.state
@@ -227,7 +226,7 @@ public
     end
   end
   def change_map(index)
-    close_contral
+    @enable=false
     Game.window(:TransitionWindow).open
     @map.unbind_player
     @map=@maps[index]
