@@ -92,6 +92,9 @@ class SkillTree
       skill.switch and skill.cast_auto(@caster)
     }
   end
+  def clear_click
+    @click_skill=nil
+  end
   def check_click(x,y)
     row=y/@@SectionHeight
     col=x/@@IconBorder
@@ -126,7 +129,7 @@ class SkillTree
           @click_x+=1
       }
     end
-    return nil
+    return clear_click
   end
   def draw(x,y)
     y=draw_base(x,y)

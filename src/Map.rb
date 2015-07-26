@@ -347,8 +347,8 @@ class Map
     end
     y=230
     
-    @sky_pic.draw_at(x,0,401)
-    @map_pic.draw_part(x,y,x,0,Game.Width,@map_pic.h)
+    @sky_pic.draw_at(x.to_i,0,401)
+    @map_pic.draw_part(x.to_i,y,x.to_i,0,Game.Width,@map_pic.h)
     
     Gl.glDisable(Gl::GL_DEPTH_TEST)
     @items.each{|item| item.draw_shadow}
