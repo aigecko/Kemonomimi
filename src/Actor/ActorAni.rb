@@ -19,7 +19,7 @@ class Actor::ActorAni
     pic_initialize
     
     @idx=0
-    @face=:right
+    @face=1
   end
   def pic_initialize
     @pic=[]

@@ -288,7 +288,7 @@ class Skill
               when Numeric
                 data[:launch_x]
               when :face
-                caster.pic_w/2*((caster.face_side==:right)? 1: -1)
+                caster.pic_w/2*caster.face_side
               else
                 0
               end,
@@ -305,7 +305,7 @@ class Skill
             w: data[:shape_w],
             h: data[:shape_h],
             t: data[:shape_t],
-            vx: caster.face_side==:right ? data[:velocity] : -data[:velocity],
+            vx: data[:velocity]*caster.face_side,
             collidable: data[:collidable],
             collide_count: info[:args][2]||caster.var[data[:collide_count_var]]
             )

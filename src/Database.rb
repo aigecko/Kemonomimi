@@ -58,15 +58,16 @@ class Database
       base=SDL::Surface.new_32bpp(img.w,img.h)
       img.draw(0,0,base)
       
-      pics={}
-      pics[:right]=base
-      pics[:left]=base.reverse
+      pics=Array.new(3)
+      pics[1]=base
+      pics[-1]=base.reverse
       
-      pics.each_value do |pic|
+      pics.each do |pic|
+        pic and
         pic.set_color_key(SDL::SRCCOLORKEY,pic[0,0])
       end
-      pics[:right]=pics[:right].to_texture
-      pics[:left]=pics[:left].to_texture
+      pics[1]=pics[1].to_texture
+      pics[-1]=pics[-1].to_texture
     rescue NoMethodError,ArgumentError=>e
       p e
       Message.show_backtrace(e)
@@ -75,6 +76,10 @@ class Database
       Message.show_backtrace(e)
       Message.show(:actor_pic_format_wrong)
       Message.show(:please_check_files)
+      exit
+    rescue
+      p e
+      Message.show_backtrace(e)
       exit
     end
     return pics

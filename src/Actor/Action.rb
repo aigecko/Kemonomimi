@@ -26,10 +26,10 @@ class Actor::Action
     case @action
     when :chase
       if @target.position.x>@position.x
-        @actor.rotate(:right)
+        @actor.rotate(1)
         dst_x=@target.position.x-(@target.pic_w+@actor.pic_w)/2+1
       else
-        @actor.rotate(:left)
+        @actor.rotate(-1)
         dst_x=@target.position.x+(@target.pic_w+@actor.pic_w)/2-1
       end      
       dst_x=dst_x.confine(0,Map.w)
@@ -63,7 +63,7 @@ class Actor::Action
     when :chase
       set_action(:attack)
       if !@target.died?
-        @position.x>@target.position.x ? @actor.rotate(:left) : @actor.rotate(:right)
+        @position.x>@target.position.x ? @actor.rotate(-1) : @actor.rotate(1)
         @actor.cast(:normal_attack,@target,nil,nil,nil)
       end
     when :pickup

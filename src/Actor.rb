@@ -15,7 +15,7 @@ class Actor
     @race=str[1].to_sym
     @class=str[2].to_sym
 
-    @face=:right
+    @face=1
     @position=Position.new(pos[0],pos[1],pos[2])
       
     @attrib=Attrib.new(attrib,@race,@class)
@@ -200,7 +200,7 @@ class Actor
       @vector_x=@wlkstep*@vx_scalar
       @vector_z=@wlkstep*@vz_scalar
       
-      @face= (@vector_x>0)? :right : :left
+      @face= (@vector_x>0)? 1 : -1
       @animation.rotate(@face)
       
       @act_affect=true
