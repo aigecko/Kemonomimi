@@ -67,12 +67,27 @@ class Map
     
     @bullet_cemetery=[]
     @circle_cemetery=[]
-    # enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp: 1000},"mon_00#{1+@id}")
-    # enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21]])
-    # @enemy<<enemy
-    s=SVM.new(self)
-    s.load_file("./rc/data/map_%03d.mdt"% @id)
-    s.run
+    
+    # s=SVM.new(self)
+    # s.load_file("./rc/data/map_%03d.mdt"% @id)
+    # s.run
+    @points=[]
+    #dbg
+    enemy=Enemy.new("陸地戰艦","slime","none",[500,0,200],{exp: 1000},"bt001s.bmp")
+    enemy.add_base_skill(:shoot,
+      name:'聖光衝擊',type: :active,
+      icon:'./rc/icon/icon/mat_tkl001/skill_002c.png:[0,0]',
+      base: :arrow,cd: 0.1,consum: 1,table:[0,[10,10]],
+      data: {sym: :matk,coef: 0.8,type: :phy,cast_type: :skill,
+        launch_y: 44,launch_x: :face,
+        pic:[:follow,{img:['./rc/pic/battle/shell.bmp'],w: 50,h: 30},[[[:blit,0]]]],
+        live_cycle: :time_only,
+        velocity: 40,shape_w: 50,shape_h: 30,shape_t: 30},
+      comment:'對直線上敵人造成#{@table[@level][0]}+#{@data[:coef]}matk物理傷害')
+    enemy.var[:shoot_skill_list]=[:shoot]
+    enemy.var[:shoot_z_range]=30
+    enemy.var[:shoot_x_range]=500
+    @enemy<<enemy
   end
   def bind_player
     @friend<<Game.player
@@ -316,7 +331,7 @@ class Map
     }
   end
   def update_actor
-    true and
+    false and
     if rand(1000)>950
       enemy=Enemy.new("始萊姆","slime","none",[500,0,200],{exp:1000},"mon_001")
       enemy.add_drop_list([[0.5,:Material,20],[0.5,:Material,21],[1.0,:Money,rand(200)]])

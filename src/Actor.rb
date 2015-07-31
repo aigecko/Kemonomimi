@@ -7,7 +7,7 @@ class Actor
   attr_reader :position,:attrib,:ally,:race,:class
   attr_reader :equip_list,:item_list,:comsumable_list,:pledge_list
   attr_reader :equip,:skill,:target,:action
-  attr_accessor :shape,:var
+  attr_reader :shape,:var
   def initialize(comment,pos,attrib,pics)
     str=comment.split
     
@@ -233,7 +233,7 @@ class Actor
     [@dst_x,@dst_y,@dst_z]
   end
   def moving?
-    @act_affect ? true : false
+    return @act_affect
   end
   def update
     @state.update

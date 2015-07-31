@@ -2,7 +2,7 @@
 class Enemy < Actor
   def initialize(name,race,klass,pos,attrib,pics)
     super("enemy %s %s"%[race,klass],pos,attrib,pics)
-    @ai=AI.new({move: :none,action: :none})
+    @ai=AI.new({move: :sidemove,action: :shoot})
     @name=name
   end
   def update

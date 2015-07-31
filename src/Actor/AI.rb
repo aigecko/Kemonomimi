@@ -23,22 +23,9 @@ class Actor
             dst_z=actor.position.z+rand(actor.var[:h])-actor.var[:h]/2
             dst_z=dst_z.confine(0,Map.h)
             actor.set_move_dst(dst_x,nil,dst_z)
-          else          
-            dst_x=dst_z=nil
-            if actor.position.x.to_i==0
-              dst_x=rand(actor.var[:w])
-            elsif actor.position.x.to_i==Map.w
-              dst_x=rand(Map.w-actor.var[:w])
-            end
-            if actor.position.z.to_i==0
-              dst_z=rand(actor.var[:h])
-            elsif actor.position.z.to_i==Map.h
-              dst_z=rand(Map.h-actor.var[:h])
-            end
-            actor.set_move_dst(dst_x,nil,dst_z)
           end
         }
-        @proc[:none]=->(actor){}      
+        @proc[:none]=->(actor){}
       end
       def self.[](type)
         return @proc[type]
@@ -53,6 +40,24 @@ class Actor
         @proc[:peaceful]=->(actor){
           if actor.attrib[:maxhp]>actor.attrib[:hp]
             actor.set_target(Game.player,:chase)
+          end
+        }
+        @proc[:shoot]=->(actor){
+          actor.var[:shoot_skill_list] or return
+          offset_z=actor.var[:shoot_z_range]
+          offset_x=actor.var[:shoot_x_range]
+          actor_x=actor.position.x
+          actor_y=actor.position.y
+          actor_z=actor.position.z
+          player_x=Game.player.position.x
+          player_z=Game.player.position.z
+          if (player_x-actor_x).abs<=offset_x&&
+             (player_z-actor_z).abs<=offset_z
+            direct=(player_x>actor_x)? 1: -1
+            actor.rotate(direct)
+            actor.var[:shoot_skill_list].each{|name|
+              actor.cast(name,nil,actor_x,actor_y,actor_z)
+            }
           end
         }
       end

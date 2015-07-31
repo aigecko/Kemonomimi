@@ -286,7 +286,7 @@ class Skill
             x: caster.position.x+
               case data[:launch_x]
               when Numeric
-                data[:launch_x]
+                data[:launch_x]*caster.face_side
               when :face
                 caster.pic_w/2*caster.face_side
               else

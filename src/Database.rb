@@ -3,7 +3,6 @@ class Database
   @Class=Input.load_database(:class,true)
   @Equip=Input.load_database(:equip,true)
   @Actor_pic=Input.load_actor_pic
-  @Actor_pic_cache={}
   @Race= Input.load_database(:race,true)
   @Consum=Input.load_database(:consum,true)
   @Item=Input.load_database(:material,true)
@@ -51,10 +50,14 @@ class Database
     end
   end
   def self.get_actor_pic(name)
-    str=StringIO.new(Zlib::Inflate.inflate(@Actor_pic[name]))
-    begin
+    if data=@Actor_pic[name]
+      str=StringIO.new(Zlib::Inflate.inflate(data))
       img=SDL::Surface.load_bmp_from_io(str)
       img=img.transform_surface(img[0,0],0,2,2,SDL::TRANSFORM_SAFE)
+    else
+      img=Surface.load_bmp('./rc/pic/battle/%s'%name)
+    end
+    begin
       base=SDL::Surface.new_32bpp(img.w,img.h)
       img.draw(0,0,base)
       
