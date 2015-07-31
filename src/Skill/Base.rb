@@ -283,14 +283,24 @@ class Skill
             caster: caster,
             live_cycle: data[:live_cycle],
             live_count: info[:args][1],
-            x: caster.position.x,
+            x: caster.position.x+
+              case data[:launch_x]
+              when Numeric
+                data[:launch_x]
+              when :face
+                caster.pic_w/2*((caster.face_side==:right)? 1: -1)
+              else
+                0
+              end,
             y: caster.position.y+
-            case data[:launch_y]
-            when :center
-              caster.pic_h/4
-            when :ground
-              0
-            end,
+              case data[:launch_y]
+              when Numeric
+                data[:launch_y]
+              when :center
+                caster.pic_h/4
+              when :ground
+                0
+              end,
             z: caster.position.z,
             w: data[:shape_w],
             h: data[:shape_h],
