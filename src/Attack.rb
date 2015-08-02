@@ -114,7 +114,6 @@ private
     attack+=attack*@attrib[:attack_adj]
     attack+=attack*@attrib[:attack_amp]/100
     attack+=attack*@caster.attrib[:attack_amp]/100
-        
     case @info[:type]
     when :phy
       case @info[:cast_type]
@@ -181,6 +180,7 @@ private
   end
   def assign_skill_defense(target,attack)
     @info[:assign] and return pre_skill_defense(target,attack)
+    return attack
   end
   def calculate_phy_output(attack)
     return attack*@caster.attrib[:phy_outamp]/100
