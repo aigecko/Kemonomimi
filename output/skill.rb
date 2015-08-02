@@ -29,7 +29,7 @@ $skill[:leopardcatear]={
 }
 
 $skill[:counter_attack]={
-  name:'反擊之火',type: :attack_defense,
+  name:'反擊之火',type: :pre_attack_defense,
   icon:'./rc/icon/skill/2011-12-23_3-049.gif:[0,0]B[0,255,0]',
   base: :counter_attack,table:[0,[10,0.1]],
   comment:'受攻擊時反彈#{@table[@level][0]}+#{@table[@level][1]}def絕對傷害'}
@@ -91,7 +91,7 @@ $skill[:rl_weapon_heal]={
   comment:'增加盾#{@data[:def_coef]}物防的回復生命以及#{@data[:mdef_coef]}魔防的回復法力'}
   
 $skill[:counter_beam]={
-  name:'聖光反射',type: :attack_defense,
+  name:'聖光反射',type: :pre_attack_defense,
   icon:'./rc/icon/icon/mat_tklre002/skill_022.png:[0,0]',
   base: :counter_beam,table:[0,[20,0.1]],
   data:{possibility: 14,cd: 0.8},

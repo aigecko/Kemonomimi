@@ -133,7 +133,6 @@ private
         attack+=calculate_phy_output(attack)
         
         damage=Attack.formula(attack,target.attrib[:def])
-        damage=attack_defense(target,damage)
         
         block=target.attrib[:block]*100
         if rand(10000)<block
@@ -141,6 +140,7 @@ private
           skill.cast_defense(target,@caster,damage)
           damage=(@caster.skill[:catear])? damage*40/100 : 1
         end
+        damage=attack_defense(target,damage)
         
         damage=critical(damage)
         damage=bash(target,damage)
@@ -155,6 +155,7 @@ private
         attack+=calculate_phy_output(attack)
         
         damage=Attack.formula(attack,target.attrib[:def])
+        damage=attack_defense(target,damage)
         
         damage-=calculate_phy_resist(target,damage)
       end
@@ -190,8 +191,12 @@ private
   def calculate_mag_damage(target,attack)
     attack-=target.attrib[:mag_decatk]
     attack<=0 and attack=1
+    
     attack+=attack*@caster.attrib[:mag_outamp]/100
+    
     damage=Attack.formula(attack,target.attrib[:mdef])
+    damage=attack_defense(target,damage)
+    
     damage-=damage*target.attrib[:mag_resist]/100
     return damage
   end
