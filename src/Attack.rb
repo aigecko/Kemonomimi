@@ -145,18 +145,7 @@ private
         damage=critical(damage)
         damage=bash(target,damage)
         
-        damage-=damage*target.attrib[:phy_resist]/100
-      when :skill
-        attack=assign_skill_defense(target,attack)
-        attack==:miss and return :miss
-        
-        attack-=target.attrib[:phy_decatk]
-        attack<=0 and attack=1
-        attack+=calculate_phy_output(attack)
-        
-        damage=Attack.formula(attack,target.attrib[:def])
-        
-        damage-=damage*target.attrib[:phy_resist]/100
+        damage-=calculate_phy_resist(target,damage)
       else
         attack=assign_skill_defense(target,attack)
         attack==:miss and return :miss
@@ -167,29 +156,19 @@ private
         
         damage=Attack.formula(attack,target.attrib[:def])
         
-        damage-=damage*target.attrib[:phy_resist]/100
+        damage-=calculate_phy_resist(target,damage)
       end
     when :mag
-      if target.has_state?(:magic_immunity)
-        return :miss
-      end
+      target.has_state?(:magic_immunity) and return :miss
       attack=assign_skill_defense(target,attack)
       attack==:miss and return :miss
       
-      attack-=target.attrib[:mag_decatk]
-      attack<=0 and attack=1
-      attack+=attack*@caster.attrib[:mag_outamp]/100
-      damage=Attack.formula(attack,target.attrib[:mdef])
-      damage-=damage*target.attrib[:mag_resist]/100
+      damage=calculate_mag_damage(target,attack)
     when :umag
       attack=assign_skill_defense(target,attack)
       attack==:miss and return :miss
       
-      attack-=target.attrib[:mag_decatk]
-      attack<=0 and attack=1
-      attack+=attack*@caster.attrib[:mag_outamp]/100
-      damage=Attack.formula(attack,target.attrib[:mdef])
-      damage-=damage*target.attrib[:mag_resist]/100
+      damage=calculate_mag_damage(target,attack)
     when :acid
       attack=assign_skill_defense(target,attack)
       attack==:miss and return :miss
@@ -204,6 +183,17 @@ private
   end
   def calculate_phy_output(attack)
     return attack*@caster.attrib[:phy_outamp]/100
+  end
+  def calculate_phy_resist(target,damage)
+    return damage*target.attrib[:phy_resist]/100
+  end
+  def calculate_mag_damage(target,attack)
+    attack-=target.attrib[:mag_decatk]
+    attack<=0 and attack=1
+    attack+=attack*@caster.attrib[:mag_outamp]/100
+    damage=Attack.formula(attack,target.attrib[:mdef])
+    damage-=damage*target.attrib[:mag_resist]/100
+    return damage
   end
   def critical(damage)
     if !@caster.attrib[:critical].empty?
