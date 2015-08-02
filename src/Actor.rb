@@ -372,17 +372,14 @@ class Actor
       @attrib[:sp]=0
     end
   end
-  def consume(consum)
-    @attrib.consume(consum)
-  end
   def can_cast?(end_time,consum)
     (has_state?(:stun)) and return false
     (Game.get_ticks>end_time) or return false
-    return @attrib>=consum
+    return consum.effective?(self)
   end
   def can_cast_auto?(end_time,consum)
     Game.get_ticks>end_time or return false
-    return @attrib>=consum
+    return consum.effective?(self)
   end
   def cast(name,target,x,y,z)
     unless @skill[name]

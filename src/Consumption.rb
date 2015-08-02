@@ -6,9 +6,22 @@ class Consumption
   def [](key)
     return @data[key]
   end
-  def each
-    for attrib,val in @data
-      yield attrib,val
-    end
+  def effective?(actor)
+    attrib=actor.attrib
+    @data.each{|key,val|
+      if Attribute.name_table[key]
+        attrib[key]<val and return false
+      end
+    }
+    return true
+  end
+  def affect(actor)
+    attrib=actor.attrib
+    @data.each{|key,val|
+      if Attribute.name_table[key]
+        val=val*(100+attrib[:consum_amp])/100
+        attrib[key]-=val
+      end
+    }
   end
 end

@@ -90,18 +90,6 @@ class Actor::Attrib
     
     compute_total
   end
-  def consume(consumption)
-    consumption.each{|sym,val|
-      val=val*(100+@total[:consum_amp])/100
-      @total[sym]= (@total[sym]>val) ? (@total[sym]-val) : 0
-    }
-  end
-  def >=(consumption)
-    consumption.each{|sym,val|
-      @total[sym]<val and return false
-    }
-    return true
-  end
 private
   def compute_base_attrib
     @@Base.each{|base|

@@ -65,7 +65,7 @@ class Skill
     toggle(x,y,z) and return
     @switch or return
     caster.can_cast?(@end_time,@consum) or return
-    caster.consume(@consum)
+    @consum.affect(caster)
     
     cd_start
     common_cd(caster)
@@ -75,7 +75,7 @@ class Skill
   end
   def cast_auto(caster)
     caster.can_cast_auto?(@end_time,@consum) or return
-    caster.consume(@consum)
+    @consum.affect(caster)
     
     cd_start
     common_cd(caster)
@@ -85,7 +85,7 @@ class Skill
   def cast_attack(caster,target,base_cd)
     @equip_need and (caster.equip[@equip_need] or return)
     caster.can_cast?(@end_time,@consum) or return
-    caster.consume(@consum)
+    @consum.affect(caster)
     
     @cd=base_cd*100/caster.attrib[:atkspd]
     cd_start
@@ -96,7 +96,7 @@ class Skill
   def cast_defense(caster,target,attack)
     @switch or return
     caster.can_cast?(@end_time,@consum) or return
-    caster.consume(@consum)
+    @consum.affect(caster)
     
     cd_start
     common_cd(caster)
