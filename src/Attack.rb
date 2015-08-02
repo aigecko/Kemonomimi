@@ -56,6 +56,7 @@ class Attack
     end
     return true
   end
+private
   def before(target)
     if @caster.has_skill?(:dogear)
       @caster.skill[:dogear].cast(@caster,target,nil,nil,nil)
@@ -129,7 +130,7 @@ class Attack
         attack-=target.attrib[:phy_decatk]
         attack<=0 and attack=1
         
-        attack+=attack*@caster.attrib[:phy_outamp]/100
+        attack+=calculate_phy_output(attack)
         
         damage=Attack.formula(attack,target.attrib[:def])
         damage=attack_defense(target,damage)
@@ -146,27 +147,23 @@ class Attack
         
         damage-=damage*target.attrib[:phy_resist]/100
       when :skill
-        if @info[:assign]
-          attack=pre_skill_defense(target,attack)
-          attack==:miss and return :miss
-        end
+        attack=assign_skill_defense(target,attack)
+        attack==:miss and return :miss
         
         attack-=target.attrib[:phy_decatk]
         attack<=0 and attack=1
-        attack+=attack*@caster.attrib[:phy_outamp]/100
+        attack+=calculate_phy_output(attack)
         
         damage=Attack.formula(attack,target.attrib[:def])
         
         damage-=damage*target.attrib[:phy_resist]/100
       else
-        if @info[:assign]
-          attack=pre_skill_defense(target,attack)
-          attack==:miss and return :miss
-        end
+        attack=assign_skill_defense(target,attack)
+        attack==:miss and return :miss
         
         attack-=target.attrib[:phy_decatk]
         attack<=0 and attack=1
-        attack+=attack*@caster.attrib[:phy_outamp]/100
+        attack+=calculate_phy_output(attack)
         
         damage=Attack.formula(attack,target.attrib[:def])
         
@@ -176,20 +173,17 @@ class Attack
       if target.has_state?(:magic_immunity)
         return :miss
       end
-      if @info[:assign]
-        attack=pre_skill_defense(target,attack)
-        attack==:miss and return :miss
-      end
+      attack=assign_skill_defense(target,attack)
+      attack==:miss and return :miss
+      
       attack-=target.attrib[:mag_decatk]
       attack<=0 and attack=1
       attack+=attack*@caster.attrib[:mag_outamp]/100
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
     when :umag
-      if @info[:assign]
-        attack=pre_skill_defense(target,attack)
-        attack==:miss and return :miss
-      end
+      attack=assign_skill_defense(target,attack)
+      attack==:miss and return :miss
       
       attack-=target.attrib[:mag_decatk]
       attack<=0 and attack=1
@@ -197,15 +191,19 @@ class Attack
       damage=Attack.formula(attack,target.attrib[:mdef])
       damage-=damage*target.attrib[:mag_resist]/100
     when :acid
-      if @info[:assign]
-        attack=pre_skill_defense(target,attack)
-        attack==:miss and return :miss
-      end
+      attack=assign_skill_defense(target,attack)
+      attack==:miss and return :miss
       
       damage=attack
     end
     damage-=damage*target.attrib[:atk_resist]/100
     return damage.confine(1,damage)
+  end
+  def assign_skill_defense(target,attack)
+    @info[:assign] and return pre_skill_defense(target,attack)
+  end
+  def calculate_phy_output(attack)
+    return attack*@caster.attrib[:phy_outamp]/100
   end
   def critical(damage)
     if !@caster.attrib[:critical].empty?
@@ -281,6 +279,7 @@ class Attack
       skill.cast(@caster,target,position.x,position.y,position.z)
     end
   end
+public
   def self.draw
     @@buffer.reject!{|dmg| dmg.draw}
   end
