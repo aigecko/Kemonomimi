@@ -351,7 +351,7 @@ class Skill
       @proc[:explode]=->(info){
         caster=info[:caster]
         data=info[:data]
-        attack=info[:args]+(caster.attrib[data[:sym]]*data[:coef]).to_i
+        attack=info[:args][0]+(caster.attrib[data[:sym]]*data[:coef]).to_i
 
         Map.add_friend_circle(
           caster.ally,
@@ -364,8 +364,8 @@ class Skill
             :col,
             caster: caster,
             live_cycle: :frame,
-            r: pic.w/2,
-            h: pic.h,
+            r: info[:args][1],
+            h: info[:args][2],
             x: info[:x],
             y: info[:y],
             z: info[:z],
@@ -738,7 +738,31 @@ class Skill
           last: info[:data][:last].to_sec)
       }
       
-      
+      @proc[:Mototada_R]=->(info){
+        caster=info[:caster]
+        data=info[:data]
+
+        Map.add_friend_circle(
+          caster.ally,
+          Bullet.new(
+            Attack.new(caster,
+              type: :acid,
+              cast_type: :skill,
+              attack: info[:attack]*info[:args][0]/100),
+            nil,
+            :col,
+            caster: caster,
+            live_cycle: :frame,
+            r: info[:args][1],
+            h: info[:args][2],
+            x: caster.position.x,
+            y: caster.position.y,
+            z: caster.position.z,
+            surface: :horizon
+          )
+        )
+        return info[:attack]
+      }
     end
     def self.[](skill)
       @proc[skill]

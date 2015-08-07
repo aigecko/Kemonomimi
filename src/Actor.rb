@@ -91,11 +91,11 @@ class Actor
         add_class_skill(:weapon,skill,Database.get_skill(skill))
       }
     when :darkknight
-      add_skill(:smash_wave,
-      name:'粉碎波',type: :append,
-      icon:'./rc/icon/skill/2011-12-23_3-037.gif:[0,0]B[255,0,0]',
-      base: :smash_wave,consum: 0,level: 1,table:[0,[100,20]],
-      comment:'攻擊時#{#T[1]}%產生#{#T[0]}範圍魔法傷害')
+      add_class_skill(:defense,:bloody_curse,
+        name:'血傷靈光',type: :attack_defense,
+        icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
+        base: :Mototada_R,table:[nil,[15,75,50]],
+        comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}之敵人')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))

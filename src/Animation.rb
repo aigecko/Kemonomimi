@@ -55,7 +55,7 @@ class Animation
       when :blit
         case @target
         when :follow
-          @data[:img][img].draw_direct(x,y,z,@reverse)
+          @data[:img][img].draw_direct(x.to_i,y,z,@reverse)
         end
       end
     }

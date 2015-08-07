@@ -78,7 +78,7 @@ class Map
       name:'聖光衝擊',type: :active,
       icon:'./rc/icon/icon/mat_tkl001/skill_002c.png:[0,0]',
       base: :arrow,cd: 0.1,consum: 1,table:[0,[10,10]],
-      data: {sym: :matk,coef: 0.8,type: :phy,cast_type: :skill,
+      data: {sym: :matk,coef: 0.8,type: :phy,cast_type: :attack,
         launch_y: 44,launch_x: :face,
         pic:[:follow,{img:['./rc/pic/battle/shell.bmp'],w: 50,h: 30},[[[:blit,0]]]],
         live_cycle: :time_only,
@@ -265,10 +265,12 @@ class Map
       end
     }
     delete_live_frame
+    mark_live_frame
+    
     update_collidable_bullet
     update_friend_bullet_circle
     update_enemy_bullet_circle
-    mark_live_frame
+    
     update_actor
     update_bullet
   end
