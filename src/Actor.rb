@@ -352,6 +352,7 @@ class Actor
     end
   end
   def lose_hp(hp)
+    died? or
     if @attrib[:hp]-hp>0
       @attrib[:hp]-=hp
     else
@@ -364,7 +365,9 @@ class Actor
   def die
     @die=true
   end
-  def died?;return @die;end
+  def died?
+    return @die
+  end
   def lose_sp(sp)
     if @attrib[:sp]-sp>0
       @attrib[:sp]-=sp
