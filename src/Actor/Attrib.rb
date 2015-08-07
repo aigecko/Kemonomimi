@@ -145,6 +145,7 @@ private
     [:dodge,:block,:ignore].each{|sym|
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
+      @total[sym]=@total[sym].confine(0,100)
     }
   end
   def compute_amp_attrib
