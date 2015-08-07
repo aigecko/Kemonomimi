@@ -155,6 +155,8 @@ klass={
     再生之盾:增加盾n物防的回復生命以及m魔防的回復法力#auto->rl_weapon
 
     火焰之力:開啟後增加n跑速m%魔法減傷且基礎攻速變為r持續s秒#metamorphosis
+    
+    #隱藏技能:爆裂連斬:對指定敵人進行n次斬擊
   ],
   :paladin=>%w[
     神聖庇護:n%機率無視攻擊並增加m%雙防#auto->amplify
@@ -172,47 +174,46 @@ klass={
     平衡之盾:增加盾n倍def最大生命及m倍mdef最大法力#auto->rl_weapon
     平衡之槍:增加長槍n倍atk魔攻#auto->single_weapon
 
-    神聖之力:開啟後增加n減傷及m最大生命有範圍靈氣且基礎攻速變為s持續r秒#metamorphosis
-    範圍靈氣:跑速n%以及m近攻魔攻
+    神聖之力:開啟後增加n最大生命m%跑速且基礎攻速變為s持續r秒#metamorphosis
   ],
   :darkknight=>%w[
     血殤靈光:反彈n%絕對傷害給周圍敵人#attack_defense->soul_of_Mototada
-    血債血償:n%吸收m%傷害並增幅m%最大生命#先反彈再吸收attack_defense->amplify
+    血債血償:無視傷害時吸收其n%傷害外加m*con之生命值#ignore
+    能量黑洞:n%無視傷害並增加m%雙吸血#attack_defense->amplify
+    
     血性狂怒:魔法免疫r秒並增加n攻速m跑速s秒#magic_immunity
-
-    能量黑洞:開啟增加n+m*atk普攻吸血r+s*matk技能吸血#boost
-    真靈切割:普攻n%奪取m%現有生命(s+r*matk)#soul_of_Nagayoshi
+    淬毒武器:普通攻擊附加n+s*matk魔法傷害並緩m%攻速持續r秒
     不死戰魂:生命每減少n增加m近攻r物防#soul_of_Nobufusa
 
-    黑暗爆發:範圍n+m*matk絕對傷害並緩r%跑速攻速持續s秒(skl_vamp)#explode
-    黑暗侵蝕:開啟後範圍n+m*maxhp絕對傷害持續r秒(skl_vamp)#soul_of_Kiyomasa
-    虛空重擊:造成n+m*matk絕對傷害暈s秒並持續r秒(skl_vamp)#soul_of_Yasumasa
+    黑暗爆發:範圍n+m*int絕對傷害並緩r%跑速持續s秒(skl_vamp)#explode
+    黑暗侵蝕:開啟後範圍n+m*maxhp絕對傷害(skl_vamp)#fire_circle
+    黑暗衝擊:直線造成n+m*int絕對傷害暈s秒(skl_vamp)#arrow
 
     長槍:paladin
     劍盾:paladin
     
-    黑暗之力:開啟後增加n韌性及m最大生命帶負面靈氣且基礎攻速變為r持續s秒#metamorphosis
-    負面靈氣:降低n物防以及m回復效果
+    黑暗之力:開啟後增加n韌性魔防及m最大生命且基礎攻速變為r持續s秒#metamorphosis
+    
+    #隱藏技能:萬歲衝鋒:消耗n生命並同時造成範圍m傷害且r秒內增加s近攻t受到之傷害
   ],
   :crossbowman=>%w[
-    能量轉化:降低受到魔傷n%並增加m+r*str弓箭射程#auto->amplify
-    巨人外皮:增加r最大生命並降低受到的n+m*con普通攻擊#pre_attack_defense->soul_of_Yoshimoto
+    能量轉化:降低受到魔傷n%#auto->amplify
+    巨人外皮:增加r最大生命並降低受到的n普通攻擊#pre_attack_defense->soul_of_Yoshimoto
     動如雷霆:開啟後增加n%跑速m韌性
     
     積蓄能量:n%機率m倍爆擊並提升r%攻擊速度#auto->amplify
     負電位差:弓箭命中後消減敵方n+m*int法力並造成等量魔法傷害#append->soul_of_Muneshige
     閃電噴發:開啟後弓箭命中後產生範圍n+m*agi物理傷害#switch_append->explode
+    雷神之箭:增加m弓箭射程以及n弓箭生命值
     
-    雷神之箭:開啟後增加n%物穿m%魔穿且箭矢增加r生命值
     天雷怒擊:指定範圍n+m*matk魔法傷害緩m跑速#explode
     暴怒雷擊:射出讓敵方受到n+m*matk魔法傷害暈眩r秒的弓箭#magic_arrow
 
     魔法之弩:增加弩n倍ratk魔攻#auto->magic_bow
 
-    閃電之力:開啟後遠攻提升n%攻速提升s%並增加m雙防持續r秒#metamorphosis
+    閃電之力:開啟後遠攻提升n%並增加m雙防持續r秒#metamorphosis
   ],
   :archer=>%w[
-    迅捷之風:增幅閃躲m%格檔n%#auto->amplify
     身輕如燕:瞬間移動到指定的地點#flash
     旋風護盾:每n秒自動產生m+r*mdef魔法護盾持續s秒#soul_of_Ittetsu
 
@@ -226,7 +227,7 @@ klass={
 
     暴風之弓:弓的攻速強化n倍#magic_bow
 
-    烈風之力:命中判定縮小且增加n跑速且基礎攻速變為s持續r秒#metamorphosis
+    烈風之力:增加n閃避m魔法抗性且基礎攻速變為s持續r秒#metamorphosis
   ]
 }
 monster={
