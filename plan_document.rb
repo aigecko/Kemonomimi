@@ -154,9 +154,9 @@ klass={
     輕巧雙刀:雙手裝備雙刀時額外增加雙刀0.1近攻的攻速#auto->dual_weapon_atkspd_acc
     再生之盾:增加盾0.2物防的回復生命以及0.2魔防的回復法力#auto->rl_weapon
 
-    火焰之力:開啟後增加40跑速45%魔法減傷且基礎攻速變為1.0持續s秒#metamorphosis
+    火焰之力:開啟後增加40跑速(15/30/45)%魔法減傷且基礎攻速變為1.0持續(20/26/32)秒#metamorphosis
     
-    #隱藏技能:爆裂連斬:對指定敵人進行1+(lv)次斬擊
+    #隱藏技能:爆裂連斬:對指定敵人進行(5/6/7)次斬擊
   ],
   :paladin=>%w[
     神聖庇護:n%機率無視攻擊並增加m%雙防#auto->amplify
@@ -177,24 +177,24 @@ klass={
     神聖之力:開啟後增加n最大生命m%跑速且基礎攻速變為s持續r秒#metamorphosis
   ],
   :darkknight=>%w[
-    血殤靈光:反彈n%絕對傷害給周圍敵人#attack_defense->soul_of_Mototada
-    血債血償:無視傷害時吸收其n%傷害外加m*con之生命值#ignore
-    能量黑洞:n%無視傷害並增加m%雙吸血#attack_defense->amplify
+    #15+血殤靈光:反彈(15+2*lv)%絕對傷害給周圍敵人#attack_defense->soul_of_Mototada
+    #15+血債血償:無視傷害時吸收其(10+lv)%傷害之生命值#ignore
+    #20+能量黑洞:(10+0.5*lv)%無視傷害並增加(2+lv)%雙吸血#attack_defense->amplify
     
-    血性狂怒:魔法免疫r秒並增加n攻速m跑速s秒#magic_immunity
-    淬毒武器:普通攻擊附加n+s*matk魔法傷害並緩m%攻速持續r秒
-    不死戰魂:生命每減少n增加m近攻r物防#soul_of_Nobufusa
+    #20+血性狂怒:魔法免疫(2+0.2*lv)秒並增加(50+5*lv)攻速16%跑速18秒#magic_immunity
+    #20+淬毒武器:普通攻擊附加(10*lv)+0.5*matk魔法傷害並緩(15+2*lv)%攻速持續4秒
+    #15+不死戰魂:生命每減少100增加(5+0.4*lv)近攻(5+0.4*lv)物防#soul_of_Nobufusa
 
-    黑暗爆發:範圍n+m*int絕對傷害並緩r%跑速持續s秒(skl_vamp)#explode
-    黑暗侵蝕:開啟後範圍n+m*maxhp絕對傷害(skl_vamp)#fire_circle
-    黑暗衝擊:直線造成n+m*int絕對傷害暈s秒(skl_vamp)#arrow
+    #20+黑暗爆發:範圍(20*lv)+0.5*int絕對傷害並緩30%跑速持續(4+0.2*lv)秒(skl_vamp)#explode
+    #20+黑暗侵蝕:開啟後範圍(10*lv)+0.13*maxhp絕對傷害(skl_vamp)#fire_circle
+    #15+黑暗衝擊:直線造成(20*lv)+0.6*int絕對傷害暈1.5秒(skl_vamp)#arrow
 
     長槍:paladin
     劍盾:paladin
     
-    黑暗之力:開啟後增加n韌性魔防及m最大生命且基礎攻速變為r持續s秒#metamorphosis
+    黑暗之力:開啟後增加(200/300/400)韌性魔防及(1000/1500/2000)最大生命且基礎攻速變為1.2持續40秒#metamorphosis
     
-    #隱藏技能:萬歲衝鋒:消耗n生命並同時造成範圍m傷害且r秒內增加s近攻t受到之傷害
+    #隱藏技能:萬歲衝鋒:消耗50%生命並同時造成範圍等量傷害且10秒內增加25%近攻20%受到之傷害
   ],
   :crossbowman=>%w[
     能量轉化:降低受到魔傷n%#auto->amplify
