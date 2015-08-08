@@ -140,19 +140,19 @@ klass={
     寒冰之力:開啟後增加n%技吸及m最大生命s最大法力並持續r秒#metamorphosis
   ],
   :fighter=>%w[
-    反擊之火:受到普攻反彈n+m*def絕對傷害#attack_defnese->counter_attack
-    堅忍不拔:最大生命增幅n%且格檔增幅m%#auto->amplify
-    無畏衝鋒:魔法免疫n秒並增加m近攻r秒#magic_immunity
+    #20+反擊之火:受到普攻反彈(10*lv)+(0.1+0.2*lv)*def絕對傷害#attack_defnese->counter_attack
+    #20+堅忍不拔:最大生命增幅(5+0.75*lv)%且格檔增幅(6+lv)%#auto->amplify
+    #20+無畏衝鋒:魔法免疫(1+lv*0.25)秒並增加(20*lv)近攻#magic_immunity
 
-    破甲斬擊:普攻造成目標降低n*log(matk)雙防#break_armor
-    流動之火:普攻造成目標每秒n+m*matk絕對傷害持續s秒#burn
-    烈火猛攻:在m秒內有100%機率普攻暈r秒並帶n傷害#boost
-    火圈迸裂:普攻造成範圍n*maxhp物傷#switch_append->explode
+    #20+破甲斬擊:普攻造成目標降低(5*lv)*log(matk)雙防#break_armor
+    #20+流動之火:普攻造成目標每秒(15*lv)+0.55*matk絕對傷害持續2秒#burn
+    #20+烈火猛攻:在(4+0.2*lv)秒內有100%機率普攻暈0.4秒並帶(20*lv)傷害#boost
+    #20+火圈迸裂:普攻造成範圍(0.01+0.002*lv)*maxhp物傷#switch_append->explode
 
-    熾焰焚身:每秒造成n+m*matk魔法傷害並降低r%跑速#switch_auto->fire_circle
+    #20+熾焰焚身:每秒造成(40*lv)+0.3*matk魔法傷害並降低(10+lv)%跑速#switch_auto->fire_circle
 
     輕巧雙刀:雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速#auto->dual_weapon_atkspd_acc
-    再生之盾:增加盾n物防的回復生命以及m魔防的回復法力#auto->rl_weapon
+    再生之盾:增加盾0.2物防的回復生命以及0.2魔防的回復法力#auto->rl_weapon
 
     火焰之力:開啟後增加n跑速m%魔法減傷且基礎攻速變為r持續s秒#metamorphosis
     
