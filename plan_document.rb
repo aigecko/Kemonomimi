@@ -197,21 +197,21 @@ klass={
     #隱藏技能:萬歲衝鋒:消耗50%生命並同時造成範圍等量傷害且10秒內增加25%近攻20%受到之傷害
   ],
   :crossbowman=>%w[
-    能量轉化:降低受到魔傷n%#auto->amplify
-    巨人外皮:增加r最大生命並降低受到的n普通攻擊#pre_attack_defense->soul_of_Yoshimoto
-    動如雷霆:開啟後增加n%跑速m韌性
+    #15+能量轉化:降低受到魔傷(8+lv)%#auto->amplify
+    #20+巨人外皮:增加(50*lv)最大生命並降低受到的(5*lv)普通攻擊#pre_attack_defense->soul_of_Yoshimoto
+    #15+動如雷霆:開啟後增加(10+lv*2)%跑速(100+10*lv)韌性持續5秒
     
-    積蓄能量:n%機率m倍爆擊並提升r%攻擊速度#auto->amplify
-    負電位差:弓箭命中後消減敵方n+m*int法力並造成等量魔法傷害#append->soul_of_Muneshige
-    閃電噴發:開啟後弓箭命中後產生範圍n+m*agi物理傷害#switch_append->explode
-    雷神之箭:增加m弓箭射程以及n弓箭生命值
+    #20+積蓄能量:20%機率(1.5+0.1*lv)倍爆擊並提升(40+2*lv)%攻擊速度#auto->amplify
+    #15+負電位差:弓箭命中後消減敵方(10*lv)+0.4*int法力並造成等量魔法傷害#append->soul_of_Muneshige
+    #20+閃電噴發:開啟後弓箭命中後產生範圍(20*lv)+0.2*agi物理傷害#switch_append->explode
+    #15+雷神之箭:增加(80+8*lv)弓箭射程以及(1+lv)弓箭生命值
     
-    天雷怒擊:指定範圍n+m*matk魔法傷害緩m跑速#explode
-    暴怒雷擊:射出讓敵方受到n+m*matk魔法傷害暈眩r秒的弓箭#magic_arrow
+    #20+天雷怒擊:指定範圍(40*lv)+0.5*matk魔法傷害緩(15+lv)%跑速#explode
+    #20+暴怒雷擊:射出讓敵方受到(20*lv)+0.4*matk魔法傷害暈眩2秒的弓箭#magic_arrow
 
-    魔法之弩:增加弩n倍ratk魔攻#auto->magic_bow
+    魔法之弩:增加弩0.75倍ratk魔攻#auto->magic_bow
 
-    閃電之力:開啟後遠攻提升n%並增加m雙防持續r秒#metamorphosis
+    閃電之力:開啟後遠攻提升(170/180/190)%並增加(100/200/300)雙防持續r秒#metamorphosis
   ],
   :archer=>%w[
     身輕如燕:瞬間移動到指定的地點#flash
