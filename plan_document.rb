@@ -146,17 +146,17 @@ klass={
 
     #20+破甲斬擊:普攻造成目標降低(5*lv)*log(matk)雙防#break_armor
     #20+流動之火:普攻造成目標每秒(15*lv)+0.55*matk絕對傷害持續2秒#burn
-    #20+烈火猛攻:在(4+0.2*lv)秒內有100%機率普攻暈0.4秒並帶(20*lv)傷害#boost
+    #20+烈火猛攻:在(4+0.2*lv)秒內有100%機率普攻暈0.32秒並帶(20*lv)傷害#boost
     #20+火圈迸裂:普攻造成範圍(0.01+0.002*lv)*maxhp物傷#switch_append->explode
 
     #20+熾焰焚身:每秒造成(40*lv)+0.3*matk魔法傷害並降低(10+lv)%跑速#switch_auto->fire_circle
 
-    輕巧雙刀:雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速#auto->dual_weapon_atkspd_acc
+    輕巧雙刀:雙手裝備雙刀時額外增加雙刀0.1近攻的攻速#auto->dual_weapon_atkspd_acc
     再生之盾:增加盾0.2物防的回復生命以及0.2魔防的回復法力#auto->rl_weapon
 
-    火焰之力:開啟後增加n跑速m%魔法減傷且基礎攻速變為r持續s秒#metamorphosis
+    火焰之力:開啟後增加40跑速45%魔法減傷且基礎攻速變為1.0持續s秒#metamorphosis
     
-    #隱藏技能:爆裂連斬:對指定敵人進行n次斬擊
+    #隱藏技能:爆裂連斬:對指定敵人進行1+(lv)次斬擊
   ],
   :paladin=>%w[
     神聖庇護:n%機率無視攻擊並增加m%雙防#auto->amplify
