@@ -25,9 +25,9 @@ class RaceWindow < SelectWindow
     @detail[:catear]=<<-EOF
 帶有貓咪耳朵的半獸人種族
 動作非常靈活
+和其他的半獸人種族相比
 行走相對快速許多
-對於敵人格擋有更快的反應
-能在敵人格擋時造成一定的傷害
+還有更快的基礎攻速
     EOF
     @detail[:foxear]=<<-EOF
 帶有狐狸耳朵的半獸人種族
@@ -49,13 +49,6 @@ class RaceWindow < SelectWindow
 可是具有特殊的潛能
 在敵人低血量時可以造成更大傷害
 是名為尾刀狗的能力
-    EOF
-    @detail[:leopardcatear]=<<-EOF
-帶有石虎耳朵的半獸人種族
-和貓耳很像但是更加敏捷
-由於瀕臨絕種因此不是每次都出現
-受到攻擊時有機率短時間大幅減傷
-名為貓科無敵時間
     EOF
   end
   def pic_initialize

@@ -7,7 +7,7 @@ $skill=Hash.new
 $skill[:catear]={
   name:'貓耳基里的祝福',type: :none,
   icon:'./rc/icon/icon/mat_tklre002/skill_029.png:[0,0]',
-  comment:'敵人格檔時可以產生4成傷害'}
+  comment:'與生俱來的靈活動作讓攻擊更快速'}
 $skill[:dogear]={
   name:'尾刀狗',type: :before,cd: 0,
   icon:'./rc/icon/icon/mat_tklre002/skill_028.png:[0,0]',

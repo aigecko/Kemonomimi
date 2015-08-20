@@ -137,7 +137,6 @@ private
         if rand(10000)<block
           skill=target.skill[:block] and
           skill.cast_defense(target,@caster,damage)
-          damage=(@caster.skill[:catear])? damage*40/100 : 1
         end
         damage=attack_defense(target,damage)
         
