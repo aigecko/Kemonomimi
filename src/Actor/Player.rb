@@ -27,7 +27,7 @@ class Player < Actor
     when :catear
       add_state(self,
       name:'貓耳之血',sym: :catear,
-        attrib:{atkcd: -0.2},
+        attrib:{atkcd: -0.2,shtcd: -0.16},
         magicimu_keep: true,
         last: nil)
     when :foxear

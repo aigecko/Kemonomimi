@@ -5,11 +5,7 @@ class RaceWindow < SelectWindow
     win_x,win_y=(Game.Width-win_w)/2,(Game.Height-win_h)/2
     super(win_x,win_y,win_w,win_h)
     
-    if(rand()<0.3)
-      @table=[:catear,:foxear,:wolfear,:dogear,:leopardcatear]
-    else
-      @table=[:catear,:foxear,:wolfear,:dogear]
-    end
+    @table=[:catear,:foxear,:wolfear,:dogear]
     skeleton_initialize
     title_initialize('請選擇種族')
     comment_initialize(:default)
