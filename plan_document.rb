@@ -124,21 +124,20 @@ klass={
     大地之力:開啟後增加400%攻速(100/200/300)智力智慧及普攻回復0.1*matk生命持續(10/16/22)秒#metamorphosis
   ],
   :mage=>%w[
-    吹雪護盾:開啟後n%傷害交由m法力承受#switch_attack_defnese->soul_of_Masayuki
-    凍雨凝結:造成攻擊者降低n+m*int近攻遠攻持續r秒#freezing_rain
-    寒冰之軀:開啟後提升n雙防及降低m%sp消耗持續r秒#boost
+    #20+吹雪護盾:開啟後(20+lv)%傷害交由(1+lv*0.2)法力承受#switch_attack_defnese->soul_of_Masayuki
+    #20+凍雨凝結:造成攻擊者降低(10+lv)%近攻遠攻持續3秒#attack_defense->freezing_rain
+    #20+寒冰之軀:提升(11*lv)雙防及降低(2+lv)%sp消耗#switch_auto->amplify
 
-    霜刺:普攻附加n+m*wis無視魔免魔傷以及強緩m跑速r攻速n秒#append->energy_arrow
-    法力汲取:普攻吸取目標n+m*wis法力為己用
+    #20+霜刺:普攻附加(25*lv)+0.2*atk無視魔免魔傷以及強緩(15+2*lv)%跑速(25+3*lv)%攻速2秒#switch_append->energy_arrow
 
-    寒冰爆彈:指定敵人受到範圍n+m*matk魔法傷害#missile
-    冰柱戳刺:指定敵人受到範圍n+m*matk魔傷暈r秒#missile
-    寒冰噴吐:前方敵人受到範圍n+m*matk魔傷緩r攻速跑速#magic_arrow
-    寒冰凍破:法術命中後造成範圍n+m*int絕對傷害#explode
+    #20+寒冰爆彈:指定敵人受到範圍(20*lv)+0.9*matk魔法傷害#missile
+    #20+冰柱戳刺:指定敵人受到範圍(20*lv)+0.5*matk魔傷暈2.5秒#missile
+    #20+寒冰噴吐:前方敵人受到範圍(15*lv)+0.6*matk魔傷並付帶(10*lv)+0.1*matk魔傷持續6秒#magic_arrow
+    #20+寒冰凍破:法術命中後額外造成(10*lv)+0.1*int絕對傷害#explode
 
-    法杖聚焦:增加法杖魔攻n倍的int#ward_power
+    法杖聚焦:增加法杖魔攻20%的int#ward_power
 
-    寒冰之力:開啟後增加n%技吸及m最大生命s最大法力並持續r秒#metamorphosis
+    寒冰之力:開啟後增加(15/18/21)%技吸及(800/1200/1600)最大生命(1000/1400/1800)最大法力並持續20秒#metamorphosis
   ],
   :fighter=>%w[
     #20+反擊之火:受到普攻反彈(10*lv)+(0.1+0.2*lv)*def絕對傷害#attack_defnese->counter_attack
