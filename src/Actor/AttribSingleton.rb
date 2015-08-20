@@ -18,8 +18,8 @@ class Actor::Attrib
   @@Base=[:str,:con,:int,:wis,:agi]
   @@Coef={
     extra: 7,
-    healhp: 0.01,
-    healsp: 0.02,
+    healhp: 0.04,
+    healsp: 0.06,
     
     growth: 10,
     amped: 100,

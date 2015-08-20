@@ -92,7 +92,7 @@ class Actor
       }
     when :darkknight
       add_class_skill(:defense,:bloody_curse,
-        name:'血傷靈光',type: :attack_defense,
+        name:'血殤靈光',type: :attack_defense,
         icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
         base: :Mototada_R,table:[nil,[15,75,50]],
         comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}之敵人')
