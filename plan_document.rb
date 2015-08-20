@@ -107,20 +107,21 @@ common={
 }
 klass={
   :cleric=>%w[
-    能量吸收:減少n%受到傷害並轉成m倍法力#attack_dendese->soul_of_Leyasu
-    岩石護盾:開啟後產生n+m*maxsp盾持續r秒#rock_shield
+    #15+能量吸收:減少(3+lv)%受到傷害並轉成(1.4+4*lv)倍法力#attack_dendese->soul_of_Leyasu
+    #15+岩石護盾:開啟後產生(50*lv)+0.2*maxsp盾持續5秒#rock_shield
     
-    回復靈氣:範圍r友軍增加n+s*con回血m+t*wis回魔
-    加速靈氣:範圍r友軍增加n%攻速m%跑速#aura
-    降傷靈氣:範圍r友軍增加n+s*con物防m+t*wis魔防#aura
+    #20+回復靈氣:範圍200友軍增加(5*lv)+0.01*con回血(5+lv)+0.015*wis回魔#aura
+    #20+加速靈氣:範圍200友軍增加(10+lv)+0.2*atkspd%攻速(5+0.5*lv)%跑速#aura
+    #20+降傷靈氣:範圍200友軍增加(12*lv)+0.1*con物防(14*lv)+0.1*wis魔防#aura
+    #20+振奮靈氣:範圍200友軍增加(12*lv)+0.1*matk近攻魔攻遠攻
     
-    大地杖擊:開啟後普攻帶n+m*sp無視魔免魔傷#append->energy_arrow
-    震地重擊:開啟後周圍敵人範圍n+r*matk魔法傷害暈m+s*int秒#explode
-    銳利飛石:前方敵人受到範圍n+r*matk魔法傷害#magic_arrow
+    #15+大地凈化:消除範圍75內之魔法效果並額外造成(10*lv)魔法傷害
+    #15+大地杖擊:開啟後普攻帶(24*lv)+0.15*sp無視魔免魔傷#append->energy_arrow
+    #20+震地重擊:開啟後周圍敵人範圍(25*lv)+0.9*matk魔法傷害暈2秒#explode
 
-    法杖儲能:增加法杖魔攻n倍的最大法力#ward_power
+    法杖儲能:增加法杖魔攻5倍的最大法力#ward_power
 
-    大地之力:開啟後增加n%攻速及普攻奪取m*matk生命持續r秒#metamorphosis
+    大地之力:開啟後增加400%攻速(100/200/300)智力智慧及普攻回復0.1*matk生命持續(10/16/22)秒#metamorphosis
   ],
   :mage=>%w[
     吹雪護盾:開啟後n%傷害交由m法力承受#switch_attack_defnese->soul_of_Masayuki
