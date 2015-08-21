@@ -24,14 +24,10 @@ class Actor::Attrib
 
     @state=Hash.new(0)
     @equip=Hash.new(0)
-    @state[:critical]=[]
-    @equip[:critical]=[]
-    @equip[:bash]=[]
-    @state[:bash]=[]
     @amped=Hash.new(0)
     @total=Hash.new(0)
 
-    @growth=growth_base 
+    @growth=growth_base
 
     @base[:level]=[@base[:level],1].max
     @base[:atkspd]==0 and @base[:atkspd]=100
@@ -49,11 +45,13 @@ class Actor::Attrib
   eval %Q{
   def #{act}_#{name}_attrib(attrib)
     attrib.each{|sym,value|
-      if [:dodge,:block,
-          :healhp,:healsp,
-          :atk_vamp,:skl_vamp,
-          :atkcd,:shtcd,
-          :critical,:bash].include?(sym)||value.integer?
+      if [:dodge,:block,:ignore,
+          :phy_resist,:mag_resist,:atk_resist].include?(sym)
+        @#{name}[sym]#{act==:gain ? '+':'-'}=[value]
+      elsif [:healhp,:healsp,
+             :atk_vamp,:skl_vamp,
+             :atkcd,:shtcd,
+             :critical,:bash].include?(sym)||value.integer?
         #{(name==:state&&act==:lose)? "(sym==:hp||sym==:sp||sym==:mag_shield||sym==:atk_shield) or ":''}
         @#{name}[sym]#{act==:gain ? '+':'-'}=value
       else
@@ -106,16 +104,20 @@ private
     }
 
     [:mag_outamp,:phy_outamp,
-     :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
      :consum_amp,:heal_amp,:tough,
      :max_mag_shield,:max_atk_shield,
      :atk_vamp,:skl_vamp].each{|sym|
       @total[sym]=0
     }
-
-    @total[:critical]=[]
-    @total[:bash]=[]
+    [:ignore,:dodge,:block,
+     :mag_resist,:phy_resist,:atk_resist,
+     :critical,:bash].each{|sym|
+      @total[sym]=[]
+      @equip[sym]=[]
+      @state[sym]=[]
+    }
+    
     @total[:healhp]=@total[:str]*@@Coef[:healhp]
     @total[:healsp]=@total[:int]*@@Coef[:healsp]
     @total[:tough]=@base[:level]
@@ -124,7 +126,6 @@ private
      :wlkspd,:atkspd,:atkcd,:shtcd,
      :maxhp,:maxsp,:healhp,:healsp,:hp,:sp,
      :mag_outamp,:phy_outamp,
-     :mag_resist,:phy_resist,:atk_resist,
      :mag_decatk,:phy_decatk,
      :consum_amp,:heal_amp,:tough,
      :mag_shield,:max_mag_shield,
@@ -137,16 +138,25 @@ private
     @state[:hp]=@state[:sp]=0
     @state[:mag_shield]=@state[:atk_shield]=0
   end
-  def compute_block_dodge
-    @total[:dodge]=@total[:agi]*@@Coef[:dodge]
-    @total[:block]=@total[:str]*@@Coef[:block]
-    @total[:ignore]=0
+  def compute_union_attrib
+    @total[:block]=[@total[:str]*@@Coef[:block]]
 
-    [:dodge,:block,:ignore].each{|sym|
+    [:mag_resist,:phy_resist,:atk_resist,
+     :block,:ignore].each{|sym|
       @total[sym]+=@state[sym]
       @total[sym]+=@equip[sym]
-      @total[sym]=@total[sym].confine(0,100)
+      base=0
+      @total[sym].each{|value|
+        base=100-(100-base)*(100-value)/100
+      }
+      @total[sym]=base.confine(0,99)
     }
+  end
+  def compute_maximun_attrib
+    @total[:dodge]=[@total[:agi]*@@Coef[:dodge]]
+    @total[:dodge]+=@equip[:dodge]
+    @total[:dodge]+=@state[:dodge]
+    @total[:dodge]=@total[:dodge].max.confine(0,99)
   end
   def compute_amp_attrib
     @@Base.each{|base|
@@ -181,7 +191,8 @@ public
   def compute_total
     compute_base_attrib
     compute_state_equip
-    compute_block_dodge
+    compute_union_attrib
+    compute_maximun_attrib
     compute_amp_attrib
     compute_step
   end
