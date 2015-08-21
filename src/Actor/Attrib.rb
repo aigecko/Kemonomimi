@@ -27,6 +27,13 @@ class Actor::Attrib
     @amped=Hash.new(0)
     @total=Hash.new(0)
 
+    [:ignore,:dodge,:block,
+     :mag_resist,:phy_resist,:atk_resist,
+     :critical,:bash].each{|sym|
+      @equip[sym]=[]
+      @state[sym]=[]
+    }
+    
     @growth=growth_base
 
     @base[:level]=[@base[:level],1].max
@@ -114,8 +121,6 @@ private
      :mag_resist,:phy_resist,:atk_resist,
      :critical,:bash].each{|sym|
       @total[sym]=[]
-      @equip[sym]=[]
-      @state[sym]=[]
     }
     
     @total[:healhp]=@total[:str]*@@Coef[:healhp]
