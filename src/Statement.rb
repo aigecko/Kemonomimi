@@ -49,11 +49,13 @@ class Statement
     @magicimu_keep=info[:magicimu_keep]
     @negative=info[:negative]
     @flag=info[:flag]
+    @prev_compute_time=Game.get_ticks
   end
   def refresh
     @end_time=Game.get_ticks+@last_time
   end
   def update(actor)
+    tough_compute(actor)
     @effect or return
     @next_affect_time<Game.get_ticks or return
     @effect.affect(actor,actor.position,@effect_amp)
@@ -63,12 +65,21 @@ class Statement
   def keep_when_magicimmunity?
     return @magicimu_keep
   end
-  def tough_compute(tough)
-    @last_time-=@last_time*tough/100
-    @last_time<0 and @last_time=0
+  def tough_compute(actor)
+    @last_time or return
+    @negative or return
+    tough=actor.attrib[:tough]
+    delta=(Game.get_ticks-@prev_compute_time)*tough/(100+tough)
+    @end_time-=delta
+    @last_time-=delta
+    @prev_compute_time=Game.get_ticks
   end
   def end?
-    return @last_time&&@end_time<Game.get_ticks&&@cur_effect_count==0
+    if @negative
+      return @last_time&&@end_time<Game.get_ticks
+    else
+      return @last_time&&@end_time<Game.get_ticks&&@cur_effect_count==0
+    end
   end
   def draw_icon(x,y,mx,my)
     @icon or return false
