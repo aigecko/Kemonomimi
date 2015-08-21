@@ -140,7 +140,7 @@ klass={
     寒冰之力:開啟後增加(15/18/21)%技吸及(800/1200/1600)最大生命(1000/1400/1800)最大法力並持續20秒#metamorphosis
   ],
   :fighter=>%w[
-    #20+反擊之火:受到普攻反彈(10*lv)+(0.1+0.2*lv)*def絕對傷害#attack_defnese->counter_attack
+    #20+反擊之火:受到普攻反彈(10*lv)+0.5*def絕對傷害#attack_defnese->counter_attack
     #20+堅忍不拔:最大生命增幅(5+0.75*lv)%且格檔增幅(6+lv)%#auto->amplify
     #20+無畏衝鋒:魔法免疫(1+lv*0.25)秒並增加(20*lv)近攻#magic_immunity
 
@@ -159,22 +159,22 @@ klass={
     #隱藏技能:爆裂連斬:對指定敵人進行(5/6/7)次斬擊
   ],
   :paladin=>%w[
-    神聖庇護:n%機率無視攻擊並增加m%雙防#auto->amplify
-    聖光反射:受攻擊n%造成範圍m+r*mdef魔傷及暈眩s秒#attack_defense->counter_beam
-    聖光庇佑:魔法免疫n秒並增加m物防魔防r秒#magic_immunuty
+    #15+神聖庇護:(7+lv)%機率無視攻擊並增加(5+lv)%雙防#auto->amplify
+    #20+聖光反射:受攻擊(14+lv)%造成範圍(20*lv)+0.3*mdef魔傷及暈眩0.2秒#attack_defense->counter_beam
+    #15+聖光庇佑:魔法免疫(2+0.2*lv)秒並增加(20*lv)雙防#magic_immunuty
     
-    輝煌聖光:範圍產生n+m*mdef護盾並增加r+s*int攻速
-    聖光波動:普攻帶範圍n+m*atk物理傷害#smash_wave
-    神聖祝福:自身每秒回複n+m*mdef生命並增加r+s*def攻擊持續t秒#recover
+    #15+輝煌聖光:範圍產生(40*lv)+1.1*mdef護盾並增加(35+2*lv)攻速持續4秒
+    #20+神聖波動:普攻帶範圍(20*lv)+0.6*atk物理傷害#switch_append->smash_wave
+    #20+神聖祝福:自身每秒回複(10*lv)+0.2*matk生命並增加(20*lv)+0.1*def攻擊持續t秒#recover
 
-    一瞬閃光:前方直線n+m*matk魔法傷害#magic_arrow
-    光束打擊:指定範圍n+m*matk魔法傷害#explode
-    自我奉獻:施展法術時範圍回復n%最大生命法力#attach->contribute
+    #20+一瞬閃光:前方直線(20*lv)+0.5*matk魔法傷害#magic_arrow
+    #20+光束打擊:指定範圍(20*lv)+0.8*matk魔法傷害#explode
+    #15+自我奉獻:施展法術時範圍回復(10*lv)+3%最大生命法力#attach->contribute
 
-    平衡之盾:增加盾n倍def最大生命及m倍mdef最大法力#auto->rl_weapon
-    平衡之槍:增加長槍n倍atk魔攻#auto->single_weapon
+    平衡之盾:增加盾8倍def最大生命及8倍mdef最大法力#auto->rl_weapon
+    平衡之槍:增加長槍90%atk的魔攻#auto->single_weapon
 
-    神聖之力:開啟後增加n最大生命m%跑速且基礎攻速變為s持續r秒#metamorphosis
+    神聖之力:開啟後增加(1000/1500/2000)最大生命跑速30%且基礎攻速變為(1.1/1.0/0.9)持續(40/50/60)秒#metamorphosis
   ],
   :darkknight=>%w[
     #15+血殤靈光:反彈(15+2*lv)%絕對傷害給周圍敵人#attack_defense->soul_of_Mototada
