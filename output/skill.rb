@@ -11,7 +11,7 @@ $skill[:catear]={
 $skill[:dogear]={
   name:'尾刀狗',type: :before,cd: 0,
   icon:'./rc/icon/icon/mat_tklre002/skill_028.png:[0,0]',
-  base: :dogear,consum: 0,level: 1,table:[0,0],
+  base: :Dogear,consum: 0,level: 1,table:[0,0],
   comment:'敵人的生命比例越低對其傷害越高'}
 $skill[:foxear]={
   name:'狐耳基里的祝福',type: :none,
@@ -20,7 +20,7 @@ $skill[:foxear]={
 $skill[:wolfear]={
   name:'狼耳基里的祝福',type: :auto,cd: 0.5,
   icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,255,255]',
-  base: :wolfear,consum: 0,level: 1,table:[0,0],
+  base: :Wolfear,consum: 0,level: 1,table:[0,0],
   comment:'生命越少回復的生命和法力會越多'}
 $skill[:leopardcatear]={
   name:'貓科無敵時間',type: :none,cd: 0.6,
@@ -36,7 +36,7 @@ $skill[:counter_attack]={
 $skill[:amplify_hp_block]={
   name:'堅忍不拔',type: :auto,
   icon:'./rc/icon/skill/2011-12-23_3-186.gif:[0,0]B[0,255,0]',
-  base: :amplify,table:[0,{maxhp: 0.06,block: 11}],
+  base: :Amplify,table:[0,{maxhp: 0.06,block: 11}],
   data:{name:'堅忍不拔',sym: :amplify_hp_block},
   comment:'最大生命增幅#{@table[@level][:maxhp]*100}% 格檔增幅#{@table[@level][:block]}%'}
 $skill[:fighter_magic_immunity]={
@@ -52,7 +52,7 @@ $skill[:break_armor]={
 $skill[:fire_boost]={
   name:'猛攻之火',type: :active,consum: 40,cd: 20,
   icon: './rc/icon/skill/2011-12-23_3-050.gif:[0,0]B[0,255,0]',
-  base: :boost,
+  base: :Boost,
   table:[0,{base:{atkspd: 40,wlkspd: 0.12},add:{atkspd:[:int,0.1],wlkspd:[:int,0.001]}}],
   data:{name:'猛攻',sym: :boost_fire,icon:'./rc/icon/skill/2011-12-23_3-050.gif',last: 16},
   comment:'在#{@data[:last]}秒內增加#{@table[@level][:base][:atkspd]}+#{@table[@level][:add][:atkspd][1]}int%攻速及#{@table[@level][:base][:wlkspd]*100}+#{@table[@level][:add][:wlkspd][1]*100}int%跑速'}
@@ -99,7 +99,7 @@ $skill[:counter_beam]={
 $skill[:holy_protect]={
   name:'神聖庇護',type: :auto,
   icon:'./rc/icon/skill/2011-12-23_3-073.gif:[0,0]B[255,0,0]',
-  base: :amplify,table:[0,{ignore: 9}],
+  base: :Amplify,table:[0,{ignore: 9}],
   data:{name:'神聖庇護',sym: :amplify_ignore},
   comment:'有#{@table[@level][:ignore]}%機率忽略受到的攻擊'}
 $skill[:paladin_magic_immunity]={

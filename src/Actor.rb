@@ -49,10 +49,10 @@ class Actor
     attack_cd=class_data[:attack_cd]
     arrow_cd=class_data[:arrow_cd]
 
-    add_base_skill(:normal_attack,
+    add_base_skill(:NormalAttack,
       name:'普通攻擊',type: :attack,cd: attack_cd,
       icon:'./rc/icon/skill/2011-12-23_3-034.gif:[0,0]B[255,255,0]',
-      base: :normal_attack,consum: 0,level: 1,table:[0,0],
+      base: :NormalAttack,consum: 0,level: 1,table:[0,0],
       common_cd: :arrow,
       comment:'對點擊的敵人攻擊 追著目標窮追猛打')
     add_base_skill(:arrow,
@@ -67,7 +67,7 @@ class Actor
           [[[:blit,0,5],[:blit,1,5],[:blit,2,5],[:blit,1,5]]] ],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
-      common_cd: :normal_attack,
+      common_cd: :NormalAttack,
       comment:'快速射出一隻箭造成#{#T[0]}+ratk的傷害')
   end  
   def skill_initialize

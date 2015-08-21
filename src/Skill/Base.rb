@@ -3,30 +3,13 @@ class Skill::Base
   def self.call(info)
     raise "SkillBaseNotImplementError"
   end
-  require_relative 'Skill/BaseBoost.rb'
+  ['Boost','Amplify','NormalAttack',
+   'Omamori','Flash',
+   'Wolfear','Dogear'].each{|postfix|
+    require_relative "Skill/Base#{postfix}.rb"
+  }
   def self.init
     @proc={}
-    @proc[:flash]=->(info){
-      limit=info[:args]
-      caster=info[:caster]
-      x,z=caster.position.x,caster.position.z
-      dis=Math.distance(x,z,info[:x],info[:z])
-      if dis>limit
-        delta_x=(info[:x]-x)*limit/dis
-        delta_z=(info[:z]-z)*limit/dis
-
-        dst_x=x+delta_x
-        dst_z=z+delta_z
-        caster.set_move_dst(info[:x],0,info[:z])
-        caster.position.x=dst_x
-        caster.position.z=dst_z
-      else
-        caster.set_move_dst(info[:x],0,info[:z])
-        caster.position.x=info[:x]
-        caster.position.z=info[:z]
-      end
-    }
-
     @proc[:counter_attack]=->(info){
       attack=info[:args][0]+(info[:caster].attrib[:def]*info[:args][1]).to_i
       Attack.new(info[:caster],
@@ -34,28 +17,7 @@ class Skill::Base
         attack: attack).affect(info[:target],info[:target].position)
       return info[:attack]
     }
-    @proc[:omamori]=->(info){
-      return :miss
-    }
-
-    @proc[:amplify]=->(info){
-      caster=info[:caster]
-      if caster.has_state?(info[:data][:sym])
-        if caster.var[:amplify_attrib]!=info[:args]
-          caster.var[:amplify_attrib]=info[:args]
-        else
-          return
-        end
-      end
-      attrib=info[:args]
-      caster.add_state(caster,
-        name: info[:data][:name],
-        sym: info[:data][:sym],
-        magicimu_keep: true,
-        attrib: attrib,
-        last: nil
-      )
-    }
+    
     @proc[:boost_circle]=->(info){
       caster=info[:caster]
       args=info[:args]
@@ -515,16 +477,7 @@ class Skill::Base
       )
     }
 
-    @proc[:normal_attack]=->(info){
-      attack=info[:caster].attrib[:atk]
-      Attack.new(info[:caster],
-        type: :phy,
-        cast_type: :attack,
-        attack: attack,
-        before: :attack_increase,
-      ).affect(info[:target],info[:target].position)
-    }
-
+    
     @proc[:fire_circle]=->(info){
       attack=info[:args][0]+info[:caster].attrib[:matk]
       if Game.get_ticks>info[:caster].var[:fire_circle_triger]
@@ -561,41 +514,7 @@ class Skill::Base
       )
     }
 
-    @proc[:wolfear]=->(info){
-      caster=info[:caster]
-      attrib=caster.attrib
-
-      healhp=(attrib[:maxhp]-attrib[:hp])*0.02
-      healsp=healhp*attrib[:maxsp]/attrib[:maxhp]
-
-      caster.add_state(caster,
-        name:'狼耳之血',sym: :wolfear,
-        icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,0,0]',
-        attrib: {healhp: healhp,healsp: healsp},
-        magicimu_keep: true,
-        last: nil)
-    }
-    @proc[:dogear]=->(info){
-      maxhp,hp=info[:target].attrib[:maxhp],info[:target].attrib[:hp]
-      percent=hp*100/maxhp
-
-      if percent<10
-        attack_amp=50
-        elsif percent<20
-        attack_amp=40
-      elsif percent<40
-        attack_amp=20
-      elsif percent<60
-        attack_amp=10
-      else
-        attack_amp=0
-      end
-      #0.1*0.5+0.1*0.4+0.2*0.2+0.2*0.1
-      # 0.10*0.6+0.05*0.5+0.1*0.4+0.15*0.3+0.2*0.15
-      #10%:1.6 15%:1.5 25%:1.4 40%:1.3 60%:1.15
-        info[:caster].attrib[:attack_amp]=attack_amp
-    }
-
+    
     @proc[:snow_shield]=->(info){
       reduce_percent=info[:args][0]
       convert_coeff=info[:args][1]
@@ -746,6 +665,6 @@ class Skill::Base
   end
   def self.[](skill)
     skill or return
-    @proc[skill] or Skill::Base.const_get(skill.capitalize)
+    @proc[skill] or Skill::Base.const_get(skill)
   end
 end

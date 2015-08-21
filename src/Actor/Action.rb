@@ -64,7 +64,7 @@ class Actor::Action
       set_action(:attack)
       if !@target.died?
         @position.x>@target.position.x ? @actor.rotate(-1) : @actor.rotate(1)
-        @actor.cast(:normal_attack,@target,nil,nil,nil)
+        @actor.cast(:NormalAttack,@target,nil,nil,nil)
       end
     when :pickup
       pickup_item(@target)
