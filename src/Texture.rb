@@ -37,7 +37,7 @@ class Texture
   def w;return @origin_w;end
   def h;return @origin_h;end
   def draw(dst_x,dst_y,dst_z=0,alpha=1.0)
-    draw_float(dst_x,dst_y,dst_z,alpha)
+    draw_float(dst_x.to_i,dst_y.to_i,dst_z,alpha)
   end  
   def draw_float(x,y,z=0,alpha=1.0)
     w,h=@draw_w,@draw_h
