@@ -22,16 +22,11 @@ $skill[:wolfear]={
   icon:'./rc/icon/skill/2011-12-23_3-079.gif:[0,0]B[255,255,255]',
   base: :Wolfear,consum: 0,level: 1,table:[0,0],
   comment:'生命越少回復的生命和法力會越多'}
-$skill[:leopardcatear]={
-  name:'貓科無敵時間',type: :none,cd: 0.6,
-  icon:'./rc/icon/skill/2011-12-23_3-180.gif:[0,0]B[255,0,0]',
-  comment:'受到攻擊有20%機率減傷50%持續0.5秒'
-}
 
 $skill[:counter_attack]={
   name:'反擊之火',type: :pre_attack_defense,
   icon:'./rc/icon/skill/2011-12-23_3-049.gif:[0,0]B[0,255,0]',
-  base: :counter_attack,table:[0,[10,0.1]],
+  base: :CounterAttack,table:[0,[10,0.1]],
   comment:'受攻擊時反彈#{@table[@level][0]}+#{@table[@level][1]}def絕對傷害'}
 $skill[:amplify_hp_block]={
   name:'堅忍不拔',type: :auto,
@@ -42,12 +37,12 @@ $skill[:amplify_hp_block]={
 $skill[:fighter_magic_immunity]={
   name:'魔法免疫',type: :active,cd: 30,
   icon:'./rc/icon/icon/tklre04/skill_053.png:[0,0]B[0,255,0]',
-  base: :magic_immunity,consum: 50,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},last: 4}],#}#}#}#}
+  base: :MagicImmunity,consum: 50,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},last: 4}],#}#}#}#}
   comment:'魔法免疫且增加#{@table[@level][:base][:atk]}+#{@table[@level][:add][:atk][1]}str近攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:break_armor]={
   name:'破甲斬擊',type: :append,
   icon:'./rc/icon/icon/tklre05/skill_074.png:[0,0]B[0,255,0]',
-  base: :break_armor,table:[0,-5],
+  base: :BreakArmor,table:[0,-5],
   comment:'命中目標降低#{-@table[@level]}xLog(matk}的雙防2秒'}
 $skill[:fire_boost]={
   name:'猛攻之火',type: :active,consum: 40,cd: 20,
@@ -59,24 +54,24 @@ $skill[:fire_boost]={
 $skill[:attack_increase]={
   name:'烈火戳刺',type: :before,
   icon:'./rc/icon/icon/mat_tkl001/skill_001a.png:[0,0]',
-  base: :attack_increase,table:[0,6],
+  base: :AttackIncrease,table:[0,6],
   data:{name:'烈火戳刺',sym: :attack_increase,atk: 15},
   comment:'每次攻擊同一目標提高#{@data[:atk]}傷害最多疊加#{@table[@level]}層'}
 $skill[:fire_burn]={
   name:'流動之火',type: :append,
   icon:'./rc/icon/skill/2011-12-23_3-051.gif:[0,0]B[0,255,0]',
-  base: :burn,table:[0,[25,0.55]],
+  base: :Burn,table:[0,[25,0.55]],
   data:{name:'燃燒',sym: :burn,icon:'./rc/icon/skill/2011-12-23_3-051.gif'},
   comment:'普攻造成目標燃燒2秒造成#{@table[@level][0]}+#{@table[@level][1]}matk絕對傷害'}
 $skill[:fire_circle]={
   name:'熾焰焚身',type: :switch_auto,cd: 1,
   icon:'./rc/icon/skill/2011-12-23_3-072.gif:[0,0]B[0,255,0]',
-  base: :fire_circle,consum: 5,table:[0,[20,-0.1]],
+  base: :FireCircle,consum: 5,table:[0,[20,-0.1]],
   comment:'每秒造成#{@table[@level][0]}+matk範圍魔法傷害並降低#{-@table[@level][1]*100}%跑速'}
 $skill[:fire_burst]={
   name:'火圈迸裂',type: :append,
   icon:'./rc/icon/icon/mat_tkl001/skill_005a.png:[0,0]',
-  base: :fire_burst,table:[0,[40,0.3,0.3]],
+  base: :FireBurst,table:[0,[40,0.3,0.3]],
   comment:'第三下普攻造成範圍#{@table[@level][0]}+#{@table[@level][1]}matk魔傷並暈眩#{@table[@level][2]}秒'}
 $skill[:dual_weapon_atkspd]={
   name:'輕巧雙刀',type: :auto,
@@ -93,7 +88,7 @@ $skill[:rl_weapon_heal]={
 $skill[:counter_beam]={
   name:'聖光反射',type: :pre_attack_defense,
   icon:'./rc/icon/icon/mat_tklre002/skill_022.png:[0,0]',
-  base: :counter_beam,table:[0,[20,0.1]],
+  base: :CounterBeam,table:[0,[20,0.1]],
   data:{possibility: 14,cd: 0.8},
   comment:'受攻擊#{@data[:possibility]}%造成範圍#{@table[@level][0]}+def魔法傷害及暈眩#{@table[@level][1]}秒'}
 $skill[:holy_protect]={
@@ -106,26 +101,26 @@ $skill[:paladin_magic_immunity]={
   name:'魔法免疫',type: :active,cd: 30,
   icon:'./rc/icon/icon/tklre04/skill_053.png:[0,0]B[255,0,0]',
   attach: :contribute,
-  base: :magic_immunity,consum: 50,
+  base: :MagicImmunity,consum: 50,
   table:[0,{base:{matk: 10,def: 30},add:{matk:[:int,0.1],def:[:con,0.1]},last: 3}],#}#}#}
   comment:'魔法免疫且增加#{@table[@level][:base][:matk]}+#{@table[@level][:add][:matk][1]}int魔攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:paladin_boost]={
   name:'輝煌聖光',type: :active,cd: 6,
   icon:'./rc/icon/icon/mat_tkl001/skill_011.png:[0,0]',
-  base: :boost_circle,consum: 10,attach: :contribute,
+  base: :BoostCircle,consum: 10,attach: :contribute,
   table:[0,[30,30]],
   data:{name:'輝煌聖光',sym: :paladin_boost,icon:'./rc/icon/icon/mat_tkl001/skill_011.png',last: 5},
   comment:'範圍回復#{@table[@level][0]}+0.3matk生命並增加#{@table[@level][1]}+0.1int攻速'}
 $skill[:paladin_smash_wave]={
   name:'神聖波動',type: :append,
   icon:'./rc/icon/skill/2011-12-23_3-037.gif:[0,0]B[0,255,0]',
-  base: :smash_wave,table:[0,[50,50]],
+  base: :SmashWave,table:[0,[50,50]],
   data:{sym: :atk,coef: 0.6,type: :umag},
   comment:'攻擊時#{@table[@level][1]}%產生#{@table[@level][0]}+#{@data[:coef]}atk範圍魔法傷害'}
 $skill[:paladin_recover]={
   name:'神聖祝福',type: :active,cd: 15,
   icon:'./rc/icon/icon/mat_tkl001/skill_012.png:[0,0]B[255,0,0]',
-  base: :recover,consum: 15,attach: :contribute,
+  base: :Recover,consum: 15,attach: :contribute,
   table:[0,{coef: 0,add: 0.2,attrib:{atk: 0.35}}],
   data:{add: :matk,name:'神聖祝福',sym: :paladin_recover,icon:'./rc/icon/icon/mat_tkl001/skill_012.png',last: 10},
   comment:'每秒回復#{@table[@level][:add]}matk生命並增加#{@table[@level][:attrib][:atk]}%攻擊持續#{@data[:last]}秒'}
@@ -144,7 +139,7 @@ $skill[:paladin_beam]={
   name:'光束打擊',type: :active,
   icon:'./rc/icon/icon/mat_tkl001/skill_003c.png:[0,0]',
   attach: :contribute,
-  base: :explode,cd: 8,consum: 10,table:[0,200],
+  base: :Explode,cd: 8,consum: 10,table:[0,200],
   data:{sym: :matk,coef: 0.7,type: :mag,
     pic:[:follow,
     {img:['./rc/pic/battle/paladin_beam.png'],
@@ -155,7 +150,7 @@ $skill[:paladin_beam]={
 $skill[:contribute]={
   name:'自我奉獻',type: :attach,
   icon:'./rc/icon/icon/mat_tkl001/skill_010.png:[0,0]',
-  base: :contribute,table:[0,0.03],
+  base: :Contribute,table:[0,0.03],
   comment:'施展技能時回復附近友軍#{@table[@level]*100}%最大生命及最大法力'}
 $skill[:rl_weapon_hpsp]={
   name:'平衡之盾',type: :auto,
