@@ -8,88 +8,13 @@ class Skill::Base
    'Wolfear','Dogear',
    'Arrow','Missile','Explode',
    'BoostCircle','CounterBeam','Contribute','SmashWave',
-   'CounterAttack','AttackIncrease','FireBurst','Burn','FireCircle','BreakArmor'
+   'CounterAttack','AttackIncrease','FireBurst','Burn','FireCircle','BreakArmor',
+   'DualWeaponAtkspdAcc','RightLeftWeapon','SingleWeapon'
    ].each{|postfix|
     require_relative "Skill/Base#{postfix}.rb"
   }
   def self.init
     @proc={}
-    
-    @proc[:dual_weapon_atkspd_acc]=->(info){
-      caster=info[:caster]
-      right_hand=caster.equip[:right]
-      left_hand=caster.equip[:left]
-      if right_hand&&left_hand&&
-         right_hand.part==:dual&&
-         left_hand.part==:dual
-        if caster.var[:dual_weapon_right]!=right_hand||
-           caster.var[:dual_weapon_left]!=left_hand
-          atkspd=right_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
-          atkspd+=left_hand.attrib[:atkspd]*Math.log10(caster.attrib[:str])
-          caster.add_state(caster,
-            name:'',sym: :dual_weapon_atkpsd,
-            icon: nil,
-            attrib: {atkspd: atkspd.to_i},
-            magicimu_keep: true,
-            last: nil)
-          caster.var[:dual_weapon_right]=right_hand
-          caster.var[:dual_weapon_left]=left_hand
-        end
-      else
-        caster.var[:dual_weapon_right]=nil
-        caster.var[:dual_weapon_left]=nil
-        caster.del_state(:dual_weapon_atkpsd)
-      end
-    }
-    @proc[:rl_weapon]=->(info){
-      caster=info[:caster]
-      right_hand=caster.equip[:right]
-      left_hand=caster.equip[:left]
-      if right_hand&&left_hand&&
-         right_hand.part==:right&&
-         left_hand.part==:left
-        if caster.var[:rl_weapon_right]!=right_hand||
-           caster.var[:rl_weapon_left]!=left_hand
-          def_conv=left_hand.attrib[:def]*info[:data][:def_coef]
-          mdef_conv=left_hand.attrib[:mdef]*info[:data][:mdef_coef]
-          caster.add_state(caster,
-            name:'',sym: :rl_weapon,
-            icon: nil,
-            attrib: {info[:data][:def_conv]=>def_conv,info[:data][:mdef_conv]=>mdef_conv},
-            magicimu_keep: true,
-            last: nil)
-          caster.var[:rl_weapon_right]=right_hand
-          caster.var[:rl_weapon_left]=left_hand
-        end
-      else
-        caster.var[:rl_weapon_right]=nil
-        caster.var[:rl_weapon_left]=nil
-        caster.del_state(:rl_weapon)
-      end
-    }
-    @proc[:single_weapon]=->(info){
-      caster=info[:caster]
-      right_hand=caster.equip[:right]
-      left_hand=caster.equip[:left]
-      if right_hand&&!left_hand&&
-         right_hand.part==:single
-        if caster.var[:single_weapon]!=right_hand
-          value=(right_hand.attrib[info[:data][:sym]]*info[:data][:coef]).to_i
-          caster.add_state(caster,
-            name:'',sym: :single_weapon,
-            icon: nil,
-            attrib:{info[:data][:conv]=>value},
-            magicimu_keep: true,
-            last: nil)
-          caster.var[:single_weapon]=right_hand
-        end
-      else
-        caster.var[:single_weapon]=nil
-        caster.del_state(:single_weapon)
-      end
-    }
-
-    
 
     @proc[:fire_arrow]=->(info){
       attack=info[:args]
@@ -100,8 +25,6 @@ class Skill::Base
       attack=const+info[:caster].attrib[:sp]*percent/100
       Attack.new(info[:caster],type: :umag,attack: attack).affect(info[:target],info[:target].position)
     }
-
-    
 
     @proc[:snow_shield]=->(info){
       reduce_percent=info[:args][0]

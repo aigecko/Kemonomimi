@@ -76,12 +76,12 @@ $skill[:fire_burst]={
 $skill[:dual_weapon_atkspd]={
   name:'輕巧雙刀',type: :auto,
   icon:'./rc/icon/icon/mat_tkl002/we_sword007b.png:[5,0]',
-  base: :dual_weapon_atkspd_acc,
+  base: :DualWeaponAtkspdAcc,
   comment:'雙手裝備雙刀時額外增加雙刀攻速xLog(str)的攻速'}
 $skill[:rl_weapon_heal]={
   name:'再生之盾',type: :auto,
   icon:'./rc/icon/icon/mat_tkl003/shield_001r.png:[0,0]',
-  base: :rl_weapon,
+  base: :RightLeftWeapon,
   data:{def_coef: 0.2,mdef_coef: 0.2,def_conv: :healhp,mdef_conv: :healsp},
   comment:'增加盾#{@data[:def_coef]}物防的回復生命以及#{@data[:mdef_coef]}魔防的回復法力'}
   
@@ -155,13 +155,13 @@ $skill[:contribute]={
 $skill[:rl_weapon_hpsp]={
   name:'平衡之盾',type: :auto,
   icon:'./rc/icon/icon/mat_tkl003/shield_001r.png:[0,0]',
-  base: :rl_weapon,
+  base: :RightLeftWeapon,
   data:{def_coef: 8,mdef_coef: 8,def_conv: :maxhp,mdef_conv: :maxsp},
   comment:'增加盾#{@data[:def_coef]}倍物防的最大生命及#{@data[:mdef_coef]}倍魔防的最大法力'}
 $skill[:single_weapon_matk]={
   name:'平衡之槍',type: :auto,
   icon:'./rc/icon/item/2011-12-23_1-033.gif:[0,0]B[0,0,255]',
-  base: :single_weapon,
+  base: :SingleWeapon,
   data:{sym: :atk,coef: 1,conv: :matk},
   comment:'增加長槍1倍物攻的魔攻'}
 
