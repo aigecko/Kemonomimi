@@ -133,7 +133,7 @@ $skill[:paladin_chop]={
   name:'聖光衝擊',type: :active,
   icon:'./rc/icon/icon/mat_tkl001/skill_002c.png:[0,0]',
   attach: :contribute,
-  base: :arrow,cd: 3,consum: 5,table:[0,[100,18]],
+  base: :Arrow,cd: 3,consum: 5,table:[0,[100,18]],
   data: {sym: :matk,coef: 0.8,type: :mag,cast_type: :skill,
     launch_y: :ground,
     pic:[:follow,{img:['./rc/pic/battle/paladin_chop.png'],w: 50,h: 30},[[[:blit,0]]]],

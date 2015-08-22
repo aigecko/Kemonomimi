@@ -58,7 +58,7 @@ class Actor
     add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
-      base: :arrow,table:[0,[50,25]],
+      base: :Arrow,table:[0,[50,25]],
       data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
         launch_y: :center,
         live_cycle: :time,

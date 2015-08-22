@@ -77,7 +77,7 @@ class Map
     enemy.add_base_skill(:shoot,
       name:'聖光衝擊',type: :active,
       icon:'./rc/icon/icon/mat_tkl001/skill_002c.png:[0,0]',
-      base: :arrow,cd: 0.1,consum: 1,table:[0,[10,10]],
+      base: :Arrow,cd: 0.1,consum: 1,table:[0,[10,10]],
       data: {sym: :matk,coef: 0.8,type: :phy,cast_type: :attack,
         launch_y: 44,launch_x: :face,
         pic:[:follow,{img:['./rc/pic/battle/shell.bmp'],w: 50,h: 30},[[[:blit,0]]]],
