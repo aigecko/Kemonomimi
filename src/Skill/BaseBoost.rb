@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Boost < Skill::Base
+class Skill::Base::Boost 
   def self.call(info)
     caster=info[:caster]
     data=info[:data]

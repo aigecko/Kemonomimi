@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Wolfear < Skill::Base
+class Skill::Base::Wolfear 
   def self.call(info)
     caster=info[:caster]
     attrib=caster.attrib

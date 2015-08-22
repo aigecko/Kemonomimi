@@ -141,7 +141,7 @@ class Actor
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
-        base: :missile,consum: 5,cd: 3,table:[0,[100]],
+        base: :Missile,consum: 5,cd: 3,table:[0,[100]],
         data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
           live_cycle: :time,live_count: 20,velocity: 15},

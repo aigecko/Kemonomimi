@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Flash < Skill::Base
+class Skill::Base::Flash 
   def self.call(info)
     limit=info[:args]
     caster=info[:caster]

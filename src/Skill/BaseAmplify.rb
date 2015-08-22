@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Amplify < Skill::Base
+class Skill::Base::Amplify 
   def self.call(info)
     caster=info[:caster]
     if caster.has_state?(info[:data][:sym])

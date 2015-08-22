@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::NormalAttack < Skill::Base
+class Skill::Base::NormalAttack 
   def self.call(info)
     attack=info[:caster].attrib[:atk]
     Attack.new(info[:caster],

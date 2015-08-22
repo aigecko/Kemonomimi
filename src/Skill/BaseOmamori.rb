@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Omamori < Skill::Base
+class Skill::Base::Omamori 
   def self.call(info)
     return :miss
   end

@@ -1,5 +1,5 @@
 #coding: utf-8
-class Skill::Base::Dogear < Skill::Base
+class Skill::Base::Dogear 
   def self.call(info)
     maxhp,hp=info[:target].attrib[:maxhp],info[:target].attrib[:hp]
     percent=hp*100/maxhp
