@@ -156,7 +156,7 @@ class Actor
       add_skill(:enegy_arrow,
         name:'碎石杖擊',type: :switch_append,
         icon:'./rc/icon/skill/2011-12-23_3-125.gif:[0,0]B[255,0,0]',
-        base: :enegy_arrow,consum: 5,level: 1,table:[0,[40,10]],
+        base: :EnergyArrow,consum: 5,level: 1,table:[0,[40,10]],
         comment:'開啟後普攻帶#{#T[0]}+#{#T[1]}%現有法力之無視魔免魔傷')
     end    
   end

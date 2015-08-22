@@ -4,7 +4,7 @@ class Skill::Base
     raise "SkillBaseNotImplementError"
   end
   ['Boost','Amplify','NormalAttack',
-   'Omamori','Flash','Recover','Aura','MagicImmunity',
+   'Omamori','Flash','Recover','Aura','MagicImmunity','EnergyArrow','Heal'
    'Wolfear','Dogear',
    'Arrow','Missile','Explode',
    'BoostCircle','CounterBeam','Contribute','SmashWave',
@@ -15,16 +15,6 @@ class Skill::Base
   }
   def self.init
     @proc={}
-
-    @proc[:fire_arrow]=->(info){
-      attack=info[:args]
-      Attack.new(info[:caster],type: :mag,attack: attack).affect(info[:target],info[:target].position)
-    }
-    @proc[:enegy_arrow]=->(info){
-      const,percent= *info[:args]
-      attack=const+info[:caster].attrib[:sp]*percent/100
-      Attack.new(info[:caster],type: :umag,attack: attack).affect(info[:target],info[:target].position)
-    }
 
     @proc[:snow_shield]=->(info){
       reduce_percent=info[:args][0]
@@ -113,16 +103,6 @@ class Skill::Base
       )
     }
 
-    @proc[:heal]=->(info){
-      hp,sp=info[:args][:hp],info[:args][:sp]
-      data=info[:data]||{}
-      target=info[:target]
-      Heal.new(info[:caster],
-        type: data[:type],hp: hp,sp: sp,
-        hpsym: data[:hpsym],hpcoef: data[:hpcoef],
-        spsym: data[:spsym],spcoef: data[:spcoef]).affect(target,target.position)
-    }
-        
     @proc[:Mototada_R]=->(info){
       caster=info[:caster]
       data=info[:data]
