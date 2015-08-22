@@ -79,11 +79,6 @@ class Actor
       [:paladin_boost,:paladin_smash_wave,:paladin_recover].each{|skill|
         add_class_skill(:attack,skill,Database.get_skill(skill))
       }
-      add_skill(:ignore,
-        name:'',type: :none,
-        icon: nil,
-        base: :heal,table:[0,{sp: 0}],
-        data:{spsym: :def,spcoef: 0.1})
       [:paladin_chop,:paladin_beam,:contribute].each{|skill|
         add_class_skill(:skill,skill,Database.get_skill(skill))
       }
@@ -94,7 +89,7 @@ class Actor
       add_class_skill(:defense,:bloody_curse,
         name:'血殤靈光',type: :attack_defense,
         icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
-        base: :Mototada_R,table:[nil,[15,75,50]],
+        base: :MototadaR,table:[nil,[15,75,50]],
         comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}之敵人')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
@@ -113,31 +108,14 @@ class Actor
       add_class_skill(:defense,:snow_shield,
         name:'吹雪護盾',type: :switch_attack_defense,
         icon:'./rc/icon/skill/2011-12-23_3-054.gif:[0,0]B[255,0,0]',
-        base: :snow_shield,table:[0,[50,1]],
+        base: :SnowShield,table:[0,[50,1]],
         comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗')
       add_class_skill(:defense,:freezing_rain,
         name:'凍雨凝結',type: :pre_attack_defense,
         icon:'./rc/icon/icon/mat_tkl001/skill_005b.png:[0,0]',
-        base: :freezing_rain,table:[0,[12,10]],
+        base: :FreezingRain,table:[0,[12,10]],
         data: {coef: 0.02,icon:'./rc/icon/icon/mat_tkl001/skill_005b.png'},
         comment:'降低攻擊者#{#T[0]}+#{#D[:coef]}int百分比的近攻魔攻持續#{#T[1]}秒')
-      add_class_skill(:defense,:ice_body,
-        name:'寒冰之軀',type: :active,consum: 40,cd: 30,
-        icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
-        base: :ice_body,table:[0,[20,5,20]],
-        data:{icon:'./rc/icon/skill/2011-12-23_3-187.gif'},
-        comment:'開啟後提升#{#T[0]}雙防及#{#T[1]}%魔攻持續#{#T[2]}秒')
-      add_class_skill(:attack,:water_smash,
-        name:'水流衝擊',type: :append,
-        icon:'./rc/icon/icon/mat_tkl001/skill_003b.png:[0,0]',
-        base: :water_smash,table:[0,[20,0.7]],
-        comment:'普攻附加#{#T[0]}+#{#T[1]}*int魔傷')
-      add_class_skill(:attack,:itegumo_erupt,
-        name:'凍雲爆發',type: :append,
-        icon:'./rc/icon/skill/2011-12-23_3-057.gif:[0,0]B[255,0,0]',
-        base: :itegumo_erupt,table:[0,[20,20,6]],
-        comment:'普攻#{#T[0]}%爆發範圍強緩#{#T[1]}%跑速攻速#{#T[2]}秒')
-      
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
@@ -149,7 +127,7 @@ class Actor
       add_class_skill(:magic,:ice_wave,
         name:'寒霜結界',type: :skill_append,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
-        base: :ice_wave,consum: 0,table:[0,20],
+        base: :IceWave,consum: 0,table:[0,20],
         data:{coef:{int: 0.8}},
         comment:'魔法命中造成#{#T}+#{#D[:coef][:int]}int範圍絕對傷害')
     when :cleric

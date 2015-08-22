@@ -17,7 +17,6 @@ class Skill
     return @@TypeList
   end
   def self.init
-    Base.init
     [:skill_active_cding_back,:skill_active_back,
      :skill_switch_on_back,:skill_switch_off_back,
      :skill_passive_back,:skill_clicked].each{|name|

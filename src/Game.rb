@@ -30,7 +30,6 @@ class<<Game
     load_lib
     Skill.init
     Event.init
-    Skill.init
     win_initialize
     
     puts "start #{Time.now-$t}"
