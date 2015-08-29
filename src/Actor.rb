@@ -116,11 +116,13 @@ class Actor
         ],
         comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗')
       add_class_skill(:defense,:freezing_rain,
-        name:'凍雨凝結',type: :pre_attack_defense,
+        name:'凍雨凝結',type: :switch_attack_defense,consum: 10,
         icon:'./rc/icon/icon/mat_tkl001/skill_005b.png:[0,0]',
-        base: :FreezingRain,table:[0,[12,10]],
-        data: {coef: 0.02,icon:'./rc/icon/icon/mat_tkl001/skill_005b.png'},
-        comment:'降低攻擊者#{#T[0]}+#{#D[:coef]}int百分比的近攻魔攻持續#{#T[1]}秒')
+        base: :FreezingRain,table:[nil,
+          11,12,13,14,15,16,17,18,19,20,
+          21,22,23,24,25,26,27,28,29,30],
+        data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tkl001/skill_005b.png',last_time: 3},
+        comment:'降低攻擊者#{#T}%近攻魔攻持續#{#D[:last_time]}秒')
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',

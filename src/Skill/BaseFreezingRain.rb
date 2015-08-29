@@ -1,14 +1,16 @@
 #coding: utf-8
 class Skill::Base::FreezingRain
   def self.call(info)
-    percent=info[:args][0]+info[:caster].attrib[:int]*info[:data][:coef]
+    caster=info[:caster]
+    percent=info[:args]
     percent/=-100.0
-    info[:target].add_state(info[:caster],
-      name:'凍雨凝結',sym: :freezing_rain,
+    info[:target].add_state(caster,
+      name: info[:data][:name],
+      sym: :freezing_rain,
       icon: info[:data][:icon],
-      attrib: {atk: percent,matk: percent},
+      attrib: {atk: percent,ratk: percent},
       magicimu_keep: true,
-      last: info[:args][1].to_sec
+      last: info[:data][:last_time].to_sec
     )
     return info[:attack]
   end
