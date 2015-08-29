@@ -16,15 +16,26 @@ class DynamicString
       Font.draw_texture(eval(@value,@binding).to_s,12,x,y,*@color)
     end
   end
+  class NewLine
+    def h
+      return 12
+    end
+    def draw(x,y)
+      return :endl
+    end
+  end
   @@VariableRegExp=/(\#\{[a-zA-Z0-9\[\]#\:\@_\.\*\+\-\"\%]*\})/
   @@ColorRegExp=/(#[\da-fA-F]{6,6}\|)|(#default\|)/
   @@GetColorRegExp=/#(..)(..)(..)\|/
   @@DefaultColorRegExp=/#default\|/
+  @@EndLineRegExp=/(\\n)/
   def initialize(str,color,binding)
-    ary=str.split(@@VariableRegExp)
+    var_ary=str.split(@@VariableRegExp)
     default_color=color
+    color_ary=[]
+    var_ary.each{|substr| color_ary+=substr.split(@@ColorRegExp)}
     queue=[]
-    ary.each{|substr| queue+=substr.split(@@ColorRegExp)}
+    color_ary.each{|substr| queue+=substr.split(@@EndLineRegExp)}
     @list=[]
     queue.each{|str|
       case str
@@ -34,6 +45,8 @@ class DynamicString
         color=default_color
       when @@GetColorRegExp
         color=[$1.hex,$2.hex,$3.hex]
+      when @@EndLineRegExp
+        @list<<NewLine.new
       else
         str.empty? or
         @list<<Font.render_texture(str,12,*color)
@@ -41,9 +54,14 @@ class DynamicString
     }
   end
   def draw(x,y)
+    base_x,base_y=x,y
     @list.each{|str|
-      str.draw(x,y)
-      x+=str.w
+      if str.draw(x,y)==:endl
+        x=base_x
+        y+=str.h
+      else
+        x+=str.w
+      end
     }
   end
 end
