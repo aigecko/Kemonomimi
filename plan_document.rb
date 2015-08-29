@@ -124,7 +124,7 @@ klass={
     大地之力:開啟後增加400%攻速(100/200/300)智力智慧及普攻回復0.1*matk生命持續(10/16/22)秒#metamorphosis
   ],
   :mage=>%w[
-    #20+吹雪護盾:開啟後(20+lv)%傷害交由(1+lv*0.2)法力承受#switch_attack_defnese->soul_of_Masayuki
+    V#20+實念之盾:開啟後(20+lv)%傷害交由(1+lv*0.2)法力承受#switch_attack_defnese->soul_of_Masayuki
     #20+凍雨凝結:造成攻擊者降低(10+lv)%近攻遠攻持續3秒#attack_defense->freezing_rain
     #20+寒冰之軀:提升(11*lv)雙防及降低(2+lv)%sp消耗#switch_auto->amplify
 

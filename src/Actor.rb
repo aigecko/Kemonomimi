@@ -106,9 +106,14 @@ class Actor
       }
    when :mage
       add_class_skill(:defense,:snow_shield,
-        name:'吹雪護盾',type: :switch_attack_defense,
+        name:'實念之盾',type: :switch_attack_defense,
         icon:'./rc/icon/skill/2011-12-23_3-054.gif:[0,0]B[255,0,0]',
-        base: :SnowShield,table:[0,[50,1]],
+        base: :SnowShield,table:[nil,
+          [21,1.2],[22,1.4],[23,1.6],[24,1.8],[25,2.0],
+          [26,2.2],[27,2.4],[28,2.6],[29,2.8],[30,3.0],
+          [31,3.2],[32,3.4],[33,3.6],[34,3.8],[35,4.0],
+          [36,4.2],[37,4.4],[38,4.6],[39,4.8],[40,5.0]
+        ],
         comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗')
       add_class_skill(:defense,:freezing_rain,
         name:'凍雨凝結',type: :pre_attack_defense,
