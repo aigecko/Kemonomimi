@@ -123,6 +123,23 @@ class Actor
           21,22,23,24,25,26,27,28,29,30],
         data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tkl001/skill_005b.png',last_time: 3},
         comment:'降低攻擊者#{#T}%近攻魔攻持續#{#D[:last_time]}秒')
+      add_class_skill(:defense,:ice_body,
+        name:'寒冰之軀',type: :switch_auto,consum: 10,cd: 1,
+        icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
+        base: :Amplify,table:[nil,
+          {def:  11,mdef:  11,consum_amp: -3},{def:  22,mdef:  22,consum_amp: -4},
+          {def:  33,mdef:  33,consum_amp: -5},{def:  44,mdef:  44,consum_amp: -6},
+          {def:  55,mdef:  55,consum_amp: -7},{def:  66,mdef:  66,consum_amp: -8},
+          {def:  77,mdef:  77,consum_amp: -9},{def:  88,mdef:  88,consum_amp:-10},
+          {def:  99,mdef:  99,consum_amp:-11},{def: 110,mdef: 110,consum_amp:-12},
+          {def: 121,mdef: 121,consum_amp:-13},{def: 132,mdef: 132,consum_amp:-14},
+          {def: 143,mdef: 143,consum_amp:-15},{def: 154,mdef: 154,consum_amp:-16},
+          {def: 165,mdef: 165,consum_amp:-17},{def: 176,mdef: 176,consum_amp:-18},
+          {def: 187,mdef: 187,consum_amp:-19},{def: 198,mdef: 198,consum_amp:-20},
+          {def: 209,mdef: 209,consum_amp:-21},{def: 220,mdef: 220,consum_amp:-22}
+        ],
+        data:{name:'寒冰之軀',sym: :ice_body},
+        comment:'提升#{#T[:def]}雙防及降低#{-#T[:consum_amp]}%之SP消耗')
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
