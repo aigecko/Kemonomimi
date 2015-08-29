@@ -128,7 +128,7 @@ klass={
     V#20+凍雨凝結:造成攻擊者降低(10+lv)%近攻遠攻持續3秒#attack_defense->freezing_rain
     V#20+寒冰之軀:提升(11*lv)雙防及降低(2+lv)%sp消耗#switch_auto->amplify
 
-    #20+霜刺:普攻附加(25*lv)+0.2*atk無視魔免魔傷以及強緩(15+2*lv)%跑速(25+3*lv)%攻速2秒#switch_append->energy_arrow
+    V#20+霜刺:普攻附加(25*lv)+0.2*atk無視魔免魔傷以及強緩(10+2*lv)%跑速(25+3*lv)%攻速2秒#switch_append->energy_arrow
 
     #20+寒冰爆彈:指定敵人受到範圍(20*lv)+0.9*matk魔法傷害#missile
     #20+冰柱戳刺:指定敵人受到範圍(20*lv)+0.5*matk魔傷暈2.5秒#missile

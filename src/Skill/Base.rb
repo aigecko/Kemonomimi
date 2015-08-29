@@ -6,7 +6,7 @@ class Skill::Base
    'Arrow','Missile','Explode',
    'BoostCircle','CounterBeam','Contribute','SmashWave',
    'CounterAttack','AttackIncrease','FireBurst','Burn','FireCircle','BreakArmor',
-   'SnowShield','FreezingRain','IceWave',
+   'SnowShield','FreezingRain','IceWave','FrostThorn',
    'DualWeaponAtkspdAcc','RightLeftWeapon','SingleWeapon',
    'MototadaR'
    ].each{|postfix|

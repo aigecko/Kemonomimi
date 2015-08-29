@@ -140,6 +140,22 @@ class Actor
         ],
         data:{name:'寒冰之軀',sym: :ice_body},
         comment:'提升#{#T[:def]}雙防及降低#{-#T[:consum_amp]}%之SP消耗')
+      add_class_skill(:attack,:frost_thorn,
+        name:'霜刺',type: :switch_append,consum: 5,
+        icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
+        base: :FrostThorn,table: [nil,
+          [ 25,12,28],[ 50,14,31],[ 75,16,34],[100,18,37],[125,20,40],
+          [150,22,43],[175,24,46],[200,26,49],[225,28,52],[250,30,55],
+          [275,32,58],[300,34,61],[325,36,64],[350,38,67],[375,40,70],
+          [400,42,73],[425,44,76],[450,46,79],[475,48,82],[500,50,85]
+        ],
+        data:{
+          name:'霜刺',sym: :forst_thorn,coef: 0.2,
+          icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
+          last_time: 2
+        },
+        comment:'普攻附加#{#T[0]}+#{#D[:coef]}atk無視魔免魔傷\n並強緩#{#T[1]}%跑速#{#T[2]}%攻速持續#{#D[:last_time]}秒'
+        )
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰球',type: :active,
         icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
