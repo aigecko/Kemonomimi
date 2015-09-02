@@ -1,5 +1,5 @@
 #coding: utf-8
-class MagicImmunity
+class Skill::Base::MagicImmunity
   def self.call(info)
     caster=info[:caster]
     add=info[:args][:add]
@@ -11,12 +11,19 @@ class MagicImmunity
       add[sym] and
       attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
     }
-    last=info[:args][:last].to_sec
-
+    magic_last=info[:args][:magic_last].to_sec
+    attrib_last=info[:args][:attrib_last].to_sec
+    
     caster.add_state(caster,
-      name:'魔法免疫',sym: :magic_immunity,
-      icon:'./rc/icon/icon/tklre04/skill_053.png',
+      name: '魔法免疫',sym: :magic_immunity,
+      icon: './rc/icon/skill/2011-12-23_3-179.gif:[0,0]B[0,255,0]',
+      magicimu_keep: true,
+      attrib: {},
+      last: magic_last)
+    caster.add_state(caster,
+      name: '屬性增加',sym: info[:data][:sym],
+      magicimu_keep: true,
       attrib: attrib,
-      last: last)
+      last: attrib_last)
   end
 end

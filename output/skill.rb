@@ -37,7 +37,8 @@ $skill[:amplify_hp_block]={
 $skill[:fighter_magic_immunity]={
   name:'魔法免疫',type: :active,cd: 30,
   icon:'./rc/icon/icon/tklre04/skill_053.png:[0,0]B[0,255,0]',
-  base: :MagicImmunity,consum: 50,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},last: 4}],#}#}#}#}
+  data:{sym: :fighter_magic_immunity},
+  base: :MagicImmunity,consum: 50,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},magic_last: 4,attrib_last: 9}],#}#}#}#}
   comment:'魔法免疫且增加#{@table[@level][:base][:atk]}+#{@table[@level][:add][:atk][1]}str近攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:break_armor]={
   name:'破甲斬擊',type: :append,
@@ -102,7 +103,8 @@ $skill[:paladin_magic_immunity]={
   icon:'./rc/icon/icon/tklre04/skill_053.png:[0,0]B[255,0,0]',
   attach: :contribute,
   base: :MagicImmunity,consum: 50,
-  table:[0,{base:{matk: 10,def: 30},add:{matk:[:int,0.1],def:[:con,0.1]},last: 3}],#}#}#}
+  data:{sym: :paladin_magic_immunity},
+  table:[0,{base:{matk: 10,def: 30},add:{matk:[:int,0.1],def:[:con,0.1]},magic_last: 3,attrib_last: 3}],#}#}#}
   comment:'魔法免疫且增加#{@table[@level][:base][:matk]}+#{@table[@level][:add][:matk][1]}int魔攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:paladin_boost]={
   name:'輝煌聖光',type: :active,cd: 6,
