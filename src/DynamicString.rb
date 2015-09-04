@@ -24,7 +24,7 @@ class DynamicString
       return :endl
     end
   end
-  @@VariableRegExp=/(\#\{[a-zA-Z0-9\[\]#\:\@_\.\*\+\-\"\%]*\})/
+  @@VariableRegExp=/(\#\{[a-zA-Z0-9\[\]#\:\@_\.\*\+\-\"\%\(\)]*\})/
   @@ColorRegExp=/(#[\da-fA-F]{6,6}\|)|(#default\|)/
   @@GetColorRegExp=/#(..)(..)(..)\|/
   @@DefaultColorRegExp=/#default\|/

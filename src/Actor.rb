@@ -97,22 +97,35 @@ class Actor
         comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}的敵人')
       add_class_skill(:defense,:black_hole,
         name:'能量黑洞',type: :auto,
-        icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
+        icon:'./rc/icon/skill/2011-12-23_3-069.gif:[0,0]B[255,0,0]',
         base: :Amplify,table:[nil,
-          {ignore:  6,atk_vamp:  3,skl_vamp:  3},{ignore:  7,atk_vamp:  4,skl_vamp:  4},
-          {ignore:  8,atk_vamp:  5,skl_vamp:  5},{ignore:  9,atk_vamp:  6,skl_vamp:  6},
-          {ignore: 10,atk_vamp:  7,skl_vamp:  7},{ignore: 11,atk_vamp:  8,skl_vamp:  8},
-          {ignore: 12,atk_vamp:  9,skl_vamp:  9},{ignore: 13,atk_vamp: 10,skl_vamp: 10},
-          {ignore: 14,atk_vamp: 11,skl_vamp: 11},{ignore: 15,atk_vamp: 12,skl_vamp: 12},
-          {ignore: 16,atk_vamp: 13,skl_vamp: 13},{ignore: 17,atk_vamp: 14,skl_vamp: 14},
-          {ignore: 18,atk_vamp: 15,skl_vamp: 15},{ignore: 19,atk_vamp: 16,skl_vamp: 16},
-          {ignore: 20,atk_vamp: 17,skl_vamp: 17},{ignore: 21,atk_vamp: 18,skl_vamp: 18},
-          {ignore: 22,atk_vamp: 19,skl_vamp: 19},{ignore: 23,atk_vamp: 20,skl_vamp: 20},
-          {ignore: 24,atk_vamp: 21,skl_vamp: 21},{ignore: 25,atk_vamp: 22,skl_vamp: 22}
+          {ignore:  6,atk_vamp: 0.03,skl_vamp: 0.03},{ignore:  7,atk_vamp: 0.04,skl_vamp: 0.04},
+          {ignore:  8,atk_vamp: 0.05,skl_vamp: 0.05},{ignore:  9,atk_vamp: 0.06,skl_vamp: 0.06},
+          {ignore: 10,atk_vamp: 0.07,skl_vamp: 0.07},{ignore: 11,atk_vamp: 0.08,skl_vamp: 0.08},
+          {ignore: 12,atk_vamp: 0.09,skl_vamp: 0.09},{ignore: 13,atk_vamp: 0.10,skl_vamp: 0.10},
+          {ignore: 14,atk_vamp: 0.11,skl_vamp: 0.11},{ignore: 15,atk_vamp: 0.12,skl_vamp: 0.12},
+          {ignore: 16,atk_vamp: 0.13,skl_vamp: 0.13},{ignore: 17,atk_vamp: 0.14,skl_vamp: 0.14},
+          {ignore: 18,atk_vamp: 0.15,skl_vamp: 0.15},{ignore: 19,atk_vamp: 0.16,skl_vamp: 0.16},
+          {ignore: 20,atk_vamp: 0.17,skl_vamp: 0.17},{ignore: 21,atk_vamp: 0.18,skl_vamp: 0.18},
+          {ignore: 22,atk_vamp: 0.19,skl_vamp: 0.19},{ignore: 23,atk_vamp: 0.20,skl_vamp: 0.20},
+          {ignore: 24,atk_vamp: 0.21,skl_vamp: 0.21},{ignore: 25,atk_vamp: 0.22,skl_vamp: 0.22}
         ],
         data:{name:'能量黑洞',sym: :black_hole},
-        comment:'#{#T[:ignore]}%機率無視攻擊並增加#{#T[:atk_vamp]}%普攻吸血及#{#T[:skl_vamp]}%技能吸血'
-        )
+        comment:'#{#T[:ignore]}%機率無視攻擊並增加#{(#T[:atk_vamp]*100).to_i}%普攻吸血及#{(#T[:skl_vamp]*100).to_i}%技能吸血')
+      add_class_skill(:attack,:slow_poison,
+        name:'淬毒武器',type: :append,
+        icon:'./rc/icon/icon/mat_tklre002/skill_024.png:[0,0]',
+        base: :SlowPoison,table:[nil,
+          [ 10,0.5,33,0],[ 20,0.5,36,0],[ 30,0.5,39,0],[ 40,0.5,42,0],[ 50,0.5,45,0],
+          [ 60,0.5,48,0],[ 70,0.5,51,0],[ 80,0.5,54,0],[ 90,0.5,57,0],[100,0.5,60,0],
+          [110,0.5,63,0],[120,0.5,66,0],[130,0.5,69,0],[140,0.5,72,0],[150,0.5,75,0],
+          [160,0.5,78,0],[170,0.5,81,0],[180,0.5,84,0],[190,0.5,87,0],[200,0.5,90,0]
+        ],
+        data:{
+          name:'淬毒武器',sym: :slow_poison,
+          icon:'./rc/icon/icon/mat_tklre002/skill_024.png:[0,0]',
+          attrib: :matk,type: :mag,last_time: 4},
+        comment:'普通攻擊附加持續的傷害\n造成每秒#{#T[0]}+#{#T[1]}*matk魔法傷害\n並降低#{#T[2]}%攻速持續#{#D[:last_time]}秒')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))

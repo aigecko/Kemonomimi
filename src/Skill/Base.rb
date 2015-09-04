@@ -8,7 +8,7 @@ class Skill::Base
    'CounterAttack','AttackIncrease','FireBurst','Burn','FireCircle','BreakArmor',
    'SnowShield','FreezingRain','IceWave','FrostThorn',
    'DualWeaponAtkspdAcc','RightLeftWeapon','SingleWeapon',
-   'MototadaR'
+   'MototadaR','SlowPoison'
    ].each{|postfix|
     require_relative "Skill/Base#{postfix}.rb"
   }
