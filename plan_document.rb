@@ -179,7 +179,7 @@ klass={
   :darkknight=>%w[
     V#15+血殤靈光:反彈受到的(15+2*lv)%絕對傷害給範圍(75+5*lv)敵人#attack_defense->soul_of_Mototada
     #15+血債血償:無視傷害時吸收其(10+lv)%傷害之生命值#ignore
-    #20+能量黑洞:(10+0.5*lv)%無視傷害並增加(2+lv)%雙吸血#attack_defense->amplify
+    V#20+能量黑洞:(5+lv)%無視傷害並增加(2+lv)%雙吸血#auto->amplify
     
     #20+血性狂怒:魔法免疫(2+0.2*lv)秒並增加(50+5*lv)攻速16%跑速18秒#magic_immunity
     #20+淬毒武器:普通攻擊附加(10*lv)+0.5*matk魔法傷害並緩(15+2*lv)%攻速持續4秒

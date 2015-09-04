@@ -95,6 +95,24 @@ class Actor
           [37,130,50],[39,135,50],[41,140,50],[43,145,50],[45,150,50]
         ],
         comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}的敵人')
+      add_class_skill(:defense,:black_hole,
+        name:'能量黑洞',type: :auto,
+        icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
+        base: :Amplify,table:[nil,
+          {ignore:  6,atk_vamp:  3,skl_vamp:  3},{ignore:  7,atk_vamp:  4,skl_vamp:  4},
+          {ignore:  8,atk_vamp:  5,skl_vamp:  5},{ignore:  9,atk_vamp:  6,skl_vamp:  6},
+          {ignore: 10,atk_vamp:  7,skl_vamp:  7},{ignore: 11,atk_vamp:  8,skl_vamp:  8},
+          {ignore: 12,atk_vamp:  9,skl_vamp:  9},{ignore: 13,atk_vamp: 10,skl_vamp: 10},
+          {ignore: 14,atk_vamp: 11,skl_vamp: 11},{ignore: 15,atk_vamp: 12,skl_vamp: 12},
+          {ignore: 16,atk_vamp: 13,skl_vamp: 13},{ignore: 17,atk_vamp: 14,skl_vamp: 14},
+          {ignore: 18,atk_vamp: 15,skl_vamp: 15},{ignore: 19,atk_vamp: 16,skl_vamp: 16},
+          {ignore: 20,atk_vamp: 17,skl_vamp: 17},{ignore: 21,atk_vamp: 18,skl_vamp: 18},
+          {ignore: 22,atk_vamp: 19,skl_vamp: 19},{ignore: 23,atk_vamp: 20,skl_vamp: 20},
+          {ignore: 24,atk_vamp: 21,skl_vamp: 21},{ignore: 25,atk_vamp: 22,skl_vamp: 22}
+        ],
+        data:{name:'能量黑洞',sym: :black_hole},
+        comment:'#{#T[:ignore]}%機率無視攻擊並增加#{#T[:atk_vamp]}%普攻吸血及#{#T[:skl_vamp]}%技能吸血'
+        )
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))
@@ -131,16 +149,16 @@ class Actor
         name:'寒冰之軀',type: :switch_auto,consum: 10,cd: 1,
         icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
         base: :Amplify,table:[nil,
-          {def:  11,mdef:  11,consum_amp: -3},{def:  22,mdef:  22,consum_amp: -4},
-          {def:  33,mdef:  33,consum_amp: -5},{def:  44,mdef:  44,consum_amp: -6},
-          {def:  55,mdef:  55,consum_amp: -7},{def:  66,mdef:  66,consum_amp: -8},
-          {def:  77,mdef:  77,consum_amp: -9},{def:  88,mdef:  88,consum_amp:-10},
-          {def:  99,mdef:  99,consum_amp:-11},{def: 110,mdef: 110,consum_amp:-12},
-          {def: 121,mdef: 121,consum_amp:-13},{def: 132,mdef: 132,consum_amp:-14},
-          {def: 143,mdef: 143,consum_amp:-15},{def: 154,mdef: 154,consum_amp:-16},
-          {def: 165,mdef: 165,consum_amp:-17},{def: 176,mdef: 176,consum_amp:-18},
-          {def: 187,mdef: 187,consum_amp:-19},{def: 198,mdef: 198,consum_amp:-20},
-          {def: 209,mdef: 209,consum_amp:-21},{def: 220,mdef: 220,consum_amp:-22}
+          {:def=>  11,mdef:  11,consum_amp: -3},{:def=>  22,mdef:  22,consum_amp: -4},
+          {:def=>  33,mdef:  33,consum_amp: -5},{:def=>  44,mdef:  44,consum_amp: -6},
+          {:def=>  55,mdef:  55,consum_amp: -7},{:def=>  66,mdef:  66,consum_amp: -8},
+          {:def=>  77,mdef:  77,consum_amp: -9},{:def=>  88,mdef:  88,consum_amp:-10},
+          {:def=>  99,mdef:  99,consum_amp:-11},{:def=> 110,mdef: 110,consum_amp:-12},
+          {:def=> 121,mdef: 121,consum_amp:-13},{:def=> 132,mdef: 132,consum_amp:-14},
+          {:def=> 143,mdef: 143,consum_amp:-15},{:def=> 154,mdef: 154,consum_amp:-16},
+          {:def=> 165,mdef: 165,consum_amp:-17},{:def=> 176,mdef: 176,consum_amp:-18},
+          {:def=> 187,mdef: 187,consum_amp:-19},{:def=> 198,mdef: 198,consum_amp:-20},
+          {:def=> 209,mdef: 209,consum_amp:-21},{:def=> 220,mdef: 220,consum_amp:-22}
         ],
         data:{name:'寒冰之軀',sym: :ice_body},
         comment:'提升#{#T[:def]}雙防及降低#{-#T[:consum_amp]}%之SP消耗')
