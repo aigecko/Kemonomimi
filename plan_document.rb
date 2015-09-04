@@ -130,9 +130,9 @@ klass={
 
     V#20+霜刺:普攻附加(25*lv)+0.2*atk無視魔免魔傷以及強緩(10+2*lv)%跑速(25+3*lv)%攻速2秒#switch_append->energy_arrow
 
-    #20+寒冰爆彈:指定敵人受到範圍(20*lv)+0.9*matk魔法傷害#missile
-    #20+冰柱戳刺:指定敵人受到範圍(20*lv)+0.5*matk魔傷暈2.5秒#missile
-    #20+寒冰噴吐:前方敵人受到範圍(15*lv)+0.6*matk魔傷並付帶(10*lv)+0.1*matk魔傷持續6秒#magic_arrow
+    #20+水柱術:指定敵人受到範圍(20*lv)+0.9*matk魔法傷害#missile
+    #20+冰凍術:指定敵人受到範圍(20*lv)+0.5*matk魔傷暈2.5秒#missile
+    #20+水龍捲:直線敵人受到範圍(15*lv)+0.6*matk魔傷並付帶(10*lv)+0.1*matk魔傷持續6秒#magic_arrow
     #20+寒冰凍破:法術命中後額外造成(10*lv)+0.1*int絕對傷害#explode
 
     法杖聚焦:增加法杖魔攻20%的int#ward_power
@@ -177,7 +177,7 @@ klass={
     神聖之力:開啟後增加(1000/1500/2000)最大生命跑速30%且基礎攻速變為(1.1/1.0/0.9)持續(40/50/60)秒#metamorphosis
   ],
   :darkknight=>%w[
-    #15+血殤靈光:反彈(15+2*lv)%絕對傷害給周圍敵人#attack_defense->soul_of_Mototada
+    V#15+血殤靈光:反彈受到的(15+2*lv)%絕對傷害給範圍(75+5*lv)敵人#attack_defense->soul_of_Mototada
     #15+血債血償:無視傷害時吸收其(10+lv)%傷害之生命值#ignore
     #20+能量黑洞:(10+0.5*lv)%無視傷害並增加(2+lv)%雙吸血#attack_defense->amplify
     

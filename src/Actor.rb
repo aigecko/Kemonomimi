@@ -89,8 +89,12 @@ class Actor
       add_class_skill(:defense,:bloody_curse,
         name:'血殤靈光',type: :attack_defense,
         icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
-        base: :MototadaR,table:[nil,[15,75,50]],
-        comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}之敵人')
+        base: :MototadaR,table:[nil,
+          [17, 80,50],[19, 85,50],[21, 90,50],[23, 95,50],[25,100,50],
+          [27,105,50],[29,110,50],[31,115,50],[33,120,50],[35,125,50],
+          [37,130,50],[39,135,50],[41,140,50],[43,145,50],[45,150,50]
+        ],
+        comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}的敵人')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))
