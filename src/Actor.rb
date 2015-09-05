@@ -194,10 +194,15 @@ class Actor
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰彈',type: :active,
         icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
-        base: :Missile,consum: 5,cd: 3,table:[0,[100]],
+        base: :Missile,consum: 40,cd: 3,table:[nil,
+          [ 20],[ 40],[ 60],[ 80],[100],
+          [120],[140],[160],[180],[200],
+          [220],[240],[260],[280],[300],
+          [300],[340],[360],[380],[400]
+        ],
         data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
-          live_cycle: :time,live_count: 20,velocity: 15},
+          live_cycle: :time,live_count: 25,velocity: 15},
         comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害')
       add_class_skill(:magic,:ice_wave,
         name:'寒冰凍破',type: :skill_append,
