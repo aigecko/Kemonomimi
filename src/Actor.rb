@@ -152,11 +152,11 @@ class Actor
         comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗')
       add_class_skill(:defense,:freezing_rain,
         name:'凍雨凝結',type: :switch_attack_defense,consum: 10,
-        icon:'./rc/icon/icon/mat_tkl001/skill_005b.png:[0,0]',
+        icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',
         base: :FreezingRain,table:[nil,
           11,12,13,14,15,16,17,18,19,20,
           21,22,23,24,25,26,27,28,29,30],
-        data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tkl001/skill_005b.png',last_time: 3},
+        data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',last_time: 3},
         comment:'降低攻擊者#{#T}%近攻魔攻持續#{#D[:last_time]}秒')
       add_class_skill(:defense,:ice_body,
         name:'寒冰之軀',type: :switch_auto,consum: 10,cd: 1,
@@ -192,18 +192,20 @@ class Actor
         comment:'普攻附加#{#T[0]}+#{#D[:coef]}atk無視魔免魔傷\n並強緩#{#T[1]}%跑速#{#T[2]}%攻速持續#{#D[:last_time]}秒'
         )
       add_class_skill(:magic,:ice_arrow,
-        name:'寒冰球',type: :active,
-        icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
+        name:'寒冰彈',type: :active,
+        icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
         base: :Missile,consum: 5,cd: 3,table:[0,[100]],
         data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
           live_cycle: :time,live_count: 20,velocity: 15},
         comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害')
       add_class_skill(:magic,:ice_wave,
-        name:'寒霜結界',type: :skill_append,
+        name:'寒冰凍破',type: :skill_append,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
-        base: :IceWave,consum: 0,table:[0,20],
-        data:{coef:{int: 0.8}},
+        base: :IceWave,consum: 0,table:[nil,
+           10, 20, 30, 40, 50, 60, 70, 80, 90,100,
+          110,120,130,140,150,160,170,180,190,200],
+        data:{coef:{int: 0.3}},
         comment:'魔法命中造成#{#T}+#{#D[:coef][:int]}int範圍絕對傷害')
     when :cleric
       add_skill(:enegy_arrow,
