@@ -63,7 +63,7 @@ class Actor
         launch_y: :center,
         live_cycle: :time,
         pic: [:follow,
-          {img:['./rc/pic/battle/arrow.png:[0,0]C[50,11]'],cut:[[50,11]],w: 50,h: 11},
+          {img:['./rc/pic/battle/arrow.png:[0,0]C[50,11]'],cut: true,w: 50,h: 11},
           [[[:blit,0,5],[:blit,1,5],[:blit,2,5],[:blit,1,5]]] ],
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
@@ -194,7 +194,7 @@ class Actor
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰彈',type: :active,
         icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
-        base: :Missile,consum: 40,cd: 3,table:[nil,
+        base: :Missile,consum: 20,cd: 3,table:[nil,
           [ 20],[ 40],[ 60],[ 80],[100],
           [120],[140],[160],[180],[200],
           [220],[240],[260],[280],[300],
@@ -204,6 +204,29 @@ class Actor
           pic:'./rc/pic/battle/ice_ball.bmp',
           live_cycle: :time,live_count: 25,velocity: 15},
         comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害')
+      add_class_skill(:magic,:freeze,
+        name:'冰凍術',type: :active,
+        icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
+        base: :MagicCircle,cd: 16,consum: 40,table:[nil,
+          [ 20,48,100,{}],[ 40,48,100,{}],[ 60,48,100,{}],[ 80,48,100,{}],[100,48,100,{}],
+          [120,48,100,{}],[140,48,100,{}],[160,48,100,{}],[180,48,100,{}],[200,48,100,{}],
+          [220,48,100,{}],[240,48,100,{}],[260,48,100,{}],[280,48,100,{}],[300,48,100,{}],
+          [320,48,100,{}],[340,48,100,{}],[360,48,100,{}],[380,48,100,{}],[400,48,100,{}]
+        ],
+        data:{
+          coef: 0.5,coef_sym: :matk,type: :mag,
+          name:'暈眩',sym: :stun,icon: nil,last: 2.5,
+          live_cycle: :time_only,live_count: 16,
+          pic:[:follow,
+            {img:['./rc/pic/battle/frozen_circle.png:[0,0]C[96,96]'],
+            w: 96,h: 96,cut: true},
+            [[
+              [:blit,0],[:blit,5],[:blit,10],[:blit,15],[:blit,20],
+              [:blit,1],[:blit,6],[:blit,11],[:blit,16],[:blit,21],
+              [:blit,2],[:blit,7],[:blit,12,5]
+            ]]]
+        },
+        comment:'將踏入指定地點的敵人冰凍#{#D[:last]}秒\n並造成#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}的魔法傷害')
       add_class_skill(:magic,:ice_wave,
         name:'寒冰凍破',type: :skill_append,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',

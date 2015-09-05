@@ -130,7 +130,7 @@ klass={
 
     V#20+霜刺:普攻附加(25*lv)+0.2*atk無視魔免魔傷以及強緩(10+2*lv)%跑速(25+3*lv)%攻速2秒#switch_append->energy_arrow
 
-    #20+寒冰彈:指定方向敵人受到(20*lv)+0.9*matk魔法傷害#missile
+    V#20+寒冰彈:指定方向敵人受到(20*lv)+0.9*matk魔法傷害#missile
     #20+冰凍術:指定敵人受到範圍(20*lv)+0.5*matk魔傷暈2.5秒#missile
     #20+水龍捲:直線敵人受到範圍(15*lv)+0.6*matk魔傷並付帶(10*lv)+0.1*matk魔傷持續6秒#magic_arrow
     V#20+寒冰凍破:法術命中後額外造成(10*lv)+0.3*int絕對傷害#explode

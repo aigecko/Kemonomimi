@@ -196,8 +196,8 @@ class Input
     if info[:cut]&&!(info[:imgAtX]||info[:imgAtY])
       w=info[:cutW].to_i
       h=info[:cutH].to_i
-      for x in 0..img.w/w
-        for y in 0..img.h/h
+      for x in 0...img.w/w
+        for y in 0...img.h/h
           img_array<<img.copy_rect(x*w,y*h,w,h).to_texture
         end
       end

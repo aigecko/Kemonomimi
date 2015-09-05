@@ -141,7 +141,7 @@ $skill[:paladin_beam]={
   name:'光束打擊',type: :active,
   icon:'./rc/icon/icon/mat_tkl001/skill_003c.png:[0,0]',
   attach: :contribute,
-  base: :Explode,cd: 8,consum: 10,table:[0,200],
+  base: :Explode,cd: 8,consum: 10,table:[0,[200,100,100]],
   data:{sym: :matk,coef: 0.7,type: :mag,
     pic:[:follow,
     {img:['./rc/pic/battle/paladin_beam.png'],

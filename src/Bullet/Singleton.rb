@@ -8,7 +8,7 @@ class Bullet
     },
     col: ->(ani,position,shape){
       draw_x=position.x-ani.w/2
-      draw_y=431-position.y-(position.z+ani.h)/2
+      draw_y=431-position.y-position.z/2-ani.h
       ani.draw(draw_x,draw_y,position.z)
     },
     hoz: ->(ani,position,shape){

@@ -3,7 +3,7 @@ class Skill::Base
   ['Boost','Amplify','NormalAttack',
    'Omamori','Flash','Recover','Aura','MagicImmunity','EnergyArrow','Heal',
    'Wolfear','Dogear',
-   'Arrow','Missile','Explode',
+   'Arrow','Missile','Explode','MagicCircle',
    'BoostCircle','CounterBeam','Contribute','SmashWave',
    'CounterAttack','AttackIncrease','FireBurst','Burn','FireCircle','BreakArmor',
    'SnowShield','FreezingRain','IceWave','FrostThorn',
