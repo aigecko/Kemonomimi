@@ -3,12 +3,12 @@ class Skill
   @@ActiveTypeList=
     [:active,:shoot]
   @@SwitchTypeList=
-    [:switch,:switch_auto,:switch_append,:switch_attack_defense]
+    [:switch,:switch_auto,:switck_before,:switch_append,:switch_attack_defense]
   @@TypeList=
     [:none,:auto,:switch,:active,:append,:before,:attach,
      :attack,:shoot,
      :pre_attack_defense,:pre_skill_defense,:attack_defense,
-     :skill_defense,:skill_append,
+     :skill_defense,:skill_append,:skill_before,
      :switch_auto,:switch_append,:switch_attack_defense]
   @@SkillBacks={}
   @@BindableList=

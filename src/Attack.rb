@@ -10,7 +10,7 @@ class Attack
     @attrib=info[:attrib]||Hash.new(0)
   end
   def affect(target,position,scale=1)
-    before(target)
+    before(target,position)
     damage=attack(target)
     if damage==:miss
       show_damage("MISS",target)
@@ -57,9 +57,10 @@ class Attack
     return true
   end
 private
-  def before(target)
+  def before(target,position)
     if @caster.has_skill?(:dogear)
-      @caster.skill[:dogear].cast(@caster,target,nil,nil,nil)
+      @caster.skill[:dogear].cast(
+        @caster,target,position.x,position.y,position.z)
     end
     
     before=@info[:before]
@@ -67,11 +68,11 @@ private
     if before.respond_to? :each
       before.each{|name|
         skill=@caster.skill[name] and
-        skill.cast(@caster,target,nil,nil,nil)
+        skill.cast(@caster,target,position.x,position.y,position.z)
       }
     else
       skill=@caster.skill[before] and
-      skill.cast(@caster,target,nil,nil,nil)
+      skill.cast(@caster,target,position.x,position.y,position.z)
     end
   end
   def pre_attack_defense(target,attack)

@@ -126,7 +126,7 @@ class Skill
     @end_time=Game.get_ticks+@cd.to_sec.to_i
   end
   def cding?
-    return @end_time&&@end_time>Game.get_ticks
+    return @end_time&&@end_time>=Game.get_ticks
   end
   def can_bind?
     return @@BindableList.include?(@type)

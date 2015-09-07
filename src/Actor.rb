@@ -194,29 +194,31 @@ class Actor
       add_class_skill(:magic,:ice_arrow,
         name:'寒冰彈',type: :active,
         icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
-        base: :Missile,consum: 20,cd: 3,table:[nil,
+        base: :Missile,consum: 80,cd: 3,table:[nil,
           [ 20],[ 40],[ 60],[ 80],[100],
           [120],[140],[160],[180],[200],
           [220],[240],[260],[280],[300],
           [300],[340],[360],[380],[400]
         ],
-        data: {coef:{matk: 0.9},type: :mag,append: :ice_wave,
+        data: {
+          coef:{matk: 0.9},type: :mag,before: :ice_wave,
           pic:'./rc/pic/battle/ice_ball.bmp',
-          live_cycle: :time,live_count: 25,velocity: 15},
+          live_cycle: :trigger,live_count: 25,
+          velocity: 15,r: 60,h: 50},
         comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害')
       add_class_skill(:magic,:freeze,
         name:'冰凍術',type: :active,
         icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
-        base: :MagicCircle,cd: 16,consum: 40,table:[nil,
+        base: :MagicCircle,cd: 16,consum: 140,table:[nil,
           [ 20,48,100,{}],[ 40,48,100,{}],[ 60,48,100,{}],[ 80,48,100,{}],[100,48,100,{}],
           [120,48,100,{}],[140,48,100,{}],[160,48,100,{}],[180,48,100,{}],[200,48,100,{}],
           [220,48,100,{}],[240,48,100,{}],[260,48,100,{}],[280,48,100,{}],[300,48,100,{}],
           [320,48,100,{}],[340,48,100,{}],[360,48,100,{}],[380,48,100,{}],[400,48,100,{}]
         ],
         data:{
-          coef: 0.5,coef_sym: :matk,type: :mag,
+          coef: 0.5,coef_sym: :matk,type: :mag,before: :ice_wave,
           name:'暈眩',sym: :stun,icon: nil,last: 2.5,
-          live_cycle: :time_only,live_count: 16,
+          live_cycle: :time_only,live_count: 16,start: :cursor,
           pic:[:follow,
             {img:['./rc/pic/battle/frozen_circle.png:[0,0]C[96,96]'],
             w: 96,h: 96,cut: true},
@@ -227,10 +229,34 @@ class Actor
             ]]]
         },
         comment:'將踏入指定地點的敵人冰凍#{#D[:last]}秒\n並造成#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}的魔法傷害')
+      add_class_skill(:magic,:ice_tornado,
+        name:'水龍捲',type: :active,
+        icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
+        base: :MagicCircle,cd: 12,consum: 120,table:[nil,
+          [15,48,100,{wlkspd: -0.05},{type: :mag,attack: 10}]
+        ],
+        data:{
+          coef: 0.6,coef_sym: :matk,type: :mag,before: :ice_wave,
+          name:'潮溼',sym: :water_slow,icon: nil,last: 6,
+          live_cycle: :time_only,live_count: 24,
+          start: :caster,vx: 18,
+          pic:[:follow,
+            {img:['./rc/pic/battle/3992_1077658210.png:[0,0]C[96,96]'],
+            w: 96,h: 96,cut: true},
+            [[
+              [:blit,0],[:blit,5],[:blit,10],[:blit,15],[:blit,20],
+              [:blit,1],[:blit,6],[:blit,11],[:blit,16],[:blit,21],
+              [:blit,2],[:blit,7],[:blit,12],[:blit,17],[:blit,22],
+              [:blit,3],[:blit,8],[:blit,13],[:blit,18],[:blit,23],
+              [:blit,4],[:blit,9],[:blit,14],[:blit,19],[:blit,24]
+            ]]]
+        },
+        comment:'直線敵人受到範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}魔傷\n'+
+                '並附加#{#T[4][:attack]}魔傷及緩#{"%d"%(-#T[3][:wlkspd]*100)}%跑速持續6秒')
       add_class_skill(:magic,:ice_wave,
-        name:'寒冰凍破',type: :skill_append,
+        name:'寒冰凍破',type: :skill_before,
         icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
-        base: :IceWave,consum: 0,table:[nil,
+        base: :IceWave,cd: 0,consum: 0,table:[nil,
            10, 20, 30, 40, 50, 60, 70, 80, 90,100,
           110,120,130,140,150,160,170,180,190,200],
         data:{coef:{int: 0.3}},
@@ -460,7 +486,7 @@ class Actor
   end
   def can_cast?(end_time,consum)
     (has_state?(:stun)) and return false
-    (Game.get_ticks>end_time) or return false
+    (Game.get_ticks>=end_time) or return false
     return consum.effective?(self)
   end
   def can_cast_auto?(end_time,consum)
