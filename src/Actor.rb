@@ -140,147 +140,16 @@ class Actor
         add_class_skill(:weapon,skill,Database.get_skill(skill))
       }
    when :mage
-      add_class_skill(:defense,:snow_shield,
-        name:'實念之盾',type: :switch_attack_defense,
-        icon:'./rc/icon/skill/2011-12-23_3-054.gif:[0,0]B[255,0,0]',
-        base: :SnowShield,table:[nil,
-          [21,1.2],[22,1.4],[23,1.6],[24,1.8],[25,2.0],
-          [26,2.2],[27,2.4],[28,2.6],[29,2.8],[30,3.0],
-          [31,3.2],[32,3.4],[33,3.6],[34,3.8],[35,4.0],
-          [36,4.2],[37,4.4],[38,4.6],[39,4.8],[40,5.0]
-        ],
-        comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗')
-      add_class_skill(:defense,:freezing_rain,
-        name:'凍雨凝結',type: :switch_attack_defense,consum: 10,
-        icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',
-        base: :FreezingRain,table:[nil,
-          11,12,13,14,15,16,17,18,19,20,
-          21,22,23,24,25,26,27,28,29,30],
-        data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',last_time: 3},
-        comment:'降低攻擊者#{#T}%近攻魔攻持續#{#D[:last_time]}秒')
-      add_class_skill(:defense,:ice_body,
-        name:'寒冰之軀',type: :switch_auto,consum: 10,cd: 1,
-        icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
-        base: :Amplify,table:[nil,
-          {:def=>  11,mdef:  11,consum_amp: -3},{:def=>  22,mdef:  22,consum_amp: -4},
-          {:def=>  33,mdef:  33,consum_amp: -5},{:def=>  44,mdef:  44,consum_amp: -6},
-          {:def=>  55,mdef:  55,consum_amp: -7},{:def=>  66,mdef:  66,consum_amp: -8},
-          {:def=>  77,mdef:  77,consum_amp: -9},{:def=>  88,mdef:  88,consum_amp:-10},
-          {:def=>  99,mdef:  99,consum_amp:-11},{:def=> 110,mdef: 110,consum_amp:-12},
-          {:def=> 121,mdef: 121,consum_amp:-13},{:def=> 132,mdef: 132,consum_amp:-14},
-          {:def=> 143,mdef: 143,consum_amp:-15},{:def=> 154,mdef: 154,consum_amp:-16},
-          {:def=> 165,mdef: 165,consum_amp:-17},{:def=> 176,mdef: 176,consum_amp:-18},
-          {:def=> 187,mdef: 187,consum_amp:-19},{:def=> 198,mdef: 198,consum_amp:-20},
-          {:def=> 209,mdef: 209,consum_amp:-21},{:def=> 220,mdef: 220,consum_amp:-22}
-        ],
-        data:{name:'寒冰之軀',sym: :ice_body},
-        comment:'提升#{#T[:def]}雙防及降低#{-#T[:consum_amp]}%之SP消耗')
-      add_class_skill(:attack,:frost_thorn,
-        name:'霜刺',type: :switch_append,consum: 20,
-        icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
-        base: :FrostThorn,table: [nil,
-          [ 25,12,28],[ 50,14,31],[ 75,16,34],[100,18,37],[125,20,40],
-          [150,22,43],[175,24,46],[200,26,49],[225,28,52],[250,30,55],
-          [275,32,58],[300,34,61],[325,36,64],[350,38,67],[375,40,70],
-          [400,42,73],[425,44,76],[450,46,79],[475,48,82],[500,50,85]
-        ],
-        data:{
-          name:'霜刺',sym: :forst_thorn,coef: 0.2,
-          icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
-          last_time: 2
-        },
-        comment:'普攻附加#{#T[0]}+#{#D[:coef]}atk無視魔免魔傷\n並強緩#{#T[1]}%跑速#{#T[2]}%攻速持續#{#D[:last_time]}秒'
-        )
-      add_class_skill(:magic,:ice_arrow,
-        name:'寒冰彈',type: :active,
-        icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
-        base: :Missile,consum: 80,cd: 3,table:[nil,
-          [ 20],[ 40],[ 60],[ 80],[100],
-          [120],[140],[160],[180],[200],
-          [220],[240],[260],[280],[300],
-          [300],[340],[360],[380],[400]
-        ],
-        data: {
-          coef:{matk: 0.9},type: :mag,before: :ice_wave,
-          pic:'./rc/pic/battle/ice_ball.bmp',
-          live_cycle: :trigger,live_count: 25,
-          velocity: 15,r: 60,h: 50},
-        comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害')
-      add_class_skill(:magic,:freeze,
-        name:'冰凍術',type: :active,
-        icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
-        base: :MagicCircle,cd: 16,consum: 140,table:[nil,
-          [ 20,48,100,{}],[ 40,48,100,{}],[ 60,48,100,{}],[ 80,48,100,{}],[100,48,100,{}],
-          [120,48,100,{}],[140,48,100,{}],[160,48,100,{}],[180,48,100,{}],[200,48,100,{}],
-          [220,48,100,{}],[240,48,100,{}],[260,48,100,{}],[280,48,100,{}],[300,48,100,{}],
-          [320,48,100,{}],[340,48,100,{}],[360,48,100,{}],[380,48,100,{}],[400,48,100,{}]
-        ],
-        data:{
-          coef: 0.5,coef_sym: :matk,type: :mag,before: :ice_wave,
-          name:'暈眩',sym: :stun,icon: nil,last: 2.5,
-          live_cycle: :time_only,live_count: 16,start: :cursor,
-          pic:[:follow,
-            {img:['./rc/pic/battle/frozen_circle.png:[0,0]C[96,96]'],
-            w: 96,h: 96,cut: true},
-            [[
-              [:blit,0],[:blit,5],[:blit,10],[:blit,15],[:blit,20],
-              [:blit,1],[:blit,6],[:blit,11],[:blit,16],[:blit,21],
-              [:blit,2],[:blit,7],[:blit,12,5]
-            ]]]
-        },
-        comment:'將踏入指定地點的敵人冰凍#{#D[:last]}秒\n並造成#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}的魔法傷害')
-      add_class_skill(:magic,:ice_tornado,
-        name:'水龍捲',type: :active,
-        icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
-        base: :MagicCircle,cd: 12,consum: 120,table:[nil,
-          [ 15,48,100,{wlkspd: -0.06},{type: :mag,attack:  10}],
-          [ 30,48,100,{wlkspd: -0.07},{type: :mag,attack:  20}],
-          [ 45,48,100,{wlkspd: -0.08},{type: :mag,attack:  30}],
-          [ 60,48,100,{wlkspd: -0.09},{type: :mag,attack:  40}],
-          [ 75,48,100,{wlkspd: -0.10},{type: :mag,attack:  50}],
-          [ 90,48,100,{wlkspd: -0.11},{type: :mag,attack:  60}],
-          [105,48,100,{wlkspd: -0.12},{type: :mag,attack:  70}],
-          [120,48,100,{wlkspd: -0.13},{type: :mag,attack:  80}],
-          [135,48,100,{wlkspd: -0.14},{type: :mag,attack:  90}],
-          [150,48,100,{wlkspd: -0.15},{type: :mag,attack: 100}],
-          [165,48,100,{wlkspd: -0.16},{type: :mag,attack: 110}],
-          [180,48,100,{wlkspd: -0.17},{type: :mag,attack: 120}],
-          [195,48,100,{wlkspd: -0.18},{type: :mag,attack: 130}],
-          [210,48,100,{wlkspd: -0.19},{type: :mag,attack: 140}],
-          [225,48,100,{wlkspd: -0.20},{type: :mag,attack: 150}],
-          [240,48,100,{wlkspd: -0.21},{type: :mag,attack: 160}],
-          [255,48,100,{wlkspd: -0.22},{type: :mag,attack: 170}],
-          [270,48,100,{wlkspd: -0.23},{type: :mag,attack: 180}],
-          [285,48,100,{wlkspd: -0.24},{type: :mag,attack: 190}],
-          [300,48,100,{wlkspd: -0.25},{type: :mag,attack: 200}]
-        ],
-        data:{
-          coef: 0.6,coef_sym: :matk,type: :mag,before: :ice_wave,
-          name:'潮溼',sym: :water_slow,icon: nil,last: 6,
-          live_cycle: :time_only,live_count: 24,
-          start: :caster,vx: 18,
-          pic:[:follow,
-            {img:['./rc/pic/battle/3992_1077658210.png:[0,0]C[96,96]'],
-            w: 96,h: 96,cut: true},
-            [[
-              [:blit,0],[:blit,5],[:blit,10],[:blit,15],[:blit,20],
-              [:blit,1],[:blit,6],[:blit,11],[:blit,16],[:blit,21],
-              [:blit,2],[:blit,7],[:blit,12],[:blit,17],[:blit,22],
-              [:blit,3],[:blit,8],[:blit,13],[:blit,18],[:blit,23],
-              [:blit,4],[:blit,9],[:blit,14],[:blit,19],[:blit,24]
-            ]]]
-        },
-        comment:'直線敵人受到範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}魔傷\n'+
-                '並附加#{#T[4][:attack]}魔傷及緩#{"%d"%(-#T[3][:wlkspd]*100)}%跑速持續6秒')
-      add_class_skill(:magic,:ice_wave,
-        name:'寒冰凍破',type: :skill_before,
-        icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
-        base: :IceWave,cd: 0,consum: 0,table:[nil,
-           10, 20, 30, 40, 50, 60, 70, 80, 90,100,
-          110,120,130,140,150,160,170,180,190,200],
-        data:{coef:{int: 0.3}},
-        comment:'魔法命中造成#{#T}+#{#D[:coef][:int]}int範圍絕對傷害')
-    when :cleric
+      [:snow_shield,:freezing_rain,:ice_body].each{|skill|
+        add_class_skill(:defense,skill,Database.get_skill(skill))
+      }
+      [:frost_thorn].each{|skill|
+        add_class_skill(:attack,skill,Database.get_skill(skill))
+      }
+      [:ice_arrow,:freeze,:ice_tornado,:ice_wave].each{|skill|
+        add_class_skill(:defense,skill,Database.get_skill(skill))
+      }
+   when :cleric
       add_skill(:enegy_arrow,
         name:'碎石杖擊',type: :switch_append,
         icon:'./rc/icon/skill/2011-12-23_3-125.gif:[0,0]B[255,0,0]',
