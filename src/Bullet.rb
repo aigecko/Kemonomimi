@@ -89,6 +89,8 @@ class<<Bullet
       return FlashBullet.new(effect,ani,shape,info)
     when :time_only
       return TimerOnlyBullet.new(effect,ani,shape,info)
+    when :trigger
+      return TriggerBullet.new(effect,ani,shape,info)
     else
       return NormalBullet.new(effect,ani,shape,info)
     end
@@ -99,3 +101,4 @@ require_relative 'Bullet/TimerBullet'
 require_relative 'Bullet/CounterBullet'
 require_relative 'Bullet/FlashBullet'
 require_relative 'Bullet/TimerOnlyBullet'
+require_relative 'Bullet/TriggerBullet'
