@@ -5,7 +5,11 @@ class Skill::Base::Aura
     args=info[:args]
     data=info[:data]
     aura=Bullet.new(
-      Effect.new(caster,args[:effect]),
+      Effect.new(caster,
+        name: data[:name],sym: data[:sym],
+        icon: data[:icon],
+        attrib: args[:attrib],
+        last: 1.to_sec),
       data[:ani],
       :col,
       caster: caster,

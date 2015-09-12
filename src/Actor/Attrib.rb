@@ -154,7 +154,7 @@ private
       @total[sym].each{|value|
         base=100-(100-base)*(100-value)/100
       }
-      @total[sym]=base.confine(0,99)
+      @total[sym]=base.confine(-99,99)
     }
   end
   def compute_maximun_attrib
