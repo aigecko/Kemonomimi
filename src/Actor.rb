@@ -190,6 +190,27 @@ class Actor
         ],
         data:{target: :enemy,name:'衰弱',sym: :darkknight_weaken},
         comment:'降低範圍#{#T[:r]}內敵人之#{-#T[:attrib][:phy_decatk]}降低物魔傷並增加#{#T[:attrib][:consum_amp]}法力消耗')
+      add_class_skill(:magic,:darkknight_erosion,
+        name:'黑暗侵蝕',type: :switch_auto,consum: 15,cd: 0.5,
+        icon:'./rc/icon/icon/tklre04/skill_061.png:[0,0]B[255,0,0]',
+        base: :FireCircle,table:[nil,
+          [ 10,{healhp:  -15,healsp:  -15}],[ 20,{healhp:  -20,healsp:  -20}],
+          [ 30,{healhp:  -25,healsp:  -25}],[ 40,{healhp:  -30,healsp:  -30}],
+          [ 50,{healhp:  -35,healsp:  -35}],[ 60,{healhp:  -40,healsp:  -40}],
+          [ 70,{healhp:  -45,healsp:  -45}],[ 80,{healhp:  -50,healsp:  -50}],
+          [ 90,{healhp:  -55,healsp:  -55}],[100,{healhp:  -60,healsp:  -60}],
+          [110,{healhp:  -65,healsp:  -65}],[120,{healhp:  -70,healsp:  -70}],
+          [130,{healhp:  -75,healsp:  -75}],[140,{healhp:  -80,healsp:  -80}],
+          [150,{healhp:  -85,healsp:  -85}],[160,{healhp:  -90,healsp:  -90}],
+          [170,{healhp:  -95,healsp:  -95}],[180,{healhp: -100,healsp: -100}],
+          [190,{healhp: -105,healsp: -105}],[200,{healhp: -110,healsp: -110}]
+        ],
+        data:{
+          coef: 0.05,coef_sym: :maxhp,type: :acid,
+          name:'黑暗侵蝕',sym: :darkknight_erosion,
+          icon: nil,last_time: 2,r: 80,h: 100
+        },
+        comment:'開啟後範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}絕對傷害\n並降低#{-#T[1][:healhp]}HP,SP回復持續#{#D[:last_time]}秒')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))

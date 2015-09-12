@@ -69,10 +69,16 @@ $skill[:fire_burn]={
   data:{name:'燃燒',sym: :burn,icon:'./rc/icon/skill/2011-12-23_3-051.gif'},
   comment:'普攻造成目標燃燒2秒造成#{@table[@level][0]}+#{@table[@level][1]}matk絕對傷害'}
 $skill[:fire_circle]={
-  name:'熾焰焚身',type: :switch_auto,cd: 1,
+  name:'熾焰焚身',type: :switch_auto,cd: 0.5,
   icon:'./rc/icon/skill/2011-12-23_3-072.gif:[0,0]B[0,255,0]',
-  base: :FireCircle,consum: 5,table:[0,[20,-0.1]],
-  comment:'每秒造成#{@table[@level][0]}+matk範圍魔法傷害並降低#{-@table[@level][1]*100}%跑速'}
+  base: :FireCircle,consum: 5,table:[0,[20,{wlkspd: -0.1}]],
+  data:{
+    coef: 0.9,coef_sym: :matk,type: :mag,
+    name:'燃燒',sym: :fire_circle,
+    icon:'./rc/icon/skill/2011-12-23_3-072.gif:[0,0]B[0,255,0]',
+    last_time: 5,r: 75,h: 50
+  },
+  comment:'每秒造成#{#T[0]}+matk範圍魔法傷害並降低#{"%d"%(-#T[1][:wlkspd]*100)}%跑速'}
 $skill[:fire_burst]={
   name:'火圈迸裂',type: :append,
   icon:'./rc/icon/icon/mat_tkl001/skill_005a.png:[0,0]',
