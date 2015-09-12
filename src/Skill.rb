@@ -36,8 +36,10 @@ class Skill
       @consum=Consumption.new({sp: consum})
     when Consumption
       @consum=consum
-    else
+    when NilClass
       @consum=Consumption.new({})
+    else
+      @consum=Consumption.new(consum)
     end
     
     @switch=!@@SwitchTypeList.include?(@type)
