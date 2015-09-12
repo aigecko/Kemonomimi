@@ -186,6 +186,9 @@ private
     @total[:wlkspd]=@total[:wlkspd].confine(@@Coef[:wlkspd_min],@@Coef[:wlkspd_max])
     @total[:atkcd]<@@Coef[:atkcd_min] and @total[:atkcd]=@@Coef[:atkcd_min]
     @total[:shtcd]<@@Coef[:shtcd_min] and @total[:shtcd]=@@Coef[:shtcd_min]
+    
+    @total[:phy_decatk]=@total[:phy_decatk].confine(0,@total[:phy_decatk])
+    @total[:mag_decatk]=@total[:mag_decatk].confine(0,@total[:mag_decatk])
   end
   def compute_step
     @total[:wlkstep]=@total[:wlkspd]/Game.FPS

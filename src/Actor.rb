@@ -168,6 +168,28 @@ class Actor
         ],
         data:{target: :enemy,name:'威壓',sym: :darkknight_coercion},
         comment:'降低範圍#{#T[:r]}內敵人#{-#T[:attrib][:phy_resist]}%物理抗性#{-#T[:attrib][:mag_resist]}%魔法抗性')
+      add_class_skill(:magic,:darkknight_weaken,
+        name:'衰弱靈氣',type: :auto,
+        icon:'./rc/icon/icon/tklre04/skill_066.png:[0,0]B[255,0,0]',
+        base: :Aura,table:[nil,
+          {attrib:{phy_decatk:  -5,mag_decatk:  -5,consum_amp: 12},r: 100,h: 100},
+          {attrib:{phy_decatk: -10,mag_decatk: -10,consum_amp: 14},r: 100,h: 100},
+          {attrib:{phy_decatk: -15,mag_decatk: -15,consum_amp: 16},r: 100,h: 100},
+          {attrib:{phy_decatk: -20,mag_decatk: -20,consum_amp: 18},r: 100,h: 100},
+          {attrib:{phy_decatk: -25,mag_decatk: -25,consum_amp: 20},r: 100,h: 100},
+          {attrib:{phy_decatk: -30,mag_decatk: -30,consum_amp: 22},r: 100,h: 100},
+          {attrib:{phy_decatk: -35,mag_decatk: -35,consum_amp: 24},r: 100,h: 100},
+          {attrib:{phy_decatk: -40,mag_decatk: -40,consum_amp: 26},r: 100,h: 100},
+          {attrib:{phy_decatk: -45,mag_decatk: -45,consum_amp: 28},r: 100,h: 100},
+          {attrib:{phy_decatk: -50,mag_decatk: -50,consum_amp: 30},r: 100,h: 100},
+          {attrib:{phy_decatk: -55,mag_decatk: -55,consum_amp: 32},r: 100,h: 100},
+          {attrib:{phy_decatk: -60,mag_decatk: -60,consum_amp: 34},r: 100,h: 100},
+          {attrib:{phy_decatk: -65,mag_decatk: -65,consum_amp: 36},r: 100,h: 100},
+          {attrib:{phy_decatk: -70,mag_decatk: -70,consum_amp: 38},r: 100,h: 100},
+          {attrib:{phy_decatk: -75,mag_decatk: -75,consum_amp: 40},r: 100,h: 100},
+        ],
+        data:{target: :enemy,name:'衰弱',sym: :darkknight_weaken},
+        comment:'降低範圍#{#T[:r]}內敵人之#{-#T[:attrib][:phy_decatk]}降低物魔傷並增加#{#T[:attrib][:consum_amp]}法力消耗')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))
