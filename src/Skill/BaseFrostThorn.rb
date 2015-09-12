@@ -15,6 +15,7 @@ class Skill::Base::FrostThorn
       name: data[:name],sym: data[:sym],
       icon: data[:icon],
       magicimu_keep: true,
+      negative: true,
       attrib: {atkspd: -slow_atkspd/100.0,wlkspd: -slow_wlkspd/100.0},
       last: data[:last_time].to_sec
     )

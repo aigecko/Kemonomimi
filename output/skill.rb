@@ -38,7 +38,11 @@ $skill[:fighter_magic_immunity]={
   name:'魔法免疫',type: :active,cd: 30,
   icon:'./rc/icon/icon/tklre04/skill_053.png:[0,0]B[0,255,0]',
   data:{sym: :fighter_magic_immunity},
-  base: :MagicImmunity,consum: 50,table:[0,{base:{atk: 30,def: 10},add:{atk:[:str,0.1],def:[:con,0.1]},magic_last: 4,attrib_last: 9}],#}#}#}#}
+  base: :MagicImmunity,consum: 50,table:[0,{
+        base:{atk: 30,def: 10},#}
+        add:{atk:[:str,0.1],def:[:con,0.1]},#}
+        magic_last: 4,attrib_last: 9}
+    ],
   comment:'魔法免疫且增加#{@table[@level][:base][:atk]}+#{@table[@level][:add][:atk][1]}str近攻及#{@table[@level][:base][:def]}+#{@table[@level][:add][:def][1]}con物防'}#}
 $skill[:break_armor]={
   name:'破甲斬擊',type: :append,

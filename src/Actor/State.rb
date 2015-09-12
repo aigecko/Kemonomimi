@@ -9,7 +9,6 @@ class Actor::State
     @actor=actor
   end
   def add(state)
-    state.negative and state.tough_compute(@actor.attrib[:tough])
     
     @state[state.sym]||=StatementSet.new
     case state.multi

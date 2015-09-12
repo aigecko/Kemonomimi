@@ -55,7 +55,7 @@ class Statement
     @end_time=Game.get_ticks+@last_time
   end
   def update(actor)
-    tough_compute(actor)
+    tough_compute(actor.attrib[:tough])
     @effect or return
     @next_affect_time<Game.get_ticks or return
     @effect.affect(actor,actor.position,@effect_amp)
@@ -65,11 +65,12 @@ class Statement
   def keep_when_magicimmunity?
     return @magicimu_keep
   end
-  def tough_compute(actor)
+  def tough_compute(tough)
     @last_time or return
     @negative or return
-    tough=actor.attrib[:tough]
-    delta=(Game.get_ticks-@prev_compute_time)*tough/(100+tough)
+    delta=(Game.get_ticks-@prev_compute_time)*
+        tough/
+        (100+tough)
     @end_time-=delta
     @last_time-=delta
     @prev_compute_time=Game.get_ticks

@@ -7,7 +7,7 @@ class Skill::Base::MagicImmunity
     info[:args][:base].each{|key,value|
       attrib[key]=value
     }
-    attrib.each_key{|sym|
+    add and attrib.each_key{|sym|
       add[sym] and
       attrib[sym]+=(caster.attrib[add[sym][0]]*add[sym][1]).to_i
     }
