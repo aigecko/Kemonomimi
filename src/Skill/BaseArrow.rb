@@ -4,16 +4,28 @@ class Skill::Base::Arrow
     caster=info[:caster]
     data=info[:data]
     attack=info[:args][0]+(caster.attrib[data[:sym]]*data[:coef]).to_i
+    
+    effect=data[:effect_sym] and
+    effect=Effect.new(caster,
+      name: data[:effect_name],sym: data[:effect_sym],
+      icon: data[:effect_icon],
+      magicimu_keep: data[:magicimu_keep],
+      effect_type: data[:effect_type],
+      attrib: data[:attrib]||{},
+      last: data[:effect_last].to_sec)
+      
+    attack=Attack.new(caster,
+      type: data[:type],
+      cast_type: data[:cast_type],
+      attack: attack,
+      attack_defense: data[:attack_defense],
+      append: data[:append]||effect,
+      assign: true)
+    
     Map.add_friend_bullet(
       caster.ally,
       Bullet.new(
-        Attack.new(caster,
-          type: data[:type],
-          cast_type: data[:cast_type],
-          attack: attack,
-          attack_defense: data[:attack_defense],
-          append: data[:append],
-          assign: true),
+        attack,
         (pic=Animation.new(*data[:pic])),
         :box,
         caster: caster,

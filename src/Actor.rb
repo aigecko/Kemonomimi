@@ -219,6 +219,24 @@ class Actor
           icon: nil,last_time: 2,r: 80,h: 100
         },
         comment:'開啟後範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}絕對傷害\n並降低#{-#T[1][:healhp]}HP,SP回復持續#{#D[:last_time]}秒')
+     add_class_skill(:magic,:fatelpluse,
+        name:'致命脈衝',type: :active,cd: 15,consum: 100,
+        icon:'./rc/icon/skill/2011-12-23_3-038.gif:[0,0]B[255,0,255]',
+        base: :Arrow,table:[nil,
+          [ 30,18],[ 60,18],[ 90,18],[120,18],[150,18],
+          [180,18],[210,18],[240,18],[270,18],[300,18],
+          [330,18],[360,18],[390,18],[420,18],[450,18],
+          [480,18],[510,18],[540,18],[570,18],[600,18],
+        ],
+        data: {
+          sym: :matk,coef: 0.6,type: :acid,cast_type: :skill,
+          effect_name:'暈眩',effect_sym: :stun,magicimu_keep: false,effect_last: 1.5,effect_type: :stun,
+          launch_y: :ground,
+          pic:[:follow,{img:['./rc/pic/battle/paladin_chop.png'],w: 50,h: 30},[[[:blit,0]]]],
+          live_cycle: :time_only,
+          velocity: 18,shape_w: 50,shape_h: 30,shape_t: 30
+        },
+        comment:'對直線上敵人造成#{#T[0]}+#{#D[:coef]}#{#D[:sym]}絕對傷害\n並附加暈眩持續#{#D[:effect_last]}秒')
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))

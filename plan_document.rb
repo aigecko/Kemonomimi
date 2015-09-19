@@ -187,7 +187,7 @@ klass={
     V#15+威壓靈氣:降低範圍敵人(10+lv)%物理抗性(15+lv)%魔法抗性
     V#15+衰弱靈氣:降低範圍敵人(5*lv)降低物魔傷並增加(10+2*lv)法力消耗
     V#20+黑暗侵蝕:開啟後範圍(10*lv)+0.05*maxhp絕對傷害並降低(10+5*lv)HPSP回復持續2秒(skl_vamp)#fire_circle
-    #20+致命脈衝:直線造成(30*lv)+0.6*atk絕對傷害暈1.5秒(skl_vamp)#arrow
+    V#20+致命脈衝:直線造成(30*lv)+0.6*matk絕對傷害暈1.5秒(skl_vamp)#arrow
 
     長槍:paladin
     劍盾:paladin

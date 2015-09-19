@@ -263,12 +263,14 @@ private
   end
   def skill_append(target,position)
     append=@info[:append] and
-    if append.respond_to? :each
+    if append.respond_to?(:each)
       append.each{|skill|
         skill.respond_to?(:cast) or 
         skill=@caster.skill[skill] and
         skill.cast(@caster,target,position.x,position.y,position.z)
       }
+    elsif append.respond_to?(:affect)
+      append.affect(target,target.position)
     else
       append.respond_to?(:cast) or 
       skill=@caster.skill[append] and

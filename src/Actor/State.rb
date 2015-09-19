@@ -9,7 +9,6 @@ class Actor::State
     @actor=actor
   end
   def add(state)
-    
     @state[state.sym]||=StatementSet.new
     case state.multi
     when :refresh
