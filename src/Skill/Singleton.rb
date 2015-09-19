@@ -9,7 +9,8 @@ class Skill
      :attack,:shoot,
      :pre_attack_defense,:pre_skill_defense,:attack_defense,
      :skill_defense,:skill_append,:skill_before,
-     :switch_auto,:switch_append,:switch_attack_defense]
+     :switch_auto,:switch_append,:switch_attack_defense,
+     :on_block,:on_ignore,:on_dodge]
   @@SkillBacks={}
   @@BindableList=
     [:active,:shoot,:switch_auto,:switch_append,:switch_attack_defense]

@@ -73,7 +73,7 @@ class Color
       attack_umag:[128,0,128],
       attack_acid:[255,255,255],
       
-      heal_hp_font:[20,232,9],
+      heal_hp_font:[0,255,0],
       heal_sp_font:[0,255,255],
       
       statement_back:[0,217,255],

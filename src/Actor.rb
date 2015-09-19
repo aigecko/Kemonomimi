@@ -112,6 +112,14 @@ class Actor
         ],
         data:{name:'能量黑洞',sym: :black_hole},
         comment:'#{#T[:ignore]}%機率無視攻擊並增加#{(#T[:atk_vamp]*100).to_i}%普攻吸血及#{(#T[:skl_vamp]*100).to_i}%技能吸血')
+      add_class_skill(:defense,:attack_absorb,
+        name:'以血償血',type: :on_ignore,
+        icon:'./rc/icon/icon/tklre04/skill_057.png:[0,0]B[0,255,0]',
+        base: :AttackAbsorb,table:[nil,
+          0.21,0.22,0.23,0.24,0.25,
+          0.26,0.27,0.28,0.29,0.30,
+          0.31,0.32,0.33,0.34,0.35],
+        comment:'無視攻擊時將該次#{"%d"%(#T*100)}%攻擊轉為自身血量')
       add_class_skill(:attack,:darkknight_rage,
         name:'血性狂怒',type: :active,consum: 105,cd: 29,
         icon:'./rc/icon/icon/tklre04/skill_058.png:[0,0]B[0,255,0]',

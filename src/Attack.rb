@@ -102,16 +102,17 @@ private
     @@buffer<<ParaString.new(damage,target,direct,color,@@FontSize)
   end
   def attack(target)
-    @info[:attack]==0 and return 0
+    attack=@info[:attack]
+    attack==0 and return 0
     
     ignore=target.attrib[:ignore]
     if rand(100)<ignore
-      skill=target.skill[:ignore] and
-      skill.cast(target,target,nil,nil,nil)
+      target.skill.each_on_ignore{|skill|
+        skill.cast_defense(target,@caster,attack)
+      }
       return :miss
     end
     
-    attack=@info[:attack]
     attack+=attack*@attrib[:attack_adj]
     attack+=attack*@attrib[:attack_amp]/100
     attack+=attack*@caster.attrib[:attack_amp]/100

@@ -53,7 +53,7 @@ class Skill
     
     @attach=info[:attach]
     
-    @comment=DynamicString.new(info[:comment]||'nil',Color[:skill_comment_font],binding)
+    @comment=DynamicString.new(info[:comment],Color[:skill_comment_font],binding)
     @cd_pic=DynamicString.new('CD: #{"%.2f"%@cd}',Color[:skill_comment_font],binding)
   end
   def toggle(x,y,z)
@@ -139,9 +139,9 @@ class Skill
   def draw_back(x,y)
     case @type
     when *@@ActiveTypeList
-      color=(cding?)?(:skill_active_cding_back):(:skill_active_back)
+      color=(cding?) ? (:skill_active_cding_back):(:skill_active_back)
     when *@@SwitchTypeList
-      color=(@switch)?(:skill_switch_on_back):(:skill_switch_off_back)
+      color=(@switch) ? (:skill_switch_on_back):(:skill_switch_off_back)
     else
       color=:skill_passive_back
     end
