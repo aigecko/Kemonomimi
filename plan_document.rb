@@ -21,6 +21,16 @@ armor={
   :feet=>%w[鞋(wlkspd) 靴(wlkspd,con)],
   :deco=>%w[茶具(healhp,healsp) 平蜘蛛釜(healhp,heapsp) 抗擊護符(phy_decatk,御守) 禦魔護符(mag_decatk,御守) 鬼面(atk_vamp,str) 能面(skl_vamp,int) 短甲(phy_decatk) 抗魔短甲(mag_decatk) 御守]
 }
+material={
+  :紙Paper=>{wlkspd: 5},
+  :布Cloth=>{mdef: 5},:皮hide=>{def: 5},#}
+  :木Wood=>{phy_decatk: 2},
+  :鋁Aluminum =>{atkspd: 5},:青銅Bronze=>{mag_decatk: 5},
+  :鐵Iron=>{wis: 5},:錫Tin=>{int: 5},
+  :鈦Titanium =>{con: 5},:銀silver=>{agi: 5},:金gold=>{str: 5},
+  :藍寶石Sapphire=>{maxsp: 0.02},:紅寶石Ruby=>{maxhp: 0.02},
+  :鑽石Dimond=>{atk: 8},:以太Ether=>{matk: 8}
+}
 base={
   soul_of_Leyasu:{table:['I_percent','F_conv_coeff']},#德川D
   physical_immunity:{table:['F_second']},#物免
@@ -77,7 +87,7 @@ base={
   metamorphosis:[]
 }
 race={
-  :catear=>'減傷n%並且物理輸出增加m%',
+  :catear=>'增加n跑速及降低m基礎攻速s基礎射速',
   :foxear=>'最大法力及消耗法力增加n%但魔法輸出增加m%',
   :dogear=>'目標血量<90+5%,<70+10%,<50+20%,<30+30%,<20+40%,<10+50%,<5%60%',
   :wolfear=>'自身每秒回復n%損失生命並回復m倍等量法力',
@@ -221,8 +231,8 @@ klass={
     #15+精準命中:40%機率(1.3+0.04*lv)倍爆擊%#auto->amplify
     #20+氣流爆發:(10+lv)%機率暈0.4秒額外(25*lv)傷害#auto->amplify
     #20+無形之箭:弓箭可穿透(1+0.25*lv)敵人並提升弓箭速度(lv)#auto->amplify
-	
-	#15+氣流擾動:指定地點敵人受到範圍(40*lv)魔法傷害並降低(15+lv)%跑速持續3秒
+
+    #15+氣流擾動:指定地點敵人受到範圍(40*lv)魔法傷害並降低(15+lv)%跑速持續3秒
     #15+望風披靡:射出可以造成(40*lv)+0.8*matk魔法傷害並沉默2.5秒的弓箭#magic_arrow
     #20+狂風之襲:直線造成(25*lv)+0.5*matk魔法傷害並降低閃避(5+lv)持續6秒#explode
 

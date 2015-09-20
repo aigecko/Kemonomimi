@@ -1,6 +1,6 @@
 #coding: utf-8
 class Equipment < Item
-  attr_reader :sym,:skill
+  attr_reader :sym,:skill,:type
   @@NameSize=15
   Abbrev=@@Abbrev={
     name: :n,icon: :i,price: :pc,comment: :c,

@@ -13,10 +13,7 @@ class Material < Item
     phy_decatk: 101,mag_decatk: 103,omamori: 107,
     water: 109,slime: 113
   }
-  @@CodeTable={}
-  for sym,val in @@MaterialTable
-    @@CodeTable[val]=sym
-  end
+  @@CodeTable=@@MaterialTable.invert
   def initialize(name,pic,price,comment,arg={})
     super(name,pic,price,comment,arg)
     @content=arg[:id]
