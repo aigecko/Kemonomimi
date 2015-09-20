@@ -20,12 +20,12 @@ class Database
       when Array
         name,icon,attrib,price,comment,arg=data
         return Equipment.new(
-          name: name,
-          icon: icon,
-          part: part,
-          attrib: attrib,
-          price: price,
-          comment: comment)
+          Equipment::Abbrev[:name] => name,
+          Equipment::Abbrev[:icon] => icon,
+          Equipment::Abbrev[:part] => part,
+          Equipment::Abbrev[:attrib] => attrib,
+          Equipment::Abbrev[:price] => price,
+          Equipment::Abbrev[:comment] => comment)
       when Hash
         return Equipment.new(data)
       end

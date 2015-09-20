@@ -1,6 +1,6 @@
 #codingL utf-8
 class ItemArray::Pack
-  @@LIMIT=99
+  LIMIT=@@LIMIT=99
   attr_accessor :item,:num
   def initialize(item,num)
     @item=item
@@ -12,7 +12,7 @@ class ItemArray::Pack
   def draw(x,y)
     @item.draw(x,y)
   end
-  def self.limit
-    return @@LIMIT
-  end
+  # def self.limit
+    # return @@LIMIT
+  # end
 end

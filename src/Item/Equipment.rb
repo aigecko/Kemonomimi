@@ -1,12 +1,20 @@
 #coding: utf-8
-class Equipment < Item  
+class Equipment < Item
   attr_reader :sym,:skill
   @@NameSize=15
+  Abbrev=@@Abbrev={
+    name: :n,icon: :i,price: :pc,comment: :c,
+    attrib: :a,part: :pt,material: :m,type: :t
+  }
   require_relative 'Item/Equipment_Attrib'
   def initialize(data)
-    super(data[:name],data[:icon],data[:price],data[:comment])
+    super(
+      data[@@Abbrev[:name]],
+      data[@@Abbrev[:icon]],
+      data[@@Abbrev[:price]],
+      data[@@Abbrev[:comment]])
     
-    attrib=data[:attrib]
+    attrib=data[@@Abbrev[:attrib]]
     if attrib[:skill]
       @skill=attrib[:skill]
       if !@skill.respond_to?(:each_value)
@@ -16,14 +24,14 @@ class Equipment < Item
       end
     end
     
-    @attrib=Attrib.new(data[:part],attrib)
+    @attrib=Attrib.new(data[@@Abbrev[:part]],attrib)
     
     @rect_h+=@attrib.size*@@FontSize
     @rect_back.h=@rect_h
     @superposed=false
     
-    @material=data[:material]
-    @type=data[:type]
+    @material=data[@@Abbrev[:material]]
+    @type=data[@@Abbrev[:type]]
   end
   def attrib
     @attrib.attrib

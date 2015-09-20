@@ -3,6 +3,12 @@ class Equipment::Attrib
   attr_reader :part,:attrib
   @@FontSize=12
   @@NameSize=15
+  @@FormatPosInteger="+%d"
+  @@FormatNegInteger="-%d"
+  @@FormatPosFloat="+%d%%"
+  @@FormatNegFloat="-%d%%"
+  @@FormatCritical="+%d%%%d倍"
+  @@FormatBash="+%d%%暈%.1f秒"
   def initialize(part,attrib)
     @part=part
     @attrib=Hash.new(0)
@@ -13,15 +19,15 @@ class Equipment::Attrib
       @attrib_str[sym]=
         case val
         when Integer
-          ((val>0)? "+%d" : "-%d")%val
+          ((val>0)? @@FormatPosInteger : @@FormatNegInteger)%val
         when Float
-          ((val>0)? "+%d%%": "-%d%%")%(val*100)
+          ((val>0)? @@FormatPosFloat: @@FormatNegFloat)% (val*100)
         when Array
           case val.first.size
           when 2
-            "+%d%%%d倍"%val.first
+            @@FormatCritical%val.first
           when 3
-            "+%d%%暈%.1f秒"%val.first
+            @@FormatBash%val.first
           end
         end
     }

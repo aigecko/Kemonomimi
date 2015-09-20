@@ -21,12 +21,12 @@ class Player < Actor
     #for i in 21..25 ; gain_equip_from_database [[:head,i]] ;end
     #dbg
     gain_equip(Equipment.new(
-      name:'測試用短劍',
-      icon:'test/sword.png',
-      part: :right,
-      attrib:{atk:15,maxhp:10},
-      price: 1000,
-      comment:'可以造成一些傷害'))
+      n:'測試用短劍',
+      i:'test/sword.png',
+      pt: :right,
+      a:{atk:15,maxhp:10},
+      pc: 1000,
+      c:'可以造成一些傷害'))
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]
