@@ -16,8 +16,17 @@ class Player < Actor
         
     for i in 1..1 ; gain_equip_from_database [[:range,i]] ;end
     wear_equip(0)
+    
     #for i in 11..15 ; gain_equip_from_database [[:head,i]] ;end
     #for i in 21..25 ; gain_equip_from_database [[:head,i]] ;end
+    #dbg
+    gain_equip(Equipment.new(
+      name:'測試用短劍',
+      icon:'test/sword.png',
+      part: :right,
+      attrib:{atk:15,maxhp:10},
+      price: 1000,
+      comment:'可以造成一些傷害'))
     
     @attrib[:hp]=@attrib[:maxhp]
     @attrib[:sp]=@attrib[:maxsp]

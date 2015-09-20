@@ -16,8 +16,19 @@ class Database
   def self.get_equip(part,index)
     begin
       data=@Equip[part][index] or raise "EquipDatabaseOutOfIndex"
-      name,pic,attrib,price,comment,arg=data
-      return Equipment.new(name,pic,part,attrib,price,comment,arg)
+      case data
+      when Array
+        name,icon,attrib,price,comment,arg=data
+        return Equipment.new(
+          name: name,
+          icon: icon,
+          part: part,
+          attrib: attrib,
+          price: price,
+          comment: comment)
+      when Hash
+        return Equipment.new(data)
+      end
     rescue NoMethodError
       Message.show_format("裝備:#{part}編號:#{index}不存在","錯誤",:ASTERISK)
       Message.show(:unvalid_equip)
