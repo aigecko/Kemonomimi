@@ -177,7 +177,7 @@ $skill[:single_weapon_matk]={
   data:{sym: :atk,coef: 1,conv: :matk},
   comment:'增加長槍1倍物攻的魔攻'}
 
-$skill[:snow_shield]={
+$skill[:mage_snow_shield]={
   name:'實念之盾',type: :switch_attack_defense,
   icon:'./rc/icon/skill/2011-12-23_3-054.gif:[0,0]B[255,0,0]',
   base: :SnowShield,table:[nil,
@@ -187,7 +187,7 @@ $skill[:snow_shield]={
     [36,4.2],[37,4.4],[38,4.6],[39,4.8],[40,5.0]
   ],
   comment:'開啟後將#{#T[0]}%傷害轉換成1/#{#T[1]}的法力消耗'}
-$skill[:freezing_rain]={
+$skill[:mage_freezing_rain]={
   name:'凍雨凝結',type: :switch_attack_defense,consum: 10,
   icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',
   base: :FreezingRain,table:[nil,
@@ -195,7 +195,7 @@ $skill[:freezing_rain]={
     21,22,23,24,25,26,27,28,29,30],
   data: {name:'凍雨凝結',icon:'./rc/icon/icon/mat_tklre002/skill_019.png:[0,0]',last_time: 3},
   comment:'降低攻擊者#{#T}%近攻魔攻持續#{#D[:last_time]}秒'}
-$skill[:ice_body]={
+$skill[:mage_ice_body]={
   name:'寒冰之軀',type: :switch_auto,consum: 10,cd: 1,
   icon:'./rc/icon/skill/2011-12-23_3-187.gif:[0,0]B[255,0,0]',
   base: :Amplify,table:[nil,
@@ -212,7 +212,7 @@ $skill[:ice_body]={
   ],
   data:{name:'寒冰之軀',sym: :ice_body},
   comment:'提升#{#T[:def]}雙防及降低#{-#T[:consum_amp]}%之SP消耗'}
-$skill[:frost_thorn]={
+$skill[:mage_frost_thorn]={
   name:'霜刺',type: :switch_append,consum: 20,
   icon:'./rc/icon/skill/2011-12-23_3-053.gif:[0,0]B[255,0,0]',
   base: :FrostThorn,table: [nil,
@@ -227,7 +227,7 @@ $skill[:frost_thorn]={
     last_time: 2
   },
   comment:'普攻附加#{#T[0]}+#{#D[:coef]}atk無視魔免魔傷\n並強緩#{#T[1]}%跑速#{#T[2]}%攻速持續#{#D[:last_time]}秒'}
-$skill[:ice_arrow]={
+$skill[:mage_ice_arrow]={
   name:'寒冰彈',type: :active,
   icon:'./rc/icon/icon/tklre04/skill_055.png:[0,0]B[255,0,0]',
   base: :Missile,consum: 80,cd: 3,table:[nil,
@@ -242,7 +242,7 @@ $skill[:ice_arrow]={
     live_cycle: :trigger,live_count: 25,
     velocity: 15,r: 60,h: 50},
   comment:'對指定地點發射冰塊造成#{#T[0]}+#{#D[:coef][:matk]}matk魔法傷害'}
-$skill[:freeze]={
+$skill[:mage_freeze]={
   name:'冰凍術',type: :active,
   icon:'./rc/icon/icon/tklre03/skill_034.png:[0,0]',
   base: :MagicCircle,cd: 16,consum: 140,table:[nil,
@@ -265,7 +265,7 @@ $skill[:freeze]={
       ]]]
   },
   comment:'將踏入指定地點的敵人冰凍#{#D[:last]}秒\n並造成#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}的魔法傷害'}
-$skill[:ice_tornado]={
+$skill[:mage_ice_tornado]={
   name:'水龍捲',type: :active,
   icon:'./rc/icon/skill/2011-12-23_3-057.gif:[0,0]B[255,0,0]',
   base: :MagicCircle,cd: 12,consum: 120,table:[nil,
@@ -308,7 +308,7 @@ $skill[:ice_tornado]={
   },
   comment:'直線敵人受到範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}魔傷\n'+
           '並附加#{#T[4][:attack]}魔傷及緩#{"%d"%(-#T[3][:wlkspd]*100)}%跑速持續6秒'}
-$skill[:ice_wave]={
+$skill[:mage_ice_wave]={
   name:'寒冰凍破',type: :skill_before,
   icon:'./rc/icon/skill/2011-12-23_3-052.gif:[0,0]B[255,0,0]',
   base: :IceWave,cd: 0,consum: 0,table:[nil,
@@ -317,7 +317,7 @@ $skill[:ice_wave]={
   data:{coef:{int: 0.3}},
   comment:'魔法命中造成#{#T}+#{#D[:coef][:int]}int範圍絕對傷害'}
   
-$skill[:bloody_curse]={
+$skill[:darkknight_bloody_curse]={
   name:'血殤靈光',type: :attack_defense,
   icon:'./rc/icon/icon/tklre04/skill_056.png:[0,0]B[255,0,0]',
   base: :MototadaR,table:[nil,
@@ -326,7 +326,7 @@ $skill[:bloody_curse]={
     [37,130,50],[39,135,50],[41,140,50],[43,145,50],[45,150,50]
   ],
   comment:'反彈受到傷害之#{#T[0]}%絕對傷害給範圍#{#T[1]}的敵人'}
-$skill[:black_hole]={
+$skill[:darkknight_black_hole]={
   name:'能量黑洞',type: :auto,
   icon:'./rc/icon/skill/2011-12-23_3-069.gif:[0,0]B[255,0,0]',
   base: :Amplify,table:[nil,
@@ -343,7 +343,7 @@ $skill[:black_hole]={
   ],
   data:{name:'能量黑洞',sym: :black_hole},
   comment:'#{#T[:ignore]}%機率無視攻擊並增加#{(#T[:atk_vamp]*100).to_i}%普攻吸血及#{(#T[:skl_vamp]*100).to_i}%技能吸血'}
-$skill[:attack_absorb]={
+$skill[:darkknight_attack_absorb]={
   name:'以血償血',type: :on_ignore,
   icon:'./rc/icon/icon/tklre04/skill_057.png:[0,0]B[0,255,0]',
   base: :AttackAbsorb,table:[nil,
@@ -378,7 +378,7 @@ $skill[:darkknight_rage]={
   ],
   data:{sym: :darkknight_magic_immunity},
   comment:'魔法免疫#{#T[:magic_last]}秒並增加#{#T[:base][:atkspd]}%攻速#{"%d"%(#T[:base][:wlkspd]*100)}%跑速持續#{#T[:attrib_last]}秒'}
-$skill[:slow_poison]={
+$skill[:darkknight_slow_poison]={
   name:'淬毒武器',type: :append,
   icon:'./rc/icon/icon/mat_tklre002/skill_024.png:[0,0]',
   base: :SlowPoison,table:[nil,
@@ -450,7 +450,7 @@ $skill[:darkknight_erosion]={
     icon: nil,last_time: 2,r: 80,h: 100
   },
   comment:'開啟後範圍#{#T[0]}+#{#D[:coef]}*#{#D[:coef_sym]}絕對傷害\n並降低#{-#T[1][:healhp]}HP,SP回復持續#{#D[:last_time]}秒'}
-$skill[:fatelpluse]={
+$skill[:darkknight_fatelpluse]={
   name:'致命脈衝',type: :active,cd: 15,consum: 100,
   icon:'./rc/icon/skill/2011-12-23_3-038.gif:[0,0]B[255,0,255]',
   base: :Arrow,table:[nil,

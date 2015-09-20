@@ -86,15 +86,11 @@ class Actor
         add_class_skill(:weapon,skill,Database.get_skill(skill))
       }
     when :darkknight
-      [:bloody_curse,:black_hole,:attack_absorb].each{|skill|
-        add_class_skill(:defense,skill,Database.get_skill(skill))
-      }
-      [:darkknight_rage,:slow_poison].each{|skill|
-        add_class_skill(:attack,skill,Database.get_skill(skill))
-      }
-      [:darkknight_coercion,:darkknight_weaken,:darkknight_erosion,:fatelpluse].each{|skill|
-        add_class_skill(:magic,skill,Database.get_skill(skill))
-      }
+      add_class_skills(
+        defense: [:darkknight_bloody_curse,:darkknight_black_hole,:darkknight_attack_absorb],
+        attack: [:darkknight_rage,:darkknight_slow_poison],
+        magic: [:darkknight_coercion,:darkknight_weaken,:darkknight_erosion,:darkknight_fatelpluse]
+      )
     when :fighter
       [:counter_attack,:amplify_hp_block,:fighter_magic_immunity].each{|skill|
         add_class_skill(:defense,skill,Database.get_skill(skill))
@@ -109,15 +105,11 @@ class Actor
         add_class_skill(:weapon,skill,Database.get_skill(skill))
       }
    when :mage
-      [:snow_shield,:freezing_rain,:ice_body].each{|skill|
-        add_class_skill(:defense,skill,Database.get_skill(skill))
-      }
-      [:frost_thorn].each{|skill|
-        add_class_skill(:attack,skill,Database.get_skill(skill))
-      }
-      [:ice_arrow,:freeze,:ice_tornado,:ice_wave].each{|skill|
-        add_class_skill(:defense,skill,Database.get_skill(skill))
-      }
+      add_class_skills(
+        defense: [:mage_snow_shield,:mage_freezing_rain,:mage_ice_body],
+        attack: [:mage_frost_thorn],
+        magic: [:mage_ice_arrow,:mage_freeze,:mage_ice_tornado,:mage_ice_wave]
+      )
    when :cleric
       add_skill(:enegy_arrow,
         name:'碎石杖擊',type: :switch_append,
@@ -256,6 +248,13 @@ class Actor
   end
   def add_class_skill(type,skill,info)
     @skill.add_class(type,skill,info)
+  end
+  def add_class_skills(hash)
+    hash.each{|type,list|
+      list.each{|skill|
+        add_class_skill(type,skill,Database.get_skill(skill))
+      }
+    }
   end
   def add_skill(skill,info)
     @skill.add_other(skill,info)
