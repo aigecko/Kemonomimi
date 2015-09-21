@@ -1,12 +1,30 @@
 #coding: utf-8
 require 'pp'
 weapon={
-  :dual=>%w[雙劍(atk,atkspd) 雙斧(atk,healhp)],
-  :single=>%w[長槍(atk,con) 大斧(atk,str)],
-  :right=>%w[單手劍(atk,def) 單手鎚(atk,maxhp)],
-  :ward=>%w[法杖(atk,matk,int) 魔法劍(atk,matk,wis)],
-  :sheild=>%w[重盾(def,block) 魔法盾(def,mdef) 輕盾(def,tough,wlkspd)],
-  :book=>%w[魔法書(atk,def,mdef,-consum_amp)]
+  :dual=>{
+    :雙劍=>{atk:"40*L",atkspd:"10*L"},
+    :雙斧=>{atk:"45*L",healhp:"5*L"}
+  },
+  :single=>{
+    :長槍=>{atk:"60*L",con:"20*L"},
+    :大斧=>{atk:"60*L",str:"20*L"}
+  },
+  :right=>{
+    :單手劍=>{atk:"40*L",def:"20*L"},#}
+    :單手鎚=>{atk:"40*L",maxhp:"100*L"}
+  },
+  :ward=>{
+    :法杖=>{atk:"20*L",matk:"40*L",int:"15*L"},
+    :魔法劍=>{atk:"35*L",matk:"25*L",wis:"15*L"}
+  },
+  :sheild=>{
+    :重盾=>{def:"20*L",block:"3*L"},#}
+    :魔法盾=>{def:"15*L",mdef:"15*L"},#}
+    :輕盾=>{def:"15*L",tough:"4*L",wlkspd:"2"}#}
+  },
+  :book=>{
+    :魔法書=>{atk:"4*L",def:"10*L",mdef:"20*L"}
+  }
 }
 armor={
   :head=>%w[頭盔(def) 角盔(def,atk) 頭巾(def,mdef) 圓帽(def,matk,ratk) 魔法帽(def,mdef,matk)],
@@ -22,14 +40,29 @@ armor={
   :deco=>%w[茶具(healhp,healsp) 平蜘蛛釜(healhp,heapsp) 抗擊護符(phy_decatk,御守) 禦魔護符(mag_decatk,御守) 鬼面(atk_vamp,str) 能面(skl_vamp,int) 短甲(phy_decatk) 抗魔短甲(mag_decatk) 御守]
 }
 material={
-  :紙Paper=>{wlkspd: 5},
-  :布Cloth=>{mdef: 5},:皮hide=>{def: 5},#}
-  :木Wood=>{phy_decatk: 2},
-  :鋁Aluminum =>{atkspd: 5},:青銅Bronze=>{mag_decatk: 5},
-  :鐵Iron=>{wis: 5},:錫Tin=>{int: 5},
-  :鈦Titanium =>{con: 5},:銀silver=>{agi: 5},:金gold=>{str: 5},
-  :藍寶石Sapphire=>{maxsp: 0.02},:紅寶石Ruby=>{maxhp: 0.02},
-  :鑽石Dimond=>{atk: 8},:以太Ether=>{matk: 8}
+  #L1
+  :紙Paper=>{wlkspd: 2}, #pc4
+  #L2
+  :布Cloth=>{mdef: 5}, #pc6
+  :皮hide=>{def: 5},#} #pc6
+  #L3
+  :木Wood=>{phy_decatk: 2}, #pc8
+  #L4
+  :鋁Aluminum =>{atkspd: 5},    #pc16
+  :青銅Bronze=>{mag_decatk: 5}, #pc12
+  #L5
+  :鐵Iron=>{wis: 5}, #pc32
+  :錫Tin=>{int: 5},  #pc32
+  #L6
+  :鈦Titanium =>{con: 5}, #pc64
+  :銀silver=>{agi: 5},    #pc96
+  :金gold=>{str: 5},      #pc128
+  #L7
+  :藍寶石Sapphire=>{maxsp: 0.02}, #pc160
+  :紅寶石Ruby=>{maxhp: 0.02},     #pc160
+  #L8
+  :鑽石Dimond=>{atk: 8}, #pc192
+  :以太Ether=>{matk: 8}  #pc256
 }
 base={
   soul_of_Leyasu:{table:['I_percent','F_conv_coeff']},#德川D
