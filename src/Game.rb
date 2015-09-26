@@ -6,7 +6,7 @@ class<<Game
     @Width=640
     @Height=480
     @Depth=400
-    @NumOfRequire=148
+    @NumOfRequire=149
     @FPS=25
     @TFP=40
     

@@ -23,7 +23,7 @@ weapon={
     :輕盾=>{def:"15*L",tough:"4*L",wlkspd:"2"}#}
   },
   :book=>{
-    :魔法書=>{atk:"4*L",def:"10*L",mdef:"20*L"}
+    :魔法書=>{atk:"4*L",def:"10*L",mdef:"20*L"}#}
   }
 }
 armor={
@@ -245,7 +245,7 @@ klass={
     #15+動如雷霆:開啟後增加(10+lv*2)%跑速(100+10*lv)韌性持續5秒
     
     #20+積蓄能量:20%機率(1.5+0.1*lv)倍爆擊並提升(40+2*lv)%攻擊速度#auto->amplify
-    #15+負電位差:弓箭命中後消減敵方(10*lv)+0.4*int法力並造成等量魔法傷害#append->soul_of_Muneshige
+    #15+負電位差:弓箭命中後消減敵方(30*lv)+0.4*int法力並造成等量魔法傷害#append->soul_of_Muneshige
     #20+閃電噴發:開啟後弓箭命中後產生範圍(20*lv)+0.2*agi物理傷害#switch_append->explode
     #15+雷神之箭:增加(80+8*lv)弓箭射程以及(1+lv)弓箭生命值
     

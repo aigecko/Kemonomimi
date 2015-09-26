@@ -58,7 +58,7 @@ class Actor
     add_base_skill(:arrow,
       name:'弓箭射擊',type: :shoot,cd: arrow_cd,
       icon:'./rc/icon/skill/2011-12-23_3-047.gif:[0,0]B[255,255,0]',
-      base: :Arrow,table:[0,[50,25]],
+      base: :Arrow,table:[0,[0,25]],
       data:{sym: :ratk,coef: 1,type: :phy,cast_type: :attack,
         launch_y: :center,
         live_cycle: :time,
@@ -68,7 +68,7 @@ class Actor
         velocity: 20,shape_w: 50,shape_h: 12,shape_t: 11},
       equip_need: :range,
       common_cd: :NormalAttack,
-      comment:'快速射出一隻箭造成#{#T[0]}+ratk的傷害')
+      comment:'快速射出一隻箭造成ratk的傷害')
   end  
   def skill_initialize
     case @class
@@ -110,6 +110,17 @@ class Actor
         attack: [:mage_frost_thorn],
         magic: [:mage_ice_arrow,:mage_freeze,:mage_ice_tornado,:mage_ice_wave]
       )
+   when :crossbowman
+      add_class_skill(:crossbowman_suikamusou,:attack,
+        name:'負電位差',type: :append,
+        icon:'./rc/icon/icon/mat_tklre002/skill_025.png:[0,0]B[255,0,0]',
+        base: :SuikaMusou,table:[nil,
+          [ 30,1.0],[ 60,1.0],[ 90,1.0],[120,1.0],[150,1.0],
+          [180,1.0],[210,1.0],[240,1.0],[270,1.0],[300,1.0],
+          [330,1.0],[360,1.0],[390,1.0],[420,1.0],[450,1.0]
+        ],
+        data:{sym: :int,coef: 0.4},
+        comment:'攻擊會消減敵方#{#T[0]}+#{#D[:coef]}*#{#D[:sym]}法力\n並造成等量魔法傷害')
    when :cleric
       add_skill(:enegy_arrow,
         name:'碎石杖擊',type: :switch_append,
